@@ -1,0 +1,14 @@
+id: web-猎鹰安全-金山终端安全系统
+info:
+  name: 猎鹰安全-金山终端安全系统
+  author: archer
+  verified: false
+  description: 检测到猎鹰安全-金山终端安全系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"数据库连接异常您可")
+expression: r0()

@@ -1,0 +1,39 @@
+id: web-coremail
+info:
+  name: coremail
+  author: archer
+  verified: false
+  description: 检测到coremail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"/coremail/bundle/")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<a href=\"http://www.coremail.cn\" target=\"_blank\">")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"coremail/common")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/coremail/common/")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/coremail/index.jsp")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"fmt_logoalt: \"coremail 电子邮件系统")'
+expression: r0() || r1() || r2() || r3() || r4() || r5()

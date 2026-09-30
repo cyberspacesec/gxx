@@ -1,0 +1,19 @@
+id: web-netsoft-eida
+info:
+  name: netsoft-eida
+  author: archer
+  verified: false
+  description: 检测到netsoft-eida系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location.href = \"/appframe/login_v2/login.jsp\";")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/images/common/favicon.ico\"")
+expression: r0() || r1()

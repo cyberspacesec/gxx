@@ -1,0 +1,14 @@
+id: web-ami-megarac-sp
+info:
+  name: ami-megarac-sp
+  author: archer
+  verified: false
+  description: 检测到ami-megarac-sp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<modelname>ami megarac sp</modelname>")
+expression: r0()

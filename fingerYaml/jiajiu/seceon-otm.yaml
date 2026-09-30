@@ -1,0 +1,14 @@
+id: web-seceon-otm
+info:
+  name: seceon-otm
+  author: archer
+  verified: false
+  description: 检测到seceon-otm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"use this if you want to run the seceon module of kibana.")
+expression: r0()

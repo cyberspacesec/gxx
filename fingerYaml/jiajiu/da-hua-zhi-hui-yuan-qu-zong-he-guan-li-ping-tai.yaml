@@ -1,0 +1,14 @@
+id: web-大华智慧园区综合管理平台
+info:
+  name: 大华智慧园区综合管理平台
+  author: archer
+  verified: false
+  description: 检测到大华智慧园区综合管理平台系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<li id=\"DSS-help\">") && response.body.ibcontains(b"<span>DSS助手</span>")
+expression: r0()

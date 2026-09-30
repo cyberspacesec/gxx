@@ -1,0 +1,14 @@
+id: web-panabit-ixcache
+info:
+  name: panabit-ixcache
+  author: archer
+  verified: false
+  description: 检测到panabit-ixcache系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>iXCache</title>")
+expression: r0()

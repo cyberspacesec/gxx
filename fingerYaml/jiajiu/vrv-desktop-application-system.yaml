@@ -1,0 +1,19 @@
+id: web-vrv-desktop-application-system
+info:
+  name: vrv-desktop-application-system
+  author: archer
+  verified: false
+  description: 检测到vrv-desktop-application-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<span id=\"lblvalidcompany\" class=\"validcompany\">vrv")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var vver = $('#hidverify').val();")
+expression: r0() || r1()

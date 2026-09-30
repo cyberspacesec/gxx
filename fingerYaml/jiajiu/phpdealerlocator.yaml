@@ -1,0 +1,14 @@
+id: web-phpdealerlocator
+info:
+  name: phpdealerlocator
+  author: archer
+  verified: false
+  description: 检测到phpdealerlocator系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"pythonselect") && response.body.ibcontains(b"for=\"dealer_radiuss_dealer_zip")
+expression: r0()

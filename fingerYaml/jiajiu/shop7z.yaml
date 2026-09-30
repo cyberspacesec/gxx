@@ -1,0 +1,19 @@
+id: web-shop7z
+info:
+  name: shop7z
+  author: archer
+  verified: false
+  description: 检测到shop7z系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"www_zzjs_net_loding\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"function www_zzjs_net_change")
+expression: r0() || r1()

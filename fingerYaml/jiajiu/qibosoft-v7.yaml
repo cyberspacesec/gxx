@@ -1,0 +1,14 @@
+id: web-qibosoft-v7
+info:
+  name: qibosoft-v7
+  author: archer
+  verified: false
+  description: 检测到qibosoft-v7系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/images/v7/cms.css\">")
+expression: r0()

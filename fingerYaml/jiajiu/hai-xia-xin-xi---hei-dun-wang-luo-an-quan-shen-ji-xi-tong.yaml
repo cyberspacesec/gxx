@@ -1,0 +1,14 @@
+id: web-海峡信息-黑盾网络安全审计系统
+info:
+  name: 海峡信息-黑盾网络安全审计系统
+  author: archer
+  verified: false
+  description: 检测到海峡信息-黑盾网络安全审计系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"technology, inc.") && response.body.ibcontains(b"福建省海峡信息技术有限公司")
+expression: r0()

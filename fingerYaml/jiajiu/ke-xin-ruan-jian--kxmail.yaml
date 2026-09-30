@@ -1,0 +1,14 @@
+id: web-科信软件-kxmail
+info:
+  name: 科信软件-kxmail
+  author: archer
+  verified: false
+  description: 检测到科信软件-kxmail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"科信邮件系统") && response.body.ibcontains(b"powered by <a href=\"http://www.kxmail.net")
+expression: r0()

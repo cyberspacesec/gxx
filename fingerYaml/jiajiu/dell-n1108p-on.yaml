@@ -1,0 +1,14 @@
+id: web-dell-n1108p-on
+info:
+  name: dell-n1108p-on
+  author: archer
+  verified: false
+  description: 检测到dell-n1108p-on系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"login_server_default\">n1108p-on")
+expression: r0()

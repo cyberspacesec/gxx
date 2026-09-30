@@ -1,0 +1,14 @@
+id: web-rising-网络安全预警系统
+info:
+  name: rising-网络安全预警系统
+  author: archer
+  verified: false
+  description: 检测到rising-网络安全预警系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"瑞星网络安全预警系统")
+expression: r0()

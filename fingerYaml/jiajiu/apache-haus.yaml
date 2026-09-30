@@ -1,0 +1,19 @@
+id: web-apache-haus
+info:
+  name: apache-haus
+  author: archer
+  verified: false
+  description: 检测到apache-haus系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/apachehaus.ico")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"copyright &copy; 2008-2017 <a href=\"http://www.apachehaus.com\">the apache haus</a>")
+expression: r0() || r1()

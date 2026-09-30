@@ -1,0 +1,19 @@
+id: web-sheca-cert
+info:
+  name: sheca-cert
+  author: archer
+  verified: false
+  description: 检测到sheca-cert系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"content: \"获取一证通信息异常。请检查数字证书是否正常运行")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<li class=\"in\" id=\"cert_li\">")
+expression: r0() || r1()

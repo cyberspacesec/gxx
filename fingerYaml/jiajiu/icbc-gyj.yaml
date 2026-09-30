@@ -1,0 +1,14 @@
+id: web-icbc-gyj
+info:
+  name: icbc-gyj
+  author: archer
+  verified: false
+  description: 检测到icbc-gyj系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var s3_app_address=\"https://gyj.icbc.com.cn\"")
+expression: r0()

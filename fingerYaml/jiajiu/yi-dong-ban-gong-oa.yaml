@@ -1,0 +1,14 @@
+id: web-移动办公oa
+info:
+  name: 移动办公oa
+  author: archer
+  verified: false
+  description: 检测到移动办公oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"qccodewidth1 = document.getelementbyid(\"divqrcode\")") && response.body.ibcontains(b"class=\"pad-0 pt-2 pb-2 text-center tc-gray mt-1\"")
+expression: r0()

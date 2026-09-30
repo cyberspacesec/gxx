@@ -1,0 +1,14 @@
+id: web-hillstone-智能安全运营系统
+info:
+  name: hillstone-智能安全运营系统
+  author: archer
+  verified: false
+  description: 检测到hillstone-智能安全运营系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/static/css/main.4672616b.chunk.css") && response.body.ibcontains(b"智源")
+expression: r0()

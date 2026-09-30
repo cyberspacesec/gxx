@@ -1,0 +1,19 @@
+id: web-citrix-xenmobile
+info:
+  name: citrix-xenmobile
+  author: archer
+  verified: false
+  description: 检测到citrix-xenmobile系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Citrix-TransactionId: *") && response.raw_header.ibcontains(b"Set-Cookie: xmscookie")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<title>XenMobile") && response.body.ibcontains(b"citrix_logo")
+expression: r0() || r1()

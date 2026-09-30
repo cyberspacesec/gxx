@@ -1,0 +1,14 @@
+id: web-lasso-web-data-engine
+info:
+  name: lasso-web-data-engine
+  author: archer
+  verified: false
+  description: 检测到lasso-web-data-engine系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: lasso")'
+expression: r0()

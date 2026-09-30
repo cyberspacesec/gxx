@@ -1,0 +1,14 @@
+id: web-LogBase日志综合审计系统
+info:
+  name: LogBase 日志综合审计系统
+  author: archer
+  verified: false
+  description: 检测到LogBase 日志综合审计系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"setHtmlFontSize") && response.body.ibcontains(b"static/css/app") && response.body.ibcontains(b"1366")
+expression: r0()

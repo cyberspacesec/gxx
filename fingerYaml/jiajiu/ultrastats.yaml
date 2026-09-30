@@ -1,0 +1,14 @@
+id: web-ultrastats
+info:
+  name: ultrastats
+  author: archer
+  verified: false
+  description: 检测到ultrastats系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img src=\"./images/main/ultrastatslogo.png\" width=\"300\" height=\"200\" name=\"ultrastats_logo\" align=\"center\">")
+expression: r0()

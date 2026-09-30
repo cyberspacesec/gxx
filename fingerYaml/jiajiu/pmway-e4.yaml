@@ -1,0 +1,19 @@
+id: web-pmway-e4
+info:
+  name: pmway-e4
+  author: archer
+  verified: false
+  description: 检测到pmway-e4系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"风<span style=\"padding-left: 12px;\"></span>格")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"热情似火</option>")
+expression: r0() || r1()

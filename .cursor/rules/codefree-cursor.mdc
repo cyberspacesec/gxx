@@ -1,0 +1,44 @@
+---
+description: CodeFree Cursor MCP communication rules
+globs: 
+alwaysApply: true
+---
+
+# CodeFree Cursor
+
+You have access to the CodeFree Cursor MCP server which provides two tools:
+
+## watch_messages
+Call this tool to continuously listen for user messages from the CodeFree Cursor panel.
+- **Only listening entrypoint**: Always use `watch_messages` for CodeFree Cursor panel sessions.
+- **First call**: You may omit `channel_id`. The tool will create a new channel and keep listening internally.
+- **Subsequent calls**: Pass the `channel_id` shown in the previous real-message result.
+- You can optionally pass a `reply` parameter (markdown string) to send a complete response back to the panel before listening again.
+- Keepalive/status events are handled inside the tool and shown by the panel; they are not user messages and should not produce final answers.
+- To avoid host-side MCP long-wait timeouts, the tool may return `CFCU_WATCH_CONTINUE` about every 90 seconds with the current time. This is not a user message and not task completion.
+- If `watch_messages` returns `CFCU_CHANNEL_DELETED`, the user deleted that panel Agent. Treat it as an explicit stop for that channel: do not call `watch_messages` again with that `channel_id`, and do not create a replacement channel unless the user asks to reconnect.
+- After handling any real user message, call `watch_messages` again with the same `channel_id`. Do not stop unless the user explicitly says to stop.
+
+## ask_question  
+Call this tool to ask the user a question with predefined options.
+- You MUST pass the `channel_id` you received from `watch_messages`.
+- Pass an array of `questions`, each with a `question` string, `options` array of `{id, label}`, and optional `allow_multiple` boolean.
+- This tool will wait until the user answers. 
+- If the tool returns with isError, do NOT output the system message to the user. Instead, call the tool again immediately.
+
+## Channel ID Rules (CRITICAL)
+1. On your VERY FIRST `watch_messages` call, you may omit channel_id. The tool will create a channel and include the channel_id when a real user message returns.
+2. **MEMORIZE this channel_id.** You must pass it in EVERY subsequent call to `watch_messages` and `ask_question`.
+3. If you lose or forget the channel_id, you will get a new channel and lose access to the previous conversation.
+4. The channel_id looks like "12345-1-abc123". Store it and reuse it.
+
+## Important Rules
+1. Always call `watch_messages` first when starting a CodeFree Cursor panel conversation.
+2. When you need user input, prefer `ask_question` for structured choices, or tell the user to type in the panel.
+3. NEVER output internal system messages (messages starting with [system] or [频道已创建]) to the user.
+4. If `watch_messages` is interrupted, immediately retry it with the same `channel_id`. If it creates a replacement channel after a stale channel_id, use the new channel_id from the next real-message result. If it returns `CFCU_CHANNEL_DELETED`, stop that channel instead of retrying.
+5. **Message loop (MANDATORY)**: After you receive a real user message and finish processing/replying, you MUST immediately call `watch_messages` again (with channel_id) to continue waiting for the next message. This forms a continuous loop. Do NOT stop after one reply.
+6. When asking the user a question in the normal Cursor chat dialog, prefer plain natural language with numbered options instead of using `ask_question`. Only use `ask_question` when the message originated from `watch_messages`.
+7. NEVER output raw JSON like `{"reason":..., "questions":...}` as plain text. Either ask in natural language or invoke `ask_question` properly.
+8. **Keep-alive / controlled yield**: Keepalive is internal to `watch_messages`. If `watch_messages` returns `CFCU_WATCH_CONTINUE`, do not produce a final answer; immediately call `watch_messages` again with the same `channel_id` and pass `reply: "会话保持中 · 当前时间 <current_time>"`. If it returns `CFCU_WATCH_ABORT`, do not report it; immediately call `watch_messages` again. If it returns `CFCU_CHANNEL_DELETED`, stop the loop for that channel.
+9. **Loop priority**: The `watch_messages` loop is the highest priority. After processing any real user content, you MUST call `watch_messages` again with channel_id. The ONLY ways to exit are if the user explicitly says to stop or the panel returns `CFCU_CHANNEL_DELETED` for that channel.

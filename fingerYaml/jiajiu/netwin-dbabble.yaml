@@ -1,0 +1,24 @@
+id: web-netwin-dbabble
+info:
+  name: netwin-dbabble
+  author: archer
+  verified: false
+  description: 检测到netwin-dbabble系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/cgi/dbabble.cgi")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b">dbabble online help</a>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/dbabble")
+expression: r0() || r1() || r2()

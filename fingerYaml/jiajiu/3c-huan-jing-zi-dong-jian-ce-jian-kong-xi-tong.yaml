@@ -1,0 +1,19 @@
+id: web-3C环境自动监测监控系统
+info:
+  name: 3C环境自动监测监控系统
+  author: archer
+  verified: true
+  description: 检测到3C环境自动监测监控系统系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-338936081"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Ajax/ValidCodeImg.ashx") && response.body.ibcontains(b"Easyui/themes/default/easyui.css")
+expression: r0() || r1()

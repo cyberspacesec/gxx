@@ -1,0 +1,24 @@
+id: web-wq-cms
+info:
+  name: wq-cms
+  author: archer
+  verified: false
+  description: 检测到wq-cms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href='http://www.wqcms.com")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"inc/wqcms.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"style/wangqi/style.css")
+expression: r0() || r1() || r2()

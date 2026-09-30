@@ -1,0 +1,19 @@
+id: web-3kits-cms
+info:
+  name: 3kits-cms
+  author: zhizhuo
+  verified: true
+  description: 识别特定Web应用
+  created: 2025/04/15
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"3kits</a>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.3kits.com\"")
+expression: r0() || r1()

@@ -1,0 +1,14 @@
+id: web-wsncm-iot
+info:
+  name: wsncm-iot
+  author: archer
+  verified: false
+  description: 检测到wsncm-iot系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"login\">物联网供应链与金融风险管理服务")
+expression: r0()

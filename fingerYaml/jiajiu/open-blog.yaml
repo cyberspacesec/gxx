@@ -1,0 +1,14 @@
+id: web-open-blog
+info:
+  name: open-blog
+  author: archer
+  verified: false
+  description: 检测到open-blog系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"target=\"_blank\">open blog")
+expression: r0()

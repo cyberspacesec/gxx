@@ -1,0 +1,19 @@
+id: web-landmark-dus
+info:
+  name: landmark-dus
+  author: archer
+  verified: false
+  description: 检测到landmark-dus系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"landmark")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/landmark.admin.web_deploy/")
+expression: r0() || r1()

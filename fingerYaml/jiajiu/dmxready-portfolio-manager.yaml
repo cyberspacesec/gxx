@@ -1,0 +1,19 @@
+id: web-dmxready-portfolio-manager
+info:
+  name: dmxready-portfolio-manager
+  author: archer
+  verified: false
+  description: 检测到dmxready-portfolio-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/css/portfoliomanager/styles_display_page.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"rememberme_portfoliomanager")
+expression: r0() || r1()

@@ -1,0 +1,19 @@
+id: web-netcom-ngfw
+info:
+  name: netcom-ngfw
+  author: archer
+  verified: true
+  description: 检测到netcom-ngfw系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>网康下一代防火墙</title>") && response.body.ibcontains(b"netentsec.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "5471989"
+expression: r0() || r1()

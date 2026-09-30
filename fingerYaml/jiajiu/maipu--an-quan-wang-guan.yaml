@@ -1,0 +1,14 @@
+id: web-maipu-安全网关
+info:
+  name: maipu-安全网关
+  author: archer
+  verified: false
+  description: 检测到maipu-安全网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webui/images/maipu/login/login_adminbg_a.gif\"?")
+expression: r0()

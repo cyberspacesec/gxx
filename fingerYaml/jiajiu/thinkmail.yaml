@@ -1,0 +1,29 @@
+id: web-thinkmail
+info:
+  name: thinkmail
+  author: archer
+  verified: false
+  description: 检测到thinkmail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href='http://www.thinkcloud.cn' target='_blank'>thinkcloud</a>.all right reserved</div>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"app_download\":\"\",\"thinkmail官网")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webmail\"+\"/common/validatecode.do")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/resource/se/common/jquery.js")
+expression: r0() || r1() || r2() || r3()

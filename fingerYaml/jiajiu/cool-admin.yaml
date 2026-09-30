@@ -1,0 +1,19 @@
+id: web-cool-admin
+info:
+  name: cool-admin
+  author: archer
+  verified: true
+  description: 检测到cool-admin系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "74170179"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"cool-admin")
+expression: r0() || r1()

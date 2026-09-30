@@ -1,0 +1,14 @@
+id: web-深信服终端安全管理系统
+info:
+  name: 深信服终端安全管理系统
+  author: archer
+  verified: false
+  description: 检测到深信服终端安全管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"location.href = \"./ui/\";") && response.body.ibcontains(b"<title>Loading...</title>") && response.raw_header.ibcontains(b"Etag: *")'
+expression: r0()

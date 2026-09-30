@@ -1,0 +1,19 @@
+id: web-open-admin-for-schools
+info:
+  name: open-admin-for-schools
+  author: archer
+  verified: false
+  description: 检测到open-admin-for-schools系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/cgi-bin/rptbirthday.pl")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"open admin for schools")
+expression: r0() || r1()

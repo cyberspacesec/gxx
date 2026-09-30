@@ -1,0 +1,14 @@
+id: web-正通慧丰实例控制台-oa
+info:
+  name: 正通慧丰实例控制台-oa
+  author: archer
+  verified: true
+  description: 检测到正通慧丰实例控制台-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1554360798"
+expression: r0()

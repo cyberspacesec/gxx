@@ -1,0 +1,19 @@
+id: web-h5s-video-platform
+info:
+  name: h5s-video-platform
+  author: archer
+  verified: true
+  description: 检测到h5s-video-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"h5s视频平台|web")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1018965904"
+expression: r0() || r1()

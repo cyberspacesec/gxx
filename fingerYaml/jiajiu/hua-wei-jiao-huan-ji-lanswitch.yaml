@@ -1,0 +1,14 @@
+id: web-华为交换机Lanswitch
+info:
+  name: 华为交换机Lanswitch
+  author: archer
+  verified: false
+  description: 检测到华为交换机Lanswitch系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/simple/view/main/modifyPwd.html")
+expression: r0()

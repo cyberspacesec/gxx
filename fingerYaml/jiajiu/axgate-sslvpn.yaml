@@ -1,0 +1,14 @@
+id: web-axgate-sslvpn
+info:
+  name: axgate-sslvpn
+  author: archer
+  verified: false
+  description: 检测到axgate-sslvpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"axgate\"")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-apache-oozie-web-console
+info:
+  name: apache-oozie-web-console
+  author: archer
+  verified: false
+  description: 检测到apache-oozie-web-console系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"oozie-console")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/oozie\">oozie console")
+expression: r0() || r1()

@@ -1,0 +1,14 @@
+id: web-wayos维盟ac集中管理系统
+info:
+  name: wayos维盟ac集中管理系统
+  author: archer
+  verified: false
+  description: 检测到wayos维盟ac集中管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>维盟（WayOS）智能路由管理系统  www.wayos.cn</title>")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-yonyou-u8
+info:
+  name: yonyou-u8
+  author: archer
+  verified: false
+  description: 检测到yonyou-u8系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"getfirstu8accid")
+expression: r0()

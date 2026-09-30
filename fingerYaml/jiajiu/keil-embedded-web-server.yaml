@@ -1,0 +1,14 @@
+id: web-keil-embedded-web-server
+info:
+  name: keil-embedded-web-server
+  author: archer
+  verified: false
+  description: 检测到keil-embedded-web-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: keil-eweb")'
+expression: r0()

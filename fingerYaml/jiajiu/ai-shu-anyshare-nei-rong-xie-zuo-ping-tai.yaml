@@ -1,0 +1,19 @@
+id: web-爱数AnyShare内容协作平台
+info:
+  name: 爱数AnyShare内容协作平台
+  author: archer
+  verified: false
+  description: 检测到爱数AnyShare内容协作平台系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"res/libs/webuploader/webuploader.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/res/libs/base64.min.js\"")
+expression: r0() || r1()

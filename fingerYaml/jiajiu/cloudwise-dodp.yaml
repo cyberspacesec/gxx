@@ -1,0 +1,14 @@
+id: web-cloudwise-dodp
+info:
+  name: cloudwise-dodp
+  author: archer
+  verified: false
+  description: 检测到cloudwise-dodp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/public/vendor/monaco/vs/loader.js")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-cloodie-his
+info:
+  name: cloodie-his
+  author: archer
+  verified: false
+  description: 检测到cloodie-his系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/design/common/his.logo.white.svg\" alt=\"his logo")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/design/design/cloodie.css")
+expression: r0() || r1()

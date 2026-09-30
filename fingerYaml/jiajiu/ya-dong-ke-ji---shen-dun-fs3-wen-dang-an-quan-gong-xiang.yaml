@@ -1,0 +1,14 @@
+id: web-亚东科技-神盾fs3文档安全共享
+info:
+  name: 亚东科技-神盾fs3文档安全共享
+  author: archer
+  verified: false
+  description: 检测到亚东科技-神盾fs3文档安全共享系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"神盾fs<sup>3</sup>文档安全共享系统v2.0</div>") && response.body.ibcontains(b"神盾fs3文档安全共享系统v2.0")
+expression: r0()

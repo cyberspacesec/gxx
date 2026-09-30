@@ -1,0 +1,14 @@
+id: web-apache-solr
+info:
+  name: apache-solr
+  author: archer
+  verified: false
+  description: 检测到apache-solr系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Location: /solr/")'
+expression: r0()

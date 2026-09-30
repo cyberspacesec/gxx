@@ -1,0 +1,14 @@
+id: web-host-security-and-management-system
+info:
+  name: host-security-and-management-system
+  author: archer
+  verified: false
+  description: 检测到host-security-and-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=./static/css/app.edb681c84a53277f9336fc297ebca96e.css")
+expression: r0()

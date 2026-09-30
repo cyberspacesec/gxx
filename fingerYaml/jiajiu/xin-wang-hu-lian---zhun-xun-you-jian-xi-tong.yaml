@@ -1,0 +1,14 @@
+id: web-新网互联-准讯邮件系统
+info:
+  name: 新网互联-准讯邮件系统
+  author: archer
+  verified: false
+  description: 检测到新网互联-准讯邮件系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webmail//cssv2/tamail.css\"") && response.body.ibcontains(b"src=\"cgijson/getloginimg.php?img=logo")
+expression: r0()

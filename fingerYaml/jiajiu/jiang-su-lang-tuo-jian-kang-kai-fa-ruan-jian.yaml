@@ -1,0 +1,14 @@
+id: web-江苏朗拓健康开发软件
+info:
+  name: 江苏朗拓健康开发软件
+  author: archer
+  verified: true
+  description: 检测到江苏朗拓健康开发软件系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1648114189"
+expression: r0()

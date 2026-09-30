@@ -1,0 +1,19 @@
+id: web-integrating-century-epbp-management-platform
+info:
+  name: integrating-century-epbp-management-platform
+  author: archer
+  verified: false
+  description: 检测到integrating-century-epbp-management-platform系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"rmsie = /(msie\\s|trident.*rv:)([\\w.]+)/i")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"match = rmsie.exec(window.navigator.useragent")
+expression: r0() || r1()

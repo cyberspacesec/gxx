@@ -1,0 +1,19 @@
+id: web-evercookie
+info:
+  name: evercookie
+  author: archer
+  verified: false
+  description: 检测到evercookie系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"evercookie.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var ec = new evercookie();")
+expression: r0() || r1()

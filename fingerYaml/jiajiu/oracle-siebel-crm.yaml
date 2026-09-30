@@ -1,0 +1,24 @@
+id: web-oracle-siebel-crm
+info:
+  name: oracle-siebel-crm
+  author: archer
+  verified: false
+  description: 检测到oracle-siebel-crm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ot='siebwebmainwindow'>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"scripting is used to manage data interactions between the siebel server/web server")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onload=\"gotourl('start.swe?swecmd=start')")
+expression: r0() || r1() || r2()

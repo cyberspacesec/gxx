@@ -1,0 +1,14 @@
+id: web-蓝盾-文档安全管理系统
+info:
+  name: 蓝盾-文档安全管理系统
+  author: archer
+  verified: false
+  description: 检测到蓝盾-文档安全管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"蓝盾文档安全管理系统")
+expression: r0()

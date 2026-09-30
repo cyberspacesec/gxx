@@ -1,0 +1,19 @@
+id: web-ruijie-rg-uac
+info:
+  name: ruijie-rg-uac
+  author: archer
+  verified: false
+  description: 检测到ruijie-rg-uac系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"bbs.ruijie.com.cn") && response.body.ibcontains(b"锐捷统一上网行为管理与审计系统")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src='images/free_login.png'")
+expression: r0() || r1()

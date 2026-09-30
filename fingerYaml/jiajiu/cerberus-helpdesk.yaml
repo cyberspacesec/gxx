@@ -1,0 +1,14 @@
+id: web-cerberus-helpdesk
+info:
+  name: cerberus-helpdesk
+  author: archer
+  verified: false
+  description: 检测到cerberus-helpdesk系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- if you have your own stylesheet for html elements, you can remove the cerberus-html.css link")
+expression: r0()

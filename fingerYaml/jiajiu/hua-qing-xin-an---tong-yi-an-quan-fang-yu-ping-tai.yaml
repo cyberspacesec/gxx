@@ -1,0 +1,14 @@
+id: web-华清信安-统一安全防御平台
+info:
+  name: 华清信安-统一安全防御平台
+  author: archer
+  verified: false
+  description: 检测到华清信安-统一安全防御平台系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.dmsdefaultlanguage") && response.body.ibcontains(b"content=\"华清信安统一安全防御平台")
+expression: r0()

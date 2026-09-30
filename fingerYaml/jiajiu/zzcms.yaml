@@ -1,0 +1,14 @@
+id: web-zzcms
+info:
+  name: zzcms
+  author: archer
+  verified: false
+  description: 检测到zzcms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/inc/showuserlogin.php?style=h&t=math.random()")
+expression: r0()

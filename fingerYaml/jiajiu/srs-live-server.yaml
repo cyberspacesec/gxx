@@ -1,0 +1,14 @@
+id: web-srs-live-server
+info:
+  name: srs-live-server
+  author: archer
+  verified: false
+  description: 检测到srs-live-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"players/js/winlin.utility.js")
+expression: r0()

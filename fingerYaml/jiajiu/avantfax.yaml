@@ -1,0 +1,14 @@
+id: web-avantfax
+info:
+  name: avantfax
+  author: archer
+  verified: false
+  description: 检测到avantfax系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"images/avantfax-big.png\" border=\"0\" alt=\"avantfax")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-ciphermail-email-encryption-gateway
+info:
+  name: ciphermail-email-encryption-gateway
+  author: archer
+  verified: false
+  description: 检测到ciphermail-email-encryption-gateway系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ciphermail email encryption gateway")
+expression: r0()

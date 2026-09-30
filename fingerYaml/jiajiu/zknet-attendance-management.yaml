@@ -1,0 +1,24 @@
+id: web-zknet-attendance-management
+info:
+  name: zknet-attendance-management
+  author: archer
+  verified: false
+  description: 检测到zknet-attendance-management系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onclick=\"showstate(gettext('forgotten password')) ")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"zknet") && response.body.ibcontains(b"zksoftware inc.")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"web考勤管理系统")
+expression: r0() || r1() || r2()

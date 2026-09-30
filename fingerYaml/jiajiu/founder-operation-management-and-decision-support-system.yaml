@@ -1,0 +1,19 @@
+id: web-founder-operation-management-and-decision-support-system
+info:
+  name: founder-operation-management-and-decision-support-system
+  author: archer
+  verified: false
+  description: 检测到founder-operation-management-and-decision-support-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/portal/img/logo.png\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/desktop/ui/custom/getimage?img=iphoneview.png\"")
+expression: r0() || r1()

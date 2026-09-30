@@ -1,0 +1,14 @@
+id: web-0example
+info:
+  name: 0example
+  author: zhizhuo
+  verified: true
+  description: 识别特定Web应用
+  created: 2025/04/15
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.bcontains(b"<title>Example Domain</title>")
+expression: r0()

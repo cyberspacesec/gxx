@@ -1,0 +1,14 @@
+id: web-ruijie-cloud
+info:
+  name: ruijie-cloud
+  author: archer
+  verified: false
+  description: 检测到ruijie-cloud系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"rcp, 管理平台\"")
+expression: r0()

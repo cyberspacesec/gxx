@@ -1,0 +1,19 @@
+id: web-hisense-webpos
+info:
+  name: hisense-webpos
+  author: archer
+  verified: false
+  description: 检测到hisense-webpos系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<legend><img src=\"../../content/images/hisense.bmp\" style=\"height:20px; padding-left:-10px\"/>webpos登录</legend>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content/images/hisense.bmp")
+expression: r0() || r1()

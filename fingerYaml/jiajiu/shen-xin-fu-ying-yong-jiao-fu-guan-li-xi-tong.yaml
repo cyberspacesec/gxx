@@ -1,0 +1,29 @@
+id: web-深信服应用交付管理系统
+info:
+  name: 深信服应用交付管理系统
+  author: archer
+  verified: true
+  description: 检测到深信服应用交付管理系统的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1810847295"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/static/es6_polyfill/polyfill.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"user_blur();")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"/reportCenter/index.php?cls_mode=cluster_mode_others")
+expression: r0() || r1() || r2() || r3()

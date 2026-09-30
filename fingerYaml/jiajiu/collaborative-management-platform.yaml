@@ -1,0 +1,34 @@
+id: web-collaborative-management-platform
+info:
+  name: collaborative-management-platform
+  author: archer
+  verified: false
+  description: 检测到collaborative-management-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"广州协商科技有限公司")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/web/submitlogon2.do")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"css/hitalklogin.css")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/activex/sinoccshell.cab")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/web/submitlogon2.do ")
+expression: r0() || r1() || r2() || r3() || r4()

@@ -1,0 +1,14 @@
+id: web-e-plugger-srm
+info:
+  name: e-plugger-srm
+  author: archer
+  verified: false
+  description: 检测到e-plugger-srm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"lan12-jingbian-hong") && response.body.ibcontains(b"科研管理系统，北京易普拉格科技")
+expression: r0()

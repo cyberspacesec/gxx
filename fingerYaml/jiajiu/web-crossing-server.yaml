@@ -1,0 +1,14 @@
+id: web-web-crossing-server
+info:
+  name: web-crossing-server
+  author: archer
+  verified: false
+  description: 检测到web-crossing-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: web crossing")'
+expression: r0()

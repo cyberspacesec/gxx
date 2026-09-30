@@ -1,0 +1,14 @@
+id: web-topsec-vpn
+info:
+  name: topsec-vpn
+  author: archer
+  verified: false
+  description: 检测到topsec-vpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"/portal_default/index.html") && response.raw_header.ibcontains(b"server: TopWebServer") && response.raw_header.ibcontains(b"set-cookie: topsecsvuilanguage")'
+expression: r0()

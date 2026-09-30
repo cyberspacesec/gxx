@@ -1,0 +1,14 @@
+id: web-micro-focus-open-enterprise-server
+info:
+  name: micro-focus-open-enterprise-server
+  author: archer
+  verified: false
+  description: 检测到micro-focus-open-enterprise-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h3>micro focus open enterprise server 提供市场中的最佳网络、文件和打印服务。</h3>")
+expression: r0()

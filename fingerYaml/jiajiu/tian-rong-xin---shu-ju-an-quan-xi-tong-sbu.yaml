@@ -1,0 +1,14 @@
+id: web-天融信-数据安全系统sbu
+info:
+  name: 天融信-数据安全系统sbu
+  author: archer
+  verified: false
+  description: 检测到天融信-数据安全系统sbu系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"天融信数据安全系统sbu")
+expression: r0()

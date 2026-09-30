@@ -1,0 +1,19 @@
+id: web-jxt-consulting
+info:
+  name: jxt-consulting
+  author: archer
+  verified: false
+  description: 检测到jxt-consulting系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"jxt-popup-wrapper")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by jxt consulting")
+expression: r0() || r1()

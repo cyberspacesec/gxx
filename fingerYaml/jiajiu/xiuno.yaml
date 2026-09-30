@@ -1,0 +1,14 @@
+id: web-xiuno
+info:
+  name: xiuno
+  author: archer
+  verified: false
+  description: 检测到xiuno系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"xiuno/xiunobbs")
+expression: r0()

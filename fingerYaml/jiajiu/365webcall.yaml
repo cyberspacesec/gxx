@@ -1,0 +1,14 @@
+id: web-365webcall
+info:
+  name: 365webcall
+  author: archer
+  verified: false
+  description: 检测到365webcall系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src='http://www.365webcall.com/imme1.aspx?")
+expression: r0()

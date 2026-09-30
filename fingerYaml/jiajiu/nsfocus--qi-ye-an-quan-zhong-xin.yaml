@@ -1,0 +1,14 @@
+id: web-nsfocus-企业安全中心
+info:
+  name: nsfocus-企业安全中心
+  author: archer
+  verified: false
+  description: 检测到nsfocus-企业安全中心系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/login_logo_espc_zh_cn.png") && response.body.ibcontains(b"绿盟科技企业安全中心")
+expression: r0()

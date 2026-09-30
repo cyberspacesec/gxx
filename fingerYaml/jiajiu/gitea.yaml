@@ -1,0 +1,14 @@
+id: web-gitea
+info:
+  name: gitea
+  author: archer
+  verified: false
+  description: 检测到gitea系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 200 && response.body.ibcontains(b"content=\"Gitea - Git with a cup of tea\"") && response.raw_header.ibcontains(b"Set-Cookie: i_like_gitea")'
+expression: r0()

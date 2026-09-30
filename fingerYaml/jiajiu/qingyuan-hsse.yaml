@@ -1,0 +1,14 @@
+id: web-qingyuan-hsse
+info:
+  name: qingyuan-hsse
+  author: archer
+  verified: false
+  description: 检测到qingyuan-hsse系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"hsse 系统")
+expression: r0()

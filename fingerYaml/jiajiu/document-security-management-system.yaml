@@ -1,0 +1,24 @@
+id: web-document-security-management-system
+info:
+  name: document-security-management-system
+  author: archer
+  verified: false
+  description: 检测到document-security-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/drm/template/css/login.css\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/drm/login.do\"")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/drm/encjs/barrett.js\"")
+expression: r0() || r1() || r2()

@@ -1,0 +1,19 @@
+id: web-votemanager
+info:
+  name: votemanager
+  author: archer
+  verified: false
+  description: 检测到votemanager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"微平台投票系统")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.cdrbp.cn\">微信数字投票") && response.body.ibcontains(b"content=\"微平台投票管理系统")
+expression: r0() || r1()

@@ -1,0 +1,29 @@
+id: web-websidestory
+info:
+  name: websidestory
+  author: archer
+  verified: false
+  description: 检测到websidestory系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"http://websidestory.com")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"websidestory code")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"websidestory,inc. all rights reserved. u.s.patent no. 6,393,479b1")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- websidestory html for search -->")
+expression: r0() || r1() || r2() || r3()

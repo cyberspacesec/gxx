@@ -1,0 +1,24 @@
+id: web-iwebshop
+info:
+  name: iwebshop
+  author: archer
+  verified: false
+  description: 检测到iwebshop系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"_skinpath")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"_themepath")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"_weburl") && response.body.ibcontains(b"class=\"pro_title\">iwebshop支付测试")
+expression: r0() || r1() || r2()

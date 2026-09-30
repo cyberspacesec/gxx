@@ -1,0 +1,14 @@
+id: web-tp_link-omada-controller
+info:
+  name: tp_link-omada-controller
+  author: archer
+  verified: false
+  description: 检测到tp_link-omada-controller系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"width=1300,initial-scale=1,minimal-ui\"")
+expression: r0()

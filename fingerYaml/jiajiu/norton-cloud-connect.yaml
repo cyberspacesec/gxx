@@ -1,0 +1,14 @@
+id: web-norton-cloud-connect
+info:
+  name: norton-cloud-connect
+  author: archer
+  verified: false
+  description: 检测到norton-cloud-connect系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"<h2 style=\"margin-left: 0px;\">norton cloud connect</h2>")'
+expression: r0()

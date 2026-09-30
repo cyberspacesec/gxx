@@ -1,0 +1,29 @@
+id: web-ctop-oa
+info:
+  name: ctop-oa
+  author: archer
+  verified: false
+  description: 检测到ctop-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/ctop/index.jsp")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/software/jinstall.exe")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"images/logo-ctop.gif")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"images/ctop_logo.gif")
+expression: r0() || r1() || r2() || r3()

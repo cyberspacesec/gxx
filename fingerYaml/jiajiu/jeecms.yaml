@@ -1,0 +1,29 @@
+id: web-jeecms
+info:
+  name: jeecms
+  author: archer
+  verified: false
+  description: 检测到jeecms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<script src=\"/r/cms/www/")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/r/cms/") && response.body.ibcontains(b"default/js/") && response.body.ibcontains(b"default/css/")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<script src=\"/u/cms/www/")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"www.jeecms.com")
+expression: r0() || r1() || r2() || r3()

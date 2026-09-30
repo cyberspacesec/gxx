@@ -1,0 +1,14 @@
+id: web-若依后端框架
+info:
+  name: 若依后端框架
+  author: archer
+  verified: false
+  description: 检测到若依后端框架系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"后台管理框架") && response.body.ibcontains(b"当前版本") && response.body.ibcontains(b"请通过前端地址访问")
+expression: r0()

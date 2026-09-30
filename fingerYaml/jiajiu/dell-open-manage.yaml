@@ -1,0 +1,14 @@
+id: web-dell-open-manage
+info:
+  name: dell-open-manage
+  author: archer
+  verified: false
+  description: 检测到dell-open-manage系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img title=\"open manage\" alt=\"open manage")
+expression: r0()

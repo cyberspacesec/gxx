@@ -1,0 +1,29 @@
+id: web-consul-hashicorp
+info:
+  name: consul-hashicorp
+  author: archer
+  verified: false
+  description: 检测到consul-hashicorp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"consul-ui/config/environment")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"consulhost")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"consul instance")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"www.consul.io")
+expression: r0() || r1() || r2() || r3()

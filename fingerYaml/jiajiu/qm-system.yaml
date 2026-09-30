@@ -1,0 +1,19 @@
+id: web-qm-system
+info:
+  name: qm-system
+  author: archer
+  verified: false
+  description: 检测到qm-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"polyfills.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"assets/css/fdb.css")
+expression: r0() || r1()

@@ -1,0 +1,24 @@
+id: web-wygk-product
+info:
+  name: wygk-product
+  author: archer
+  verified: false
+  description: 检测到wygk-product系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"wrzcnet.ico")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"mailto:webmaster@wrzc.net")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"url = 'wrzcnet_vote.asp?stype=view';")
+expression: r0() || r1() || r2()

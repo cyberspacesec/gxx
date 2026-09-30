@@ -1,0 +1,24 @@
+id: web-phplist
+info:
+  name: phplist
+  author: archer
+  verified: false
+  description: 检测到phplist系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"michiel dethmers - http://www.phplist.com")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"phplist version")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"&copy; <a href=\"http://phplist.com\" target")
+expression: r0() || r1() || r2()

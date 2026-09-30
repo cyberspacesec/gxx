@@ -1,0 +1,24 @@
+id: web-whir-ezoffice
+info:
+  name: whir-ezoffice
+  author: archer
+  verified: false
+  description: 检测到whir-ezoffice系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ezofficeusername")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"whirrootpath")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/defaultroot/js/cookie.js")
+expression: r0() || r1() || r2()

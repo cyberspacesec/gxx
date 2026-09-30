@@ -1,0 +1,24 @@
+id: web-mahara
+info:
+  name: mahara
+  author: archer
+  verified: false
+  description: 检测到mahara系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"this site is powered by mahara")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"powered-by\"><a href=\"http://mahara.org/")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"{\"namedfieldempty\":")
+expression: r0() || r1() || r2()

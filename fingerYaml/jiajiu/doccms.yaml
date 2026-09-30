@@ -1,0 +1,14 @@
+id: web-doccms
+info:
+  name: doccms
+  author: archer
+  verified: false
+  description: 检测到doccms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Power by DocCms x1.0&grysoft")
+expression: r0()

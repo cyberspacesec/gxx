@@ -1,0 +1,14 @@
+id: web-raisecom-ivoice8000
+info:
+  name: raisecom-ivoice8000
+  author: archer
+  verified: false
+  description: 检测到raisecom-ivoice8000系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"com_raisecom_ums_aos_portal_login_domain")
+expression: r0()

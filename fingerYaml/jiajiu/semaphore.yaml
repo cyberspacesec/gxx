@@ -1,0 +1,19 @@
+id: web-semaphore
+info:
+  name: semaphore
+  author: archer
+  verified: false
+  description: 检测到semaphore系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"www.smartlogic.com")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"powered by semaphore\"")
+expression: r0() || r1()

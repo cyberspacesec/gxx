@@ -1,0 +1,14 @@
+id: web-vos-vos2009
+info:
+  name: vos-vos2009
+  author: archer
+  verified: false
+  description: 检测到vos-vos2009系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"vos2009, voip, voip运营支撑系统, 软交换\"")
+expression: r0()

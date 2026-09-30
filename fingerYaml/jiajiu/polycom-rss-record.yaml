@@ -1,0 +1,14 @@
+id: web-polycom-rss-record
+info:
+  name: polycom-rss-record
+  author: archer
+  verified: false
+  description: 检测到polycom-rss-record系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location.replace(\"/rss/\")")
+expression: r0()

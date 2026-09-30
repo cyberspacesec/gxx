@@ -1,0 +1,19 @@
+id: web-staragent
+info:
+  name: staragent
+  author: archer
+  verified: false
+  description: 检测到staragent系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location = \"/user/home.jsx\";")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/aisc/aisc.css")
+expression: r0() || r1()

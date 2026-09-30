@@ -1,0 +1,19 @@
+id: web-xinhaisoft-system
+info:
+  name: xinhaisoft-system
+  author: archer
+  verified: false
+  description: 检测到xinhaisoft-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"北京心海导航教育科技股份有限公司-中国心理网版权所有<br>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"../regist.asp?school=")
+expression: r0() || r1()

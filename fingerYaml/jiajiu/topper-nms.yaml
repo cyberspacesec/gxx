@@ -1,0 +1,14 @@
+id: web-topper-nms
+info:
+  name: topper-nms
+  author: archer
+  verified: false
+  description: 检测到topper-nms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"mailto:kenstar@kenstar-group.com")
+expression: r0()

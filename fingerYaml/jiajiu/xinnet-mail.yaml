@@ -1,0 +1,19 @@
+id: web-xinnet-mail
+info:
+  name: xinnet-mail
+  author: archer
+  verified: false
+  description: 检测到xinnet-mail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"cgijson/getloginimg.php?img=logo")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webmail//cssv2/tamail.css")
+expression: r0() || r1()

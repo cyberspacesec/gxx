@@ -1,0 +1,14 @@
+id: web-OSS存储桶
+info:
+  name: OSS 存储桶
+  author: archer
+  verified: false
+  description: 检测到OSS 存储桶系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ListBucketResult") && response.body.ibcontains(b"MaxKeys") && response.body.ibcontains(b"Contents")
+expression: r0()

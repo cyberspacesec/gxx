@@ -1,0 +1,14 @@
+id: web-looyu-oms
+info:
+  name: looyu-oms
+  author: archer
+  verified: false
+  description: 检测到looyu-oms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"http://gate.looyu.com/")
+expression: r0()

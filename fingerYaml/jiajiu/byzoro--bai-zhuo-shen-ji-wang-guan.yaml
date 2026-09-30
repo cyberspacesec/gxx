@@ -1,0 +1,14 @@
+id: web-byzoro-百卓审计网关
+info:
+  name: byzoro-百卓审计网关
+  author: archer
+  verified: false
+  description: 检测到byzoro-百卓审计网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title> technology, inc.</title>") && response.body.ibcontains(b"百卓网络")
+expression: r0()

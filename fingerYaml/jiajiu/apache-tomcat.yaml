@@ -1,0 +1,54 @@
+id: web-apache-tomcat
+info:
+  name: apache-tomcat
+  author: archer
+  verified: true
+  description: 检测到apache-tomcat系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 404 && response.body.ibcontains(b"<h3>Apache Tomcat/")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<title>Apache Tomcat/")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/manager/html") && response.body.ibcontains(b"/manager/status")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"tomcat.css")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"this is the default tomcat home page")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h3>apache tomcat")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"x-powered-by: Tomcat")'
+  r7:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: Apache-Coyote/")'
+  r8:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-297069493"
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6() || r7() || r8()

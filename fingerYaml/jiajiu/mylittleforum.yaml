@@ -1,0 +1,19 @@
+id: web-mylittleforum
+info:
+  name: mylittleforum
+  author: archer
+  verified: false
+  description: 检测到mylittleforum系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by my little forum")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"index.php?mode=js_defaults")
+expression: r0() || r1()

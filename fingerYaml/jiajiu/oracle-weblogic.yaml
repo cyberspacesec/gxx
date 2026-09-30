@@ -1,0 +1,49 @@
+id: web-oracle-weblogic
+info:
+  name: oracle-weblogic
+  author: archer
+  verified: false
+  description: 检测到oracle-weblogic系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"WebLogic")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Hypertext Transfer Protocol")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<i>Hypertext Transfer Protocol -- HTTP/1.1</i>")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/console/framework/skins/wlsconsole/images/login_WebLogic_branding.png")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Welcome to Weblogic Application Server")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Error 403--")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Error 404--Not Found")
+  r7:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Oracle WebLogic Server")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6() || r7()

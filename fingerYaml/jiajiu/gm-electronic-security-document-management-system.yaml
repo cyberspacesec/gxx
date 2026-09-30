@@ -1,0 +1,19 @@
+id: web-gm-electronic-security-document-management-system
+info:
+  name: gm-electronic-security-document-management-system
+  author: archer
+  verified: false
+  description: 检测到gm-electronic-security-document-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"</span>国迈安全私有云部. <span>all rights reserved")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"国迈安全私有云部 all rights reserved")
+expression: r0() || r1()

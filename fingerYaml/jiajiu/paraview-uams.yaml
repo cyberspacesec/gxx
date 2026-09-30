@@ -1,0 +1,14 @@
+id: web-paraview-uams
+info:
+  name: paraview-uams
+  author: archer
+  verified: false
+  description: 检测到paraview-uams系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- <title>派拉统一身份管理系统</title> -->")
+expression: r0()

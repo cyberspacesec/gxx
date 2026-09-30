@@ -1,0 +1,14 @@
+id: web-cl-http
+info:
+  name: cl-http
+  author: archer
+  verified: false
+  description: 检测到cl-http系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: cl-http")'
+expression: r0()

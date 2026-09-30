@@ -1,0 +1,24 @@
+id: web-pivotx
+info:
+  name: pivotx
+  author: archer
+  verified: false
+  description: 检测到pivotx系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"includes/js/pivotx.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"templates_internal/assets/pivotx.png\" alt=\"pivotx")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"pivotx")
+expression: r0() || r1() || r2()

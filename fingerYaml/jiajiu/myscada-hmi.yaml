@@ -1,0 +1,14 @@
+id: web-myscada-hmi
+info:
+  name: myscada-hmi
+  author: archer
+  verified: false
+  description: 检测到myscada-hmi系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"if(window.__myscadaversion)")
+expression: r0()

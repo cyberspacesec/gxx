@@ -1,0 +1,14 @@
+id: web-qibosoft-microsite
+info:
+  name: qibosoft-microsite
+  author: archer
+  verified: false
+  description: 检测到qibosoft-microsite系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by qibosoft v1.0")
+expression: r0()

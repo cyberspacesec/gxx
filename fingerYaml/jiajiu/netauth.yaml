@@ -1,0 +1,19 @@
+id: web-netauth
+info:
+  name: netauth
+  author: archer
+  verified: false
+  description: 检测到netauth系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"image/loginauthorize.png\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onmouseover=\"mm_swapimage('image1','','image/loginok_after.gif',1)\"")
+expression: r0() || r1()

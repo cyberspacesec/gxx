@@ -1,0 +1,14 @@
+id: web-seagull-php-framework
+info:
+  name: seagull-php-framework
+  author: archer
+  verified: false
+  description: 检测到seagull-php-framework系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var sgl_js_sessid")
+expression: r0()

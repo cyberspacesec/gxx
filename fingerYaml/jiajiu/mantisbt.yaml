@@ -1,0 +1,19 @@
+id: web-mantisbt
+info:
+  name: mantisbt
+  author: archer
+  verified: false
+  description: 检测到mantisbt系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by mantis bugtracker")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"mantis bugtracker")
+expression: r0() || r1()

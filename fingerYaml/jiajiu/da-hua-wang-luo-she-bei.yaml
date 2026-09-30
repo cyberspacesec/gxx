@@ -1,0 +1,24 @@
+id: web-大华网络设备
+info:
+  name: 大华网络设备
+  author: archer
+  verified: true
+  description: 检测到大华网络设备系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>WEB SERVICE</title>") && response.body.ibcontains(b"/IEpolyfill.min.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-926971827"
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1653394551"
+expression: r0() || r1() || r2()

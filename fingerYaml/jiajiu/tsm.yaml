@@ -1,0 +1,14 @@
+id: web-tsm
+info:
+  name: tsm
+  author: archer
+  verified: false
+  description: 检测到tsm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var url = getcontextname() + \"?service=ajaxdirect/1/")
+expression: r0()

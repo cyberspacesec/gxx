@@ -1,0 +1,19 @@
+id: web-深信服BBC集中安全管理平台
+info:
+  name: 深信服BBC集中安全管理平台
+  author: archer
+  verified: false
+  description: 检测到深信服BBC集中安全管理平台系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"3parts/babelRuntime.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"location.href = '/bbc/index'")
+expression: r0() || r1()

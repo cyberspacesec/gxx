@@ -1,0 +1,14 @@
+id: web-惠尔顿-e地通vpn
+info:
+  name: 惠尔顿-e地通vpn
+  author: archer
+  verified: false
+  description: 检测到惠尔顿-e地通vpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"jtpsoft style1") && response.body.ibcontains(b"images/l_name.jpg")
+expression: r0()

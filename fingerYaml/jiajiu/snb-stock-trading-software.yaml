@@ -1,0 +1,14 @@
+id: web-snb-stock-trading-software
+info:
+  name: snb-stock-trading-software
+  author: archer
+  verified: false
+  description: 检测到snb-stock-trading-software系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"copyright 2005–2009 <a href=\"http://www.s-mo.com\">")
+expression: r0()

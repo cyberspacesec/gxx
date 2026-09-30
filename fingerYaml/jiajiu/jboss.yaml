@@ -1,0 +1,29 @@
+id: web-jboss
+info:
+  name: jboss
+  author: archer
+  verified: true
+  description: 检测到jboss系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://jboss.org\">")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"jboss.css")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"x-powered-by: JBoss")'
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-656811182"
+expression: r0() || r1() || r2() || r3()

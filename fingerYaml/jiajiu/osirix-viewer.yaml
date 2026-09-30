@@ -1,0 +1,14 @@
+id: web-osirix-viewer
+info:
+  name: osirix-viewer
+  author: archer
+  verified: false
+  description: 检测到osirix-viewer系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"service provided by <a href=\"https://www.osirix-viewer.com\"")
+expression: r0()

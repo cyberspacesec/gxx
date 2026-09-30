@@ -1,0 +1,24 @@
+id: web-itenable
+info:
+  name: itenable
+  author: archer
+  verified: false
+  description: 检测到itenable系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/enableq.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"js/checkquestion.js.php")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/images/enableq.ico")
+expression: r0() || r1() || r2()

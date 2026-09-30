@@ -1,0 +1,232 @@
+name: 构建与发布
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  GOTOOLCHAIN: local
+  GOFLAGS: -mod=readonly
+  GOPROXY: https://proxy.golang.org,direct
+
+jobs:
+  metadata:
+    name: 发布版本
+    if: github.event_name == 'workflow_dispatch' || github.event.deleted == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: 核对版本与主分支
+        id: version
+        env:
+          RELEASE_EVENT: ${{ github.event_name }}
+          RELEASE_REF: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          if [[ "$RELEASE_EVENT" == push ]]; then
+            version="${RELEASE_REF#v}"
+            git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+          else
+            version="$(python3 -c 'import json; print(json.load(open("cmd/gxx-ide/wails.json"))["info"]["productVersion"])')"
+          fi
+          if [[ ! "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            printf '无效的发布版本：%s\n' "$version" >&2
+            exit 1
+          fi
+          printf 'version=%s\n' "$version" >> "$GITHUB_OUTPUT"
+
+  checks:
+    name: 发布检查
+    needs: metadata
+    uses: ./.github/workflows/ci.yml
+
+  cli:
+    name: 六平台 CLI
+    needs: [metadata, checks]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: '1.25.0'
+          cache-dependency-path: go.sum
+      - name: 构建内置指纹发布包
+        env:
+          CGO_ENABLED: '0'
+          GXX_SKIP_IDE: '1'
+          GXX_SKIP_UPX: '1'
+          GXX_VERSION: ${{ needs.metadata.outputs.version }}
+        run: bash build.sh --all
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-cli
+          path: build/gxx_*.zip
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
+
+  ide:
+    name: IDE ${{ matrix.platform }}
+    needs: [metadata, checks]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            platform: darwin/arm64
+            archive: mac_arm64
+          - runner: macos-15-intel
+            platform: darwin/amd64
+            archive: mac_x64
+          - runner: windows-2022
+            platform: windows/amd64
+            archive: win_x64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 40
+    env:
+      RELEASE_VERSION: ${{ needs.metadata.outputs.version }}
+      RELEASE_PLATFORM: ${{ matrix.platform }}
+      RELEASE_ARCHIVE: ${{ matrix.archive }}
+      NODE_OPTIONS: --max-old-space-size=4096
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: '1.25.0'
+          cache-dependency-path: |
+            go.sum
+            cmd/gxx-ide/go.sum
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: cmd/gxx-ide/frontend/package-lock.json
+      - name: 安装与模块一致的 Wails CLI
+        working-directory: cmd/gxx-ide
+        run: |
+          wails_version="$(go list -m -f '{{.Version}}' github.com/wailsapp/wails/v2)"
+          go install "github.com/wailsapp/wails/v2/cmd/wails@$wails_version"
+          printf '%s/bin\n' "$(go env GOPATH)" >> "$GITHUB_PATH"
+      - name: 构建前端与产品版本
+        working-directory: cmd/gxx-ide
+        run: |
+          node --input-type=module <<'JS'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const path = 'wails.json';
+          const config = JSON.parse(readFileSync(path, 'utf8'));
+          config.info.productVersion = process.env.RELEASE_VERSION.split(/[+-]/)[0];
+          writeFileSync(path, `${JSON.stringify(config, null, 2)}\n`);
+          JS
+          cd frontend
+          npm ci
+          npm run build
+      - name: 构建桌面应用
+        working-directory: cmd/gxx-ide
+        run: |
+          binary=gxx-ide
+          args=(build -platform "$RELEASE_PLATFORM" -clean -skipbindings -s -tags embed)
+          if [[ "$RUNNER_OS" == macOS ]]; then
+            args+=(-compiler "$PWD/scripts/wails-go")
+          else
+            binary+=.exe
+          fi
+          wails "${args[@]}" -o "$binary"
+      - name: 打包 macOS 应用
+        if: runner.os == 'macOS'
+        working-directory: cmd/gxx-ide/build/bin
+        run: |
+          mkdir -p ../../../../build
+          zip -ry "../../../../build/gxx-ide_${RELEASE_ARCHIVE}_${RELEASE_VERSION}.zip" .
+      - name: 打包 Windows 应用
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force build | Out-Null
+          Compress-Archive -Path cmd/gxx-ide/build/bin/gxx-ide.exe -DestinationPath "build/gxx-ide_$($env:RELEASE_ARCHIVE)_$($env:RELEASE_VERSION).zip"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-ide-${{ matrix.archive }}
+          path: build/gxx-ide_*.zip
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
+
+  publish:
+    name: GitHub Release
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [metadata, cli, ide]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: release-*
+          path: build
+          merge-multiple: true
+      - name: 核对发布包与校验和
+        env:
+          RELEASE_VERSION: ${{ needs.metadata.outputs.version }}
+        run: python3 .github/scripts/check-release.py build "$RELEASE_VERSION"
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: '1.25.0'
+          cache-dependency-path: go.sum
+      - name: 验证外部模块安装与 SDK 扫描
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          consumer="$(mktemp -d)"
+          cp .github/scripts/sdk-check.go "$consumer/main.go"
+          cd "$consumer"
+          go mod init sdk-release-check
+          go get "github.com/cyberspacesec/gxx/sdk@$RELEASE_TAG"
+          go run .
+      - name: 上传并发布
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_VERSION: ${{ needs.metadata.outputs.version }}
+        shell: bash
+        run: |
+          draft="$(gh release view "$RELEASE_TAG" --json isDraft --jq '.isDraft' 2>/dev/null || true)"
+          if [[ "$draft" == false ]]; then
+            printf '该版本已经发布，不覆盖现有资源。\n'
+            exit 0
+          fi
+          if [[ "$draft" != true ]]; then
+            gh release create "$RELEASE_TAG" --verify-tag --draft --generate-notes --title "GXX $RELEASE_VERSION"
+          fi
+          gh release upload "$RELEASE_TAG" build/*.zip build/SHA256SUMS --clobber
+          if [[ "${RELEASE_VERSION%%+*}" == *-* ]]; then
+            gh release edit "$RELEASE_TAG" --draft=false --prerelease
+          else
+            gh release edit "$RELEASE_TAG" --draft=false --latest
+          fi

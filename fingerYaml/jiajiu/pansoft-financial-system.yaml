@@ -1,0 +1,19 @@
+id: web-pansoft-financial-system
+info:
+  name: pansoft-financial-system
+  author: archer
+  verified: false
+  description: 检测到pansoft-financial-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"pansoftplugins/multithreading/pancalc.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/login/img/loading.gif\"")
+expression: r0() || r1()

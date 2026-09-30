@@ -1,0 +1,14 @@
+id: web-天行网安-安全单向导入系统
+info:
+  name: 天行网安-安全单向导入系统
+  author: archer
+  verified: false
+  description: 检测到天行网安-安全单向导入系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"天行安全单向导入系统") && response.body.ibcontains(b"<meta http-equiv=\"refresh\" content=\"0;url=/usermainaction.action\" />")
+expression: r0()

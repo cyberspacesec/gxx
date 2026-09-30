@@ -1,0 +1,29 @@
+id: web-深信服数据中心管理系统
+info:
+  name: 深信服数据中心管理系统
+  author: archer
+  verified: false
+  description: 检测到深信服数据中心管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"acloglogin.php")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Location: ./src/acloglogin.php")'
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/cfwloginout.php") && response.body.ibcontains(b"_top")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b" = function(str, key)") && response.body.ibcontains(b"content=\"must-revalidate\"") && response.body.ibcontains(b"content=\"no-cache\"") && response.body.ibcontains(b"content=\"IE=EmulateIE7\"")
+expression: r0() || r1() || r2() || r3()

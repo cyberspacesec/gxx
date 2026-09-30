@@ -1,0 +1,14 @@
+id: web-bxemail
+info:
+  name: bxemail
+  author: archer
+  verified: false
+  description: 检测到bxemail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"请输入正确的电子邮件地址，如：abc@bxemail.com")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-drugpak
+info:
+  name: drugpak
+  author: archer
+  verified: false
+  description: 检测到drugpak系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by drugpak")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/dplimg/dpstyle.css")
+expression: r0() || r1()

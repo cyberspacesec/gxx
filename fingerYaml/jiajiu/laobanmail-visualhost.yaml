@@ -1,0 +1,14 @@
+id: web-laobanmail-visualhost
+info:
+  name: laobanmail-visualhost
+  author: archer
+  verified: false
+  description: 检测到laobanmail-visualhost系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/public/js/util/xg_oyang.js")
+expression: r0()

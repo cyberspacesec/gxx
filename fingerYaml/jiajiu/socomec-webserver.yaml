@@ -1,0 +1,14 @@
+id: web-socomec-webserver
+info:
+  name: socomec-webserver
+  author: archer
+  verified: false
+  description: 检测到socomec-webserver系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"diag.htm?src=index")
+expression: r0()

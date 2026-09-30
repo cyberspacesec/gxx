@@ -1,0 +1,14 @@
+id: web-360-安全路由
+info:
+  name: 360-安全路由
+  author: archer
+  verified: false
+  description: 检测到360-安全路由系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"360安全路由") && response.body.ibcontains(b"360loginflag")
+expression: r0()

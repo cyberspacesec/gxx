@@ -1,0 +1,19 @@
+id: web-jiaozhichu-online-test-system
+info:
+  name: jiaozhichu-online-test-system
+  author: archer
+  verified: false
+  description: 检测到jiaozhichu-online-test-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"jiaozhichu")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/ksxt/h5/images/jiaozhichu.ico")
+expression: r0() || r1()

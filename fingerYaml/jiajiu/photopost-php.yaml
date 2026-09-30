@@ -1,0 +1,19 @@
+id: web-photopost-php
+info:
+  name: photopost-php
+  author: archer
+  verified: false
+  description: 检测到photopost-php系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"adm-misc.php?admact=mainmenu")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.photopost.com\">photopost")
+expression: r0() || r1()

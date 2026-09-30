@@ -1,0 +1,14 @@
+id: web-powerweb
+info:
+  name: powerweb
+  author: archer
+  verified: false
+  description: 检测到powerweb系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: powerweb")'
+expression: r0()

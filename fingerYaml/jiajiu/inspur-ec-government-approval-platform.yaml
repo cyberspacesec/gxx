@@ -1,0 +1,19 @@
+id: web-inspur-ec-government-approval-platform
+info:
+  name: inspur-ec-government-approval-platform
+  author: archer
+  verified: false
+  description: 检测到inspur-ec-government-approval-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onlinequery/querylist.aspx")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"langchao.ecgap.outportal")
+expression: r0() || r1()

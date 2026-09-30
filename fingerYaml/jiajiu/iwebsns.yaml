@@ -1,0 +1,19 @@
+id: web-iwebsns
+info:
+  name: iwebsns
+  author: archer
+  verified: false
+  description: 检测到iwebsns系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/jooyea/images/sns_idea1.jpg")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/jooyea/images/snslogo.gif")
+expression: r0() || r1()

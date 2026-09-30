@@ -1,0 +1,14 @@
+id: web-anymacro-邮件系统
+info:
+  name: anymacro-邮件系统
+  author: archer
+  verified: false
+  description: 检测到anymacro-邮件系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"document.aa.f_email")
+expression: r0()

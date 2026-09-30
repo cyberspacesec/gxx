@@ -1,0 +1,19 @@
+id: web-victorysoft
+info:
+  name: victorysoft
+  author: archer
+  verified: false
+  description: 检测到victorysoft系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"value=\"style2012/style1/scripts/expressinstall.swf\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"webstyles/webstyle1/style1/css.css\"")
+expression: r0() || r1()

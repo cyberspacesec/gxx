@@ -1,0 +1,14 @@
+id: web-石化盈科-ssl-vpn-远程接入系统
+info:
+  name: 石化盈科-ssl-vpn-远程接入系统
+  author: archer
+  verified: false
+  description: 检测到石化盈科-ssl-vpn-远程接入系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"new_style/placeholderfriend.js")
+expression: r0()

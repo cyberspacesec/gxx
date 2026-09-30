@@ -1,0 +1,19 @@
+id: web-pegarules
+info:
+  name: pegarules
+  author: archer
+  verified: false
+  description: 检测到pegarules系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"unable to logon to the pegarules system")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"images/pzpegaicon.ico")
+expression: r0() || r1()

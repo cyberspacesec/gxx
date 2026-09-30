@@ -1,0 +1,14 @@
+id: web-深信服SSLVPN-Error
+info:
+  name: 深信服 SSL VPN - Error
+  author: archer
+  verified: false
+  description: 检测到深信服 SSL VPN - Error系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Please contact the server administratorat \n sangforsvpn@sangfor.com.cn")
+expression: r0()

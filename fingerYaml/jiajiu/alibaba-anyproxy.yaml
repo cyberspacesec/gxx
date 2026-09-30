@@ -1,0 +1,14 @@
+id: web-alibaba-anyproxy
+info:
+  name: alibaba-anyproxy
+  author: archer
+  verified: false
+  description: 检测到alibaba-anyproxy系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>AnyProxy</title>") && response.body.ibcontains(b"dist/main.css")
+expression: r0()

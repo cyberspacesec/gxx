@@ -1,0 +1,19 @@
+id: web-深信服web防篡改管理系统
+info:
+  name: 深信服web防篡改管理系统
+  author: archer
+  verified: false
+  description: 检测到深信服web防篡改管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<li style=\"color:#999999;margin-left:6px;list-style:circle inside;\">如忘记密码，请与防火墙管理员联系</li>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"WEB防篡改") && response.body.ibcontains(b"cgi-bin/tamper_admin.cgi")
+expression: r0() || r1()

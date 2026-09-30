@@ -1,0 +1,19 @@
+id: web-empirebak
+info:
+  name: empirebak
+  author: archer
+  verified: false
+  description: 检测到empirebak系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href=\"http://www.phome.net\" target=\"_blank\"><strong>empirebak</strong>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div align=\"center\">(<a href=\"doc.html\" target=\"_blank\">查看帝国备份王说明文档</a>)</div>")
+expression: r0() || r1()

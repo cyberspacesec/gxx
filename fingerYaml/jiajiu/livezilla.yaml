@@ -1,0 +1,29 @@
+id: web-livezilla
+info:
+  name: livezilla
+  author: archer
+  verified: false
+  description: 检测到livezilla系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"thank you for using livezilla!")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"livezilla")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.livezilla.net\" target=\"_blank")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"livezilla is a registered trademark of livezilla gmbh</div>")
+expression: r0() || r1() || r2() || r3()

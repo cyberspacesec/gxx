@@ -1,0 +1,14 @@
+id: web-cnvp-jcms
+info:
+  name: cnvp-jcms
+  author: archer
+  verified: false
+  description: 检测到cnvp-jcms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"publish by jcms2010")
+expression: r0()

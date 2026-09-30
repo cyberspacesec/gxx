@@ -1,0 +1,14 @@
+id: web-zyxel-vmg
+info:
+  name: zyxel-vmg
+  author: archer
+  verified: false
+  description: 检测到zyxel-vmg系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"zyxelhelp.js") && response.body.ibcontains(b".::welcome to the web-based configurator::.")
+expression: r0()

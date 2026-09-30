@@ -1,0 +1,14 @@
+id: web-golden-dragon-card-ecard-website-query-subsystem
+info:
+  name: golden-dragon-card-ecard-website-query-subsystem
+  author: archer
+  verified: false
+  description: 检测到golden-dragon-card-ecard-website-query-subsystem系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"location.href=\"homelogin.action")
+expression: r0()

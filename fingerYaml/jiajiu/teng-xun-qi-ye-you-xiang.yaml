@@ -1,0 +1,24 @@
+id: web-腾讯企业邮箱
+info:
+  name: 腾讯企业邮箱
+  author: archer
+  verified: true
+  description: 检测到腾讯企业邮箱系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/cgi-bin/getinvestigate?flowid=")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"登录腾讯企业邮箱")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1704851473"
+expression: r0() || r1() || r2()

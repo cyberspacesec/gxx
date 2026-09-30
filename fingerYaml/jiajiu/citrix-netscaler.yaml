@@ -1,0 +1,19 @@
+id: web-citrix-netscaler
+info:
+  name: citrix-netscaler
+  author: archer
+  verified: false
+  description: 检测到citrix-netscaler系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: citrix_ns_id")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"netscape/firefox/opera")
+expression: r0() || r1()

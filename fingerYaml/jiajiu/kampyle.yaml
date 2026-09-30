@@ -1,0 +1,19 @@
+id: web-kampyle
+info:
+  name: kampyle
+  author: archer
+  verified: false
+  description: 检测到kampyle系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"http://cf.kampyle.com/k_button.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"start kampyle feedback form button")
+expression: r0() || r1()

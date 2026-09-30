@@ -1,0 +1,19 @@
+id: web-apache-superset
+info:
+  name: apache-superset
+  author: archer
+  verified: false
+  description: 检测到apache-superset系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Superset</title>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/static/assets/images/superset-logo-")
+expression: r0() || r1()

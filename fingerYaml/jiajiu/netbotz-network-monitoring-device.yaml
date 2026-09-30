@@ -1,0 +1,19 @@
+id: web-netbotz-network-monitoring-device
+info:
+  name: netbotz-network-monitoring-device
+  author: archer
+  verified: false
+  description: 检测到netbotz-network-monitoring-device系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/netbotz.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.netbotz.com\" target")
+expression: r0() || r1()

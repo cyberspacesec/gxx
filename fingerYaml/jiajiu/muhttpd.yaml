@@ -1,0 +1,19 @@
+id: web-muhttpd
+info:
+  name: muhttpd
+  author: archer
+  verified: true
+  description: 检测到muhttpd系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1495420903"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"2017 arris enterprises, llc. all rights reserved.")
+expression: r0() || r1()

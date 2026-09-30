@@ -1,0 +1,24 @@
+id: web-kkfileview
+info:
+  name: kkfileview
+  author: archer
+  verified: false
+  description: 检测到kkfileview系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/onlinePreview?url=") && response.body.ibcontains(b"encodeURIComponent(b64Encoded)")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>kkFileView演示首页</title>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"repo: ''kkFileView''")'
+expression: r0() || r1() || r2()

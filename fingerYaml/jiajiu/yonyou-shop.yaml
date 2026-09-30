@@ -1,0 +1,24 @@
+id: web-yonyou-shop
+info:
+  name: yonyou-shop
+  author: archer
+  verified: false
+  description: 检测到yonyou-shop系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"url:\"/shophome/ajaxgetcompetemessagelist.action\",")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"$.post(\"/shopfront/shoppingcar/gotoshoppingcartajax.action\",function(data){")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"北京用友政务软件股份有限公司")
+expression: r0() || r1() || r2()

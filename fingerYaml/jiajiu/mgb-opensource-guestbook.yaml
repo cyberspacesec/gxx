@@ -1,0 +1,19 @@
+id: web-mgb-opensource-guestbook
+info:
+  name: mgb-opensource-guestbook
+  author: archer
+  verified: false
+  description: 检测到mgb-opensource-guestbook系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"mgb opensource guestbook")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"mgb homepage")
+expression: r0() || r1()

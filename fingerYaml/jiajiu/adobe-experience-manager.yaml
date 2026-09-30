@@ -1,0 +1,14 @@
+id: web-adobe-experience-manager
+info:
+  name: adobe-experience-manager
+  author: archer
+  verified: false
+  description: 检测到adobe-experience-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"tag{background:url(login/clientlib/resources/adobe-logo.png)")
+expression: r0()

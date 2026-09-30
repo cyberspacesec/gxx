@@ -1,0 +1,19 @@
+id: web-zte-police-research-system
+info:
+  name: zte-police-research-system
+  author: archer
+  verified: false
+  description: 检测到zte-police-research-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"深圳市中兴信息技术有限公司版权所有")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"img/gonanlogo.jpg")
+expression: r0() || r1()

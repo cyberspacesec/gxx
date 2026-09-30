@@ -1,0 +1,25 @@
+#!/bin/sh
+set -eu
+
+GO_BIN="${GO_BIN:-go}"
+TARGET_GOOS="${GOOS:-$("$GO_BIN" env GOOS)}"
+
+if [ -z "${GOCACHE:-}" ]; then
+  export GOCACHE="$PWD/.gocache"
+fi
+
+if [ "$TARGET_GOOS" = "darwin" ]; then
+  export CGO_LDFLAGS="-framework UniformTypeIdentifiers ${CGO_LDFLAGS:-}"
+fi
+
+if [ -n "${WAILS_GO_LOG:-}" ]; then
+  {
+    printf 'PWD=%s\n' "$PWD"
+    printf 'GOOS=%s GOARCH=%s CGO_ENABLED=%s\n' "${GOOS:-}" "${GOARCH:-}" "${CGO_ENABLED:-}"
+    printf 'GOCACHE=%s\n' "${GOCACHE:-}"
+    printf 'CGO_LDFLAGS=%s\n' "${CGO_LDFLAGS:-}"
+    printf 'ARGS=%s\n' "$*"
+  } >> "$WAILS_GO_LOG"
+fi
+
+exec "$GO_BIN" "$@"

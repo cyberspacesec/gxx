@@ -1,0 +1,19 @@
+id: web-open-xchange
+info:
+  name: open-xchange
+  author: archer
+  verified: false
+  description: 检测到open-xchange系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"you need to enable javascript to access the open-xchange server")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"browserchecktext_id")
+expression: r0() || r1()

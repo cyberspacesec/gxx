@@ -1,0 +1,14 @@
+id: web-google-talk-chatback
+info:
+  name: google-talk-chatback
+  author: archer
+  verified: false
+  description: 检测到google-talk-chatback系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"www.google.com/talk/service/")
+expression: r0()

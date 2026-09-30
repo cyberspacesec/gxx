@@ -1,0 +1,14 @@
+id: web-FortiClient防护软件
+info:
+  name: FortiClient防护软件
+  author: archer
+  verified: true
+  description: 检测到FortiClient防护软件系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "945408572"
+expression: r0()

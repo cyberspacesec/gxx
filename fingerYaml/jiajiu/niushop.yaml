@@ -1,0 +1,19 @@
+id: web-niushop
+info:
+  name: niushop
+  author: archer
+  verified: true
+  description: 检测到niushop系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-671442035"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"niushop")
+expression: r0() || r1()

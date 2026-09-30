@@ -1,0 +1,24 @@
+id: web-php-layers
+info:
+  name: php-layers
+  author: archer
+  verified: false
+  description: 检测到php-layers系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"powered by php layers menu")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- end of menu header - php layers menu")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- beginning of menu header - php layers menu")
+expression: r0() || r1() || r2()

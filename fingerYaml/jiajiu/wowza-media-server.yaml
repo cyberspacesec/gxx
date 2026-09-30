@@ -1,0 +1,14 @@
+id: web-wowza-media-server
+info:
+  name: wowza-media-server
+  author: archer
+  verified: false
+  description: 检测到wowza-media-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<html><head><title>wowza media server")
+expression: r0()

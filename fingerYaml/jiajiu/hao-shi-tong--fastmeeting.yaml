@@ -1,0 +1,14 @@
+id: web-好视通-fastmeeting
+info:
+  name: 好视通-fastmeeting
+  author: archer
+  verified: false
+  description: 检测到好视通-fastmeeting系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"login/createQRCode.do") && response.body.ibcontains(b"resources/commonImage/favicon.ico") && response.body.ibcontains(b"用户登录")
+expression: r0()

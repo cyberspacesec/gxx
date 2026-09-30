@@ -1,0 +1,14 @@
+id: web-zfsoft-oa
+info:
+  name: zfsoft-oa
+  author: archer
+  verified: false
+  description: 检测到zfsoft-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"zfoausername")
+expression: r0()

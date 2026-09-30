@@ -1,0 +1,14 @@
+id: web-threatconnect-platform
+info:
+  name: threatconnect-platform
+  author: archer
+  verified: false
+  description: 检测到threatconnect-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"threatconnect\" />")
+expression: r0()

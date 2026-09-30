@@ -1,0 +1,24 @@
+id: web-安恒信息-明御运维审计与风险控制系统
+info:
+  name: 安恒信息-明御运维审计与风险控制系统
+  author: archer
+  verified: true
+  description: 检测到安恒信息-明御运维审计与风险控制系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1776863739"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/js/components/cellselector.js.php")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"明御运维审计")
+expression: r0() || r1() || r2()

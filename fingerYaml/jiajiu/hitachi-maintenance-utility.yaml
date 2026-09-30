@@ -1,0 +1,14 @@
+id: web-hitachi-maintenance-utility
+info:
+  name: hitachi-maintenance-utility
+  author: archer
+  verified: false
+  description: 检测到hitachi-maintenance-utility系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"__gwt_historyframe")
+expression: r0()

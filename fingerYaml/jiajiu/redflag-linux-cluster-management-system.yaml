@@ -1,0 +1,14 @@
+id: web-redflag-linux-cluster-management-system
+info:
+  name: redflag-linux-cluster-management-system
+  author: archer
+  verified: false
+  description: 检测到redflag-linux-cluster-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<b>登录到红旗集群管理系统</b></td>")
+expression: r0()

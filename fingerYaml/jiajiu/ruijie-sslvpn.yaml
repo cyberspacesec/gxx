@@ -1,0 +1,19 @@
+id: web-ruijie-sslvpn
+info:
+  name: ruijie-sslvpn
+  author: archer
+  verified: false
+  description: 检测到ruijie-sslvpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"document.cookie = \"rjsslvpn_encookie=yes;\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"SSLVPN") && response.body.ibcontains(b"login") && response.body.ibcontains(b"rjsslvpn_encookie")
+expression: r0() || r1()

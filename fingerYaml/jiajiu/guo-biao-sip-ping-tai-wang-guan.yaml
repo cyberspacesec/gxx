@@ -1,0 +1,14 @@
+id: web-国标sip平台网关
+info:
+  name: 国标sip平台网关
+  author: archer
+  verified: false
+  description: 检测到国标sip平台网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h5><a href=\"config.htm?file=config.htm\">start page</a></h5>\"???*#e?<?q") && response.body.ibcontains(b"sippuaccessserverctx")
+expression: r0()

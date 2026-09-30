@@ -1,0 +1,29 @@
+id: web-vmware-virtualcenter
+info:
+  name: vmware-virtualcenter
+  author: archer
+  verified: false
+  description: 检测到vmware-virtualcenter系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"vmware virtualcenter")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"vmware vsphere")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"url=vcops-vsphere/")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"the vshield manager requires")
+expression: r0() || r1() || r2() || r3()

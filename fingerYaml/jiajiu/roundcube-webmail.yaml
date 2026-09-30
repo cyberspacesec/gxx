@@ -1,0 +1,19 @@
+id: web-roundcube-webmail
+info:
+  name: roundcube-webmail
+  author: archer
+  verified: true
+  description: 检测到roundcube-webmail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>RoundCube")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-976235259"
+expression: r0() || r1()

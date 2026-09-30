@@ -1,0 +1,14 @@
+id: web-fortinet-fortigate
+info:
+  name: fortinet-fortigate
+  author: archer
+  verified: false
+  description: 检测到fortinet-fortigate系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"top.location=window.location;top.location=\"/remote/login\";")
+expression: r0()

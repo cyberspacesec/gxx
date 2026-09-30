@@ -1,0 +1,19 @@
+id: web-news
+info:
+  name: news
+  author: archer
+  verified: false
+  description: 检测到news系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img id=\"createcheckcode\" src=\"login/picturecheckcode\" name=\"check_code\" ng-click=\"reloadcheckcode()")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ng-disabled=\"!loginform.$valid\"")
+expression: r0() || r1()

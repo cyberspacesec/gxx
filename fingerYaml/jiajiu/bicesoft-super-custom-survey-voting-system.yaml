@@ -1,0 +1,19 @@
+id: web-bicesoft-super-custom-survey-voting-system
+info:
+  name: bicesoft-super-custom-survey-voting-system
+  author: archer
+  verified: false
+  description: 检测到bicesoft-super-custom-survey-voting-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"images/bicesoft.css\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"佰思超强自定义问卷调查系统(bicesoft.com)")
+expression: r0() || r1()

@@ -1,0 +1,17 @@
+id: fingeryaml-25
+info:
+  name: ZyXEL-Prestige-660RU-T3/T7
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: fingeryaml-25'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.raw_header.ibcontains(b"Prestige 660RU-T3/T7")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-中远麒麟iaudit堡垒机
+info:
+  name: 中远麒麟iaudit堡垒机
+  author: archer
+  verified: false
+  description: 检测到中远麒麟iaudit堡垒机系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"www.tosec.com.cn/doc") && response.body.ibcontains(b"(atype==\"fingersecauth\"||atype==\"localfingersecauth\")")
+expression: r0()

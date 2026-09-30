@@ -1,0 +1,14 @@
+id: web-jltech
+info:
+  name: jltech
+  author: archer
+  verified: false
+  description: 检测到jltech系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"jlwcs") && response.body.ibcontains(b"京伦建站系统 ")
+expression: r0()

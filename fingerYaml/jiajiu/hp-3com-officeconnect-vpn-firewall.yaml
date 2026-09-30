@@ -1,0 +1,14 @@
+id: web-hp-3com-officeconnect-vpn-firewall
+info:
+  name: hp-3com-officeconnect-vpn-firewall
+  author: archer
+  verified: false
+  description: 检测到hp-3com-officeconnect-vpn-firewall系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"3com - officeconnect vpn firewall")
+expression: r0()

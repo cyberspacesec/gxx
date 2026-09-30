@@ -1,0 +1,19 @@
+id: web-collectionsystem
+info:
+  name: collectionsystem
+  author: archer
+  verified: false
+  description: 检测到collectionsystem系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"upgrade/ocx/ccdmsshell.cab#version")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"s_container_left\"")
+expression: r0() || r1()

@@ -1,0 +1,14 @@
+id: web-apache-mesos
+info:
+  name: apache-mesos
+  author: archer
+  verified: false
+  description: 检测到apache-mesos系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img src=\"/static/img/mesos_logo.png\" alt=\"apache mesos\">")
+expression: r0()

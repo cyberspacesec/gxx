@@ -1,0 +1,14 @@
+id: web-cetc-工业防火墙
+info:
+  name: cetc-工业防火墙
+  author: archer
+  verified: false
+  description: 检测到cetc-工业防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webgui/scripts/dd_belatedpng.js") && response.body.ibcontains(b"工业防火墙")
+expression: r0()

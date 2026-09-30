@@ -1,0 +1,14 @@
+id: web-sophos-web-appliance
+info:
+  name: sophos-web-appliance
+  author: archer
+  verified: false
+  description: 检测到sophos-web-appliance系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"url(resources/images/en/login_swa.jpg)")
+expression: r0()

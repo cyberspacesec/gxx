@@ -1,0 +1,24 @@
+id: web-easysite
+info:
+  name: easysite
+  author: archer
+  verified: false
+  description: 检测到easysite系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"generator\" content=\"easysite")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"copyright 2009 by huilan")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"_desktopmodules_picturenews")
+expression: r0() || r1() || r2()

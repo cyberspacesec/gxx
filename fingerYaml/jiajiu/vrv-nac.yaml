@@ -1,0 +1,19 @@
+id: web-vrv-nac
+info:
+  name: vrv-nac
+  author: archer
+  verified: false
+  description: 检测到vrv-nac系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"modal_delay\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"localstorage.setitem('doctitle','北信源网络接入控制系统')") && response.body.ibcontains(b"欢迎登录北信源网络接入控制系统")
+expression: r0() || r1()

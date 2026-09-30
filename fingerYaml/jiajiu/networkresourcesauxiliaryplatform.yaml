@@ -1,0 +1,14 @@
+id: web-networkresourcesauxiliaryplatform
+info:
+  name: networkresourcesauxiliaryplatform
+  author: archer
+  verified: false
+  description: 检测到networkresourcesauxiliaryplatform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<b>网络资源综合支撑辅助平台</b>")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-suncere-system
+info:
+  name: suncere-system
+  author: archer
+  verified: false
+  description: 检测到suncere-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"技术支持：广东旭诚科技有限公司")
+expression: r0()

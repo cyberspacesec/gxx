@@ -1,0 +1,14 @@
+id: web-bjca
+info:
+  name: bjca
+  author: archer
+  verified: false
+  description: 检测到bjca系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<li><a href=\"/install/certapp_bd.exe\">下载证书应用环境</a></li>")
+expression: r0()

@@ -1,0 +1,24 @@
+id: web-hikvision-v23-control
+info:
+  name: hikvision-v23-control
+  author: archer
+  verified: false
+  description: 检测到hikvision-v23-control系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"hikvision v2.3控件网页demo")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"杭州海康威视数字技术股份有限公司")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"if(m_bdvrcontrol.stoptalk())")
+expression: r0() || r1() || r2()

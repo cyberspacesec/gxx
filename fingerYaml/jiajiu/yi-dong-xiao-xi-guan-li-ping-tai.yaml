@@ -1,0 +1,14 @@
+id: web-移动消息管理平台
+info:
+  name: 移动消息管理平台
+  author: archer
+  verified: false
+  description: 检测到移动消息管理平台系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"移动管理平台消息服务") && response.body.ibcontains(b"action=\"login.jsp")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-aurion
+info:
+  name: aurion
+  author: archer
+  verified: false
+  description: 检测到aurion系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- aurion teal will be used as the login-time default")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/aurion.js")
+expression: r0() || r1()

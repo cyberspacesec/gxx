@@ -1,0 +1,14 @@
+id: web-国标网关管理系统
+info:
+  name: 国标网关管理系统
+  author: archer
+  verified: false
+  description: 检测到国标网关管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title>国标网关管理系统</title")
+expression: r0()

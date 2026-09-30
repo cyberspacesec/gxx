@@ -1,0 +1,19 @@
+id: web-emc-documentum-webtop
+info:
+  name: emc-documentum-webtop
+  author: archer
+  verified: false
+  description: 检测到emc-documentum-webtop系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webtop/index.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webtop/webtop/theme/documentum/css/webtop.css")
+expression: r0() || r1()

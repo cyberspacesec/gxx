@@ -1,0 +1,44 @@
+id: web-ecology-oa
+info:
+  name: ecology-oa
+  author: archer
+  verified: true
+  description: 检测到ecology-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1578525679"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/wui/common/css/w7ovfont.css")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"typeof poppedwindow")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"client/jquery.client_wev8.js")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/theme/ecology8/jquery/js/zdialog_wev8.js")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ecology8/lang/weaver_lang_7_wev8.js")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: ecology_JSessionId")'
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6()

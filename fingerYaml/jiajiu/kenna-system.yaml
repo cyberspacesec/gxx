@@ -1,0 +1,19 @@
+id: web-kenna-system
+info:
+  name: kenna-system
+  author: archer
+  verified: false
+  description: 检测到kenna-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/favicon.ico?kenna\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"kenna sessions new\"")
+expression: r0() || r1()

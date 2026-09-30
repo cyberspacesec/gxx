@@ -1,0 +1,14 @@
+id: web-hikvision-ivms-8700
+info:
+  name: hikvision-ivms-8700
+  author: archer
+  verified: false
+  description: 检测到hikvision-ivms-8700系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/portal/common/js/commonvar.js")
+expression: r0()

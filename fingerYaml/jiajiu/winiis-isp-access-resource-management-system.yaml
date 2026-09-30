@@ -1,0 +1,14 @@
+id: web-winiis-isp-access-resource-management-system
+info:
+  name: winiis-isp-access-resource-management-system
+  author: archer
+  verified: false
+  description: 检测到winiis-isp-access-resource-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"winisp.gif")
+expression: r0()

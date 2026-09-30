@@ -1,0 +1,29 @@
+id: web-thinkphp
+info:
+  name: thinkphp
+  author: archer
+  verified: true
+  description: 检测到thinkphp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"X-Powered-By: ThinkPHP")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.thinkphp.cn\">thinkphp</a>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1165838194"
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"thinkphp_show_page_trace")
+expression: r0() || r1() || r2() || r3()

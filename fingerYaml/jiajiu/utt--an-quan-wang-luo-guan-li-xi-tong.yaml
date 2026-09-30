@@ -1,0 +1,14 @@
+id: web-utt-安全网络管理系统
+info:
+  name: utt-安全网络管理系统
+  author: archer
+  verified: false
+  description: 检测到utt-安全网络管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"technology, inc.") && response.body.ibcontains(b"上海艾泰科技有限公司")
+expression: r0()

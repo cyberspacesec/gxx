@@ -1,0 +1,14 @@
+id: web-fortinet-sslvpn
+info:
+  name: fortinet-sslvpn
+  author: archer
+  verified: false
+  description: 检测到fortinet-sslvpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/sslvpn/portal.html") && response.body.ibcontains(b"fgt_lang")
+expression: r0()

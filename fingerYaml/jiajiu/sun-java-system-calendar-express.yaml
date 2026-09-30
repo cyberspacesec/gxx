@@ -1,0 +1,14 @@
+id: web-sun-java-system-calendar-express
+info:
+  name: sun-java-system-calendar-express
+  author: archer
+  verified: false
+  description: 检测到sun-java-system-calendar-express系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img src=\"imx/login-logo.gif\" width=\"186\" height=\"79\" alt=\"sun microsystems, inc.\">")
+expression: r0()

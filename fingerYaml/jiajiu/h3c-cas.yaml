@@ -1,0 +1,14 @@
+id: web-h3c-cas
+info:
+  name: h3c-cas
+  author: archer
+  verified: false
+  description: 检测到h3c-cas系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"cas.css")
+expression: r0()

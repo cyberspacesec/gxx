@@ -1,0 +1,14 @@
+id: web-中新金盾-信息安全管理系统
+info:
+  name: 中新金盾-信息安全管理系统
+  author: archer
+  verified: false
+  description: 检测到中新金盾-信息安全管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"onclick=\"javascript:useaccountlogin();") && response.body.ibcontains(b"c.alertmsg(''磁盘空间剩余: '' + space_available + '' m'',''alert_msg'');")'
+expression: r0()

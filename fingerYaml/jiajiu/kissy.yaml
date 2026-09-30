@@ -1,0 +1,24 @@
+id: web-kissy
+info:
+  name: kissy
+  author: archer
+  verified: false
+  description: 检测到kissy系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"kissy.ready")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"kissy-min.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"kissy.js")
+expression: r0() || r1() || r2()

@@ -1,0 +1,19 @@
+id: web-wacintaki-poteto-bbs
+info:
+  name: wacintaki-poteto-bbs
+  author: archer
+  verified: false
+  description: 检测到wacintaki-poteto-bbs系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.ninechime.com/products/\" title=\"get your own free bbs!\">wacintaki")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"by <a href=\"http://suteki.nu\">ranmaguy</a> and <a href=\"http://www.cellosoft.com\">marcello</a>")
+expression: r0() || r1()

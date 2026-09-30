@@ -1,0 +1,14 @@
+id: web-symantec-client-security
+info:
+  name: symantec-client-security
+  author: archer
+  verified: false
+  description: 检测到symantec-client-security系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- symantec client security web based installation -->")
+expression: r0()

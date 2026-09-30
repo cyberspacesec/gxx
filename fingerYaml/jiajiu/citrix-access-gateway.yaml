@@ -1,0 +1,49 @@
+id: web-citrix-access-gateway
+info:
+  name: citrix-access-gateway
+  author: archer
+  verified: false
+  description: 检测到citrix-access-gateway系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 302 && response.body.ibcontains(b"\"/vpn/resources/{lang}\"") && response.raw_header.ibcontains(b"Location: /vpn/index.html")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/vpn/images/accessgateway.ico")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"citrixreceiverlogoaboutbox\"")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/vpn/js/gateway_login_view.js?")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"cloud.ottoworkfroce.eu/vpn/index.html")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"vpn/js/lsgateway_login_view.js")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"_ctxstxt_netscalergateway\"")
+  r7:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"receiver/images/common/icon_vpn.ico")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6() || r7()

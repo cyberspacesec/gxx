@@ -1,0 +1,14 @@
+id: web-radware-appwall
+info:
+  name: radware-appwall
+  author: archer
+  verified: false
+  description: 检测到radware-appwall系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"unauthorized activity has been detected.")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-nextcloud-product
+info:
+  name: nextcloud-product
+  author: archer
+  verified: false
+  description: 检测到nextcloud-product系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"nextcloud</a> – 给您所有数据一个安全的家")
+expression: r0()

@@ -1,0 +1,44 @@
+id: web-若依CMS
+info:
+  name: 若依CMS
+  author: archer
+  verified: true
+  description: 检测到若依CMS系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"css/ry-ui.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"load_title>正在加载系统资源，请耐心等待")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"load_title\">正在加载系统资源，请耐心等待")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"初次加载资源可能需要较多时间 请耐心等待")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/ruoyi/css/ry-ui.css") && response.body.ibcontains(b"src=\"/ruoyi/js/ry-ui.js")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"js/ry-ui.js")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1231872293"
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6()

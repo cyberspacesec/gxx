@@ -1,0 +1,19 @@
+id: web-faq-manager
+info:
+  name: faq-manager
+  author: archer
+  verified: false
+  description: 检测到faq-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<td><font size=\"-1\">&nbsp;</font><p><b><font size=\"-1\">faq admin area</font></b></td>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"admin/\">admin area</a></td></tr></table></body></html>")
+expression: r0() || r1()

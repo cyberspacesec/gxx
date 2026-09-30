@@ -1,0 +1,19 @@
+id: web-appex-lotapp
+info:
+  name: appex-lotapp
+  author: archer
+  verified: false
+  description: 检测到appex-lotapp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"appex network corporation")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/change_lan.php?lanid=en")
+expression: r0() || r1()

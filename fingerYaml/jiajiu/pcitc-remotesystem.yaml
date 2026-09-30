@@ -1,0 +1,19 @@
+id: web-pcitc-remotesystem
+info:
+  name: pcitc-remotesystem
+  author: archer
+  verified: false
+  description: 检测到pcitc-remotesystem系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"validatecode.aspx\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"f-loading-mask ui-widget ui-widget-content\"")
+expression: r0() || r1()

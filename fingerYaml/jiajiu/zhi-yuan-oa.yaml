@@ -1,0 +1,59 @@
+id: web-致远OA
+info:
+  name: 致远OA
+  author: archer
+  verified: false
+  description: 检测到致远OA系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/seeyon/USER-DATA/IMAGES/LOGIN/login.gif")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/seeyon/common/")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"M3 Server")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"M1-Server")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/seeyon/user-data/images/login/login.gif")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"seeyon") && response.body.ibcontains(b"seeyonproductid")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: SY8045")'
+  r7:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var _ctxpath = '/seeyon'")
+  r8:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"a8-v5企业版")
+  r9:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/seeyon/")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6() || r7() || r8() || r9()

@@ -1,0 +1,14 @@
+id: web-梭子鱼垃圾邮件防火墙
+info:
+  name: 梭子鱼垃圾邮件防火墙
+  author: archer
+  verified: false
+  description: 检测到梭子鱼垃圾邮件防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"梭子鱼垃圾邮件防火墙")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-tass-smart-auditor
+info:
+  name: tass-smart-auditor
+  author: archer
+  verified: false
+  description: 检测到tass-smart-auditor系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"灵志日志审计系统")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"北京江南天安科技有限公司")
+expression: r0() || r1()

@@ -1,0 +1,14 @@
+id: web-founder-all-media-editing-system
+info:
+  name: founder-all-media-editing-system
+  author: archer
+  verified: false
+  description: 检测到founder-all-media-editing-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/newsedit/newsedit/css/login_1.css")
+expression: r0()

@@ -1,0 +1,29 @@
+id: web-ecology泛微云桥e-bridge
+info:
+  name: ecology泛微云桥e-bridge
+  author: archer
+  verified: false
+  description: 检测到ecology泛微云桥e-bridge系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta name=\"searchtitle\" content=\"泛微云桥e-Bridge\"> ")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"e-Bridge")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"wx.weaver")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"泛微云桥e-bridge\"")
+expression: r0() || r1() || r2() || r3()

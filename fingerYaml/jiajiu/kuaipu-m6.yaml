@@ -1,0 +1,14 @@
+id: web-kuaipu-m6
+info:
+  name: kuaipu-m6
+  author: archer
+  verified: false
+  description: 检测到kuaipu-m6系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"resource/javascript/jkpm6.datetime.js")
+expression: r0()

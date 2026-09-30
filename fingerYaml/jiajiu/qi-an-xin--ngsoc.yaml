@@ -1,0 +1,14 @@
+id: web-奇安信-ngsoc
+info:
+  name: 奇安信-ngsoc
+  author: archer
+  verified: false
+  description: 检测到奇安信-ngsoc系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ngsoc日志采集探针") && response.body.ibcontains(b"ngsoc关联规则引擎")
+expression: r0()

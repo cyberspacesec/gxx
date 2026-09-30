@@ -1,0 +1,19 @@
+id: web-OEM设备-天融信
+info:
+  name: OEM设备-天融信
+  author: archer
+  verified: false
+  description: 检测到OEM设备-天融信系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Login @ Reporter</title>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Login @ Reporter</title>")
+expression: r0() || r1()

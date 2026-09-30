@@ -1,0 +1,19 @@
+id: web-confluence
+info:
+  name: confluence
+  author: archer
+  verified: false
+  description: 检测到confluence系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Location: /login.action?os_destination=") && response.raw_header.ibcontains(b"X-Confluence-Request-Time: *")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"com-atlassian-confluence") && response.body.ibcontains(b"name=\"confluence-base-url\"")
+expression: r0() || r1()

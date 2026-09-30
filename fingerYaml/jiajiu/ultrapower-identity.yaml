@@ -1,0 +1,14 @@
+id: web-ultrapower-identity
+info:
+  name: ultrapower-identity
+  author: archer
+  verified: false
+  description: 检测到ultrapower-identity系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<li><p>欢迎进入身份与安全管控系统</p></li>")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-opennewsletter
+info:
+  name: opennewsletter
+  author: archer
+  verified: false
+  description: 检测到opennewsletter系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://netmeans.net\">netmeans.net")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"this software is based on the opennewsletter project")
+expression: r0() || r1()

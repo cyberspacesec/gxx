@@ -1,0 +1,29 @@
+id: web-hikvision-ivms
+info:
+  name: hikvision-ivms
+  author: archer
+  verified: false
+  description: 检测到hikvision-ivms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!--警示提示处-->")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h1 class=\"logo\">安防综合管理平台</h1>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"杭州海康威视系统技术有限公司 版权所有")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"serviceip")
+expression: r0() || r1() || r2() || r3()

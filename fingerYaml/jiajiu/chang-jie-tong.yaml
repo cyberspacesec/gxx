@@ -1,0 +1,19 @@
+id: web-畅捷通
+info:
+  name: 畅捷通
+  author: archer
+  verified: true
+  description: 检测到畅捷通系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"><script>location='/tplus/';</script></body>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-2067519629"
+expression: r0() || r1()

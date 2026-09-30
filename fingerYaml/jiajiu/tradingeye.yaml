@@ -1,0 +1,19 @@
+id: web-tradingeye
+info:
+  name: tradingeye
+  author: archer
+  verified: false
+  description: 检测到tradingeye系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"dpivision.com ltd\" />")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"credits\"><a href=\"http://www.tradingeye.com/\">powered by tradingeye</a>")
+expression: r0() || r1()

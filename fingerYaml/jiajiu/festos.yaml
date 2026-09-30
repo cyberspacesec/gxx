@@ -1,0 +1,19 @@
+id: web-festos
+info:
+  name: festos
+  author: archer
+  verified: false
+  description: 检测到festos系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"festos")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"css/festos.css")
+expression: r0() || r1()

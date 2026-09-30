@@ -1,0 +1,14 @@
+id: web-conking-schoolgroup
+info:
+  name: conking-schoolgroup
+  author: archer
+  verified: false
+  description: 检测到conking-schoolgroup系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"javascripts/float.js") && response.body.ibcontains(b"vcxvcxv")
+expression: r0()

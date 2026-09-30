@@ -1,0 +1,24 @@
+id: web-microsoft-sharepoint
+info:
+  name: microsoft-sharepoint
+  author: archer
+  verified: false
+  description: 检测到microsoft-sharepoint系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"microsoft sharepoint")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"sharepoint team")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"msowebpartpage_postbacksource")
+expression: r0() || r1() || r2()

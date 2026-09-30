@@ -1,0 +1,19 @@
+id: web-mixcall-seat-management-center
+info:
+  name: mixcall-seat-management-center
+  author: archer
+  verified: false
+  description: 检测到mixcall-seat-management-center系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"深圳市深海捷科技有限公司")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/admin/modules/admin/statics/images/")
+expression: r0() || r1()

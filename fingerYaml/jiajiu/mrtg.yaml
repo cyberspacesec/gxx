@@ -1,0 +1,19 @@
+id: web-mrtg
+info:
+  name: mrtg
+  author: archer
+  verified: false
+  description: 检测到mrtg系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://oss.oetiker.ch/mrtg/")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/mrtg-l.png") && response.body.ibcontains(b"command line is easier to read using \"view page properties\" of your browser")
+expression: r0() || r1()

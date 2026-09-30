@@ -1,0 +1,24 @@
+id: web-reremouse-exam-system
+info:
+  name: reremouse-exam-system
+  author: archer
+  verified: false
+  description: 检测到reremouse-exam-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"蝙蝠在线考试系统")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"博库医学在线考试系统，技术支持：杭州博库科技有限公司")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/resources/js/upscroll.js\"")
+expression: r0() || r1() || r2()

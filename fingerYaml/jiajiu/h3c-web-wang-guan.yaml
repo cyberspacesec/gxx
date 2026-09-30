@@ -1,0 +1,24 @@
+id: web-h3c-web网管
+info:
+  name: h3c-web网管
+  author: archer
+  verified: false
+  description: 检测到h3c-web网管系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/wcn/login\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<TITLE>Web User Login</TITLE>") && response.body.ibcontains(b"WnmGetLanguageSupported")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Web网管用户登录") && response.body.ibcontains(b"china_logo.jpg") && response.body.ibcontains(b"webui")
+expression: r0() || r1() || r2()

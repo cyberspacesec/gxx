@@ -1,0 +1,14 @@
+id: web-中新金盾防火墙
+info:
+  name: 中新金盾防火墙
+  author: archer
+  verified: false
+  description: 检测到中新金盾防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<title>中新金盾防火墙</title>") && response.body.ibcontains(b"ZXFW")
+expression: r0()

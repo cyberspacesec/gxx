@@ -1,0 +1,14 @@
+id: web-bangyong-pm2
+info:
+  name: bangyong-pm2
+  author: archer
+  verified: false
+  description: 检测到bangyong-pm2系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"pm2项目管理系统bs版增强工具.zip")
+expression: r0()

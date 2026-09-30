@@ -1,0 +1,39 @@
+id: web-wordpress
+info:
+  name: wordpress
+  author: archer
+  verified: false
+  description: 检测到wordpress系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"/wp-content/themes/")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"name=\"generator\" content=\"wordpress ")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/wp-includes/")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<link rel='stylesheet' id='wp-block-library-css")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"\\/wp-admin\\/admin-ajax.php\",\"")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"/wp-content/uploads/")
+expression: r0() || r1() || r2() || r3() || r4() || r5()

@@ -1,0 +1,24 @@
+id: web-nsoc-bigdata
+info:
+  name: nsoc-bigdata
+  author: archer
+  verified: false
+  description: 检测到nsoc-bigdata系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h2>nsoc大数据分析系统</h2>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/nfw/static/framework/images/views.png")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<b>nsoc云安全解决方案")
+expression: r0() || r1() || r2()

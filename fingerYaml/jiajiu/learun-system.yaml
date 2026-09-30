@@ -1,0 +1,14 @@
+id: web-learun-system
+info:
+  name: learun-system
+  author: archer
+  verified: false
+  description: 检测到learun-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"力软敏捷开发框架，是一个web可视化开发平台")
+expression: r0()

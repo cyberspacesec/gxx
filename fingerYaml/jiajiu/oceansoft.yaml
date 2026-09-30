@@ -1,0 +1,34 @@
+id: web-oceansoft
+info:
+  name: oceansoft
+  author: archer
+  verified: false
+  description: 检测到oceansoft系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"江苏欧索软件有限公司")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/ocensoftcomm.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"技术支持：<a href=\"http://www.oceansoft.com.cn/\">")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"aspx/casecenter/acasecenter.aspx?pagetype=sxcx&casetype=sscs&casename=") && response.body.ibcontains(b"href=\"/e/action/listinfo/?")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"江苏欧索")
+expression: r0() || r1() || r2() || r3() || r4()

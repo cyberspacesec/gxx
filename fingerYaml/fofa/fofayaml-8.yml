@@ -1,0 +1,20 @@
+---
+id: fofayaml-8
+info:
+  name: CUPS
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: fofayaml-8'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.raw_header.ibcontains(b"CUPS")
+expression: r0()
+
+...

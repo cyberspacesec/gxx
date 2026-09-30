@@ -1,0 +1,19 @@
+id: web-phpmps
+info:
+  name: phpmps
+  author: archer
+  verified: false
+  description: 检测到phpmps系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by phpmps")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"templates/phpmps/style/index.css")
+expression: r0() || r1()

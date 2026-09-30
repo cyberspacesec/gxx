@@ -1,0 +1,19 @@
+id: web-conftool
+info:
+  name: conftool
+  author: archer
+  verified: false
+  description: 检测到conftool系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h2 align=center>conftool conference administration")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href='http://www.conftool.net'>conference management software")
+expression: r0() || r1()

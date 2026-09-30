@@ -1,0 +1,14 @@
+id: web-webray-situation-awareness
+info:
+  name: webray-situation-awareness
+  author: archer
+  verified: false
+  description: 检测到webray-situation-awareness系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"class=\"disclaimer\" style=\"color: #ffffff\">《盛邦安全网站监控预警平台服务协议》</a>")'
+expression: r0()

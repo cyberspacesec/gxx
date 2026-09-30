@@ -1,0 +1,14 @@
+id: web-优仕康-网关
+info:
+  name: 优仕康-网关
+  author: archer
+  verified: false
+  description: 检测到优仕康-网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"ipxweb/login.html")
+expression: r0()

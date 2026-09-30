@@ -1,0 +1,14 @@
+id: web-netzone-webcache
+info:
+  name: netzone-webcache
+  author: archer
+  verified: false
+  description: 检测到netzone-webcache系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"广州高度软件有限公司版权所有")
+expression: r0()

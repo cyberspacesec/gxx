@@ -1,0 +1,19 @@
+id: web-avantfax-ictfax
+info:
+  name: avantfax-ictfax
+  author: archer
+  verified: false
+  description: 检测到avantfax-ictfax系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img src=\"images/avantfax-big.png\" border=\"0\" alt=\"ictfax")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"ictfax")
+expression: r0() || r1()

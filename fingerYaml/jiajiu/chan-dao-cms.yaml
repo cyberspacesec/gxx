@@ -1,0 +1,44 @@
+id: web-禅道CMS
+info:
+  name: 禅道CMS
+  author: archer
+  verified: true
+  description: 检测到禅道CMS系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"$('#zentao').addClass('btn-success');")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"zentao/theme")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "53755730"
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"set-cookie: zentaosid")'
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href='http://www.zentao.net' target='_blank'>zentaopms") && response.body.ibcontains(b"welcome to use zentao!")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href='/zentao/favicon.ico")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"server: cpws")'
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6()

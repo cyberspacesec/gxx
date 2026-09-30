@@ -1,0 +1,19 @@
+id: web-ibm-tivoli
+info:
+  name: ibm-tivoli
+  author: archer
+  verified: false
+  description: 检测到ibm-tivoli系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"banner/tivoli/tv_icbanner.html")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"tivoli netview uses an open source web server")
+expression: r0() || r1()

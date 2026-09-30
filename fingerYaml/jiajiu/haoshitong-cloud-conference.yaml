@@ -1,0 +1,24 @@
+id: web-haoshitong-cloud-conference
+info:
+  name: haoshitong-cloud-conference
+  author: archer
+  verified: false
+  description: 检测到haoshitong-cloud-conference系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"images/common/logina_1.gif")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"fsmeeting")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"type=\"hidden\" id=\"app.index.configsuclogin")
+expression: r0() || r1() || r2()

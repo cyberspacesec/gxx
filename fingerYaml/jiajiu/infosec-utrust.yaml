@@ -1,0 +1,14 @@
+id: web-infosec-utrust
+info:
+  name: infosec-utrust
+  author: archer
+  verified: false
+  description: 检测到infosec-utrust系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"china utrust infortech co,.ltd")
+expression: r0()

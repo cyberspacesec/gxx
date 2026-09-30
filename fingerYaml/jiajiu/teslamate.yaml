@@ -1,0 +1,19 @@
+id: web-teslamate
+info:
+  name: teslamate
+  author: archer
+  verified: true
+  description: 检测到teslamate系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img alt=\"TeslaMate\" src=")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1478287554"
+expression: r0() || r1()

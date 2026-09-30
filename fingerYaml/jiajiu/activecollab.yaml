@@ -1,0 +1,19 @@
+id: web-activecollab
+info:
+  name: activecollab
+  author: archer
+  verified: false
+  description: 检测到activecollab系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by activecollab")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<p id=\"powered_by\"><a href=\"http://www.activecollab.com/\"")
+expression: r0() || r1()

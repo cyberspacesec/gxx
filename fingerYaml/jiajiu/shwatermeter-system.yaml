@@ -1,0 +1,14 @@
+id: web-shwatermeter-system
+info:
+  name: shwatermeter-system
+  author: archer
+  verified: false
+  description: 检测到shwatermeter-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"关于正则表达式的内容在本书的第10章中有较详细的讨论")
+expression: r0()

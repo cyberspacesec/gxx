@@ -1,0 +1,19 @@
+id: web-7moor-product
+info:
+  name: 7moor-product
+  author: archer
+  verified: false
+  description: 检测到7moor-product系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"ds_do_action domain_aboutus\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/javascripts/qiniu/qiniu.js")
+expression: r0() || r1()

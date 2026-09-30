@@ -1,0 +1,24 @@
+id: web-panabit-gateway
+info:
+  name: panabit-gateway
+  author: archer
+  verified: false
+  description: 检测到panabit-gateway系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"forum.panabit.com") && response.body.ibcontains(b"pa_iptcode")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Maintain") && response.body.ibcontains(b"Panalog")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"codeno\"") && response.body.ibcontains(b"日志系统")
+expression: r0() || r1() || r2()

@@ -1,0 +1,14 @@
+id: web-nexpose
+info:
+  name: nexpose
+  author: archer
+  verified: true
+  description: 检测到nexpose系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<label for=\"nexposeccusername\">Username</label>") && response.icon_hash == "-516760689"
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-citrix-receiver
+info:
+  name: citrix-receiver
+  author: archer
+  verified: false
+  description: 检测到citrix-receiver系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"clients/html5client/src/receiverthirdpartynotices.html\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"logonbelt-topshadow") && response.body.ibcontains(b"upgradeavailable-already-installed-separator bar-separator")
+expression: r0() || r1()

@@ -1,0 +1,19 @@
+id: web-apache-couchdb
+info:
+  name: apache-couchdb
+  author: archer
+  verified: true
+  description: 检测到apache-couchdb系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"x-couchdb-body-time: 0") && response.raw_header.ibcontains(b"Server: CouchDB")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1346006262"
+expression: r0() || r1()

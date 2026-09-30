@@ -1,0 +1,24 @@
+id: web-xjhyt-system
+info:
+  name: xjhyt-system
+  author: archer
+  verified: false
+  description: 检测到xjhyt-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<input class=\"an1\" name=\"btnrst\" id=\"btnrst\" type=\"reset\" value=\" \" />")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"wrap login_wrap\"")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"url(images/yh.jpg)")
+expression: r0() || r1() || r2()

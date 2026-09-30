@@ -1,0 +1,24 @@
+id: web-uniform-server
+info:
+  name: uniform-server
+  author: archer
+  verified: false
+  description: 检测到uniform-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.uniformserver.com\">")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta name=\"description\" content=\"the uniform server 8.1.0-coral.\" />")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"divider\">developed by <a href=\"http://www.uniformserver.com/\">the uniform server development team</a></div>")
+expression: r0() || r1() || r2()

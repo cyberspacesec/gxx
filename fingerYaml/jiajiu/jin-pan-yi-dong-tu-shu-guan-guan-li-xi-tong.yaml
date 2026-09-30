@@ -1,0 +1,29 @@
+id: web-金盘移动图书馆管理系统
+info:
+  name: 金盘移动图书馆管理系统
+  author: archer
+  verified: false
+  description: 检测到金盘移动图书馆管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onclick=\"change('book');")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/opac/periodicals")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"jp-searchtabs")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"图书") && response.body.ibcontains(b"金盘软件")
+expression: r0() || r1() || r2() || r3()

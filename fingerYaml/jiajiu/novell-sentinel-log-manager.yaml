@@ -1,0 +1,19 @@
+id: web-novell-sentinel-log-manager
+info:
+  name: novell-sentinel-log-manager
+  author: archer
+  verified: false
+  description: 检测到novell-sentinel-log-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"novell sentinel log manager")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"0;url=/novelllogmanager\">")
+expression: r0() || r1()

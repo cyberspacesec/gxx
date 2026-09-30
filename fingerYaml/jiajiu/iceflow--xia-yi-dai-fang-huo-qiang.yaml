@@ -1,0 +1,14 @@
+id: web-iceflow-下一代防火墙
+info:
+  name: iceflow-下一代防火墙
+  author: archer
+  verified: false
+  description: 检测到iceflow-下一代防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h2 class=\"media-heading\">fw下一代防火墙</h2>")
+expression: r0()

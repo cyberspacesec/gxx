@@ -1,0 +1,14 @@
+id: web-huawei-ssl-vpn
+info:
+  name: huawei-ssl-vpn
+  author: archer
+  verified: false
+  description: 检测到huawei-ssl-vpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Clear SSL cache successfully") && response.body.ibcontains(b"getCookie(\"SGDPortal\")") && response.body.ibcontains(b"SVN_GetLoginContextValue(")
+expression: r0()

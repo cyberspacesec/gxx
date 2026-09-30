@@ -1,0 +1,19 @@
+id: web-360天擎终端安全管理系统
+info:
+  name: 360天擎终端安全管理系统
+  author: archer
+  verified: false
+  description: 检测到360天擎终端安全管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"360entinst") && response.body.ibcontains(b"关于全网部署360私有云的通知")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"360天擎终端")
+expression: r0() || r1()

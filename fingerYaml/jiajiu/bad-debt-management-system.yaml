@@ -1,0 +1,14 @@
+id: web-bad-debt-management-system
+info:
+  name: bad-debt-management-system
+  author: archer
+  verified: false
+  description: 检测到bad-debt-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"登录密码错误次数超过5次，帐号被锁定。请联系省坏账系统管理员，或发邮件解锁")
+expression: r0()

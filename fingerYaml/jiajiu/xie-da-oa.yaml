@@ -1,0 +1,14 @@
+id: web-协达oa
+info:
+  name: 协达oa
+  author: archer
+  verified: false
+  description: 检测到协达oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"img.style.height=(bodyH-84-100)")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-pc4uploader
+info:
+  name: pc4uploader
+  author: archer
+  verified: false
+  description: 检测到pc4uploader系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by pc4uploader")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"pc4uploader <font color")
+expression: r0() || r1()

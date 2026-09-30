@@ -1,0 +1,14 @@
+id: web-axentra-hipserv
+info:
+  name: axentra-hipserv
+  author: archer
+  verified: false
+  description: 检测到axentra-hipserv系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"axentra")
+expression: r0()

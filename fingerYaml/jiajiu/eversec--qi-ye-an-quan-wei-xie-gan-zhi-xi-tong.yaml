@@ -1,0 +1,14 @@
+id: web-eversec-企业安全威胁感知系统
+info:
+  name: eversec-企业安全威胁感知系统
+  author: archer
+  verified: false
+  description: 检测到eversec-企业安全威胁感知系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/j_spring_security_check")
+expression: r0()

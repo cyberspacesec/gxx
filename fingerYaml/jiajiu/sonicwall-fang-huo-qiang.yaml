@@ -1,0 +1,14 @@
+id: web-SonicWall防火墙
+info:
+  name: SonicWall 防火墙
+  author: archer
+  verified: true
+  description: 检测到SonicWall 防火墙系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "631108382"
+expression: r0()

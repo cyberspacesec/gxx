@@ -1,0 +1,14 @@
+id: web-深信服上网行为管理系统
+info:
+  name: 深信服上网行为管理系统
+  author: archer
+  verified: false
+  description: 检测到深信服上网行为管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b" = function(str, key)") && response.body.ibcontains(b"content=\"must-revalidate\"") && response.body.ibcontains(b"content=\"no-cache\"") && response.body.ibcontains(b"content=\"text/html; charset=utf-8\" />")
+expression: r0()

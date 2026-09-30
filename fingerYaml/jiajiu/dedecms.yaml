@@ -1,0 +1,49 @@
+id: web-dedecms
+info:
+  name: dedecms
+  author: archer
+  verified: false
+  description: 检测到dedecms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=http://www.dedecms.com target='_blank'>Power by DedeCms</a>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"power by dedecms")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"http://www.dedecms.com/")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/templets/default/style/dedecms.css") && response.body.ibcontains(b"dedecms")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div><h3>dedecms error warning!</h3>")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"name=\"dede_fields") && response.body.ibcontains(b"name=\"dede_fieldshash")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"order by dede58.com\" />")
+  r7:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<form  name=\"formsearch\" action=\"/plus/search.php\">") && response.body.ibcontains(b"name=\"q\"")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6() || r7()

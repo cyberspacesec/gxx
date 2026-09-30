@@ -1,0 +1,24 @@
+id: web-trac
+info:
+  name: trac
+  author: archer
+  verified: false
+  description: 检测到trac系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h1>available projects</h1>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"wiki/tracguide")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by trac")
+expression: r0() || r1() || r2()

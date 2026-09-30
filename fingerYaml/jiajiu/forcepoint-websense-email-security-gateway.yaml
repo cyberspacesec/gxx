@@ -1,0 +1,14 @@
+id: web-forcepoint-websense-email-security-gateway
+info:
+  name: forcepoint-websense-email-security-gateway
+  author: archer
+  verified: false
+  description: 检测到forcepoint-websense-email-security-gateway系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"websense email security gateway")
+expression: r0()

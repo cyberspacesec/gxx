@@ -1,0 +1,29 @@
+id: web-cisco-prime-infrastructure
+info:
+  name: cisco-prime-infrastructure
+  author: archer
+  verified: false
+  description: 检测到cisco-prime-infrastructure系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div class=\"xwtproductname\" >cisco prime infrastructure")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webacs/lib/xwt/themes/prime/prime-xwt.css")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"webacs/welcomeaction.do")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: prime")'
+expression: r0() || r1() || r2() || r3()

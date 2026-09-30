@@ -1,0 +1,19 @@
+id: web-whmcs
+info:
+  name: whmcs
+  author: archer
+  verified: false
+  description: 检测到whmcs系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href=\"http://www.whmcs.com")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"welcome_box\">please <a href=\"clientarea.php\" title=\"login\"><strong>login</strong></a> or <a href=\"register.php\" title=\"register\"><strong>register</strong></a></div>")
+expression: r0() || r1()

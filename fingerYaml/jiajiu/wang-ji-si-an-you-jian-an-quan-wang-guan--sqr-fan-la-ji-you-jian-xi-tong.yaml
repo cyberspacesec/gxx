@@ -1,0 +1,14 @@
+id: web-网际思安邮件安全网关-sqr反垃圾邮件系统
+info:
+  name: 网际思安邮件安全网关-sqr反垃圾邮件系统
+  author: archer
+  verified: false
+  description: 检测到网际思安邮件安全网关-sqr反垃圾邮件系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"spam sqr") && response.body.ibcontains(b"snspam/spam_request/")
+expression: r0()

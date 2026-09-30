@@ -1,0 +1,19 @@
+id: web-rancher
+info:
+  name: rancher
+  author: archer
+  verified: true
+  description: 检测到rancher系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "464587962"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Loading&hellip;</title>") && response.body.ibcontains(b"ember-basic-dropdown-wormhole")
+expression: r0() || r1()

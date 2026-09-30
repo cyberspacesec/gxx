@@ -1,0 +1,14 @@
+id: web-sitegenius
+info:
+  name: sitegenius
+  author: archer
+  verified: false
+  description: 检测到sitegenius系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var portalbrowser = window.open('popup.php?page_type='+page_type+'&lang=")
+expression: r0()

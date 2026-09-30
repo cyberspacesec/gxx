@@ -1,0 +1,19 @@
+id: web-yonyou-erp
+info:
+  name: yonyou-erp
+  author: archer
+  verified: false
+  description: 检测到yonyou-erp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"login_main_bg")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"login_owner")
+expression: r0() || r1()

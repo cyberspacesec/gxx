@@ -1,0 +1,14 @@
+id: web-xecure-vpn
+info:
+  name: xecure-vpn
+  author: archer
+  verified: false
+  description: 检测到xecure-vpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"xnstyle.css") && response.body.ibcontains(b"xecure vpn manager")
+expression: r0()

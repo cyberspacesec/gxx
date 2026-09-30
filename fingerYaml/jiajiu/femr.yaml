@@ -1,0 +1,19 @@
+id: web-femr
+info:
+  name: femr
+  author: archer
+  verified: false
+  description: 检测到femr系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/res/vendor/bootstrap-3.3.5/css/bootstrap.min.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/res/images/login-bg-1.png")
+expression: r0() || r1()

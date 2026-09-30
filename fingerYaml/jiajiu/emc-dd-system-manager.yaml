@@ -1,0 +1,19 @@
+id: web-emc-dd-system-manager
+info:
+  name: emc-dd-system-manager
+  author: archer
+  verified: false
+  description: 检测到emc-dd-system-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"emc-favicon.ico")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"dd system manager")
+expression: r0() || r1()

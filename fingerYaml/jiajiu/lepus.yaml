@@ -1,0 +1,14 @@
+id: web-lepus
+info:
+  name: lepus
+  author: archer
+  verified: false
+  description: 检测到lepus系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"language/switchover\"+'/'+current_language") && response.body.ibcontains(b"登录")
+expression: r0()

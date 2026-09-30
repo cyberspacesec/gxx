@@ -1,0 +1,21 @@
+build/
+# 跨平台 zip 产物在仓库根 build/（见 scripts/packager）
+frontend/node_modules/
+frontend/wailsjs/
+wailsjs/
+.gocache/
+
+# frontend/dist 保留一个占位 index.html 让 go:embed 能编译；
+# wails build 会覆盖该目录的真实产物
+frontend/dist/assets/
+frontend/dist/*.js
+frontend/dist/*.css
+
+# Swagger 由 swag init 生成；docs.go 占位保留在仓库
+docs/swagger.json
+docs/swagger.yaml
+
+# 系统垃圾文件
+*.pkg
+*.app
+.DS_Store

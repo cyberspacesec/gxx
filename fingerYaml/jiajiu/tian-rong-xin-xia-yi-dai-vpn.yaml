@@ -1,0 +1,14 @@
+id: web-天融信下一代VPN
+info:
+  name: 天融信下一代VPN
+  author: archer
+  verified: false
+  description: 检测到天融信下一代VPN系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"vone/pub/common/images") && response.body.ibcontains(b"www.topsec.com.cn")
+expression: r0()

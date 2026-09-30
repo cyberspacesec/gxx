@@ -1,0 +1,14 @@
+id: web-smartcds
+info:
+  name: smartcds
+  author: archer
+  verified: false
+  description: 检测到smartcds系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: smartcds")'
+expression: r0()

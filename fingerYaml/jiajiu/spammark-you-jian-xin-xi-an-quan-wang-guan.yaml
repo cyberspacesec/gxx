@@ -1,0 +1,19 @@
+id: web-spammark邮件信息安全网关
+info:
+  name: spammark邮件信息安全网关
+  author: archer
+  verified: false
+  description: 检测到spammark邮件信息安全网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/spammark?noframes=1")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"href=\"spammark16.ico\"")
+expression: r0() || r1()

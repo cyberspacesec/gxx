@@ -1,0 +1,14 @@
+id: web-citec-system
+info:
+  name: citec-system
+  author: archer
+  verified: false
+  description: 检测到citec-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"正在使用腾讯qq帐号登录消防联网系统")
+expression: r0()

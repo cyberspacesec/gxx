@@ -1,0 +1,19 @@
+id: web-sco-openserver
+info:
+  name: sco-openserver
+  author: archer
+  verified: false
+  description: 检测到sco-openserver系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"sco corporate web site")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"gif/rlogo1.gif")
+expression: r0() || r1()

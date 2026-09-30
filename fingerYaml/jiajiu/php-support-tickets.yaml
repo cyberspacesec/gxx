@@ -1,0 +1,19 @@
+id: web-php-support-tickets
+info:
+  name: php-support-tickets
+  author: archer
+  verified: false
+  description: 检测到php-support-tickets系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"php support tickets\">php support tickets")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"triangle solutions ltd")
+expression: r0() || r1()

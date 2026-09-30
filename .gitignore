@@ -1,0 +1,42 @@
+logs/
+# Git 元数据与 GitLab 配置仅保留在本地。
+.git
+.gitlab/
+.gitlab-ci*.yml
+.gitlab-ci*.yaml
+venv/
+__pycache__
+.gocache/
+.idea
+.venv
+./main
+gxx
+build/
+.DS_Store
+dist/
+result_*
+*.json
+!cmd/gxx-ide/wails.json
+!cmd/gxx-ide/frontend/.prettierrc.json
+!cmd/gxx-ide/frontend/package.json
+!cmd/gxx-ide/frontend/package-lock.json
+!cmd/gxx-ide/frontend/tsconfig*.json
+*.csv
+*.txt
+
+# ---- GXX IDE（cmd/gxx-ide/）GUI 子项目产物 ----
+cmd/gxx-ide/build/
+# IDE zip 与 CLI 同在 build/（根 .gitignore 已忽略 build/）
+cmd/gxx-ide/.gocache/
+cmd/gxx-ide/.wails-go.log
+cmd/gxx-ide/frontend/node_modules/
+cmd/gxx-ide/frontend/.eslintcache
+cmd/gxx-ide/frontend/package.json.md5
+cmd/gxx-ide/frontend/wailsjs/
+# 占位的 frontend/dist 保留 index.html 让 go:embed 能编译
+cmd/gxx-ide/frontend/dist/assets/
+cmd/gxx-ide/frontend/dist/*.js
+cmd/gxx-ide/frontend/dist/*.css
+# swag 自动生成的部分
+cmd/gxx-ide/docs/swagger.json
+cmd/gxx-ide/docs/swagger.yaml

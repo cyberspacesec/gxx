@@ -1,0 +1,14 @@
+id: web-codesafe
+info:
+  name: codesafe
+  author: archer
+  verified: false
+  description: 检测到codesafe系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"baseurl : ''app'',        //配置模块根路径到静态资源根目录。")'
+expression: r0()

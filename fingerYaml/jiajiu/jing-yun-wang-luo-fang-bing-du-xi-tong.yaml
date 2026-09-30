@@ -1,0 +1,14 @@
+id: web-景云网络防病毒系统
+info:
+  name: 景云网络防病毒系统
+  author: archer
+  verified: false
+  description: 检测到景云网络防病毒系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"login_form") && response.body.ibcontains(b"styles/images/logo.png") && response.body.ibcontains(b"防病毒")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-qax-secfox
+info:
+  name: qax-secfox
+  author: archer
+  verified: true
+  description: 检测到qax-secfox系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"type=application/x-xtx-axhost") && response.body.ibcontains(b"id=mtokenplugin width=0 height=0 style=\"position: absolute;left: 0px; top: 0px\"") && response.icon_hash == "-616328301"'
+expression: r0()

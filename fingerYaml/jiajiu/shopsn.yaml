@@ -1,0 +1,24 @@
+id: web-shopsn
+info:
+  name: shopsn
+  author: archer
+  verified: false
+  description: 检测到shopsn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"shopsn")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.shopsn.net\">商城系统</a>&nbsp;提供技术支持")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"<span>shopsn全网开源<a style=\"padding: 0px\" href=\"http://www.shopsn.net")'
+expression: r0() || r1() || r2()

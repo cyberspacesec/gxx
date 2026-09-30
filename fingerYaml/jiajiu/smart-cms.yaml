@@ -1,0 +1,14 @@
+id: web-smart-cms
+info:
+  name: smart-cms
+  author: archer
+  verified: false
+  description: 检测到smart-cms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"name=\"formdoc\" action=\"/hz/sys/login/logined.jsp")
+expression: r0()

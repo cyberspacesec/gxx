@@ -1,0 +1,17 @@
+id: aircube-login
+info:
+  name: AirCube
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: aircube-login'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>airCube</title>")
+expression: r0()

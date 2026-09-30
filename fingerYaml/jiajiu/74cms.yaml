@@ -1,0 +1,39 @@
+id: web-74cms
+info:
+  name: 74cms
+  author: archer
+  verified: false
+  description: 检测到74cms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"content=\"74cms.com\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"74cms.com")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"骑士cms")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href=\"http://www.74cms.com/\"")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/templates/default/css/common.css")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"selectjobscategory")
+expression: r0() || r1() || r2() || r3() || r4() || r5()

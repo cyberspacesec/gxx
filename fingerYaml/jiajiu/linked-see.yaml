@@ -1,0 +1,19 @@
+id: web-linked-see
+info:
+  name: linked-see
+  author: archer
+  verified: true
+  description: 检测到linked-see系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "4aa64c674d4f0b5f85b17ae727fa5e7e"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>linked coms</title>")
+expression: r0() || r1()

@@ -1,0 +1,19 @@
+id: web-asynqmon
+info:
+  name: asynqmon
+  author: archer
+  verified: true
+  description: 检测到asynqmon系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"asynq monitoring web console\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "178411612"
+expression: r0() || r1()

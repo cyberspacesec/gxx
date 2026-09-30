@@ -1,0 +1,24 @@
+id: web-ruckus-wireless
+info:
+  name: ruckus-wireless
+  author: archer
+  verified: true
+  description: 检测到ruckus-wireless系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Ruckus Wireless Admin</title>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"Ruckus Wireless\" title=")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-2069844696"
+expression: r0() || r1() || r2()

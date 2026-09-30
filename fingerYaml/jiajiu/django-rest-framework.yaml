@@ -1,0 +1,14 @@
+id: web-django-rest-framework
+info:
+  name: django-rest-framework
+  author: archer
+  verified: false
+  description: 检测到django-rest-framework系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Django REST framework") && response.body.ibcontains(b"href='https://www.django-rest-framework.org/'>")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-EMQX
+info:
+  name: EMQX
+  author: archer
+  verified: true
+  description: 检测到EMQX系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-670975485"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>EMQX Dashboard</title>")
+expression: r0() || r1()

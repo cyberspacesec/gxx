@@ -1,0 +1,14 @@
+id: web-uniview-ezstation
+info:
+  name: uniview-ezstation
+  author: archer
+  verified: false
+  description: 检测到uniview-ezstation系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h1>welcome to ezstation vc server")
+expression: r0()

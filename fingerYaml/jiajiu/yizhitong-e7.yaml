@@ -1,0 +1,14 @@
+id: web-yizhitong-e7
+info:
+  name: yizhitong-e7
+  author: archer
+  verified: false
+  description: 检测到yizhitong-e7系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"name=\"hidden_isbiaozhun\"")
+expression: r0()

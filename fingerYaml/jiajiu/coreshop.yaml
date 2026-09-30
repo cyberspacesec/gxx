@@ -1,0 +1,19 @@
+id: web-coreshop
+info:
+  name: coreshop
+  author: archer
+  verified: true
+  description: 检测到coreshop系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1403972357"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"coreshop")
+expression: r0() || r1()

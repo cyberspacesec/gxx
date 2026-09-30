@@ -1,0 +1,14 @@
+id: web-backbee
+info:
+  name: backbee
+  author: archer
+  verified: false
+  description: 检测到backbee系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"bb5-site-wrapper\">")
+expression: r0()

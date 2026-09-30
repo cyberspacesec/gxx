@@ -1,0 +1,19 @@
+id: web-帆软V1011
+info:
+  name: 帆软V10/11
+  author: archer
+  verified: false
+  description: 检测到帆软V10/11系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webroot/decision/file?path=")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/decision/file?path=/com/fr/web/core")
+expression: r0() || r1()

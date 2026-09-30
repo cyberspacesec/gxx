@@ -1,0 +1,24 @@
+id: web-netflow-analyzer-zoho-traffic-management
+info:
+  name: netflow-analyzer-zoho-traffic-management
+  author: archer
+  verified: false
+  description: 检测到netflow-analyzer-zoho-traffic-management系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"netflow analyzer")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"zoho")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/netflow/css/netflow.css")
+expression: r0() || r1() || r2()

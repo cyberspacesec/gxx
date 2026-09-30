@@ -1,0 +1,14 @@
+id: web-firerp-soft
+info:
+  name: firerp-soft
+  author: archer
+  verified: false
+  description: 检测到firerp-soft系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"mm_preloadimages('images/bt/bt_login_b.gif")
+expression: r0()

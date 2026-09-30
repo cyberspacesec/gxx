@@ -1,0 +1,14 @@
+id: web-alcatel_lucent-企业网关
+info:
+  name: alcatel_lucent-企业网关
+  author: archer
+  verified: false
+  description: 检测到alcatel_lucent-企业网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alcatel-lucent") && response.body.ibcontains(b"欢迎登陆网页配置界面")
+expression: r0()

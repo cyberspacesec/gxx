@@ -1,0 +1,24 @@
+id: web-foosun
+info:
+  name: foosun
+  author: archer
+  verified: false
+  description: 检测到foosun系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"created by dotnetcms") && response.body.ibcontains(b"for foosun")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by www.foosun.net,products:foosun content manage system")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"encodeURIComponent(obj") && response.body.ibcontains(b"Search.html?type") && response.body.ibcontains(b"function SearchGo")
+expression: r0() || r1() || r2()

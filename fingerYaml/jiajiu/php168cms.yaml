@@ -1,0 +1,14 @@
+id: web-php168cms
+info:
+  name: php168cms
+  author: archer
+  verified: false
+  description: 检测到php168cms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var system = 'cms")
+expression: r0()

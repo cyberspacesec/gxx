@@ -1,0 +1,14 @@
+id: web-bamboocloud-bim
+info:
+  name: bamboocloud-bim
+  author: archer
+  verified: false
+  description: 检测到bamboocloud-bim系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"bim 开发配置与运维控制台")
+expression: r0()

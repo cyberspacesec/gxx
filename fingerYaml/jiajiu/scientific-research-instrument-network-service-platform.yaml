@@ -1,0 +1,14 @@
+id: web-scientific-research-instrument-network-service-platform
+info:
+  name: scientific-research-instrument-network-service-platform
+  author: archer
+  verified: false
+  description: 检测到scientific-research-instrument-network-service-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"content: \"/lfsms/user/login2?go=\" + go")'
+expression: r0()

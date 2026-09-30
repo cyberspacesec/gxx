@@ -1,0 +1,14 @@
+id: web-360天堤新一代智慧防火墙
+info:
+  name: 360天堤新一代智慧防火墙
+  author: archer
+  verified: false
+  description: 检测到360天堤新一代智慧防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"360天堤")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-天融信-安全管理系统
+info:
+  name: 天融信-安全管理系统
+  author: archer
+  verified: false
+  description: 检测到天融信-安全管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"天融信安全管理")
+expression: r0()

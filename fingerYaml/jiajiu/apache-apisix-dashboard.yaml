@@ -1,0 +1,19 @@
+id: web-apache-apisix-dashboard
+info:
+  name: apache-apisix-dashboard
+  author: archer
+  verified: true
+  description: 检测到apache-apisix-dashboard系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>apache apisix dashboard</title>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "358172742"
+expression: r0() || r1()

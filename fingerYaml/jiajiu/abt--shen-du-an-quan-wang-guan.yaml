@@ -1,0 +1,14 @@
+id: web-abt-深度安全网关
+info:
+  name: abt-深度安全网关
+  author: archer
+  verified: false
+  description: 检测到abt-深度安全网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"安博通应用网关") && response.body.ibcontains(b"安博通深度安全网关")
+expression: r0()

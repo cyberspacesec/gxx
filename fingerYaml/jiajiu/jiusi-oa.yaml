@@ -1,0 +1,14 @@
+id: web-jiusi-oa
+info:
+  name: jiusi-oa
+  author: archer
+  verified: false
+  description: 检测到jiusi-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"九思软件")
+expression: r0()

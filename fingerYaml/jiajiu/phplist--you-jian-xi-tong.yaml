@@ -1,0 +1,14 @@
+id: web-phplist-邮件系统
+info:
+  name: phplist-邮件系统
+  author: archer
+  verified: false
+  description: 检测到phplist-邮件系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"phplist version") && response.body.ibcontains(b"content=\"michiel dethmers - http://www.phplist.com")
+expression: r0()

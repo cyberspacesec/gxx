@@ -1,0 +1,14 @@
+id: web-nitc-cms
+info:
+  name: nitc-cms
+  author: archer
+  verified: false
+  description: 检测到nitc-cms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/images/nitc1.png") && response.body.ibcontains(b"nitc web marketing service")
+expression: r0()

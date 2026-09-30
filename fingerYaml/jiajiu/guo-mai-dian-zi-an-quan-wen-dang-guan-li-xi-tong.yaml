@@ -1,0 +1,14 @@
+id: web-国迈电子安全文档管理系统
+info:
+  name: 国迈电子安全文档管理系统
+  author: archer
+  verified: false
+  description: 检测到国迈电子安全文档管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"国迈安全私有云部 all rights reserved") && response.body.ibcontains(b"</span>国迈安全私有云部. <span>all rights reserved")
+expression: r0()

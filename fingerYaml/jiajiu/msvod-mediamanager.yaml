@@ -1,0 +1,24 @@
+id: web-msvod-mediamanager
+info:
+  name: msvod-mediamanager
+  author: archer
+  verified: false
+  description: 检测到msvod-mediamanager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"$('.sign-btn').addclass(\"completion\");")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"static/js/meisicms.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"魅思cms")
+expression: r0() || r1() || r2()

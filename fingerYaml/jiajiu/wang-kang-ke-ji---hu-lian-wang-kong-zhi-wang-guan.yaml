@@ -1,0 +1,14 @@
+id: web-网康科技-互联网控制网关
+info:
+  name: 网康科技-互联网控制网关
+  author: archer
+  verified: false
+  description: 检测到网康科技-互联网控制网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"网康科技互联网控制网关") && response.body.ibcontains(b"网康互联网控制网关")
+expression: r0()

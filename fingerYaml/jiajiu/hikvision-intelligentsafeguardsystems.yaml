@@ -1,0 +1,14 @@
+id: web-hikvision-intelligentsafeguardsystems
+info:
+  name: hikvision-intelligentsafeguardsystems
+  author: archer
+  verified: false
+  description: 检测到hikvision-intelligentsafeguardsystems系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location.href.indexof(\"/index/carfile/\"")
+expression: r0()

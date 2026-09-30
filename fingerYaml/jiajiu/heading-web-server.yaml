@@ -1,0 +1,14 @@
+id: web-heading-web-server
+info:
+  name: heading-web-server
+  author: archer
+  verified: false
+  description: 检测到heading-web-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"location.href='/otter'")
+expression: r0()

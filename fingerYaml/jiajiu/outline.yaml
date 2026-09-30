@@ -1,0 +1,14 @@
+id: web-outline
+info:
+  name: outline
+  author: archer
+  verified: false
+  description: 检测到outline系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>outline</title>") && response.body.ibcontains(b"title=\"outline\"/>")
+expression: r0()

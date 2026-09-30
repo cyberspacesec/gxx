@@ -1,0 +1,14 @@
+id: web-明源云erp
+info:
+  name: 明源云erp
+  author: archer
+  verified: false
+  description: 检测到明源云erp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"明源云ERP")
+expression: r0()

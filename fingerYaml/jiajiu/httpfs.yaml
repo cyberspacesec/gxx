@@ -1,0 +1,14 @@
+id: web-httpfs
+info:
+  name: httpfs
+  author: archer
+  verified: false
+  description: 检测到httpfs系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<b>httpfs service</b")
+expression: r0()

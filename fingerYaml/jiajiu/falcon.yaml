@@ -1,0 +1,19 @@
+id: web-falcon
+info:
+  name: falcon
+  author: archer
+  verified: false
+  description: 检测到falcon系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h3 class=\"font-bold\">opsplatform</h3>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"textarea class=\"form-control endpoints")
+expression: r0() || r1()

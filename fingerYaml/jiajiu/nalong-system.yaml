@@ -1,0 +1,14 @@
+id: web-nalong-system
+info:
+  name: nalong-system
+  author: archer
+  verified: false
+  description: 检测到nalong-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"ctl00_contentplaceholder1_txthospcode\"")
+expression: r0()

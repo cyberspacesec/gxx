@@ -1,0 +1,14 @@
+id: web-jamf-panel
+info:
+  name: jamf-panel
+  author: archer
+  verified: false
+  description: 检测到jamf-panel系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Jamf Pro Login") && response.body.ibcontains(b"Jamf Cloud Node")
+expression: r0()

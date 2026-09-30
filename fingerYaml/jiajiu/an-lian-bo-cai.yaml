@@ -1,0 +1,29 @@
+id: web-暗链博彩
+info:
+  name: 暗链博彩
+  author: archer
+  verified: false
+  description: 检测到暗链博彩系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"新莆京游戏")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"天博体育")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"半岛体育")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"电子娱乐")
+expression: r0() || r1() || r2() || r3()

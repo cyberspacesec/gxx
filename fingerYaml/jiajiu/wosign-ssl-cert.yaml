@@ -1,0 +1,19 @@
+id: web-wosign-ssl-cert
+info:
+  name: wosign-ssl-cert
+  author: archer
+  verified: false
+  description: 检测到wosign-ssl-cert系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"https://seal.wosign.com/tws.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"https://seal.wosign.com/signature")
+expression: r0() || r1()

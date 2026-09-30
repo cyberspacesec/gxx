@@ -1,0 +1,19 @@
+id: web-cnway-ilims
+info:
+  name: cnway-ilims
+  author: archer
+  verified: false
+  description: 检测到cnway-ilims系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/extjs/adapter/ext/ext-base-js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/js/allpagefunction.js")
+expression: r0() || r1()

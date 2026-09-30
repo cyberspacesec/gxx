@@ -1,0 +1,14 @@
+id: web-vpn358system
+info:
+  name: vpn358system
+  author: archer
+  verified: false
+  description: 检测到vpn358system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/lib/bootstrap/ico/favicon.ico\"") && response.body.ibcontains(b"class=\"form-actions j_add_ip_actions\"")
+expression: r0()

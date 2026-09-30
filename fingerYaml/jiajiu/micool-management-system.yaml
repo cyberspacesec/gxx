@@ -1,0 +1,24 @@
+id: web-micool-management-system
+info:
+  name: micool-management-system
+  author: archer
+  verified: false
+  description: 检测到micool-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"米酷影视 版权所有")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"name=\"keywords\" content=\"电影,视频大全,在线高清电影,付费电影,免费电影,剧集,电影,在线观看,vip高清电影直播\"")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"bplay.php?play=")
+expression: r0() || r1() || r2()

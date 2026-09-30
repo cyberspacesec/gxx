@@ -1,0 +1,14 @@
+id: web-mail2000-邮件系统
+info:
+  name: mail2000-邮件系统
+  author: archer
+  verified: false
+  description: 检测到mail2000-邮件系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"mail2000郵件系統")
+expression: r0()

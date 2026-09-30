@@ -1,0 +1,44 @@
+id: web-kingdee
+info:
+  name: kingdee
+  author: archer
+  verified: false
+  description: 检测到kingdee系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Kingdee.EntryRole") && response.body.ibcontains(b"loginKDLogo")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"金蝶国际软件集团有限公司版权所有")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var formidafterlogin = '\"bos_mainconsolesutra\"")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"kd-div-loading-ct\"")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"logo-kingdee.png")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"eassessionid")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/eassso/common")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6()

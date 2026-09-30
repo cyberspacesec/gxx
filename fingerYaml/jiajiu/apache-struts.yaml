@@ -1,0 +1,54 @@
+id: web-apache-struts
+info:
+  name: apache-struts
+  author: archer
+  verified: false
+  description: 检测到apache-struts系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Location: /index.action")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Location: /login.action")'
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"=\"struts.token.name\"")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<form action=\"login.action\" method=\"post")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<form action=\"/login.action\" method=\"post")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"Struts2 Showcase for Apache Struts Project\"")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"struts problem report")
+  r7:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"there is no action mapped for namespace")
+  r8:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"no result defined for action and result input")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6() || r7() || r8()

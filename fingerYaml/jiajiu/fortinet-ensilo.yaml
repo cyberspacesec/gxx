@@ -1,0 +1,14 @@
+id: web-fortinet-ensilo
+info:
+  name: fortinet-ensilo
+  author: archer
+  verified: false
+  description: 检测到fortinet-ensilo系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img src=\"images/ensilo_logo.png")
+expression: r0()

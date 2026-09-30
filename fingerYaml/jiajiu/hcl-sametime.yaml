@@ -1,0 +1,14 @@
+id: web-hcl-sametime
+info:
+  name: hcl-sametime
+  author: archer
+  verified: false
+  description: 检测到hcl-sametime系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/chat/sametime192x192.png")
+expression: r0()

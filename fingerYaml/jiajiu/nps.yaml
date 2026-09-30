@@ -1,0 +1,14 @@
+id: web-nps
+info:
+  name: nps
+  author: archer
+  verified: false
+  description: 检测到nps系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ehang") && response.body.ibcontains(b"login") && response.body.ibcontains(b"nps")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-aws-elastic-beanstalk
+info:
+  name: aws-elastic-beanstalk
+  author: archer
+  verified: false
+  description: 检测到aws-elastic-beanstalk系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h2>what's next?</h2>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"aws.amazon.com/elasticbeanstalk")
+expression: r0() || r1()

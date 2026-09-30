@@ -1,0 +1,14 @@
+id: web-epoint-devops-monitor
+info:
+  name: epoint-devops-monitor
+  author: archer
+  verified: false
+  description: 检测到epoint-devops-monitor系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>新点运维监控平台单机版</title>") && response.body.ibcontains(b"新点运维监控平台单机版,请耐心等待")
+expression: r0()

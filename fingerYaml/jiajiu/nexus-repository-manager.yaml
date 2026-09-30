@@ -1,0 +1,24 @@
+id: web-nexus-repository-manager
+info:
+  name: nexus-repository-manager
+  author: archer
+  verified: false
+  description: 检测到nexus-repository-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Nexus Repository Manager</title>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b" nexus repository manager")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"progressmessage('initializing ...')")
+expression: r0() || r1() || r2()

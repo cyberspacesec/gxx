@@ -1,0 +1,14 @@
+id: web-OEM-奇安信堡垒机
+info:
+  name: OEM-奇安信堡垒机
+  author: archer
+  verified: false
+  description: 检测到OEM-奇安信堡垒机系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"application/x-xtx-axhost")
+expression: r0()

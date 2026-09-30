@@ -1,0 +1,14 @@
+id: web-ewei-plagform
+info:
+  name: ewei-plagform
+  author: archer
+  verified: false
+  description: 检测到ewei-plagform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"易维平台</h1>")
+expression: r0()

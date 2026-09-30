@@ -1,0 +1,14 @@
+id: web-mobilityguard
+info:
+  name: mobilityguard
+  author: archer
+  verified: false
+  description: 检测到mobilityguard系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"click here for more information about mobilityguard")
+expression: r0()

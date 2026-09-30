@@ -1,0 +1,14 @@
+id: web-蓝海卓越计费管理系统
+info:
+  name: 蓝海卓越计费管理系统
+  author: archer
+  verified: false
+  description: 检测到蓝海卓越计费管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<script language='javascript'>window.parent.location.href='login.php';</script>")
+expression: r0()

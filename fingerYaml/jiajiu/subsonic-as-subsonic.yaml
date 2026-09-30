@@ -1,0 +1,24 @@
+id: web-subsonic-as-subsonic
+info:
+  name: subsonic-as-subsonic
+  author: archer
+  verified: false
+  description: 检测到subsonic-as-subsonic系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"subsonic")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onload=\"document.getelementbyid('j_username').focus()\"")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"parent.frames.upper.keyboardshortcut(\"showindex\", index.touppercase());")
+expression: r0() || r1() || r2()

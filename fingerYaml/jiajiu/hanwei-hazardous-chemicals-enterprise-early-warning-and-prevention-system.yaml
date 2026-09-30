@@ -1,0 +1,19 @@
+id: web-hanwei-hazardous-chemicals-enterprise-early-warning-and-prevention-system
+info:
+  name: hanwei-hazardous-chemicals-enterprise-early-warning-and-prevention-system
+  author: archer
+  verified: false
+  description: 检测到hanwei-hazardous-chemicals-enterprise-early-warning-and-prevention-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"default value is bootstrapdialog.type_primary")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var objheight = document.documentelement.clientheight")
+expression: r0() || r1()

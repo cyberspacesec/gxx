@@ -1,0 +1,19 @@
+id: web-asp168-oho
+info:
+  name: asp168-oho
+  author: archer
+  verified: false
+  description: 检测到asp168-oho系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"upload/moban/images/style.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"default.php?mod=article&do=detail&tid")
+expression: r0() || r1()

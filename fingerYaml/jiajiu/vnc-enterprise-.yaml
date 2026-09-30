@@ -1,0 +1,14 @@
+id: web-vnc-enterprise-
+info:
+  name: vnc-enterprise-
+  author: archer
+  verified: false
+  description: 检测到vnc-enterprise-系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: vnc server enterprise edition")'
+expression: r0()

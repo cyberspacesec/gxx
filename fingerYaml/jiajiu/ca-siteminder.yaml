@@ -1,0 +1,14 @@
+id: web-ca-siteminder
+info:
+  name: ca-siteminder
+  author: archer
+  verified: false
+  description: 检测到ca-siteminder系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- siteminder encoding")
+expression: r0()

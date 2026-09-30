@@ -1,0 +1,14 @@
+id: web-zidesoft-e6
+info:
+  name: zidesoft-e6
+  author: archer
+  verified: false
+  description: 检测到zidesoft-e6系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/static/images/login/btn-login.gif\"")
+expression: r0()

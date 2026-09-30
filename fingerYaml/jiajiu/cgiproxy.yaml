@@ -1,0 +1,14 @@
+id: web-cgiproxy
+info:
+  name: cgiproxy
+  author: archer
+  verified: false
+  description: 检测到cgiproxy系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.jmarshall.com/tools/cgiproxy/")
+expression: r0()

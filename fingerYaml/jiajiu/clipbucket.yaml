@@ -1,0 +1,24 @@
+id: web-clipbucket
+info:
+  name: clipbucket
+  author: archer
+  verified: false
+  description: 检测到clipbucket系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- clipbucket") && response.body.ibcontains(b"content=\"clipbucket")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- forged by clipbucket")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://clip-bucket.com/\">clipbucket")
+expression: r0() || r1() || r2()

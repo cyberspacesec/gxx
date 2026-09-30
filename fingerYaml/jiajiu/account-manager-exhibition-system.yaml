@@ -1,0 +1,14 @@
+id: web-account-manager-exhibition-system
+info:
+  name: account-manager-exhibition-system
+  author: archer
+  verified: false
+  description: 检测到account-manager-exhibition-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/system/login/login.shtml")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-adobe-cq5
+info:
+  name: adobe-cq5
+  author: archer
+  verified: false
+  description: 检测到adobe-cq5系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"_jcr_content")
+expression: r0()

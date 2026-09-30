@@ -1,0 +1,14 @@
+id: web-das-intellitech-c3
+info:
+  name: das-intellitech-c3
+  author: archer
+  verified: false
+  description: 检测到das-intellitech-c3系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location.href=\"single/empmain2.aspx")
+expression: r0()

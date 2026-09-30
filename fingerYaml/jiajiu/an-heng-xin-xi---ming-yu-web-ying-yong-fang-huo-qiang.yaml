@@ -1,0 +1,14 @@
+id: web-安恒信息-明御web应用防火墙
+info:
+  name: 安恒信息-明御web应用防火墙
+  author: archer
+  verified: false
+  description: 检测到安恒信息-明御web应用防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"scripts/app.waf.system.login.js") && response.body.ibcontains(b"明御web应用防火墙")
+expression: r0()

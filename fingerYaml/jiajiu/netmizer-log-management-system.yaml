@@ -1,0 +1,19 @@
+id: web-netmizer-log-management-system
+info:
+  name: netmizer-log-management-system
+  author: archer
+  verified: false
+  description: 检测到netmizer-log-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var mywindows = ext.create")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location.href=\"main.html\";")
+expression: r0() || r1()

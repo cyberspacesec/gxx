@@ -1,0 +1,19 @@
+id: web-zhongshengsoft-crm
+info:
+  name: zhongshengsoft-crm
+  author: archer
+  verified: false
+  description: 检测到zhongshengsoft-crm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"clientutil.isff=!clientutil.isie")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alert(\"餐厅编号不能为空\")")
+expression: r0() || r1()

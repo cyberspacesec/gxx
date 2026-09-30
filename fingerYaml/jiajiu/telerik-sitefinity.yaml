@@ -1,0 +1,19 @@
+id: web-telerik-sitefinity
+info:
+  name: telerik-sitefinity
+  author: archer
+  verified: false
+  description: 检测到telerik-sitefinity系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"telerik.web.ui.webresource.axd")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"sitefinity")
+expression: r0() || r1()

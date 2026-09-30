@@ -1,0 +1,24 @@
+id: web-shenri-elevator
+info:
+  name: shenri-elevator
+  author: archer
+  verified: false
+  description: 检测到shenri-elevator系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/frameworks/images/ico.ico")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"images/login/btnmobile.gif")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"copyright 2015 shenri habiliment co.,ltd. all rights reserved")
+expression: r0() || r1() || r2()

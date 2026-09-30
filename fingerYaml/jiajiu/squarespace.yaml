@@ -1,0 +1,14 @@
+id: web-squarespace
+info:
+  name: squarespace
+  author: archer
+  verified: false
+  description: 检测到squarespace系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"new squarespace.fixedpositiontip(\"logout successful\", \"you have been successfully logged out.\", { xmargin: 15, ymargin: 15, icon: \"/universal/images/helptip-info.png\", orientation: \"upper-right\", viewportfixed: true, autohide: 1800 }).show();")'
+expression: r0()

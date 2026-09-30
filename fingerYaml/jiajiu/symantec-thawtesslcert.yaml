@@ -1,0 +1,14 @@
+id: web-symantec-thawte_ssl_cert
+info:
+  name: symantec-thawte_ssl_cert
+  author: archer
+  verified: false
+  description: 检测到symantec-thawte_ssl_cert系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"https://seal.thawte.com/getthawteseal")
+expression: r0()

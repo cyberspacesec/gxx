@@ -1,0 +1,78 @@
+name: 持续集成
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GOTOOLCHAIN: local
+  GOFLAGS: -mod=readonly
+  GOPROXY: https://proxy.golang.org,direct
+
+jobs:
+  engine:
+    name: Go 引擎与 SDK
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: '1.25.0'
+          cache-dependency-path: go.sum
+      - name: 静态检查
+        run: go vet ./...
+      - name: 单元与集成测试
+        run: go test -count=1 ./...
+      - name: 并发竞态检查
+        run: go test -race -count=1 ./...
+      - name: 内置指纹库测试
+        run: go test -tags embed -count=1 ./sdk ./pkg/cel ./pkg/runner ./pkg/wappalyzer ./fingerYaml
+      - name: 核对依赖文件
+        run: git diff --exit-code -- go.mod go.sum
+
+  ide:
+    name: IDE 后端与前端
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: '1.25.0'
+          cache-dependency-path: |
+            go.sum
+            cmd/gxx-ide/go.sum
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: cmd/gxx-ide/frontend/package-lock.json
+      - name: IDE 前端测试与构建
+        working-directory: cmd/gxx-ide/frontend
+        run: |
+          npm ci
+          npm test
+          npm run build
+      - name: IDE 后端静态检查与竞态测试
+        working-directory: cmd/gxx-ide
+        run: |
+          go vet ./...
+          go test -race -count=1 ./...
+      - name: 核对依赖文件
+        run: git diff --exit-code -- go.mod go.sum cmd/gxx-ide/go.mod cmd/gxx-ide/go.sum cmd/gxx-ide/frontend/package-lock.json

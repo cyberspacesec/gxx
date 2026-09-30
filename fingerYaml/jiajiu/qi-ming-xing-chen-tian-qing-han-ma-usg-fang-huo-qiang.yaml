@@ -1,0 +1,24 @@
+id: web-启明星辰天清汉马usg防火墙
+info:
+  name: 启明星辰天清汉马usg防火墙
+  author: archer
+  verified: false
+  description: 检测到启明星辰天清汉马usg防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"Venusense") && response.body.ibcontains(b"天清汉马USG防火墙")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"天清汉马USG")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"/cgi-bin/webui?op=get_product_model")
+expression: r0() || r1() || r2()

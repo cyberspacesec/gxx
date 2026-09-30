@@ -1,0 +1,14 @@
+id: web-bh-bh5000c
+info:
+  name: bh-bh5000c
+  author: archer
+  verified: false
+  description: 检测到bh-bh5000c系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"bhclientcer:\"/modules/web/common/data/bhclient.cer")
+expression: r0()

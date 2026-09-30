@@ -1,0 +1,14 @@
+id: web-pg-real-estate-solution
+info:
+  name: pg-real-estate-solution
+  author: archer
+  verified: false
+  description: 检测到pg-real-estate-solution系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b">pg real estate solution - real estate web site design")
+expression: r0()

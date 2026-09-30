@@ -1,0 +1,19 @@
+id: web-thinkphp-yfcmf
+info:
+  name: thinkphp-yfcmf
+  author: archer
+  verified: false
+  description: 检测到thinkphp-yfcmf系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/public/others/maxlength.js") && response.body.ibcontains(b"yfcmf")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/yfcmf/yfcmf.js")
+expression: r0() || r1()

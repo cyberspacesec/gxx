@@ -1,0 +1,14 @@
+id: web-联软准入
+info:
+  name: 联软准入
+  author: archer
+  verified: false
+  description: 检测到联软准入系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"leagsoft") && response.body.ibcontains(b"redirect") && response.body.ibcontains(b"网络准入")
+expression: r0()

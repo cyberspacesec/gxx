@@ -1,0 +1,14 @@
+id: web-heading-e-commerce-platform
+info:
+  name: heading-e-commerce-platform
+  author: archer
+  verified: false
+  description: 检测到heading-e-commerce-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location.replace('/bin/hdnet.dll/login')")
+expression: r0()

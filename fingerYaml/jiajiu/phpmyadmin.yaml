@@ -1,0 +1,29 @@
+id: web-phpmyadmin
+info:
+  name: phpmyadmin
+  author: archer
+  verified: false
+  description: 检测到phpmyadmin系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"phpmyadmin.css.php")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: phpmyadmin=")'
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: pma_lang=")'
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"pma_password")
+expression: r0() || r1() || r2() || r3()

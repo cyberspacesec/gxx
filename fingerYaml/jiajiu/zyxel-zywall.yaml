@@ -1,0 +1,14 @@
+id: web-zyxel-zywall
+info:
+  name: zyxel-zywall
+  author: archer
+  verified: false
+  description: 检测到zyxel-zywall系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>zywall") && response.body.ibcontains(b"zyfunction.js")
+expression: r0()

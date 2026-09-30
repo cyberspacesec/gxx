@@ -1,0 +1,14 @@
+id: web-sophos-cyberoam-sslvpn
+info:
+  name: sophos-cyberoam-sslvpn
+  author: archer
+  verified: false
+  description: 检测到sophos-cyberoam-sslvpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"sslvpnuserportalloginform") && response.body.ibcontains(b"cyberoam ssl vpn portal")
+expression: r0()

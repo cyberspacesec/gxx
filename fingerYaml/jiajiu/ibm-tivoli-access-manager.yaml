@@ -1,0 +1,19 @@
+id: web-ibm-tivoli-access-manager
+info:
+  name: ibm-tivoli-access-manager
+  author: archer
+  verified: false
+  description: 检测到ibm-tivoli-access-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!--- do not translate or modify any part of the hidden parameter(s) --->")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var warningstring = \"<b>warning:</b> to maintain your login session, make sure that your browser is configured to accept cookies.\";")
+expression: r0() || r1()

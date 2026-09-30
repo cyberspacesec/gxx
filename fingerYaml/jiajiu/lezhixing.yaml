@@ -1,0 +1,24 @@
+id: web-lezhixing
+info:
+  name: lezhixing
+  author: archer
+  verified: false
+  description: 检测到lezhixing系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/datacenter/authentication/login.do\" method=\"post")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"location.href=contextpath+\"/login/password/password.jsp")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/static/thirdparty/jquery/") && response.body.ibcontains(b"var contextpath = \"/datacenter")
+expression: r0() || r1() || r2()

@@ -1,0 +1,19 @@
+id: web-lenovo-enterprise-network-disk
+info:
+  name: lenovo-enterprise-network-disk
+  author: archer
+  verified: false
+  description: 检测到lenovo-enterprise-network-disk系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"client/android/bin/lenovobox.apk")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"联想企业网盘android客户端下载\"")
+expression: r0() || r1()

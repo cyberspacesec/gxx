@@ -1,0 +1,14 @@
+id: web-microsoft-silverlight
+info:
+  name: microsoft-silverlight
+  author: archer
+  verified: false
+  description: 检测到microsoft-silverlight系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"get microsoft silverlight")
+expression: r0()

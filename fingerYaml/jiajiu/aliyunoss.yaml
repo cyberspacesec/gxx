@@ -1,0 +1,14 @@
+id: web-aliyunoss
+info:
+  name: aliyunoss
+  author: archer
+  verified: false
+  description: 检测到aliyunoss系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: aliyunoss")'
+expression: r0()

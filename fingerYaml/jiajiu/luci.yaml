@@ -1,0 +1,39 @@
+id: web-luci
+info:
+  name: luci
+  author: archer
+  verified: false
+  description: 检测到luci系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/luci-static/openwrt.org/cascade.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"luci - lua configuration interface")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by luci")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/cgi-bin/luci\">")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/cgi-bin/luci\"></a>")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<head> <meta http-equiv=\"refresh\" content=\"0; url=/cgi-bin/luci\" /> </head>")
+expression: r0() || r1() || r2() || r3() || r4() || r5()

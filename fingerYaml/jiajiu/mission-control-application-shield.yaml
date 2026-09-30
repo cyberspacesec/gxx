@@ -1,0 +1,14 @@
+id: web-mission-control-application-shield
+info:
+  name: mission-control-application-shield
+  author: archer
+  verified: false
+  description: 检测到mission-control-application-shield系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"mission control application shield")
+expression: r0()

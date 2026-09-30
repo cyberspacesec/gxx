@@ -1,0 +1,19 @@
+id: web-growforce-email
+info:
+  name: growforce-email
+  author: archer
+  verified: false
+  description: 检测到growforce-email系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://webmail.zmail300.cn")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/page/help/mailconfig/config/index.html")
+expression: r0() || r1()

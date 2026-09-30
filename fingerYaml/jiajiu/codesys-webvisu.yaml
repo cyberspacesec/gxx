@@ -1,0 +1,14 @@
+id: web-codesys-webvisu
+info:
+  name: codesys-webvisu
+  author: archer
+  verified: false
+  description: 检测到codesys-webvisu系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<param name=\"startvisu\" value=\"plc_visu\">")
+expression: r0()

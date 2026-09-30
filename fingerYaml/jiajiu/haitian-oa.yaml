@@ -1,0 +1,24 @@
+id: web-haitian-oa
+info:
+  name: haitian-oa
+  author: archer
+  verified: false
+  description: 检测到haitian-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"htvos.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"images/myjs.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"mshtml 8.00.6001.19298")
+expression: r0() || r1() || r2()

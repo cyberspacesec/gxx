@@ -1,0 +1,14 @@
+id: web-alcatel_lucent-omnivista-cirrus
+info:
+  name: alcatel_lucent-omnivista-cirrus
+  author: archer
+  verified: false
+  description: 检测到alcatel_lucent-omnivista-cirrus系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/help/en-us/others/ov-cirrus_cookiepolicy.html")
+expression: r0()

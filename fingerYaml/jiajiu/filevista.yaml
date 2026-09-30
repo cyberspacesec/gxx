@@ -1,0 +1,14 @@
+id: web-filevista
+info:
+  name: filevista
+  author: archer
+  verified: false
+  description: 检测到filevista系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.gleamtech.com/products/filevista/web-file-manager") && response.body.ibcontains(b"welcome to filevista")
+expression: r0()

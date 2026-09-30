@@ -1,0 +1,24 @@
+id: web-h_ui
+info:
+  name: h_ui
+  author: archer
+  verified: false
+  description: 检测到h_ui系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"h-ui.js") && response.body.ibcontains(b"h-ui.min.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/css/h-ui.min.css") && response.body.ibcontains(b"html5shi.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/css/h-ui.login.css") && response.body.ibcontains(b"/h-ui.admin/")
+expression: r0() || r1() || r2()

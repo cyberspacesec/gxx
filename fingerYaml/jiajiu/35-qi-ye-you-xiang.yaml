@@ -1,0 +1,24 @@
+id: web-35企业邮箱
+info:
+  name: 35企业邮箱
+  author: archer
+  verified: true
+  description: 检测到35企业邮箱系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"35") && response.body.ibcontains(b"images/mail/35pushmail.app.png") && response.body.ibcontains(b"switchingserverpopup")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"user_define_img_btn6\" href=\"http://help.mail.35.com/mailman/81.html")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1676919780"
+expression: r0() || r1() || r2()

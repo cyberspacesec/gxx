@@ -1,0 +1,14 @@
+id: web-vmware-vrealize-operations-manager
+info:
+  name: vmware-vrealize-operations-manager
+  author: archer
+  verified: false
+  description: 检测到vmware-vrealize-operations-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Identity Manager") && response.body.ibcontains(b"VMware")
+expression: r0()

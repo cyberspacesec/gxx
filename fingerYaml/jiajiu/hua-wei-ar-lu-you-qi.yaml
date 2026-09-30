@@ -1,0 +1,19 @@
+id: web-华为AR路由器
+info:
+  name: 华为AR路由器
+  author: archer
+  verified: false
+  description: 检测到华为AR路由器系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"simple/util/ui/all/allUI.css") && response.body.ibcontains(b"/view/loginUser.html")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"AR Web登录") && response.body.ibcontains(b"Log In to AR Web")
+expression: r0() || r1()

@@ -1,0 +1,24 @@
+id: web-w7-officialaccounts
+info:
+  name: w7-officialaccounts
+  author: archer
+  verified: false
+  description: 检测到w7-officialaccounts系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"copyright\">powered by <a href=\"http://www.we7.cc\"><b>微擎</b>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"微擎,微信") && response.body.ibcontains(b"onsubmit=\"return formcheck();\" class=\"we7-form\">")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by we7.cc")
+expression: r0() || r1() || r2()

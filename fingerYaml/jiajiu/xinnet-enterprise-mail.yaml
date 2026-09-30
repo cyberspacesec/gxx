@@ -1,0 +1,14 @@
+id: web-xinnet-enterprise-mail
+info:
+  name: xinnet-enterprise-mail
+  author: archer
+  verified: false
+  description: 检测到xinnet-enterprise-mail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"北京新网数码信息技术有限公司 版权所有</span>")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-apache-kylin
+info:
+  name: apache-kylin
+  author: archer
+  verified: false
+  description: 检测到apache-kylin系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<meta http-equiv=\"refresh\" content=\"1;url=kylin\">")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/kylin/\"")
+expression: r0() || r1()

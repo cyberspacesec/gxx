@@ -1,0 +1,24 @@
+id: web-zkteco-security-management-system
+info:
+  name: zkteco-security-management-system
+  author: archer
+  verified: false
+  description: 检测到zkteco-security-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src='/login/images/zksecurity.png'") && response.body.ibcontains(b"百傲瑞达")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"login-fingerYaml-btn disabled\"") && response.body.ibcontains(b"id=\"password_hidden\"")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"$(\".copyright\").text(\"copyright ? \" + server_current_year + \" zkteco co., ltd. all rights reserved\");")
+expression: r0() || r1() || r2()

@@ -1,0 +1,14 @@
+id: web-apex-livebpm
+info:
+  name: apex-livebpm
+  author: archer
+  verified: false
+  description: 检测到apex-livebpm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/plug-in/login/fixed/css/login.css\"")
+expression: r0()

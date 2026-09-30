@@ -1,0 +1,14 @@
+id: web-ip_com-第二代防火墙
+info:
+  name: ip_com-第二代防火墙
+  author: archer
+  verified: false
+  description: 检测到ip_com-第二代防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"深圳市和为顺网络技术有限公司\"z?pkq") && response.body.ibcontains(b"technology, inc.")
+expression: r0()

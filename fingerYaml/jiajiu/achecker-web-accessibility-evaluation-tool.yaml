@@ -1,0 +1,14 @@
+id: web-achecker-web-accessibility-evaluation-tool
+info:
+  name: achecker-web-accessibility-evaluation-tool
+  author: archer
+  verified: false
+  description: 检测到achecker-web-accessibility-evaluation-tool系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"achecker is a web accessibility")
+expression: r0()

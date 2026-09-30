@@ -1,0 +1,24 @@
+id: web-sinosoft-technology-e-government-system
+info:
+  name: sinosoft-technology-e-government-system
+  author: archer
+  verified: false
+  description: 检测到sinosoft-technology-e-government-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"app_themes/1/style.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location = \"homepages/index.aspx")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"homepages/content_page.aspx")
+expression: r0() || r1() || r2()

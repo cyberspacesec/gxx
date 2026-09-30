@@ -1,0 +1,19 @@
+id: web-hadoop-hue
+info:
+  name: hadoop-hue
+  author: archer
+  verified: false
+  description: 检测到hadoop-hue系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"jhuehdfstreeglobals")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"hue and the hue logo are trademarks of cloudera, inc.") && response.body.ibcontains(b"id=\"jhuenotify")
+expression: r0() || r1()

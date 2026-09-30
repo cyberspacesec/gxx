@@ -1,0 +1,19 @@
+id: web-goodway-integrated-management-information-system
+info:
+  name: goodway-integrated-management-information-system
+  author: archer
+  verified: false
+  description: 检测到goodway-integrated-management-information-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"option value=\"enterprise\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"是否域账户登录")
+expression: r0() || r1()

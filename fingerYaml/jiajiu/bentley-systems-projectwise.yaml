@@ -1,0 +1,14 @@
+id: web-bentley-systems-projectwise
+info:
+  name: bentley-systems-projectwise
+  author: archer
+  verified: false
+  description: 检测到bentley-systems-projectwise系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"projectwise.ico")
+expression: r0()

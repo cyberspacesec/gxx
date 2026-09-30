@@ -1,0 +1,14 @@
+id: web-tab-and-link-manager
+info:
+  name: tab-and-link-manager
+  author: archer
+  verified: false
+  description: 检测到tab-and-link-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"footer_copyright\" class=\"shade footer_copyright\">powered by <a href=\"http://www.wolfshead-solutions.com/ws-products/product-1")
+expression: r0()

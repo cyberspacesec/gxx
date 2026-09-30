@@ -1,0 +1,19 @@
+id: web-6kbbs
+info:
+  name: 6kbbs
+  author: zhizhuo
+  verified: true
+  description: 识别特定Web应用
+  created: 2025/04/15
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by 6kbbs")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"generator\" content=\"6kbbs")
+expression: r0() || r1()

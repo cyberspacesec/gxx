@@ -1,0 +1,19 @@
+id: web-laysns-cms
+info:
+  name: laysns-cms
+  author: archer
+  verified: false
+  description: 检测到laysns-cms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"laysns\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.laysns.com/\"> laysns")
+expression: r0() || r1()

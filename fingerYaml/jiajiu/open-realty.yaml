@@ -1,0 +1,19 @@
+id: web-open-realty
+info:
+  name: open-realty
+  author: archer
+  verified: false
+  description: 检测到open-realty系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"open-realty")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.open-realty.org\" title=\"powered by open-realty")
+expression: r0() || r1()

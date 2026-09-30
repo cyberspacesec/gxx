@@ -1,0 +1,19 @@
+id: web-nextjs
+info:
+  name: nextjs
+  author: archer
+  verified: false
+  description: 检测到nextjs系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"X-Powered-By: Next.js")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta name=\"next-head-count")
+expression: r0() || r1()

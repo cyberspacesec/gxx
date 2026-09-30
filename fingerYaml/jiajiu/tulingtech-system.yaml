@@ -1,0 +1,14 @@
+id: web-tulingtech-system
+info:
+  name: tulingtech-system
+  author: archer
+  verified: false
+  description: 检测到tulingtech-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/content/login-ui/static/h-ui.admin/css/h-ui.login.css\"")
+expression: r0()

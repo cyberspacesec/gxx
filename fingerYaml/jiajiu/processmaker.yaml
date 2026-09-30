@@ -1,0 +1,24 @@
+id: web-processmaker
+info:
+  name: processmaker
+  author: archer
+  verified: false
+  description: 检测到processmaker系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"processmaker ver")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.processmaker.com\" alt=\"processmaker")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"powered by processmaker")
+expression: r0() || r1() || r2()

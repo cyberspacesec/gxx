@@ -1,0 +1,14 @@
+id: web-d-link
+info:
+  name: d-link
+  author: archer
+  verified: false
+  description: 检测到d-link系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"D-Link Systems, Inc")
+expression: r0()

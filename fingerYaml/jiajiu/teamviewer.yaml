@@ -1,0 +1,24 @@
+id: web-teamviewer
+info:
+  name: teamviewer
+  author: archer
+  verified: false
+  description: 检测到teamviewer系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"teamviewer") && response.body.ibcontains(b"this site is running")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href='http://www.teamviewer.com'>teamviewer</a>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"this site is running")
+expression: r0() || r1() || r2()

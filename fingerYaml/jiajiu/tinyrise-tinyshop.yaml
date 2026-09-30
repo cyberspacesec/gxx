@@ -1,0 +1,19 @@
+id: web-tinyrise-tinyshop
+info:
+  name: tinyrise-tinyshop
+  author: archer
+  verified: false
+  description: 检测到tinyrise-tinyshop系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var server_url = '/__con__/__act__';")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"tiny_token_")
+expression: r0() || r1()

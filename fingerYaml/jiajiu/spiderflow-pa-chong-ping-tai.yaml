@@ -1,0 +1,14 @@
+id: web-SpiderFlow爬虫平台
+info:
+  name: SpiderFlow爬虫平台
+  author: archer
+  verified: true
+  description: 检测到SpiderFlow爬虫平台系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-528044181"
+expression: r0()

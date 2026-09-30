@@ -1,0 +1,14 @@
+id: web-深信服日志审计
+info:
+  name: 深信服日志审计
+  author: archer
+  verified: false
+  description: 检测到深信服日志审计系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.SF={}") && response.body.ibcontains(b"content=webkit|ie-stand")
+expression: r0()

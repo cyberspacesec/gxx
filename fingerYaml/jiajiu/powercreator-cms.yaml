@@ -1,0 +1,24 @@
+id: web-powercreator-cms
+info:
+  name: powercreator-cms
+  author: archer
+  verified: false
+  description: 检测到powercreator-cms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"email:support@powercreator.com.cn<br />")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<span class=\"bottom_versionno\">")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powercreator ")
+expression: r0() || r1() || r2()

@@ -1,0 +1,19 @@
+id: web-faqrobot
+info:
+  name: faqrobot
+  author: archer
+  verified: false
+  description: 检测到faqrobot系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"faq客服机器人")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"南京云问网络技术有限公司")
+expression: r0() || r1()

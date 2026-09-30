@@ -1,0 +1,19 @@
+id: web-microsoft-remote-web-workplace
+info:
+  name: microsoft-remote-web-workplace
+  author: archer
+  verified: false
+  description: 检测到microsoft-remote-web-workplace系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"copyright (c) microsoft corporation")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"logon.aspx?")
+expression: r0() || r1()

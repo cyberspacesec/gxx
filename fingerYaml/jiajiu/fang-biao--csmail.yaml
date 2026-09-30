@@ -1,0 +1,14 @@
+id: web-方标-csmail
+info:
+  name: 方标-csmail
+  author: archer
+  verified: false
+  description: 检测到方标-csmail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<frame src=\"/mainframe_zh-cn.html\" />")
+expression: r0()

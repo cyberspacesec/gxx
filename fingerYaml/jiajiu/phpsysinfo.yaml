@@ -1,0 +1,29 @@
+id: web-phpsysinfo
+info:
+  name: phpsysinfo
+  author: archer
+  verified: false
+  description: 检测到phpsysinfo系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var stargeturl = \"index.php?disp=dynamic")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"phpsysinfo")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://phpsysinfo.sourceforge.net/\">phpsysinfo")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/templates/phpsysinfo.css")
+expression: r0() || r1() || r2() || r3()

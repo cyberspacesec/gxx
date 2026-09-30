@@ -1,0 +1,19 @@
+id: web-trend-smart-protection-server
+info:
+  name: trend-smart-protection-server
+  author: archer
+  verified: false
+  description: 检测到trend-smart-protection-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"lastrow_right")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"redirect_reason")
+expression: r0() || r1()

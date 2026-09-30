@@ -1,0 +1,14 @@
+id: web-web2project
+info:
+  name: web2project
+  author: archer
+  verified: false
+  description: 检测到web2project系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"</head><body>fatal error. you haven't created a config file yet.<br/><a href=")
+expression: r0()

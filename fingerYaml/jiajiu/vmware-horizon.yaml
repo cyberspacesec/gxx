@@ -1,0 +1,19 @@
+id: web-vmware-horizon
+info:
+  name: vmware-horizon
+  author: archer
+  verified: false
+  description: 检测到vmware-horizon系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href='https://www.vmware.com/go/viewclients'")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"vmware horizon\">")
+expression: r0() || r1()

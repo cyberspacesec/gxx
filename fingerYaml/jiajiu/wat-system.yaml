@@ -1,0 +1,14 @@
+id: web-wat-system
+info:
+  name: wat-system
+  author: archer
+  verified: false
+  description: 检测到wat-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"生产经营计划统计一体化管理信息系统安装程序")
+expression: r0()

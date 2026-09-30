@@ -1,0 +1,14 @@
+id: web-maritimeselectionsystem
+info:
+  name: maritimeselectionsystem
+  author: archer
+  verified: false
+  description: 检测到maritimeselectionsystem系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"海事选船系统</el-col>")
+expression: r0()

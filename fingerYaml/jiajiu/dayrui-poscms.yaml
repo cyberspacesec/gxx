@@ -1,0 +1,14 @@
+id: web-dayrui-poscms
+info:
+  name: dayrui-poscms
+  author: archer
+  verified: false
+  description: 检测到dayrui-poscms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/statics/admin/global/plugins/font-awesome/css/font-awesome.min.css")
+expression: r0()

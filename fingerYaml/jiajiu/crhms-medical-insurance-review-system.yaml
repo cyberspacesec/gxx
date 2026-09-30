@@ -1,0 +1,14 @@
+id: web-crhms-medical-insurance-review-system
+info:
+  name: crhms-medical-insurance-review-system
+  author: archer
+  verified: false
+  description: 检测到crhms-medical-insurance-review-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.open(url, \"中公网医疗信息管理系统\", option")
+expression: r0()

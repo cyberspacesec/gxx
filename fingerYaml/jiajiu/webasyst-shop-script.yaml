@@ -1,0 +1,19 @@
+id: web-webasyst-shop-script
+info:
+  name: webasyst-shop-script
+  author: archer
+  verified: false
+  description: 检测到webasyst-shop-script系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.shop-script.com")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"powered by webasyst shop-script <a href=\"http://www.shop-script.com/\" style=\"font-weight: normal\">shopping cart software</a>")'
+expression: r0() || r1()

@@ -1,0 +1,14 @@
+id: web-通天星CMS
+info:
+  name: 通天星CMS
+  author: archer
+  verified: false
+  description: 检测到通天星CMS系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/808gps/")
+expression: r0()

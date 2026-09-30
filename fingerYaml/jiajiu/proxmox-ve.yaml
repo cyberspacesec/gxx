@@ -1,0 +1,24 @@
+id: web-proxmox-ve
+info:
+  name: proxmox-ve
+  author: archer
+  verified: false
+  description: 检测到proxmox-ve系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"boxheadline\">proxmox virtual environment")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href='http://www.proxmox.com' target='_blank' class=\"boxheadline")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ext.create('pve.stdworkspace')")
+expression: r0() || r1() || r2()

@@ -1,0 +1,19 @@
+id: web-microsoft-isa-server
+info:
+  name: microsoft-isa-server
+  author: archer
+  verified: false
+  description: 检测到microsoft-isa-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"the isa server denied the specified uniform resource locator")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"the server denied the specified uniform resource locator (url). contact the server administrator")
+expression: r0() || r1()

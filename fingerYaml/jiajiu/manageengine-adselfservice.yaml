@@ -1,0 +1,29 @@
+id: web-manageengine-adselfservice
+info:
+  name: manageengine-adselfservice
+  author: archer
+  verified: false
+  description: 检测到manageengine-adselfservice系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"images/adssp_favicon.ico")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"small_status_box")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"adsf/js/")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"manageengine")
+expression: r0() || r1() || r2() || r3()

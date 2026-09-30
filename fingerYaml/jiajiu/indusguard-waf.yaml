@@ -1,0 +1,14 @@
+id: web-indusguard-waf
+info:
+  name: indusguard-waf
+  author: archer
+  verified: false
+  description: 检测到indusguard-waf系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"wafportal/wafportal.nocache.js")
+expression: r0()

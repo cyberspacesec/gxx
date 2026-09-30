@@ -1,0 +1,19 @@
+id: web-php-voting-system
+info:
+  name: php-voting-system
+  author: archer
+  verified: false
+  description: 检测到php-voting-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"http://www.888072.com") && response.body.ibcontains(b"content=\"qq 7000719")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"http://www.vote123.cn")
+expression: r0() || r1()

@@ -1,0 +1,14 @@
+id: web-WildFly
+info:
+  name: WildFly
+  author: archer
+  verified: true
+  description: 检测到WildFly系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1666561833"
+expression: r0()

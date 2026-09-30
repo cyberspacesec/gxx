@@ -1,0 +1,14 @@
+id: web-中电福富-安全基线管理
+info:
+  name: 中电福富-安全基线管理
+  author: archer
+  verified: false
+  description: 检测到中电福富-安全基线管理系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"align=\"center\">福富软件")
+expression: r0()

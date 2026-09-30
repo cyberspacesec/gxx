@@ -1,0 +1,19 @@
+id: web-江苏易安联安全设备
+info:
+  name: 江苏易安联安全设备
+  author: archer
+  verified: true
+  description: 检测到江苏易安联安全设备系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/enadmin/favicon.ico") && response.body.ibcontains(b"ensbrain_web_admin")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "375198632"
+expression: r0() || r1()

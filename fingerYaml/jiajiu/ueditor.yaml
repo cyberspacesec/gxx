@@ -1,0 +1,14 @@
+id: web-ueditor
+info:
+  name: ueditor
+  author: archer
+  verified: false
+  description: 检测到ueditor系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"ueditor.all.js")
+expression: r0()

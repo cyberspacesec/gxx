@@ -1,0 +1,14 @@
+id: web-animati-pacs
+info:
+  name: animati-pacs
+  author: archer
+  verified: false
+  description: 检测到animati-pacs系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<form action=\"\" onsubmit=\"pacs.login.sendpasswordrecoverymail()")
+expression: r0()

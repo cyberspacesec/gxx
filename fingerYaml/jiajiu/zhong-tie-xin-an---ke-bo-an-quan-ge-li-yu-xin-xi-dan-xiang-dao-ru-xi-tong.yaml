@@ -1,0 +1,14 @@
+id: web-中铁信安-科博安全隔离与信息单向导入系统
+info:
+  name: 中铁信安-科博安全隔离与信息单向导入系统
+  author: archer
+  verified: false
+  description: 检测到中铁信安-科博安全隔离与信息单向导入系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"科博安全隔离与信息交换系统") && response.body.ibcontains(b"科博安全隔离与信息单向导入系统</span>")
+expression: r0()

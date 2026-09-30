@@ -1,0 +1,19 @@
+id: web-kerio-webstar
+info:
+  name: kerio-webstar
+  author: archer
+  verified: false
+  description: 检测到kerio-webstar系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: kerio_webstar")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: webstar")'
+expression: r0() || r1()

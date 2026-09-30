@@ -1,0 +1,14 @@
+id: web-barracuda-ssl-vpn
+info:
+  name: barracuda-ssl-vpn
+  author: archer
+  verified: false
+  description: 检测到barracuda-ssl-vpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"barracuda ssl vpn")
+expression: r0()

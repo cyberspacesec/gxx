@@ -1,0 +1,29 @@
+id: web-turbomail
+info:
+  name: turbomail
+  author: archer
+  verified: false
+  description: 检测到turbomail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"TurboMail管理系统")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by turbomail") && response.body.ibcontains(b"wzcon1 clearfix")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.turbomail.org\">powered by turbomail</a>")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"turbomail 电子邮件系统\"/>")
+expression: r0() || r1() || r2() || r3()

@@ -1,0 +1,14 @@
+id: web-videosurveillancemanagementplatform
+info:
+  name: videosurveillancemanagementplatform
+  author: archer
+  verified: false
+  description: 检测到videosurveillancemanagementplatform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b" <span>平台采用最新图像化展现技术")
+expression: r0()

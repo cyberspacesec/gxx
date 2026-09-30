@@ -1,0 +1,14 @@
+id: web-老板邮局-bossmail
+info:
+  name: 老板邮局-bossmail
+  author: archer
+  verified: false
+  description: 检测到老板邮局-bossmail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://apps.microsoft.com/windows/zh-cn/app/bossmail/24f4bdb3-1bca-467e-9dd9-15a5d278aec6") && response.body.ibcontains(b"<span class=\"footer_t\">powered by bossmail</span>")
+expression: r0()

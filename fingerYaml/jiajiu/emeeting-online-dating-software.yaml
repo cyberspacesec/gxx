@@ -1,0 +1,19 @@
+id: web-emeeting-online-dating-software
+info:
+  name: emeeting-online-dating-software
+  author: archer
+  verified: false
+  description: 检测到emeeting-online-dating-software系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"emeeting dating software")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/_emeetingglobals.js")
+expression: r0() || r1()

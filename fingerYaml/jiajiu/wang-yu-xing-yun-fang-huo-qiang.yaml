@@ -1,0 +1,14 @@
+id: web-网御星云防火墙
+info:
+  name: 网御星云防火墙
+  author: archer
+  verified: false
+  description: 检测到网御星云防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"txt_userpass09") && response.body.ibcontains(b"js/UtilEncrypt.js")
+expression: r0()

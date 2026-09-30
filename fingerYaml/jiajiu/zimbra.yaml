@@ -1,0 +1,24 @@
+id: web-zimbra
+info:
+  name: zimbra
+  author: archer
+  verified: false
+  description: 检测到zimbra系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"ImgZimbraIcon") && response.raw_header.ibcontains(b"Set-Cookie: ZM_LOGIN_CSRF")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window._zimbramail")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"zimbra")
+expression: r0() || r1() || r2()

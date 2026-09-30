@@ -1,0 +1,14 @@
+id: web-soffice
+info:
+  name: soffice
+  author: archer
+  verified: false
+  description: 检测到soffice系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<title>SOFFICE登录</title>")
+expression: r0()

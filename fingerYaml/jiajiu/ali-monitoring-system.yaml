@@ -1,0 +1,19 @@
+id: web-ali-monitoring-system
+info:
+  name: ali-monitoring-system
+  author: archer
+  verified: false
+  description: 检测到ali-monitoring-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/monitor/css/monitor.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/monitor/monitoritem/monitoritemlist.htm")
+expression: r0() || r1()

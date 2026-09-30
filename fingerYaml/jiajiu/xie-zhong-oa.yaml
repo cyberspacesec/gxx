@@ -1,0 +1,14 @@
+id: web-协众oa
+info:
+  name: 协众oa
+  author: archer
+  verified: false
+  description: 检测到协众oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Location: index.php?app=main&func=passport&action=login") && response.raw_header.ibcontains(b"Set-Cookie: CNOAOASESSID=")'
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-swiki
+info:
+  name: swiki
+  author: archer
+  verified: false
+  description: 检测到swiki系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"<a href=\"http://minnow.cc.gatech.edu/swiki\" title=\"comswiki: powered by squeak\"><img src=\"/defaultscheme/comswiki.gif\" border=0 width=277 height=88 alt=\"comswiki: powered by squeak\"></a><br>")'
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-ranzhi-oa
+info:
+  name: ranzhi-oa
+  author: archer
+  verified: false
+  description: 检测到ranzhi-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/sys/index.php?m=user&f=login&referer=")
+expression: r0()

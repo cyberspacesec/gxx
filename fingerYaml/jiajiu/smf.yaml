@@ -1,0 +1,24 @@
+id: web-smf
+info:
+  name: smf
+  author: archer
+  verified: false
+  description: 检测到smf系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.simplemachines.org/about/copyright.php\" title=\"free forum software\" target=\"_blank")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img class=\"floatright\" id=\"smflogo\" src=")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"document.getelementbyid(\"upshrink\").src = smf_images_url + ")
+expression: r0() || r1() || r2()

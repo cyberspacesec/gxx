@@ -1,0 +1,14 @@
+id: web-m2soft-rdserver
+info:
+  name: m2soft-rdserver
+  author: archer
+  verified: false
+  description: 检测到m2soft-rdserver系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: rdserver")'
+expression: r0()

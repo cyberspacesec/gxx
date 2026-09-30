@@ -1,0 +1,14 @@
+id: web-21grid
+info:
+  name: 21grid
+  author: archer
+  verified: false
+  description: 检测到21grid系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"技术支持：网格（福建）智能科技有限公司")
+expression: r0()

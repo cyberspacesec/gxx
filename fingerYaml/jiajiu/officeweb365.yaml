@@ -1,0 +1,14 @@
+id: web-OfficeWeb365
+info:
+  name: OfficeWeb365
+  author: archer
+  verified: false
+  description: 检测到OfficeWeb365系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"请输入furl参数")
+expression: r0()

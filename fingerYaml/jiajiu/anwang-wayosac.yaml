@@ -1,0 +1,14 @@
+id: web-anwang-wayosac
+info:
+  name: anwang-wayosac
+  author: archer
+  verified: true
+  description: 检测到anwang-wayosac系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "343858396"
+expression: r0()

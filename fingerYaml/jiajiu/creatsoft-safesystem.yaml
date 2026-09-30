@@ -1,0 +1,14 @@
+id: web-creatsoft-safesystem
+info:
+  name: creatsoft-safesystem
+  author: archer
+  verified: false
+  description: 检测到creatsoft-safesystem系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"javascript:update_news('board/noticelist.jsp')")
+expression: r0()

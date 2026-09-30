@@ -1,0 +1,19 @@
+id: web-ipswitch-imailserver
+info:
+  name: ipswitch-imailserver
+  author: archer
+  verified: false
+  description: 检测到ipswitch-imailserver系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"myicalusername")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: ipswitch-imail")'
+expression: r0() || r1()

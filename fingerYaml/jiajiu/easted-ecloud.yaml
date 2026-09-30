@@ -1,0 +1,14 @@
+id: web-easted-ecloud
+info:
+  name: easted-ecloud
+  author: archer
+  verified: false
+  description: 检测到easted-ecloud系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<span>easted vserver虚拟数据中心系统</span></a></div>")
+expression: r0()

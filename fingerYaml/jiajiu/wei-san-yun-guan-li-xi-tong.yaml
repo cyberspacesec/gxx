@@ -1,0 +1,14 @@
+id: web-微三云管理系统
+info:
+  name: 微三云管理系统
+  author: archer
+  verified: false
+  description: 检测到微三云管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<dd>管理系统 MANAGEMENT SYSTEM</dd>")
+expression: r0()

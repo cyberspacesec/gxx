@@ -1,0 +1,24 @@
+id: web-webuploader
+info:
+  name: webuploader
+  author: archer
+  verified: false
+  description: 检测到webuploader系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webuploader.min.js\"></script>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webuploader.js\"></script>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webuploader.css\" rel=\"stylesheet")
+expression: r0() || r1() || r2()

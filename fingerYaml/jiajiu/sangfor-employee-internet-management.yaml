@@ -1,0 +1,29 @@
+id: web-sangfor-employee-internet-management
+info:
+  name: sangfor-employee-internet-management
+  author: archer
+  verified: false
+  description: 检测到sangfor-employee-internet-management系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"document.cookie = 'sangfor_session_hash=0'")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"上网优化管理")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://sec.sangfor.com.cn/events/89.html\"")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"internet authentication system")
+expression: r0() || r1() || r2() || r3()

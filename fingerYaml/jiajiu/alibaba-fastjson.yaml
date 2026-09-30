@@ -1,0 +1,44 @@
+id: web-alibaba-fastjson
+info:
+  name: alibaba-fastjson
+  author: archer
+  verified: false
+  description: 检测到alibaba-fastjson系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"js/base/fastjson")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var json = json.parse")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"com.alibaba.fastjson.JSONException")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"unclosed string")
+  r4:
+    request:
+      method: POST
+      path: /
+    expression: response.body.ibcontains(b"fastjson") && response.body.ibcontains(b"version")
+  r5:
+    request:
+      method: POST
+      path: /
+    expression: 'response.body.ibcontains(b"illegal identifier : @pos 1, json : {@type:java.lang.autocloseable")'
+  r6:
+    request:
+      method: POST
+      path: /
+    expression: response.body.ibcontains(b"syntax error, expect {, actual error, pos 0")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6()

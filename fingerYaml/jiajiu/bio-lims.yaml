@@ -1,0 +1,14 @@
+id: web-bio-lims
+info:
+  name: bio-lims
+  author: archer
+  verified: false
+  description: 检测到bio-lims系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/lims/dist/css/font-awesome.min.css")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-infopro-system
+info:
+  name: infopro-system
+  author: archer
+  verified: false
+  description: 检测到infopro-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<input type=\"submit\" name=\"cmdsubmit\" value=\" 登 录 \" onclick=\"javascript:webform_dopostbackwithoptions(new webform_postbackoptions(&quot;cmdsubmit&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))\" id=\"cmdsubmit\" class=\"colorbutton")
+expression: r0()

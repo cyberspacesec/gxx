@@ -1,0 +1,19 @@
+id: web-阿里企业邮箱
+info:
+  name: 阿里企业邮箱
+  author: archer
+  verified: false
+  description: 检测到阿里企业邮箱系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/alimail/error/browserlog")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"阿里企业邮箱")
+expression: r0() || r1()

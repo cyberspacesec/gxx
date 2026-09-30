@@ -1,0 +1,19 @@
+id: web-hdwiki
+info:
+  name: hdwiki
+  author: archer
+  verified: false
+  description: 检测到hdwiki系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"hdwiki")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"http://kaiyuan.hudong.com?hf=hdwiki_copyright_kaiyuan")
+expression: r0() || r1()

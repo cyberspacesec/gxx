@@ -1,0 +1,14 @@
+id: web-dnatools-dnalims
+info:
+  name: dnatools-dnalims
+  author: archer
+  verified: false
+  description: 检测到dnatools-dnalims系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/cgi-bin/dna/password.cgi") && response.body.ibcontains(b"dnalims")
+expression: r0()

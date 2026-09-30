@@ -1,0 +1,24 @@
+id: web-npoint
+info:
+  name: npoint
+  author: archer
+  verified: false
+  description: 检测到npoint系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"n点虚拟主机管理系统")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"js/ajax_x.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/inc/usercode.asp?npoint=")
+expression: r0() || r1() || r2()

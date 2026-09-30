@@ -1,0 +1,44 @@
+id: web-drupal
+info:
+  name: drupal
+  author: archer
+  verified: false
+  description: 检测到drupal系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"/misc/drupal.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Powered by <a href=\"https://www.drupal.org\">Drupal</a>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"Drupal.settings")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"jquery.extend(drupal.settings")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/sites/default/files/")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/sites/all/modules/")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/sites/all/themes/")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6()

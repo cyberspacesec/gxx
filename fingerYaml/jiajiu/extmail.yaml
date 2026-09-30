@@ -1,0 +1,14 @@
+id: web-extmail
+info:
+  name: extmail
+  author: archer
+  verified: false
+  description: 检测到extmail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"setcookie('extmail_username") && response.body.ibcontains(b"欢迎使用extmail")
+expression: r0()

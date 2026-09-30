@@ -1,0 +1,14 @@
+id: web-xray-clandbeta
+info:
+  name: xray-clandbeta
+  author: archer
+  verified: true
+  description: 检测到xray-clandbeta系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/cland/css/") && response.icon_hash == "1188866996"
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-skillsoft-skillport-lms
+info:
+  name: skillsoft-skillport-lms
+  author: archer
+  verified: false
+  description: 检测到skillsoft-skillport-lms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<table border=\"0\" width=\"100%\" id=\"logobanner\"><tr width=\"100%\"><td  width=\"82%\"><img src=\"https://customer.skillport.com/spcustom/")
+expression: r0()

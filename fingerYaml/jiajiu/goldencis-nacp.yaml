@@ -1,0 +1,14 @@
+id: web-goldencis-nacp
+info:
+  name: goldencis-nacp
+  author: archer
+  verified: false
+  description: 检测到goldencis-nacp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div class=\"tit_b\"> 通过管理员分配的密码使用紧急入口。</div>")
+expression: r0()

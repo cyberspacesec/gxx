@@ -1,0 +1,14 @@
+id: web-深信服SD-WAN安全智能路由器
+info:
+  name: 深信服SD-WAN安全智能路由器
+  author: archer
+  verified: false
+  description: 检测到深信服SD-WAN安全智能路由器系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"static/es6_polyfill/polyfill.min.js")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-工控安全隐患治理项目系统
+info:
+  name: 工控安全隐患治理项目系统
+  author: archer
+  verified: false
+  description: 检测到工控安全隐患治理项目系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"qyxt.html\"")
+expression: r0()

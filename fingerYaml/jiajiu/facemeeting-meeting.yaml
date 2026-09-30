@@ -1,0 +1,14 @@
+id: web-facemeeting-meeting
+info:
+  name: facemeeting-meeting
+  author: archer
+  verified: false
+  description: 检测到facemeeting-meeting系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"subnav\">飞视美</div>")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-ultrapower-me移动协调办公平台
+info:
+  name: ultrapower-me移动协调办公平台
+  author: archer
+  verified: false
+  description: 检测到ultrapower-me移动协调办公平台系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"me移动协调办公平台")
+expression: r0()

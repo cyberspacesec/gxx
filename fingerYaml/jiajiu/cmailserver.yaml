@@ -1,0 +1,19 @@
+id: web-cmailserver
+info:
+  name: cmailserver
+  author: archer
+  verified: false
+  description: 检测到cmailserver系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<font size=2>username ( contatto email )</font>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<input type=checkbox name=\"saveuserpass")
+expression: r0() || r1()

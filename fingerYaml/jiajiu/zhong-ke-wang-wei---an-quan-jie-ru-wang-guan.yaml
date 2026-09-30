@@ -1,0 +1,14 @@
+id: web-中科网威-安全接入网关
+info:
+  name: 中科网威-安全接入网关
+  author: archer
+  verified: false
+  description: 检测到中科网威-安全接入网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<form id=\"form1\" name=\"form1\" method=\"post\" action=\"login_commit.php\" class=\"mainbox\">") && response.body.ibcontains(b"document.getelementbyid(\"dkey_login\").checked=false;")
+expression: r0()

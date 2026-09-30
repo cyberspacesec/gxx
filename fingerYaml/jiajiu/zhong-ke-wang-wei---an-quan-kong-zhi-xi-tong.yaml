@@ -1,0 +1,14 @@
+id: web-中科网威-安全控制系统
+info:
+  name: 中科网威-安全控制系统
+  author: archer
+  verified: false
+  description: 检测到中科网威-安全控制系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"dkey_login\"?0?") && response.body.ibcontains(b"<div class=\"con_r_b_r\"> <input class=\"btn_bg")
+expression: r0()

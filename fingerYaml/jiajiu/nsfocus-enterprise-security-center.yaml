@@ -1,0 +1,14 @@
+id: web-nsfocus-enterprise-security-center
+info:
+  name: nsfocus-enterprise-security-center
+  author: archer
+  verified: false
+  description: 检测到nsfocus-enterprise-security-center系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/login_logo_espc_zh_cn.png")
+expression: r0()

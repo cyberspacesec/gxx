@@ -1,0 +1,19 @@
+id: web-sdcncsi
+info:
+  name: sdcncsi
+  author: archer
+  verified: false
+  description: 检测到sdcncsi系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<em class=\"wk-fl\">在沃系统</em>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"refreshcaptchaimgfun")
+expression: r0() || r1()

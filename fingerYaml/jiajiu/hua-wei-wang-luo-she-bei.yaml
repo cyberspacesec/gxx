@@ -1,0 +1,14 @@
+id: web-华为网络设备
+info:
+  name: 华为网络设备
+  author: archer
+  verified: true
+  description: 检测到华为网络设备系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-884776764"
+expression: r0()

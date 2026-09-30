@@ -1,0 +1,44 @@
+id: web-suitecrm
+info:
+  name: suitecrm
+  author: archer
+  verified: false
+  description: 检测到suitecrm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"sugar.themes.theme_name = 'suitep'")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"sugar.themes.theme_name      = 'suiter'")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"img/suitecrm.png\" alt=\"bitnami suitecrm stack\"")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"supercharged by suitecrm")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"custom/themes/default/images/company_logo.png")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"suitecrm\"")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: sugar_user_theme=suitep")'
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6()

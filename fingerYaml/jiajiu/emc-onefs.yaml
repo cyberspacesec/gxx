@@ -1,0 +1,14 @@
+id: web-emc-onefs
+info:
+  name: emc-onefs
+  author: archer
+  verified: false
+  description: 检测到emc-onefs系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/onefs/styles/onefs.css")
+expression: r0()

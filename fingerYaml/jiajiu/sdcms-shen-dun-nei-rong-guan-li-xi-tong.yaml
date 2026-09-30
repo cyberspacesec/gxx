@@ -1,0 +1,14 @@
+id: web-sdcms神盾内容管理系统
+info:
+  name: sdcms神盾内容管理系统
+  author: archer
+  verified: false
+  description: 检测到sdcms神盾内容管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"login") && response.body.ibcontains(b"sdcms")
+expression: r0()

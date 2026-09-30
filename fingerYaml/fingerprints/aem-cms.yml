@@ -1,0 +1,17 @@
+id: aem-cms
+info:
+  name: AEM Finder
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: aem-cms'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Welcome to Adobe Experience Manager")
+expression: r0()

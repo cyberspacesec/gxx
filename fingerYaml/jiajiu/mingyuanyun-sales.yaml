@@ -1,0 +1,19 @@
+id: web-mingyuanyun-sales
+info:
+  name: mingyuanyun-sales
+  author: archer
+  verified: false
+  description: 检测到mingyuanyun-sales系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img id=\"erp\" src=\"/_imgs/login/zs_erp.png")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"value=\"明源售楼管理系统v5.0\"")
+expression: r0() || r1()

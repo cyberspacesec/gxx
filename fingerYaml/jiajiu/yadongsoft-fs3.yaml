@@ -1,0 +1,14 @@
+id: web-yadongsoft-fs3
+info:
+  name: yadongsoft-fs3
+  author: archer
+  verified: false
+  description: 检测到yadongsoft-fs3系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"神盾fs<sup>3</sup>文档安全共享系统v2.0</div>")
+expression: r0()

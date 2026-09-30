@@ -1,0 +1,14 @@
+id: web-mbedthis-appweb
+info:
+  name: mbedthis-appweb
+  author: archer
+  verified: false
+  description: 检测到mbedthis-appweb系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: mbedthis-appweb")'
+expression: r0()

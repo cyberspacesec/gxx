@@ -1,0 +1,14 @@
+id: web-世无忧-世安内网安全
+info:
+  name: 世无忧-世安内网安全
+  author: archer
+  verified: false
+  description: 检测到世无忧-世安内网安全系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"gzsa. all rights reserved</span>") && response.body.ibcontains(b"内网终端安全管理系统登陆界面")
+expression: r0()

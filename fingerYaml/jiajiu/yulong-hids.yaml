@@ -1,0 +1,19 @@
+id: web-yulong-hids
+info:
+  name: yulong-hids
+  author: archer
+  verified: false
+  description: 检测到yulong-hids系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h1>驭龙</h1>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h2>yulong - a cool hids system.</h2>")
+expression: r0() || r1()

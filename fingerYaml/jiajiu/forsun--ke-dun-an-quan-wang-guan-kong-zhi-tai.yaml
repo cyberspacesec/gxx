@@ -1,0 +1,14 @@
+id: web-forsun-科盾安全网关控制台
+info:
+  name: forsun-科盾安全网关控制台
+  author: archer
+  verified: false
+  description: 检测到forsun-科盾安全网关控制台系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"科盾网关控制台")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-ispconfig
+info:
+  name: ispconfig
+  author: archer
+  verified: false
+  description: 检测到ispconfig系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href=\"http://www.ispconfig.org")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-byzoro-安全网关
+info:
+  name: byzoro-安全网关
+  author: archer
+  verified: false
+  description: 检测到byzoro-安全网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"&nbsp;patrolflow 多业务安全网关") && response.body.ibcontains(b"patrolflow")
+expression: r0()

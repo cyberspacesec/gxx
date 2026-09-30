@@ -1,0 +1,19 @@
+id: web-parallels-plesk-panel
+info:
+  name: parallels-plesk-panel
+  author: archer
+  verified: false
+  description: 检测到parallels-plesk-panel系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"parallels ip holdings gmbh")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img src=\"./img/panel-logo.png\" alt=\"parallels plesk panel\"></a>")
+expression: r0() || r1()

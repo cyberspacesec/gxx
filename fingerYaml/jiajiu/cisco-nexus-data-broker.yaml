@@ -1,0 +1,14 @@
+id: web-cisco-nexus-data-broker
+info:
+  name: cisco-nexus-data-broker
+  author: archer
+  verified: false
+  description: 检测到cisco-nexus-data-broker系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location.href = '/monitor';")
+expression: r0()

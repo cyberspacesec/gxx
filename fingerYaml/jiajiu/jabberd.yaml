@@ -1,0 +1,14 @@
+id: web-jabberd
+info:
+  name: jabberd
+  author: archer
+  verified: false
+  description: 检测到jabberd系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: jabberd")'
+expression: r0()

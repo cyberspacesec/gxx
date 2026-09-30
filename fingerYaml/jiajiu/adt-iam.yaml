@@ -1,0 +1,14 @@
+id: web-adt-iam
+info:
+  name: adt-iam
+  author: archer
+  verified: false
+  description: 检测到adt-iam系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"tpn,vpn,内网安全,内网控制,主机防护\"")
+expression: r0()

@@ -1,0 +1,24 @@
+id: web-ibm-imm
+info:
+  name: ibm-imm
+  author: archer
+  verified: false
+  description: 检测到ibm-imm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta http-equiv=\"refresh\" content=\"0;url=/designs/imm/noscript/noscript_en.php\" />")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ibm.stg.inlinemessage.messagetypes.msg_critical")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/ibmdojo/")
+expression: r0() || r1() || r2()

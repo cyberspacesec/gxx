@@ -1,0 +1,19 @@
+id: web-cscms
+info:
+  name: cscms
+  author: archer
+  verified: false
+  description: 检测到cscms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"tag_adfo dis_wap")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/js/cscms.js")
+expression: r0() || r1()

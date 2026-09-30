@@ -1,0 +1,14 @@
+id: web-glpi
+info:
+  name: glpi
+  author: archer
+  verified: true
+  description: 检测到glpi系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1403107158"
+expression: r0()

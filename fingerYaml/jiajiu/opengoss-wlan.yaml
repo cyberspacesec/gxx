@@ -1,0 +1,19 @@
+id: web-opengoss-wlan
+info:
+  name: opengoss-wlan
+  author: archer
+  verified: false
+  description: 检测到opengoss-wlan系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/stylesheets/themes/wifi2/ui.theme.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"wlan综合网管系统\"")
+expression: r0() || r1()

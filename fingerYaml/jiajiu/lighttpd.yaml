@@ -1,0 +1,19 @@
+id: web-lighttpd
+info:
+  name: lighttpd
+  author: archer
+  verified: false
+  description: 检测到lighttpd系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Powered by lighttpd</title>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: lighttpd")'
+expression: r0() || r1()

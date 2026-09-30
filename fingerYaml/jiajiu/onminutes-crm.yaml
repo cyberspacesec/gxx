@@ -1,0 +1,14 @@
+id: web-onminutes-crm
+info:
+  name: onminutes-crm
+  author: archer
+  verified: false
+  description: 检测到onminutes-crm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div class=\"extras\" id=\"password_extras\">") && response.body.ibcontains(b"crm")
+expression: r0()

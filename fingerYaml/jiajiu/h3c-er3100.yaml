@@ -1,0 +1,14 @@
+id: web-h3c-er3100
+info:
+  name: h3c-er3100
+  author: archer
+  verified: false
+  description: 检测到h3c-er3100系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ER3100") && response.body.ibcontains(b"h3c.com") && response.body.ibcontains(b"login")
+expression: r0()

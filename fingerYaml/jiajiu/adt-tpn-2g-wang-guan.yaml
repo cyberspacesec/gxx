@@ -1,0 +1,14 @@
+id: web-adt-tpn-2g网关
+info:
+  name: adt-tpn-2g网关
+  author: archer
+  verified: false
+  description: 检测到adt-tpn-2g网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"tpn-2g") && response.body.ibcontains(b"src=\"./system/usbkey.js\"")
+expression: r0()

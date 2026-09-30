@@ -1,0 +1,14 @@
+id: web-sundray-企业防火墙
+info:
+  name: sundray-企业防火墙
+  author: archer
+  verified: false
+  description: 检测到sundray-企业防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"help = decodeuricomponent(version_info_ch)")
+expression: r0()

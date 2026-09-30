@@ -1,0 +1,14 @@
+id: web-harbor
+info:
+  name: harbor
+  author: archer
+  verified: false
+  description: 检测到harbor系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<title>Harbor</title>")
+expression: r0()

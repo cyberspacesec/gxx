@@ -1,0 +1,29 @@
+id: web-pexip
+info:
+  name: pexip
+  author: archer
+  verified: false
+  description: 检测到pexip系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h2>pexip infinity</h2>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h2>会议平台</h2>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"pexip infinity")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"pex-app")
+expression: r0() || r1() || r2() || r3()

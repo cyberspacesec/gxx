@@ -1,0 +1,14 @@
+id: web-mu-yun-webvpn
+info:
+  name: mu-yun-webvpn
+  author: archer
+  verified: false
+  description: 检测到mu-yun-webvpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=木云科技") && response.body.ibcontains(b"webvpn") && response.body.ibcontains(b"应用安全网关")
+expression: r0()

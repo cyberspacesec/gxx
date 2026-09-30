@@ -1,0 +1,14 @@
+id: web-piaoyou-erp
+info:
+  name: piaoyou-erp
+  author: archer
+  verified: false
+  description: 检测到piaoyou-erp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ajax/confirm.ashx") && response.body.ibcontains(b"css/sexybuttons.css")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-kafka-manager
+info:
+  name: kafka-manager
+  author: archer
+  verified: false
+  description: 检测到kafka-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"vassets/images/2af62f58ee2baf495c9b3a9a1c30ce03-favicon.png")
+expression: r0()

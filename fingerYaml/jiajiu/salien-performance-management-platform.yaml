@@ -1,0 +1,19 @@
+id: web-salien-performance-management-platform
+info:
+  name: salien-performance-management-platform
+  author: archer
+  verified: false
+  description: 检测到salien-performance-management-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"images/login/cbgl/favicon.ico\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"copyright 2010 www.salien.com.cn\"")
+expression: r0() || r1()

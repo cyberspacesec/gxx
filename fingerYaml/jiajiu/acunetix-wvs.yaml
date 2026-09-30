@@ -1,0 +1,14 @@
+id: web-acunetix-wvs
+info:
+  name: acunetix-wvs
+  author: archer
+  verified: false
+  description: 检测到acunetix-wvs系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<acx-root>") && response.body.ibcontains(b"<title>Acunetix")
+expression: r0()

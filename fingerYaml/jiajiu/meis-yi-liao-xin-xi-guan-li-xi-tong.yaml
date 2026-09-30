@@ -1,0 +1,14 @@
+id: web-MEIS医疗信息管理系统
+info:
+  name: MEIS医疗信息管理系统
+  author: archer
+  verified: false
+  description: 检测到MEIS医疗信息管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h1 class=\"logo\">欢迎使用 <span class=\"logo_icon\">meis</span> 医疗信息管理系统</h1>")
+expression: r0()

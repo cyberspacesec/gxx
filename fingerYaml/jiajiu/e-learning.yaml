@@ -1,0 +1,14 @@
+id: web-e-learning
+info:
+  name: e-learning
+  author: archer
+  verified: false
+  description: 检测到e-learning系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"method=\"post\" action=\"/eln3_asp/login.do")
+expression: r0()

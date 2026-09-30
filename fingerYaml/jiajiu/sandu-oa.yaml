@@ -1,0 +1,14 @@
+id: web-sandu-oa
+info:
+  name: sandu-oa
+  author: archer
+  verified: false
+  description: 检测到sandu-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"青岛叁度信息技术有限公司")
+expression: r0()

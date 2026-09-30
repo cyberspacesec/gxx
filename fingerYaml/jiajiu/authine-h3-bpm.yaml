@@ -1,0 +1,14 @@
+id: web-authine-h3-bpm
+info:
+  name: authine-h3-bpm
+  author: archer
+  verified: false
+  description: 检测到authine-h3-bpm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"h3 bpm suite信息化的最佳实践")
+expression: r0()

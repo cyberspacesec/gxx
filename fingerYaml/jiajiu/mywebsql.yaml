@@ -1,0 +1,19 @@
+id: web-mywebsql
+info:
+  name: mywebsql
+  author: archer
+  verified: false
+  description: 检测到mywebsql系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"target=\"_blank\" href=\"http://mywebsql.net")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"method=\"post\" action=\"\" name=\"dbform\" ")
+expression: r0() || r1()

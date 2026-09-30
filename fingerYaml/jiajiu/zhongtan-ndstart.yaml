@@ -1,0 +1,19 @@
+id: web-zhongtan-ndstart
+info:
+  name: zhongtan-ndstart
+  author: archer
+  verified: false
+  description: 检测到zhongtan-ndstart系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var pubnewsarray")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>南大之星信息发布系统 ")
+expression: r0() || r1()

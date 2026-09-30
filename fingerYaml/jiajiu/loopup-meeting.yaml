@@ -1,0 +1,14 @@
+id: web-loopup-meeting
+info:
+  name: loopup-meeting
+  author: archer
+  verified: false
+  description: 检测到loopup-meeting系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"loopup\"") && response.body.ibcontains(b"machine:")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-ganglia
+info:
+  name: ganglia
+  author: archer
+  verified: false
+  description: 检测到ganglia系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onchange=\"ganglia_form.submit();")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"name=\"ganglia_form")
+expression: r0() || r1()

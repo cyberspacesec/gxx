@@ -1,0 +1,24 @@
+id: web-海康威视综合安防管理平台
+info:
+  name: 海康威视综合安防管理平台
+  author: archer
+  verified: true
+  description: 检测到海康威视综合安防管理平台系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-808437027"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/portal/ui/openLogin/static/favicon.ico")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/portal/ui/static/favicon.ico")
+expression: r0() || r1() || r2()

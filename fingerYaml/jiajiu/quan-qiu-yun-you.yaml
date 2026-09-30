@@ -1,0 +1,14 @@
+id: web-全球云邮
+info:
+  name: 全球云邮
+  author: archer
+  verified: true
+  description: 检测到全球云邮系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1640067892"
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-锐捷-rg-ew1200g
+info:
+  name: 锐捷-rg-ew1200g
+  author: archer
+  verified: false
+  description: 检测到锐捷-rg-ew1200g系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/js/app") && response.body.ibcontains(b"/static/img/title.ico") && response.body.ibcontains(b"锐捷")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-accellion-secure-file-transfer
+info:
+  name: accellion-secure-file-transfer
+  author: archer
+  verified: false
+  description: 检测到accellion-secure-file-transfer系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"secured by accellion")
+expression: r0()

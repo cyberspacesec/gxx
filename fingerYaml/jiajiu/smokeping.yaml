@@ -1,0 +1,19 @@
+id: web-smokeping
+info:
+  name: smokeping
+  author: archer
+  verified: false
+  description: 检测到smokeping系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://oss.oetiker.ch/smokeping/counter.cgi/")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<tr><td class=\"menuitem\" colspan=\"2\">&nbsp;-&nbsp;<a class=\"menulink\" href=\"?target=")
+expression: r0() || r1()

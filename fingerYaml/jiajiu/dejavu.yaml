@@ -1,0 +1,14 @@
+id: web-dejavu
+info:
+  name: dejavu
+  author: archer
+  verified: false
+  description: 检测到dejavu系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"Dejavu, the missing Web UI for Elasticsearch")
+expression: r0()

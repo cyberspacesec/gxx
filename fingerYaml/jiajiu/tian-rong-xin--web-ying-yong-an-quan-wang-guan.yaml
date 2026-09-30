@@ -1,0 +1,14 @@
+id: web-天融信-web应用安全网关
+info:
+  name: 天融信-web应用安全网关
+  author: archer
+  verified: false
+  description: 检测到天融信-web应用安全网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"this.src='/style/images/rand.php?update=1'") && response.body.ibcontains(b"天融信web应用安全网关")
+expression: r0()

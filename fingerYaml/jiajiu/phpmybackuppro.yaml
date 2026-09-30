@@ -1,0 +1,14 @@
+id: web-phpmybackuppro
+info:
+  name: phpmybackuppro
+  author: archer
+  verified: false
+  description: 检测到phpmybackuppro系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"please login (use your mysql username and password): <a href=\"index.php?login=true")'
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-rengine
+info:
+  name: rengine
+  author: archer
+  verified: false
+  description: 检测到rengine系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b">Login to reNgine.</h5>")
+expression: r0()

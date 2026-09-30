@@ -1,0 +1,14 @@
+id: web-pbootcms
+info:
+  name: pbootcms
+  author: archer
+  verified: false
+  description: 检测到pbootcms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: pbootsystem=")'
+expression: r0()

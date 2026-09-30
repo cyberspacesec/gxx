@@ -1,0 +1,14 @@
+id: web-gfsoft-akuntansi-2008
+info:
+  name: gfsoft-akuntansi-2008
+  author: archer
+  verified: false
+  description: 检测到gfsoft-akuntansi-2008系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"images/box%20akuntansi%202008.png\"")
+expression: r0()

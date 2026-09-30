@@ -1,0 +1,19 @@
+id: web-hanyuan-wanfa-fax-server
+info:
+  name: hanyuan-wanfa-fax-server
+  author: archer
+  verified: false
+  description: 检测到hanyuan-wanfa-fax-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"background=\"images/centerfax0.gif\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"background-image:url(images/bgfax0.jpg);")
+expression: r0() || r1()

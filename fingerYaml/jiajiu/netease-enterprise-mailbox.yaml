@@ -1,0 +1,24 @@
+id: web-netease-enterprise-mailbox
+info:
+  name: netease-enterprise-mailbox
+  author: archer
+  verified: false
+  description: 检测到netease-enterprise-mailbox系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"frmvalidator")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<span class=\"warn\">请您从网易企业邮箱用户登录页登录</span>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"网易企业邮箱") && response.body.ibcontains(b"src=\"http://mimg.qiye.163.com/")
+expression: r0() || r1() || r2()

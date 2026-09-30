@@ -1,0 +1,19 @@
+id: web-supermap-iserver
+info:
+  name: supermap-iserver
+  author: archer
+  verified: false
+  description: 检测到supermap-iserver系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location.href=\"iserver\";")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"copyright\"><a href=\"http://www.supermap.com.cn")
+expression: r0() || r1()

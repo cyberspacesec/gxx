@@ -1,0 +1,14 @@
+id: web-trs-hybase
+info:
+  name: trs-hybase
+  author: archer
+  verified: false
+  description: 检测到trs-hybase系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"#\">trs hybase</a>")
+expression: r0()

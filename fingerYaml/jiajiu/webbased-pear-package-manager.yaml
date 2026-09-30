@@ -1,0 +1,19 @@
+id: web-webbased-pear-package-manager
+info:
+  name: webbased-pear-package-manager
+  author: archer
+  verified: false
+  description: 检测到webbased-pear-package-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"pear_frontend_web")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img src=\"?img=pear\" width=\"104\" height=\"50\" vspace=\"2\" hspace=\"5\" alt=\"pear\">")
+expression: r0() || r1()

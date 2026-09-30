@@ -1,0 +1,14 @@
+id: web-tomcat-monitor-uses-wadl
+info:
+  name: tomcat-monitor-uses-wadl
+  author: archer
+  verified: false
+  description: 检测到tomcat-monitor-uses-wadl系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"tomcat monitor uses wadl to describe services it can offer")
+expression: r0()

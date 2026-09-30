@@ -1,0 +1,19 @@
+id: web-奇安信-vpn
+info:
+  name: 奇安信-vpn
+  author: archer
+  verified: true
+  description: 检测到奇安信-vpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"QianxinVPN") && response.body.ibcontains(b"卸载奇安信VPN")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "663709625"
+expression: r0() || r1()

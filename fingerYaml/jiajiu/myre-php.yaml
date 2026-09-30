@@ -1,0 +1,19 @@
+id: web-myre-php
+info:
+  name: myre-php
+  author: archer
+  verified: false
+  description: 检测到myre-php系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"<!-- begin: menu footer don''t change anything")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<b><u>my last viewed</u></b>")
+expression: r0() || r1()

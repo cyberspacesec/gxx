@@ -1,0 +1,14 @@
+id: web-information-security-integrated-management-platform
+info:
+  name: information-security-integrated-management-platform
+  author: archer
+  verified: false
+  description: 检测到information-security-integrated-management-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ccaq_kf@unisk.cn")
+expression: r0()

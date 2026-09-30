@@ -1,0 +1,14 @@
+id: web-hp-virtual-connect-manager
+info:
+  name: hp-virtual-connect-manager
+  author: archer
+  verified: false
+  description: 检测到hp-virtual-connect-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"name='mx_hidden' src=\"common/hiddenframe.html")
+expression: r0()

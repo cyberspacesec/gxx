@@ -1,0 +1,19 @@
+id: web-ucap-search-
+info:
+  name: ucap-search-
+  author: archer
+  verified: false
+  description: 检测到ucap-search-系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"http://so.kaipuyun.cn?sitecode=")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"method=\"post\" action=\"s\" onsubmit=\"return checksearchform();\">")
+expression: r0() || r1()

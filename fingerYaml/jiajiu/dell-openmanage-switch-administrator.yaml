@@ -1,0 +1,19 @@
+id: web-dell-openmanage-switch-administrator
+info:
+  name: dell-openmanage-switch-administrator
+  author: archer
+  verified: false
+  description: 检测到dell-openmanage-switch-administrator系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.top.location.href = \"dell_login.html")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"progressgraphicnone")
+expression: r0() || r1()

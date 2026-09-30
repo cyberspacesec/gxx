@@ -1,0 +1,29 @@
+id: web-oracle-application-server
+info:
+  name: oracle-application-server
+  author: archer
+  verified: false
+  description: 检测到oracle-application-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"oracle http server</font></font></b></h1>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"mod_ssl web site")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"oracle jsp documentation")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"mod_ose documentation")
+expression: r0() || r1() || r2() || r3()

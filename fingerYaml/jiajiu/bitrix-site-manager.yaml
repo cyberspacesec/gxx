@@ -1,0 +1,19 @@
+id: web-bitrix-site-manager
+info:
+  name: bitrix-site-manager
+  author: archer
+  verified: false
+  description: 检测到bitrix-site-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"bitrix_sm_time_zone")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"bx.setcsslist")
+expression: r0() || r1()

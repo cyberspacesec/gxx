@@ -1,0 +1,14 @@
+id: web-axis2-web
+info:
+  name: axis2-web
+  author: archer
+  verified: false
+  description: 检测到axis2-web系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"axis2-web/css/axis-style.css")
+expression: r0()

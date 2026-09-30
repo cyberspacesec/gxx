@@ -1,0 +1,19 @@
+id: web-ieslab-scada
+info:
+  name: ieslab-scada
+  author: archer
+  verified: false
+  description: 检测到ieslab-scada系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"copyrightpt12")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"青岛积成电子有限公司")
+expression: r0() || r1()

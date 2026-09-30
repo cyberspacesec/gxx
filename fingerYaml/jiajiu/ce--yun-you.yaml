@@ -1,0 +1,14 @@
+id: web-ce-云邮
+info:
+  name: ce-云邮
+  author: archer
+  verified: false
+  description: 检测到ce-云邮系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/page/help/mailconfig/config/index.html") && response.body.ibcontains(b"href=\"http://webmail.zmail300.cn")
+expression: r0()

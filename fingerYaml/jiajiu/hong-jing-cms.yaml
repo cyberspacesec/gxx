@@ -1,0 +1,24 @@
+id: web-宏景CMS
+info:
+  name: 宏景CMS
+  author: archer
+  verified: false
+  description: 检测到宏景CMS系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/images/hcm/copyright.gif\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/images/hcm/themes/default/login/login_banner2.png?v=12334\"")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/general/sys/hjaxmanage.js\"")
+expression: r0() || r1() || r2()

@@ -1,0 +1,19 @@
+id: web-pivotal-crm
+info:
+  name: pivotal-crm
+  author: archer
+  verified: false
+  description: 检测到pivotal-crm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<frame name=\"hidden\" src=\"xmlloader.asp?type=portal")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"hidden\" src=\"xmlloader.asp?type=portal")
+expression: r0() || r1()

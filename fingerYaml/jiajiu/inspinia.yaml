@@ -1,0 +1,14 @@
+id: web-inspinia
+info:
+  name: inspinia
+  author: archer
+  verified: false
+  description: 检测到inspinia系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"inspinia") && response.body.ibcontains(b"name=\"password")
+expression: r0()

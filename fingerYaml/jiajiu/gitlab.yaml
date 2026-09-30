@@ -1,0 +1,44 @@
+id: web-gitlab
+info:
+  name: gitlab
+  author: archer
+  verified: false
+  description: 检测到gitlab系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"gon.default_issues_tracker")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"gitlab community edition\"")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"gitlab ")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"https://about.gitlab.com/\">about gitlab")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"col-sm-7 brand-holder pull-left\"")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"search gitlab") && response.body.ibcontains(b"navbar-gitlab")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"set-cookie: _gitlab_session=")'
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6()

@@ -1,0 +1,19 @@
+id: web-adimoney
+info:
+  name: adimoney
+  author: archer
+  verified: false
+  description: 检测到adimoney系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img src=\"/img/logo.png\" alt=\"adimoney\"/>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"adimoney.com mobile advertisement network. ")
+expression: r0() || r1()

@@ -1,0 +1,17 @@
+id: adminset-panel
+info:
+  name: Adminset
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: adminset-panel'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>AdminSet Login</title>")
+expression: r0()

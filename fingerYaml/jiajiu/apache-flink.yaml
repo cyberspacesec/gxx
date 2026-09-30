@@ -1,0 +1,19 @@
+id: web-apache-flink
+info:
+  name: apache-flink
+  author: archer
+  verified: false
+  description: 检测到apache-flink系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<title>Apache Flink Web Dashboard</title>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img alt=\"apache flink dashboard\" src=\"images/flink-logo.png")
+expression: r0() || r1()

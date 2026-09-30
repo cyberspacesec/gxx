@@ -1,0 +1,24 @@
+id: web-weiphp
+info:
+  name: weiphp
+  author: archer
+  verified: false
+  description: 检测到weiphp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"本系统由<a href=\"http://www.weiphp.cn\" target=\"_blank\">weiphp</a>强力驱动")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"weiphp")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/css/weiphp.css")
+expression: r0() || r1() || r2()

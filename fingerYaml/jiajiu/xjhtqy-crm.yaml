@@ -1,0 +1,14 @@
+id: web-xjhtqy-crm
+info:
+  name: xjhtqy-crm
+  author: archer
+  verified: false
+  description: 检测到xjhtqy-crm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"hidden-xs ewheaderrow\"><img src=\"aspximages/htqy.png\"")
+expression: r0()

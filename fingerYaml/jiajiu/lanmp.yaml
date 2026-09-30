@@ -1,0 +1,14 @@
+id: web-lanmp
+info:
+  name: lanmp
+  author: archer
+  verified: false
+  description: 检测到lanmp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<strong>恭喜") && response.body.ibcontains(b"LANMP") && response.body.ibcontains(b"wdlinux.cn") && response.body.ibcontains(b"本页可删除")
+expression: r0()

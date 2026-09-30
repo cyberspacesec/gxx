@@ -1,0 +1,29 @@
+id: web-avtech-video-web-server
+info:
+  name: avtech-video-web-server
+  author: archer
+  verified: true
+  description: 检测到avtech-video-web-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"please visit 'www.avtech.com.tw'")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Remote Surveillance, Any time &amp; Any where</title>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/av732e/setup.exe")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-2069844696"
+expression: r0() || r1() || r2() || r3()

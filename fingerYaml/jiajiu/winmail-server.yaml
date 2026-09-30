@@ -1,0 +1,49 @@
+id: web-winmail-server
+info:
+  name: winmail-server
+  author: archer
+  verified: false
+  description: 检测到winmail-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"amax information technologies inc.")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"pop3,smtp server: <font color=red>")'
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"themes/default/images/mail_pic.jpg")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"encryptpwd") && response.body.ibcontains(b"sessid")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"f_theme") && response.body.ibcontains(b"pwdplaceholder")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"winmail mail server")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"(build ") && response.body.ibcontains(b"background=\"customer/winmail_bg11.jpg")
+  r7:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"customer/index_winmail_new.gif")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6() || r7()

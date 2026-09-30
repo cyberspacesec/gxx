@@ -1,0 +1,19 @@
+id: web-episerver
+info:
+  name: episerver
+  author: archer
+  verified: false
+  description: 检测到episerver系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"episerver")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/javascript/episerverscriptmanager.js")
+expression: r0() || r1()

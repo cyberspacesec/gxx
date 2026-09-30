@@ -1,0 +1,14 @@
+id: web-adt-iam网关控制台
+info:
+  name: adt-iam网关控制台
+  author: archer
+  verified: false
+  description: 检测到adt-iam网关控制台系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"iam") && response.body.ibcontains(b"src=\"/page/assets/javascripts/adt.js\"")
+expression: r0()

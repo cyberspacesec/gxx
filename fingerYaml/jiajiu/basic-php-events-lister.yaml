@@ -1,0 +1,14 @@
+id: web-basic-php-events-lister
+info:
+  name: basic-php-events-lister
+  author: archer
+  verified: false
+  description: 检测到basic-php-events-lister系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"powered by: <a href=\"http://www.mevin.com/\">")'
+expression: r0()

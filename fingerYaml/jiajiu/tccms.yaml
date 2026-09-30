@@ -1,0 +1,19 @@
+id: web-tccms
+info:
+  name: tccms
+  author: archer
+  verified: false
+  description: 检测到tccms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"index.php?ac=link_more")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"index.php?ac=news_list")
+expression: r0() || r1()

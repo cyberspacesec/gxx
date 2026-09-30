@@ -1,0 +1,14 @@
+id: web-全息若海-仓储办公辅助管理系统
+info:
+  name: 全息若海-仓储办公辅助管理系统
+  author: archer
+  verified: false
+  description: 检测到全息若海-仓储办公辅助管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/scripts/easyui/jquery.easyui.min.js\"") && response.body.ibcontains(b"广州全息若海信息科技有限公司")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-奇安信网康互联网控制网关
+info:
+  name: 奇安信网康互联网控制网关
+  author: archer
+  verified: true
+  description: 检测到奇安信网康互联网控制网关系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "171566578"
+expression: r0()

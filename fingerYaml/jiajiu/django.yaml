@@ -1,0 +1,24 @@
+id: web-django
+info:
+  name: django
+  author: archer
+  verified: false
+  description: 检测到django系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"__admin_media_prefix__")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"csrfmiddlewaretoken")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"django settings file.")
+expression: r0() || r1() || r2()

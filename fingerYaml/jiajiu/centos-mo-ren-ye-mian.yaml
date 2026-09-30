@@ -1,0 +1,14 @@
+id: web-centos默认页面
+info:
+  name: centos默认页面
+  author: archer
+  verified: false
+  description: 检测到centos默认页面系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Welcome to CentOS</title>") && response.body.ibcontains(b"centos.org") && response.body.ibcontains(b"img/centos-logo.png")
+expression: r0()

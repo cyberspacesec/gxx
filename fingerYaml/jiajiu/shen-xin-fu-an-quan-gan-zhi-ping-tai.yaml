@@ -1,0 +1,19 @@
+id: web-深信服安全感知平台
+info:
+  name: 深信服安全感知平台
+  author: archer
+  verified: true
+  description: 检测到深信服安全感知平台系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1389145411"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"apps") && response.body.ibcontains(b"login.js") && response.body.ibcontains(b"安全感知平台")
+expression: r0() || r1()

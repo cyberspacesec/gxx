@@ -1,0 +1,19 @@
+id: web-pulsesecure-ssl-vpn
+info:
+  name: pulsesecure-ssl-vpn
+  author: archer
+  verified: false
+  description: 检测到pulsesecure-ssl-vpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Pulse Connect Secure</title>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<b>pulse connect secure</b>")
+expression: r0() || r1()

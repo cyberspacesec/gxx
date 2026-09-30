@@ -1,0 +1,19 @@
+id: web-金蝶云星空
+info:
+  name: 金蝶云星空
+  author: archer
+  verified: false
+  description: 检测到金蝶云星空系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/ClientBin/Kingdee.BOS.XPF.App.xap")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"HTML5/content/themes/kdcss.min.css")
+expression: r0() || r1()

@@ -1,0 +1,69 @@
+id: web-microsoft-exchange
+info:
+  name: microsoft-exchange
+  author: archer
+  verified: false
+  description: 检测到microsoft-exchange系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Location: /owa/") && response.raw_header.ibcontains(b"Server: Microsoft")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- owapage = asp.auth_logon_aspx")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/exchweb/bin/auth/owalogon.asp")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/exchweb/bin/auth/owalogon.asp?url=")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/owa/auth/")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location.replace(\"/owa/\" + window.location.hash);</script></head><body></body>")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta http-equiv=\"refresh\" content=\"0;url=/owa\">")
+  r7:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"themes/resources/segoeui-semibold.ttf")
+  r8:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div class=\"signinheader\">outlook</div>") && response.body.ibcontains(b"owalogocontainer")
+  r9:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/owa/") && response.body.ibcontains(b"owapage = asp.auth_logon_aspx")
+  r10:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/owa/") && response.body.ibcontains(b"showpasswordcheck")
+  r11:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div class=\"signInHeader\">Outlook</div>")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6() || r7() || r8() || r9() || r10() || r11()

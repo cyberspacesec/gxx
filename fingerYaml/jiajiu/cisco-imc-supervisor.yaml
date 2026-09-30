@@ -1,0 +1,19 @@
+id: web-cisco-imc-supervisor
+info:
+  name: cisco-imc-supervisor
+  author: archer
+  verified: false
+  description: 检测到cisco-imc-supervisor系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"font-family: \"ciscosansthin\"")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"cisco imc supervisor")
+expression: r0() || r1()

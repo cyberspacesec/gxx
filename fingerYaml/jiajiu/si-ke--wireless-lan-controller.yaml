@@ -1,0 +1,14 @@
+id: web-思科-Wireless-LAN-Controller
+info:
+  name: 思科-Wireless-LAN-Controller
+  author: archer
+  verified: false
+  description: 检测到思科-Wireless-LAN-Controller系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/main_login.html") && response.body.ibcontains(b"css/icon_styles_ciscologo.css")
+expression: r0()

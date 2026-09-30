@@ -1,0 +1,14 @@
+id: web-marcopacs-product
+info:
+  name: marcopacs-product
+  author: archer
+  verified: false
+  description: 检测到marcopacs-product系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"data-redirect=\"account/systemconfiguration.aspx\"")
+expression: r0()

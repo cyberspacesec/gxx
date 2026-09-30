@@ -1,0 +1,14 @@
+id: web-grasp-erp
+info:
+  name: grasp-erp
+  author: archer
+  verified: false
+  description: 检测到grasp-erp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b" alert(\"欢迎使用 【管家婆分销erp)")
+expression: r0()

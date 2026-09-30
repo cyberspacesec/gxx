@@ -1,0 +1,14 @@
+id: web-ipguard-system
+info:
+  name: ipguard-system
+  author: archer
+  verified: false
+  description: 检测到ipguard-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onchange=\"is_empty('#txtusername','#lblemptyname')")
+expression: r0()

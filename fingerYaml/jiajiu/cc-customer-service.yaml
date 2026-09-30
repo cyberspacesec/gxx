@@ -1,0 +1,14 @@
+id: web-cc-customer-service
+info:
+  name: cc-customer-service
+  author: archer
+  verified: false
+  description: 检测到cc-customer-service系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<script src=\"http://kefu.qycn.com/")
+expression: r0()

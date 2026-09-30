@@ -1,0 +1,14 @@
+id: web-isunor-order-management-system
+info:
+  name: isunor-order-management-system
+  author: archer
+  verified: false
+  description: 检测到isunor-order-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var c_name = 'jsessionid';")
+expression: r0()

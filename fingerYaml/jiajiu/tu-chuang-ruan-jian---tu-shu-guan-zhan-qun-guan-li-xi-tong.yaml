@@ -1,0 +1,14 @@
+id: web-图创软件-图书馆站群管理系统
+info:
+  name: 图创软件-图书馆站群管理系统
+  author: archer
+  verified: false
+  description: 检测到图创软件-图书馆站群管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/interlib/common/")
+expression: r0()

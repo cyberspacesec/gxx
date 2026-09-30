@@ -1,0 +1,19 @@
+id: web-project-management-system
+info:
+  name: project-management-system
+  author: archer
+  verified: false
+  description: 检测到project-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var right = regexp.rightcontext")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.top.location = \"login.aspx?url=\" + right\"")
+expression: r0() || r1()

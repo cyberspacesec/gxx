@@ -1,0 +1,14 @@
+id: web-nmap-log
+info:
+  name: nmap-log
+  author: archer
+  verified: false
+  description: 检测到nmap-log系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"interesting ports on") && response.body.ibcontains(b"starting nmap")
+expression: r0()

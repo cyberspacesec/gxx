@@ -1,0 +1,19 @@
+id: web-slideshowpro-director
+info:
+  name: slideshowpro-director
+  author: archer
+  verified: false
+  description: 检测到slideshowpro-director系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"simple-footer\"><span>slideshowpro director")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"</div> <!--close login-container--></body>")
+expression: r0() || r1()

@@ -1,0 +1,14 @@
+id: web-teradata-ncluster
+info:
+  name: teradata-ncluster
+  author: archer
+  verified: false
+  description: 检测到teradata-ncluster系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"redirecting to aster ncluster management console (amc)")
+expression: r0()

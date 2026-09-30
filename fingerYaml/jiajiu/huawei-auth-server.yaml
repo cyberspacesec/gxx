@@ -1,0 +1,14 @@
+id: web-huawei-auth-server
+info:
+  name: huawei-auth-server
+  author: archer
+  verified: false
+  description: 检测到huawei-auth-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"75718c9a-f029-11d1-a1ac-00c04fb6c223")
+expression: r0()

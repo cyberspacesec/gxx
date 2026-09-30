@@ -1,0 +1,14 @@
+id: web-cachecloud
+info:
+  name: cachecloud
+  author: archer
+  verified: false
+  description: 检测到cachecloud系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alert(\"系统不存在该用户名，请确认该用户申请了cachecloud权限!\");")
+expression: r0()

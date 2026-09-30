@@ -1,0 +1,14 @@
+id: web-海康威视网络设备
+info:
+  name: 海康威视网络设备
+  author: archer
+  verified: false
+  description: 检测到海康威视网络设备系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"GetMovePlaybackTime(szGetTime)") && response.body.ibcontains(b"ZoomInfoCallback")
+expression: r0()

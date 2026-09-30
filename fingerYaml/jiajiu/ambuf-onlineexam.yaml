@@ -1,0 +1,14 @@
+id: web-ambuf-onlineexam
+info:
+  name: ambuf-onlineexam
+  author: archer
+  verified: false
+  description: 检测到ambuf-onlineexam系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"北京众恒志信科技")
+expression: r0()

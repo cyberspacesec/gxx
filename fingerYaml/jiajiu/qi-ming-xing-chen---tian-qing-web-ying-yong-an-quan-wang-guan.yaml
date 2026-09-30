@@ -1,0 +1,14 @@
+id: web-启明星辰-天清web应用安全网关
+info:
+  name: 启明星辰-天清web应用安全网关
+  author: archer
+  verified: false
+  description: 检测到启明星辰-天清web应用安全网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"天清web应用安全网关") && response.body.ibcontains(b"v2/global/vendor/modernizr/modernizr.js")
+expression: r0()

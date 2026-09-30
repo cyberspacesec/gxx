@@ -1,0 +1,14 @@
+id: web-supermap-gis
+info:
+  name: supermap-gis
+  author: archer
+  verified: false
+  description: 检测到supermap-gis系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"北京超图软件股份有限公司")
+expression: r0()

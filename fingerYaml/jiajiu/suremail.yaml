@@ -1,0 +1,19 @@
+id: web-suremail
+info:
+  name: suremail
+  author: archer
+  verified: false
+  description: 检测到suremail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"北京国信安邮科技有限公司")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<span> 客服邮箱：support@suremail.cn</span>")
+expression: r0() || r1()

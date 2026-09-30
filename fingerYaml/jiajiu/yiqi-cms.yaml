@@ -1,0 +1,14 @@
+id: web-yiqi-cms
+info:
+  name: yiqi-cms
+  author: archer
+  verified: false
+  description: 检测到yiqi-cms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"yiqicms")
+expression: r0()

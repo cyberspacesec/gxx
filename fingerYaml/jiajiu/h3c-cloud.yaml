@@ -1,0 +1,19 @@
+id: web-h3c-cloud
+info:
+  name: h3c-cloud
+  author: archer
+  verified: false
+  description: 检测到h3c-cloud系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"分布式存储管理系统 </p>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"vstor")
+expression: r0() || r1()

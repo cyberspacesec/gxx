@@ -1,0 +1,24 @@
+id: web-oracle-primerva
+info:
+  name: oracle-primerva
+  author: archer
+  verified: false
+  description: 检测到oracle-primerva系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"primavera systems, inc")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"introareabuildid")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"com.primavera.detectplugin.detectpluginapplet.class")
+expression: r0() || r1() || r2()

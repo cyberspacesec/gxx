@@ -1,0 +1,14 @@
+id: web-hikvision-isecure-center
+info:
+  name: hikvision-isecure-center
+  author: archer
+  verified: true
+  description: 检测到hikvision-isecure-center系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "136203464"
+expression: r0()

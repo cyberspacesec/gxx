@@ -1,0 +1,19 @@
+id: web-tomatocart
+info:
+  name: tomatocart
+  author: archer
+  verified: false
+  description: 检测到tomatocart系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"tomatocart open source shopping cart solutions\" />")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href=\"http://www.tomatocart.com\" target=\"_blank\">tomatocart</a>")
+expression: r0() || r1()

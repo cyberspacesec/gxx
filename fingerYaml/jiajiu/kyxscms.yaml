@@ -1,0 +1,24 @@
+id: web-kyxscms
+info:
+  name: kyxscms
+  author: archer
+  verified: false
+  description: 检测到kyxscms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"goodbook-tabcont")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<script src=\"/public/static/layer/layer.js\">")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/template/home/default_web/css/style.css\"")
+expression: r0() || r1() || r2()

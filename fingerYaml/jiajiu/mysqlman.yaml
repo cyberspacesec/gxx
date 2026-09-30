@@ -1,0 +1,19 @@
+id: web-mysqlman
+info:
+  name: mysqlman
+  author: archer
+  verified: false
+  description: 检测到mysqlman系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"mysql.cgi?do=top_level_op")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"size=\"1\">mysqlman")
+expression: r0() || r1()

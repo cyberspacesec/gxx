@@ -1,0 +1,14 @@
+id: web-315soft-filesystem
+info:
+  name: 315soft-filesystem
+  author: archer
+  verified: false
+  description: 检测到315soft-filesystem系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b">多可电子档案管理系统</div")
+expression: r0()

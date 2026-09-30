@@ -1,0 +1,19 @@
+id: web-263-enterprise-mailbox
+info:
+  name: 263-enterprise-mailbox
+  author: archer
+  verified: false
+  description: 检测到263-enterprise-mailbox系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"net263.wm.custom_login.homepage_init")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/custom_login/js/net263_wm_util.js")
+expression: r0() || r1()

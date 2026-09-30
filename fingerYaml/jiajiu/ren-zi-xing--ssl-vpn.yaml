@@ -1,0 +1,14 @@
+id: web-任子行-ssl-vpn
+info:
+  name: 任子行-ssl-vpn
+  author: archer
+  verified: false
+  description: 检测到任子行-ssl-vpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"surfilter") && response.body.ibcontains(b"src=\"/javascript/validation/sslvpnlogin.js")
+expression: r0()

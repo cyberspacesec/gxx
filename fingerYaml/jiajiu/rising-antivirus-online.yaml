@@ -1,0 +1,14 @@
+id: web-rising-antivirus-online
+info:
+  name: rising-antivirus-online
+  author: archer
+  verified: false
+  description: 检测到rising-antivirus-online系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"ravweb_files/")
+expression: r0()

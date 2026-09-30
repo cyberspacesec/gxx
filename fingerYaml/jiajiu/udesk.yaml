@@ -1,0 +1,19 @@
+id: web-udesk
+info:
+  name: udesk
+  author: archer
+  verified: false
+  description: 检测到udesk系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"assets-cli.udesk.cn/im_client/js/udeskapi.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"udesk.cn/im_client/?web_plugin_id=")
+expression: r0() || r1()

@@ -1,0 +1,24 @@
+id: web-cmstop
+info:
+  name: cmstop
+  author: archer
+  verified: false
+  description: 检测到cmstop系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/css/cmstop-common.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/js/cmstop-common.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a class=\"poweredby\" href=\"http://www.cmstop.com\"") && response.body.ibcontains(b"cmstop-list-text.css")
+expression: r0() || r1() || r2()

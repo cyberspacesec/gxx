@@ -1,0 +1,14 @@
+id: web-easycloud
+info:
+  name: easycloud
+  author: archer
+  verified: false
+  description: 检测到easycloud系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h1 class=\"white\">云资源管控平台</h1>")
+expression: r0()

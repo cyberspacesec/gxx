@@ -1,0 +1,14 @@
+id: web-dell-networker-management-console
+info:
+  name: dell-networker-management-console
+  author: archer
+  verified: false
+  description: 检测到dell-networker-management-console系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"emc corporation")
+expression: r0()

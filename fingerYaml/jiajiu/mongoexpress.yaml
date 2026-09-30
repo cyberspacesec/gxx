@@ -1,0 +1,14 @@
+id: web-mongoexpress
+info:
+  name: mongoexpress
+  author: archer
+  verified: false
+  description: 检测到mongoexpress系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Mongo Express") && response.body.ibcontains(b"mongo-express-logo.png")
+expression: r0()

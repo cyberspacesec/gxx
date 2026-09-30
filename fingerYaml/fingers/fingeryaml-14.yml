@@ -1,0 +1,20 @@
+---
+id: fingeryaml-14
+info:
+  name: FEMR-Smart Outpatient Management System
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: fingeryaml-14'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.bcontains(b"/res/vendor/bootstrap-3.3.5/css/bootstrap.min.css") || response.body.bcontains(b"res/images/login-bg-1.png")
+expression: r0()
+
+...

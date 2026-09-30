@@ -1,0 +1,14 @@
+id: web-chinags-cloudlearning
+info:
+  name: chinags-cloudlearning
+  author: archer
+  verified: false
+  description: 检测到chinags-cloudlearning系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/integrats/gs.sub.systemmanager/dologin/json")
+expression: r0()

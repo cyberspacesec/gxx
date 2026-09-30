@@ -1,0 +1,19 @@
+id: web-tumblr
+info:
+  name: tumblr
+  author: archer
+  verified: false
+  description: 检测到tumblr系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta name=\"tumblr-theme\" content=")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- begin tumblr code --><iframe src=\"http://assets.tumblr.com/iframe.html")
+expression: r0() || r1()

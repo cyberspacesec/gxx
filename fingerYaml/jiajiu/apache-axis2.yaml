@@ -1,0 +1,14 @@
+id: web-apache-axis2
+info:
+  name: apache-axis2
+  author: archer
+  verified: false
+  description: 检测到apache-axis2系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"axis2-admin") && response.body.ibcontains(b"axis2-web")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-dell-openmanage
+info:
+  name: dell-openmanage
+  author: archer
+  verified: false
+  description: 检测到dell-openmanage系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"openmanage\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/oem//data/images/logo.gif\"") && response.body.ibcontains(b"url=/servlet/omsalogin?msgstatus='")
+expression: r0() || r1()

@@ -1,0 +1,24 @@
+id: web-wdlinux-wdcpsystem
+info:
+  name: wdlinux-wdcpsystem
+  author: archer
+  verified: false
+  description: 检测到wdlinux-wdcpsystem系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.wdlinux.cn/bbs/index.php")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"linux云主机")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: wdcpsessionid")'
+expression: r0() || r1() || r2()

@@ -1,0 +1,14 @@
+id: web-点晴mis管理信息系统
+info:
+  name: 点晴mis管理信息系统
+  author: archer
+  verified: true
+  description: 检测到点晴mis管理信息系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-557984382"
+expression: r0()

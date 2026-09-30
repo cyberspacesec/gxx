@@ -1,0 +1,14 @@
+id: web-安达通-tpn网关控制台登陆系统
+info:
+  name: 安达通-tpn网关控制台登陆系统
+  author: archer
+  verified: false
+  description: 检测到安达通-tpn网关控制台登陆系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"tpn-2g网关控制台管理员登录") && response.body.ibcontains(b"$('#submitid').bind('click',checksubmitfn);\"")
+expression: r0()

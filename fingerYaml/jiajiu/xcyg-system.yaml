@@ -1,0 +1,14 @@
+id: web-xcyg-system
+info:
+  name: xcyg-system
+  author: archer
+  verified: false
+  description: 检测到xcyg-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b">digital anywhere platform</h2>")
+expression: r0()

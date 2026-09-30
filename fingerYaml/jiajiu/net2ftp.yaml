@@ -1,0 +1,29 @@
+id: web-net2ftp
+info:
+  name: net2ftp
+  author: archer
+  verified: false
+  description: 检测到net2ftp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- net2ftp version")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- end of net2ftp login form")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.net2ftp.com\">net2ftp</a>")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"net2ftp")
+expression: r0() || r1() || r2() || r3()

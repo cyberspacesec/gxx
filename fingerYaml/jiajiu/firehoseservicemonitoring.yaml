@@ -1,0 +1,14 @@
+id: web-firehose_service_monitoring
+info:
+  name: firehose_service_monitoring
+  author: archer
+  verified: false
+  description: 检测到firehose_service_monitoring系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h1>firehose_service_monitoring status</h1>")
+expression: r0()

@@ -1,0 +1,24 @@
+id: web-深信服身份认证系统
+info:
+  name: 深信服身份认证系统
+  author: archer
+  verified: false
+  description: 检测到深信服身份认证系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"/webauth/\">")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"身份认证系统")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"info-inner\"")
+expression: r0() || r1() || r2()

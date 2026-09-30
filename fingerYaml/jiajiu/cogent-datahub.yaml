@@ -1,0 +1,14 @@
+id: web-cogent-datahub
+info:
+  name: cogent-datahub
+  author: archer
+  verified: false
+  description: 检测到cogent-datahub系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/images/cogent.gif")
+expression: r0()

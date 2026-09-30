@@ -1,0 +1,14 @@
+id: web-h3c-ssl-vpn
+info:
+  name: h3c-ssl-vpn
+  author: archer
+  verified: false
+  description: 检测到h3c-ssl-vpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"welcome to ssl vpn</h1>") && response.body.ibcontains(b"keep me signed in</span>")
+expression: r0()

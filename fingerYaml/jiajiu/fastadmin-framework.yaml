@@ -1,0 +1,34 @@
+id: web-fastadmin-framework
+info:
+  name: fastadmin-framework
+  author: archer
+  verified: true
+  description: 检测到fastadmin-framework系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"copyright © fastadmin.net")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1036943727"
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"/\" class=\"navbar-brand\">fastadmin</a>")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"fastadmin.net")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"FastAdmin") && response.body.ibcontains(b"fastadmin.net")
+expression: r0() || r1() || r2() || r3() || r4()

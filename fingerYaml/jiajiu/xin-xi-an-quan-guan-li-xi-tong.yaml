@@ -1,0 +1,14 @@
+id: web-信息安全管理系统
+info:
+  name: 信息安全管理系统
+  author: archer
+  verified: false
+  description: 检测到信息安全管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"lblmsg_container\"") && response.body.ibcontains(b"src=\"js/piwik.js\"")
+expression: r0()

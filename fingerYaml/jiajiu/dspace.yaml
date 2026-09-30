@@ -1,0 +1,19 @@
+id: web-dspace
+info:
+  name: dspace
+  author: archer
+  verified: false
+  description: 检测到dspace系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"dspace")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.dspace.org\">dspace software")
+expression: r0() || r1()

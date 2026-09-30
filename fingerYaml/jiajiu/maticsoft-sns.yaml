@@ -1,0 +1,24 @@
+id: web-maticsoft-sns
+info:
+  name: maticsoft-sns
+  author: archer
+  verified: false
+  description: 检测到maticsoft-sns系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"maticsoftsns")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"maticsoft")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/areas/sns/")
+expression: r0() || r1() || r2()

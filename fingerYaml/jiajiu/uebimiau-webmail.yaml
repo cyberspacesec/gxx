@@ -1,0 +1,14 @@
+id: web-uebimiau-webmail
+info:
+  name: uebimiau-webmail
+  author: archer
+  verified: false
+  description: 检测到uebimiau-webmail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<script type=\"text/javascript\" src=\"themes/default/js/webmail.js\"></script>") && response.body.ibcontains(b"uebimiau")
+expression: r0()

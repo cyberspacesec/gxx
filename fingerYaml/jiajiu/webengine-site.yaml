@@ -1,0 +1,19 @@
+id: web-webengine-site
+info:
+  name: webengine-site
+  author: archer
+  verified: false
+  description: 检测到webengine-site系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/webengine/images/common.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"location.href = \"/webengine/web/\";")
+expression: r0() || r1()

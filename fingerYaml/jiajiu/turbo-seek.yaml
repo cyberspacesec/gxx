@@ -1,0 +1,14 @@
+id: web-turbo-seek
+info:
+  name: turbo-seek
+  author: archer
+  verified: false
+  description: 检测到turbo-seek系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var myspecs = \"'menubar=0,status=1,resizable=1,location=0,titlebar=1,toolbar=1,scrollbars=1,width=\" + mywidth + \",height=\" + myheight +")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-openfire
+info:
+  name: openfire
+  author: archer
+  verified: false
+  description: 检测到openfire系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"background: transparent url(images/login_logo.gif) no-repeat")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>openfire 管理界面</title>")
+expression: r0() || r1()

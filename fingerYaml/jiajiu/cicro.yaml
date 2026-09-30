@@ -1,0 +1,19 @@
+id: web-cicro
+info:
+  name: cicro
+  author: archer
+  verified: false
+  description: 检测到cicro系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"cicro") && response.body.ibcontains(b"content=\"cicro") && response.body.ibcontains(b"cws")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"index.files/cicro_userdefine.css")
+expression: r0() || r1()

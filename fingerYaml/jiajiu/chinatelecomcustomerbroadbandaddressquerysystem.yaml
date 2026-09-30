@@ -1,0 +1,14 @@
+id: web-chinatelecomcustomerbroadbandaddressquerysystem
+info:
+  name: chinatelecomcustomerbroadbandaddressquerysystem
+  author: archer
+  verified: false
+  description: 检测到chinatelecomcustomerbroadbandaddressquerysystem系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<strong>客户宽带地址查询")
+expression: r0()

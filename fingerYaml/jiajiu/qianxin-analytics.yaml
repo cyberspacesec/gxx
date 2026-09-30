@@ -1,0 +1,14 @@
+id: web-qianxin-analytics
+info:
+  name: qianxin-analytics
+  author: archer
+  verified: false
+  description: 检测到qianxin-analytics系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/static/build/animate_nprogress_timepiacker_tooltipster.min.css")
+expression: r0()

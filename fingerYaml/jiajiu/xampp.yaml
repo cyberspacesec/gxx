@@ -1,0 +1,19 @@
+id: web-xampp
+info:
+  name: xampp
+  author: archer
+  verified: false
+  description: 检测到xampp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"font-size: 1.2em; color: red;\">new xampp")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"xampp ")
+expression: r0() || r1()

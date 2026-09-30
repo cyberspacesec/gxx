@@ -1,0 +1,19 @@
+id: web-yonyou-grp-u8
+info:
+  name: yonyou-grp-u8
+  author: archer
+  verified: true
+  description: 检测到yonyou-grp-u8系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"key2 = \"grp\", key3 = \"u8\"") && response.body.ibcontains(b"用友grp-u8")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-299520369"
+expression: r0() || r1()

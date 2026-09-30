@@ -1,0 +1,14 @@
+id: web-ibm-ts3310
+info:
+  name: ibm-ts3310
+  author: archer
+  verified: false
+  description: 检测到ibm-ts3310系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"http-equiv=\"refresh\" content=\"0; url=/main_login.htm\"")
+expression: r0()

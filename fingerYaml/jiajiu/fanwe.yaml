@@ -1,0 +1,19 @@
+id: web-fanwe
+info:
+  name: fanwe
+  author: archer
+  verified: false
+  description: 检测到fanwe系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"app/tpl/fanwe_1/images/lazy_loading.gif")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"index.php?ctl=article_cate")
+expression: r0() || r1()

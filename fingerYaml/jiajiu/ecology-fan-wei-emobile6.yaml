@@ -1,0 +1,24 @@
+id: web-ecology泛微EMobile6
+info:
+  name: ecology泛微EMobile6
+  author: archer
+  verified: false
+  description: 检测到ecology泛微EMobile6系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"weaver e-mobile\"") && response.body.ibcontains(b"verifyLogin.do")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"e-mobile&nbsp;")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/images/login_logo@2x.png") && response.body.ibcontains(b"action=\"/verifylogin.do")
+expression: r0() || r1() || r2()

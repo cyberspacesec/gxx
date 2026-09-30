@@ -1,0 +1,14 @@
+id: web-lemis-management-system
+info:
+  name: lemis-management-system
+  author: archer
+  verified: false
+  description: 检测到lemis-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"lemis.web_app_name")
+expression: r0()

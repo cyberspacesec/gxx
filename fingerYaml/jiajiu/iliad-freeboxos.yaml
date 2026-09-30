@@ -1,0 +1,14 @@
+id: web-iliad-freeboxos
+info:
+  name: iliad-freeboxos
+  author: archer
+  verified: false
+  description: 检测到iliad-freeboxos系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"logo_freeboxos")
+expression: r0()

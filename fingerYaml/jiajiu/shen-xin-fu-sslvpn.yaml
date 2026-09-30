@@ -1,0 +1,44 @@
+id: web-深信服SSLVPN
+info:
+  name: 深信服 SSL VPN
+  author: archer
+  verified: false
+  description: 检测到深信服 SSL VPN系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"sf_ssl_ms_") && response.body.ibcontains(b"portal")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/cgi-bin/login.cgi") && response.body.ibcontains(b"/html/js/loginPrivacy.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/cgi-bin/login.cgi") && response.body.ibcontains(b"SSL VPN")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/local/connect_notfound/connect_notfound.html?from=")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/portal\",right:0}];") && response.body.ibcontains(b"/por/login_psw.csp")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"SSL VPN") && response.body.ibcontains(b"/por/login_psw.csp") && response.body.ibcontains(b"IE=EmulateIE7")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"SSL VPN") && response.body.ibcontains(b"IE=EmulateIE7") && response.body.ibcontains(b"security_check.csp")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6()

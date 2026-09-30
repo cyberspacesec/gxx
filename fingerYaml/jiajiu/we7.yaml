@@ -1,0 +1,14 @@
+id: web-we7
+info:
+  name: we7
+  author: archer
+  verified: false
+  description: 检测到we7系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<title>微擎") && response.body.ibcontains(b"w7.cc")
+expression: r0()

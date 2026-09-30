@@ -1,0 +1,14 @@
+id: web-oracle-fusion-middleware
+info:
+  name: oracle-fusion-middleware
+  author: archer
+  verified: false
+  description: 检测到oracle-fusion-middleware系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"css/fmw_bottom_area.css")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-phpok
+info:
+  name: phpok
+  author: archer
+  verified: true
+  description: 检测到phpok系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta name=\"author\" content=\"phpok,")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "474815207" || response.icon_hash == "aea2803f24d6f4156bde7681f17c3253"
+expression: r0() || r1()

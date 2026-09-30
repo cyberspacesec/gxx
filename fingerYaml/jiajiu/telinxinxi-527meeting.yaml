@@ -1,0 +1,19 @@
+id: web-telinxinxi-527meeting
+info:
+  name: telinxinxi-527meeting
+  author: archer
+  verified: false
+  description: 检测到telinxinxi-527meeting系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"527meeting")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b" content=\"轻会议\"")
+expression: r0() || r1()

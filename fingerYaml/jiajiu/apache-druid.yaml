@@ -1,0 +1,14 @@
+id: web-apache-druid
+info:
+  name: apache-druid
+  author: archer
+  verified: false
+  description: 检测到apache-druid系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"content=\"Apache Druid console\"")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-neo4j-browser
+info:
+  name: neo4j-browser
+  author: archer
+  verified: false
+  description: 检测到neo4j-browser系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"neo4j://") && response.body.ibcontains(b"neo4j_version") && response.body.ibcontains(b"neo4j_edition")
+expression: r0()

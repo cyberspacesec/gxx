@@ -1,0 +1,14 @@
+id: web-seehealth-health-management-system
+info:
+  name: seehealth-health-management-system
+  author: archer
+  verified: false
+  description: 检测到seehealth-health-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"upvalidatefile.aspx")
+expression: r0()

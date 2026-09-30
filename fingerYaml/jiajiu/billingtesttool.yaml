@@ -1,0 +1,14 @@
+id: web-billingtesttool
+info:
+  name: billingtesttool
+  author: archer
+  verified: false
+  description: 检测到billingtesttool系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href:'/billtool/querysum'")
+expression: r0()

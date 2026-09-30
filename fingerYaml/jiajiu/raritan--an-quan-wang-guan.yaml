@@ -1,0 +1,14 @@
+id: web-raritan-安全网关
+info:
+  name: raritan-安全网关
+  author: archer
+  verified: false
+  description: 检测到raritan-安全网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"images/ccsg logo.gif") && response.body.ibcontains(b"raritan cc-sg")
+expression: r0()

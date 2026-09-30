@@ -1,0 +1,19 @@
+id: web-hims-hotel-cloud-computing-service
+info:
+  name: hims-hotel-cloud-computing-service
+  author: archer
+  verified: false
+  description: 检测到hims-hotel-cloud-computing-service系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"gb_root_dir") && response.body.ibcontains(b"maincontent.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"hims酒店云计算服务")
+expression: r0() || r1()

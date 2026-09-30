@@ -1,0 +1,14 @@
+id: web-pcitc-management-platform
+info:
+  name: pcitc-management-platform
+  author: archer
+  verified: false
+  description: 检测到pcitc-management-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.open(\"http://itmc.mmsh.sinopec.com/itgk/sysmgr/productregister/yunweiproregister.view\"); }  ")
+expression: r0()

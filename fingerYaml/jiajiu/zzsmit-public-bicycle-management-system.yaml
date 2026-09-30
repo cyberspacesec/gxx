@@ -1,0 +1,14 @@
+id: web-zzsmit-public-bicycle-management-system
+info:
+  name: zzsmit-public-bicycle-management-system
+  author: archer
+  verified: false
+  description: 检测到zzsmit-public-bicycle-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/skins/bicycle/css/login.css\"")
+expression: r0()

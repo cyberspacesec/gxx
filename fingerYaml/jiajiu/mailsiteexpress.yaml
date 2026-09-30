@@ -1,0 +1,19 @@
+id: web-mailsiteexpress
+info:
+  name: mailsiteexpress
+  author: archer
+  verified: false
+  description: 检测到mailsiteexpress系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onsubmit=\"openexpress(document.expresslogin)")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"rockliffe systems, inc.")
+expression: r0() || r1()

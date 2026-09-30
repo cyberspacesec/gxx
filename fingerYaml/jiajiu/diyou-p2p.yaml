@@ -1,0 +1,19 @@
+id: web-diyou-p2p
+info:
+  name: diyou-p2p
+  author: archer
+  verified: false
+  description: 检测到diyou-p2p系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/js/diyou.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/dyweb/dythemes")
+expression: r0() || r1()

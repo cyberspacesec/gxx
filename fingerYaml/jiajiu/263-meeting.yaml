@@ -1,0 +1,14 @@
+id: web-263-meeting
+info:
+  name: 263-meeting
+  author: archer
+  verified: false
+  description: 检测到263-meeting系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<frame src=\"/jsp/conference/meetinglist.jsp\" name=\"mainframe\"/>")
+expression: r0()

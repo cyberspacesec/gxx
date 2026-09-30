@@ -1,0 +1,29 @@
+id: web-ibm-lotus-sametime
+info:
+  name: ibm-lotus-sametime
+  author: archer
+  verified: false
+  description: 检测到ibm-lotus-sametime系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"sametime/avtest.js\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"sametime/meetingcenter-moz.css\"")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"sametimemeetingsbuttontransparent\"")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"sametime/themes/images/blank.gif")
+expression: r0() || r1() || r2() || r3()

@@ -1,0 +1,14 @@
+id: web-yioks-campus-football-management-platform
+info:
+  name: yioks-campus-football-management-platform
+  author: archer
+  verified: false
+  description: 检测到yioks-campus-football-management-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<script>document.location='/index.mpl?a=login'</script>")
+expression: r0()

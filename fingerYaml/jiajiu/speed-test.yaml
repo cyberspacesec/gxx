@@ -1,0 +1,14 @@
+id: web-speed-test
+info:
+  name: speed-test
+  author: archer
+  verified: false
+  description: 检测到speed-test系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"classid=\"clsid:53028063-426b-446d-85f9-62e9e3dc5501\"")
+expression: r0()

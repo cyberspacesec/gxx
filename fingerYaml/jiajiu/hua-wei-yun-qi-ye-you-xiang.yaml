@@ -1,0 +1,14 @@
+id: web-华为云企业邮箱
+info:
+  name: 华为云企业邮箱
+  author: archer
+  verified: true
+  description: 检测到华为云企业邮箱系统的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1765442030"
+expression: r0()

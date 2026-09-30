@@ -1,0 +1,19 @@
+id: web-apusic
+info:
+  name: apusic
+  author: archer
+  verified: false
+  description: 检测到apusic系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<td>管理apusic应用服务器</td>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: apusic application server")'
+expression: r0() || r1()

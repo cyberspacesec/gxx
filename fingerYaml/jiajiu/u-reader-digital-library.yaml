@@ -1,0 +1,19 @@
+id: web-u-reader-digital-library
+info:
+  name: u-reader-digital-library
+  author: archer
+  verified: false
+  description: 检测到u-reader-digital-library系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"ureader")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"login-show-title\">dynomedia inc.</p>")
+expression: r0() || r1()

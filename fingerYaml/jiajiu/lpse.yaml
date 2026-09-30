@@ -1,0 +1,14 @@
+id: web-lpse
+info:
+  name: lpse
+  author: archer
+  verified: false
+  description: 检测到lpse系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/eproc/assets/application.css")
+expression: r0()

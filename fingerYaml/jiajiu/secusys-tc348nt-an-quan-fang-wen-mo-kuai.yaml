@@ -1,0 +1,14 @@
+id: web-secusys-tc348nt安全访问模块
+info:
+  name: secusys-tc348nt安全访问模块
+  author: archer
+  verified: false
+  description: 检测到secusys-tc348nt安全访问模块系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"tc348nt pannel")
+expression: r0()

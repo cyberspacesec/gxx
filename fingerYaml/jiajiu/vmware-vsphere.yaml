@@ -1,0 +1,14 @@
+id: web-vmware-vsphere
+info:
+  name: vmware-vsphere
+  author: archer
+  verified: false
+  description: 检测到vmware-vsphere系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta name=\"description\" content=\"VMware vSphere")
+expression: r0()

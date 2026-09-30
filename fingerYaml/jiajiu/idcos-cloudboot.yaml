@@ -1,0 +1,14 @@
+id: web-idcos-cloudboot
+info:
+  name: idcos-cloudboot
+  author: archer
+  verified: false
+  description: 检测到idcos-cloudboot系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/clipboard/zeroclipboard.min")
+expression: r0()

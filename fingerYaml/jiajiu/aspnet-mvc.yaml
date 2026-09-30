@@ -1,0 +1,19 @@
+id: web-aspnet-mvc
+info:
+  name: aspnet-mvc
+  author: archer
+  verified: false
+  description: 检测到aspnet-mvc系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h2>modify this template to jump-start your asp.net mvc application.</h2>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"asp.net mvc application</p>")
+expression: r0() || r1()

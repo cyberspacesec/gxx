@@ -1,0 +1,14 @@
+id: web-hejia-oa
+info:
+  name: hejia-oa
+  author: archer
+  verified: false
+  description: 检测到hejia-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/templates/everythingisok/index.css\"")
+expression: r0()

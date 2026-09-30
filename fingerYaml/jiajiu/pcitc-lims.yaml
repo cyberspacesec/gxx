@@ -1,0 +1,14 @@
+id: web-pcitc-lims
+info:
+  name: pcitc-lims
+  author: archer
+  verified: false
+  description: 检测到pcitc-lims系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/home/plug_in_download")
+expression: r0()

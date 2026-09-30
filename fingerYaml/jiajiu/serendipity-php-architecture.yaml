@@ -1,0 +1,14 @@
+id: web-serendipity-php-architecture
+info:
+  name: serendipity-php-architecture
+  author: archer
+  verified: false
+  description: 检测到serendipity-php-architecture系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"serendipity_editor.js")
+expression: r0()

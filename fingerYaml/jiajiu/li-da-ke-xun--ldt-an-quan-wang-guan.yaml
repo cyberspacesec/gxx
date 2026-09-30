@@ -1,0 +1,14 @@
+id: web-力达科讯-ldt安全网关
+info:
+  name: 力达科讯-ldt安全网关
+  author: archer
+  verified: false
+  description: 检测到力达科讯-ldt安全网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<body onload=\"chkversion();setlanguage();loading()\" onkeydown=\"keylogin(event);\">") && response.body.ibcontains(b"湖北力达科讯")
+expression: r0()

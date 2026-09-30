@@ -1,0 +1,14 @@
+id: web-360新天擎
+info:
+  name: 360新天擎
+  author: archer
+  verified: false
+  description: 检测到360新天擎系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Location: /login?refer=%2F") && response.raw_header.ibcontains(b"Set-Cookie: SKYLAR")'
+expression: r0()

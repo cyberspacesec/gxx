@@ -1,0 +1,24 @@
+id: web-sitecore
+info:
+  name: sitecore
+  author: archer
+  verified: true
+  description: 检测到sitecore系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"Sitecore\" id=\"scLogo\" />")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"Sitecore Documentation site\">")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "775590621"
+expression: r0() || r1() || r2()

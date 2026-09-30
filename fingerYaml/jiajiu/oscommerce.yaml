@@ -1,0 +1,19 @@
+id: web-oscommerce
+info:
+  name: oscommerce
+  author: archer
+  verified: false
+  description: 检测到oscommerce系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"images/oscommerce.png")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"set-cookie: oscsid=")'
+expression: r0() || r1()

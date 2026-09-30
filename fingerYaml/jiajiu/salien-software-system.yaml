@@ -1,0 +1,19 @@
+id: web-salien-software-system
+info:
+  name: salien-software-system
+  author: archer
+  verified: false
+  description: 检测到salien-software-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"images/login/msn/favicon.ico\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"北京市时林电脑公司")
+expression: r0() || r1()

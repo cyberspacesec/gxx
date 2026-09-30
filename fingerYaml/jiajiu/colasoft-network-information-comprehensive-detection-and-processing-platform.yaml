@@ -1,0 +1,19 @@
+id: web-colasoft-network-information-comprehensive-detection-and-processing-platform
+info:
+  name: colasoft-network-information-comprehensive-detection-and-processing-platform
+  author: archer
+  verified: false
+  description: 检测到colasoft-network-information-comprehensive-detection-and-processing-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta name=\"colasoft\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"科来网络信息综合检测处理平台")
+expression: r0() || r1()

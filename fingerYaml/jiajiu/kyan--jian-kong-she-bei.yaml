@@ -1,0 +1,14 @@
+id: web-kyan-监控设备
+info:
+  name: kyan-监控设备
+  author: archer
+  verified: false
+  description: 检测到kyan-监控设备系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"login_files") && response.body.ibcontains(b"platform") && response.body.ibcontains(b"欢迎")
+expression: r0()

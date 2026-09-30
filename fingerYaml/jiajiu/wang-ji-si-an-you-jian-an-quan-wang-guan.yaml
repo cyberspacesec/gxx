@@ -1,0 +1,24 @@
+id: web-网际思安邮件安全网关
+info:
+  name: 网际思安邮件安全网关
+  author: archer
+  verified: false
+  description: 检测到网际思安邮件安全网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"snspam/spam_request/")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"snspam/start_page.asp")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"spam_request/spam_requestact.asp")
+expression: r0() || r1() || r2()

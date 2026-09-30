@@ -1,0 +1,29 @@
+id: web-宝塔控制面板
+info:
+  name: 宝塔控制面板
+  author: archer
+  verified: false
+  description: 检测到宝塔控制面板系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Set-Cookie: BT_PANEL_6")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"bt.cn") && response.body.ibcontains(b"扫码登录")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"入口校验失败") && response.body.ibcontains(b"面板")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<title>宝塔Linux面板</title>")
+expression: r0() || r1() || r2() || r3()

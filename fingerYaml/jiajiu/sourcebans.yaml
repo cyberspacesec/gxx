@@ -1,0 +1,19 @@
+id: web-sourcebans
+info:
+  name: sourcebans
+  author: archer
+  verified: false
+  description: 检测到sourcebans系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"footqversion\">version(")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"http://www.sourcebans.net\" target=\"_blank\"><img src=\"images/sb.png")
+expression: r0() || r1()

@@ -1,0 +1,14 @@
+id: web-kolab
+info:
+  name: kolab
+  author: archer
+  verified: false
+  description: 检测到kolab系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"kolab")
+expression: r0()

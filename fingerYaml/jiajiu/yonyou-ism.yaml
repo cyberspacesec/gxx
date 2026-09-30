@@ -1,0 +1,14 @@
+id: web-yonyou-ism
+info:
+  name: yonyou-ism
+  author: archer
+  verified: false
+  description: 检测到yonyou-ism系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"sheight*window.screen.deviceydpi")
+expression: r0()

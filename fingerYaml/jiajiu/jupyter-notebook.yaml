@@ -1,0 +1,29 @@
+id: web-jupyter-notebook
+info:
+  name: jupyter-notebook
+  author: archer
+  verified: true
+  description: 检测到jupyter-notebook系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"ipython-main-app\" class=\"container\">")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"ipython_notebook\" class=\"nav navbar-brand\">")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Jupyter Notebook</title>")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-895963602"
+expression: r0() || r1() || r2() || r3()

@@ -1,0 +1,24 @@
+id: web-phxeventmanager
+info:
+  name: phxeventmanager
+  author: archer
+  verified: false
+  description: 检测到phxeventmanager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<td><div class=\"minicalmonth")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"pem-includes/xajax/xajax_js/xajax_core.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by phxeventmanager")
+expression: r0() || r1() || r2()

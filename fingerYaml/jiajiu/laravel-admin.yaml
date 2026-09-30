@@ -1,0 +1,19 @@
+id: web-laravel-admin
+info:
+  name: laravel-admin
+  author: archer
+  verified: false
+  description: 检测到laravel-admin系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"vendor/laravel-admin/")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"欢迎登录laravel-admin</p>")
+expression: r0() || r1()

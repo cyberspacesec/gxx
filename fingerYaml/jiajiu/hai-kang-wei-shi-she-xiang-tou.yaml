@@ -1,0 +1,24 @@
+id: web-海康威视摄像头
+info:
+  name: 海康威视摄像头
+  author: archer
+  verified: true
+  description: 检测到海康威视摄像头系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Common/static/theme/theme.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-383452067"
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "999357577"
+expression: r0() || r1() || r2()

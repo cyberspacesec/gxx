@@ -1,0 +1,24 @@
+id: web-violation-outreach-monitoring-system
+info:
+  name: violation-outreach-monitoring-system
+  author: archer
+  verified: false
+  description: 检测到violation-outreach-monitoring-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<body onload=\"forward_to_logon()\">")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location='login.action';")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"欢迎登录违规外联平台")
+expression: r0() || r1() || r2()

@@ -1,0 +1,24 @@
+id: web-ecshop
+info:
+  name: ecshop
+  author: archer
+  verified: false
+  description: 检测到ecshop系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"ecshop")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"ecs_cartinfo\"")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"set-cookie: ECS_ID=")'
+expression: r0() || r1() || r2()

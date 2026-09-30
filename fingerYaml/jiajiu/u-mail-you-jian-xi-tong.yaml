@@ -1,0 +1,14 @@
+id: web-U-Mail邮件系统
+info:
+  name: U-Mail邮件系统
+  author: archer
+  verified: true
+  description: 检测到U-Mail邮件系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1734508635"
+expression: r0()

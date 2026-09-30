@@ -1,0 +1,19 @@
+id: web-nstrong-itmaster
+info:
+  name: nstrong-itmaster
+  author: archer
+  verified: false
+  description: 检测到nstrong-itmaster系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var base_path = '/stormweb';")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"netstrong")
+expression: r0() || r1()

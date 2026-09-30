@@ -1,0 +1,19 @@
+id: web-hanwei-mobile-platform
+info:
+  name: hanwei-mobile-platform
+  author: archer
+  verified: false
+  description: 检测到hanwei-mobile-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img src=\"images/zshlogo.jpg\" />")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"信任汉威的开发证书")
+expression: r0() || r1()

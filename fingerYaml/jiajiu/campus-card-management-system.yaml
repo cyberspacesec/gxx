@@ -1,0 +1,24 @@
+id: web-campus-card-management-system
+info:
+  name: campus-card-management-system
+  author: archer
+  verified: false
+  description: 检测到campus-card-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"harbin synjones electronic")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"document.formpostds.action=\"xxsearch.action")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/shouyeziti.css")
+expression: r0() || r1() || r2()

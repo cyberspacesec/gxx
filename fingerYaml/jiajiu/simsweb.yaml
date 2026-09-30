@@ -1,0 +1,24 @@
+id: web-simsweb
+info:
+  name: simsweb
+  author: archer
+  verified: false
+  description: 检测到simsweb系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<form onsubmit=\"sendinfo(); return false;\" name=\"logon")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/simsweb/monitor.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"index.html\"><font color=\"black\" face=\"arial\">loading simsweb, please wait.....</font></a></h2>")
+expression: r0() || r1() || r2()

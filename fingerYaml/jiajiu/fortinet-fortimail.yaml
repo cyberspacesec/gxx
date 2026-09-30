@@ -1,0 +1,14 @@
+id: web-fortinet-fortimail
+info:
+  name: fortinet-fortimail
+  author: archer
+  verified: false
+  description: 检测到fortinet-fortimail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"location=\"/m/webmail/\";") && response.body.ibcontains(b"<script language=javascript>")
+expression: r0()

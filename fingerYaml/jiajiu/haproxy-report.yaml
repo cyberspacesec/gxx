@@ -1,0 +1,14 @@
+id: web-haproxy-report
+info:
+  name: haproxy-report
+  author: archer
+  verified: false
+  description: 检测到haproxy-report系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"statistics report for haproxy")
+expression: r0()

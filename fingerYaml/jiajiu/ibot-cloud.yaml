@@ -1,0 +1,14 @@
+id: web-ibot-cloud
+info:
+  name: ibot-cloud
+  author: archer
+  verified: false
+  description: 检测到ibot-cloud系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"author:lvzhaohua")
+expression: r0()

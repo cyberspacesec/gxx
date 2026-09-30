@@ -1,0 +1,19 @@
+id: web-CNS网络核心系统
+info:
+  name: CNS网络核心系统
+  author: archer
+  verified: false
+  description: 检测到CNS网络核心系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!--p>cns网络核心服务自动化开通平台系统. ")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<span class=\"left\">cns-app ")
+expression: r0() || r1()

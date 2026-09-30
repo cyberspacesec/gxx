@@ -1,0 +1,14 @@
+id: web-yapi
+info:
+  name: yapi
+  author: archer
+  verified: false
+  description: 检测到yapi系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"YApi") && response.body.ibcontains(b"可视化接口管理平台")
+expression: r0()

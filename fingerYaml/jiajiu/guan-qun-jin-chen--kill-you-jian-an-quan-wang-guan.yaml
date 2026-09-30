@@ -1,0 +1,14 @@
+id: web-冠群金辰-kill邮件安全网关
+info:
+  name: 冠群金辰-kill邮件安全网关
+  author: archer
+  verified: false
+  description: 检测到冠群金辰-kill邮件安全网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"background=\"skins/default/images/login_ksgm.jpg") && response.body.ibcontains(b"kill邮件安全网关")
+expression: r0()

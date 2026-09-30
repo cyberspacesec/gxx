@@ -1,0 +1,14 @@
+id: web-edoc
+info:
+  name: edoc
+  author: archer
+  verified: true
+  description: 检测到edoc系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "151439403"
+expression: r0()

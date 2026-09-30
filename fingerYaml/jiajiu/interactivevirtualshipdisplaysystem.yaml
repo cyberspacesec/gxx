@@ -1,0 +1,14 @@
+id: web-interactivevirtualshipdisplaysystem
+info:
+  name: interactivevirtualshipdisplaysystem
+  author: archer
+  verified: false
+  description: 检测到interactivevirtualshipdisplaysystem系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"交互式虚拟船舶展示系统</a>")
+expression: r0()

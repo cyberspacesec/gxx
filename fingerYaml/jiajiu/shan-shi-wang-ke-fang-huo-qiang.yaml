@@ -1,0 +1,19 @@
+id: web-山石网科防火墙
+info:
+  name: 山石网科防火墙
+  author: archer
+  verified: false
+  description: 检测到山石网科防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"GLOBAL_CONFIG.js") && response.body.ibcontains(b"Hillstone") && response.body.ibcontains(b"licenseAggrement")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"山石网科下一代防火墙</div>") && response.body.ibcontains(b"<title>HILLSTONE NETWORKS</title>")
+expression: r0() || r1()

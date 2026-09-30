@@ -1,0 +1,29 @@
+id: web-dzzoffice-product
+info:
+  name: dzzoffice-product
+  author: archer
+  verified: false
+  description: 检测到dzzoffice-product系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"dzz/system/scripts/jquery.jstree.min.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"dzz/scripts/dzz_min.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.dzzoffice.com\"")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"misc.php?mod=sendmail")
+expression: r0() || r1() || r2() || r3()

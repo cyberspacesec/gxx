@@ -1,0 +1,24 @@
+id: web-sangfor-sip
+info:
+  name: sangfor-sip
+  author: archer
+  verified: false
+  description: 检测到sangfor-sip系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.sessionstorage.removeitem('serialcheckobj')")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/apps/secvisual/static/js/runtime.js?")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"url: ''../auth_manage/auth_manage/on_login''")'
+expression: r0() || r1() || r2()

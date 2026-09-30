@@ -1,0 +1,14 @@
+id: web-cnrdm-product
+info:
+  name: cnrdm-product
+  author: archer
+  verified: false
+  description: 检测到cnrdm-product系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"登录青铜器rdm</b></div>")
+expression: r0()

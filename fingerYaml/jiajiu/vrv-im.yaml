@@ -1,0 +1,29 @@
+id: web-vrv-im
+info:
+  name: vrv-im
+  author: archer
+  verified: false
+  description: 检测到vrv-im系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h3>连豆豆pc客户端 </h3>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://im.vrv.cn/server-securitycenter/password/goretrieval.vrv")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"loginusername\" value=\"\" placeholder=\"连豆豆账号/邮箱/手机号")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"wj-text wj-title\">下载信源豆豆</p>")
+expression: r0() || r1() || r2() || r3()

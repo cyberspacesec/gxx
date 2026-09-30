@@ -1,0 +1,24 @@
+id: web-icinga
+info:
+  name: icinga
+  author: archer
+  verified: true
+  description: 检测到icinga系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Icinga Web 2 Login</title>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"mask-icon\" href=\"/icingaweb2/img/website-icon.svg\" color=")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-949847429"
+expression: r0() || r1() || r2()

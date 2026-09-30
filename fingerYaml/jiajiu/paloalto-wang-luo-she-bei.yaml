@@ -1,0 +1,24 @@
+id: web-paloalto网络设备
+info:
+  name: paloalto网络设备
+  author: archer
+  verified: true
+  description: 检测到paloalto网络设备系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"global-protect/login.esp")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b" 2015 palo alto networks, inc. ")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "873381299"
+expression: r0() || r1() || r2()

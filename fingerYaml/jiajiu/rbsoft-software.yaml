@@ -1,0 +1,14 @@
+id: web-rbsoft-software
+info:
+  name: rbsoft-software
+  author: archer
+  verified: false
+  description: 检测到rbsoft-software系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"name=\"redirectto\" value=\"/zym/rbkj.nsf\"")
+expression: r0()

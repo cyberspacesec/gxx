@@ -1,0 +1,20 @@
+---
+id: fofayaml-50
+info:
+  name: Scientific Linux
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: fofayaml-50'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.raw_header.ibcontains(b"Scientific Linux")
+expression: r0()
+
+...

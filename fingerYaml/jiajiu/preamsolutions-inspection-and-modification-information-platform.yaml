@@ -1,0 +1,14 @@
+id: web-preamsolutions-inspection-and-modification-information-platform
+info:
+  name: preamsolutions-inspection-and-modification-information-platform
+  author: archer
+  verified: false
+  description: 检测到preamsolutions-inspection-and-modification-information-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/gqjx/loginmgr.do?method=dologin")
+expression: r0()

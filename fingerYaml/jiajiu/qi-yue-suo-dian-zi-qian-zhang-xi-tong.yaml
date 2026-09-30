@@ -1,0 +1,19 @@
+id: web-契约锁电子签章系统
+info:
+  name: 契约锁电子签章系统
+  author: archer
+  verified: true
+  description: 检测到契约锁电子签章系统的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/qysoss/assets/js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "738823048"
+expression: r0() || r1()

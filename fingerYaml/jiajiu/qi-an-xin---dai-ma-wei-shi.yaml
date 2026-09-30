@@ -1,0 +1,14 @@
+id: web-奇安信-代码卫士
+info:
+  name: 奇安信-代码卫士
+  author: archer
+  verified: false
+  description: 检测到奇安信-代码卫士系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"baseurl : ''app'',        //配置模块根路径到静态资源根目录") && response.body.ibcontains(b"360代码卫士")'
+expression: r0()

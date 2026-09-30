@@ -1,0 +1,19 @@
+id: web-cms4j
+info:
+  name: cms4j
+  author: archer
+  verified: false
+  description: 检测到cms4j系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/cms4jadmin/login.jsp")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"method=\"post\" name=\"cms4jsearchform\" id=\"cms4jsearchform")
+expression: r0() || r1()

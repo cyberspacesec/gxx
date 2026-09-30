@@ -1,0 +1,14 @@
+id: web-263-hrm
+info:
+  name: 263-hrm
+  author: archer
+  verified: false
+  description: 检测到263-hrm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<p align=\"center\">请使用263em登陆!</p>")
+expression: r0()

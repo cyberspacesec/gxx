@@ -1,0 +1,14 @@
+id: web-leadshop
+info:
+  name: leadshop
+  author: archer
+  verified: true
+  description: 检测到leadshop系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-582976053" || response.icon_hash == "5b0665d0447da9c06646da8f282bf372"
+expression: r0()

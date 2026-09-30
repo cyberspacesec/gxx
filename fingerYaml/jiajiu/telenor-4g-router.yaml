@@ -1,0 +1,19 @@
+id: web-telenor-4g-router
+info:
+  name: telenor-4g-router
+  author: archer
+  verified: false
+  description: 检测到telenor-4g-router系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<form id=\"default_login\" name=\"default_login\" method=\"post\" action=\"/goform/user_login\">")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"please power off and plug in (u)sim card. then power on again. or pin is permanently blocked, please contact the provider")
+expression: r0() || r1()

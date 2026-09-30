@@ -1,0 +1,24 @@
+id: web-autoindex-php-script
+info:
+  name: autoindex-php-script
+  author: archer
+  verified: false
+  description: 检测到autoindex-php-script系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"autoindex default")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: autoindex2")'
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"autoindex.sourceforge.net/")
+expression: r0() || r1() || r2()

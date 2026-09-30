@@ -1,0 +1,19 @@
+id: web-qianxing-oa
+info:
+  name: qianxing-oa
+  author: archer
+  verified: false
+  description: 检测到qianxing-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"input name=\"s1\" type=\"image\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"count/mystat.asp")
+expression: r0() || r1()

@@ -1,0 +1,19 @@
+id: web-tuling-procurement-strategy-management-system
+info:
+  name: tuling-procurement-strategy-management-system
+  author: archer
+  verified: false
+  description: 检测到tuling-procurement-strategy-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"长沙图灵科技有限公司")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/login/main_body_bg.jpg\"")
+expression: r0() || r1()

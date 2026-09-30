@@ -1,0 +1,19 @@
+id: web-h3c-hdm
+info:
+  name: h3c-hdm
+  author: archer
+  verified: false
+  description: 检测到h3c-hdm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/video_record.jnlp")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<iframe frameborder=\"0\" class=\"framelayout\" src=\"./page/blank.html\" name=\"mainframe\" id=\"mainframe")
+expression: r0() || r1()

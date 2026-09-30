@@ -1,0 +1,19 @@
+id: web-genieatm
+info:
+  name: genieatm
+  author: archer
+  verified: false
+  description: 检测到genieatm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"copyright© genie networks ltd.")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"defect 3531")
+expression: r0() || r1()

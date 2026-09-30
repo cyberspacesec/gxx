@@ -1,0 +1,14 @@
+id: web-http基本认证
+info:
+  name: http基本认证
+  author: archer
+  verified: false
+  description: 检测到http基本认证系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 401 && response.body.ibcontains(b"Unauthorized") && response.raw_header.ibcontains(b"Www-Authenticate: Basic realm=\"default\"")'
+expression: r0()

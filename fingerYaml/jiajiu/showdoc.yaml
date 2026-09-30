@@ -1,0 +1,14 @@
+id: web-showdoc
+info:
+  name: showdoc
+  author: archer
+  verified: false
+  description: 检测到showdoc系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=本网站基于开源版showdoc搭建")
+expression: r0()

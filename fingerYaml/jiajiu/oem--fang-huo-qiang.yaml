@@ -1,0 +1,14 @@
+id: web-OEM-防火墙
+info:
+  name: OEM-防火墙
+  author: archer
+  verified: false
+  description: 检测到OEM-防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/common/checknum_creat.php?module=config_authnum")
+expression: r0()

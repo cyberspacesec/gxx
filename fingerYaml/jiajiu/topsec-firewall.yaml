@@ -1,0 +1,14 @@
+id: web-topsec-firewall
+info:
+  name: topsec-firewall
+  author: archer
+  verified: false
+  description: 检测到topsec-firewall系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"TOPSEC") && response.body.ibcontains(b"image/aaa.png") && response.body.ibcontains(b"username")
+expression: r0()

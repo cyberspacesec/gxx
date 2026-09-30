@@ -1,0 +1,39 @@
+id: web-wireless-access-point-controller
+info:
+  name: wireless-access-point-controller
+  author: archer
+  verified: false
+  description: 检测到wireless-access-point-controller系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var oemproductname = \"mvc_howay6000\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<select id = \"selclangswitch\" class=\"langswitch\" onchange = \"switchpagelanguage()\">")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"苏州汉明科技有限公司")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var oemproductname = \"mvc_howay6100\")")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"images/acchtext.png\"")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"版权所有 &copy 2009-2017</div>")
+expression: r0() || r1() || r2() || r3() || r4() || r5()

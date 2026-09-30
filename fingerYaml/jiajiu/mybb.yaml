@@ -1,0 +1,29 @@
+id: web-mybb
+info:
+  name: mybb
+  author: archer
+  verified: false
+  description: 检测到mybb系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href=\"http://www.mybboard.com")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<!-- mybb is free software developed and maintained")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"visibility of the mybb copyright at any time")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onchange=\"mybb.changelanguage();")
+expression: r0() || r1() || r2() || r3()

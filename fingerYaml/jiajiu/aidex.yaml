@@ -1,0 +1,14 @@
+id: web-aidex
+info:
+  name: aidex
+  author: archer
+  verified: false
+  description: 检测到aidex系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"http://www.aidex.de/")
+expression: r0()

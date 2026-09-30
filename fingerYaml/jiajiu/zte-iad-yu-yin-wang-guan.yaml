@@ -1,0 +1,14 @@
+id: web-zte-iad语音网关
+info:
+  name: zte-iad语音网关
+  author: archer
+  verified: false
+  description: 检测到zte-iad语音网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/image/i202.gif") && response.body.ibcontains(b"/image/banner_i532.jpg")
+expression: r0()

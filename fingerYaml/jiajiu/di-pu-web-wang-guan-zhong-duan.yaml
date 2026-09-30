@@ -1,0 +1,14 @@
+id: web-迪普Web网管终端
+info:
+  name: 迪普Web网管终端
+  author: archer
+  verified: false
+  description: 检测到迪普Web网管终端系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/func/web_main/login") && response.body.ibcontains(b"login_en.html")
+expression: r0()

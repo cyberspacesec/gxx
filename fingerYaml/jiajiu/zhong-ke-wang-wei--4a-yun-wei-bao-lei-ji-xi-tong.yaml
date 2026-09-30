@@ -1,0 +1,14 @@
+id: web-中科网威-4a运维堡垒机系统
+info:
+  name: 中科网威-4a运维堡垒机系统
+  author: archer
+  verified: false
+  description: 检测到中科网威-4a运维堡垒机系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"zk.appname='中科网威4a运维堡垒机系统'")
+expression: r0()

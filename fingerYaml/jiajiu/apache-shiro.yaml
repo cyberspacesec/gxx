@@ -1,0 +1,28 @@
+id: web-apache-shiro
+info:
+  name: apache-shiro
+  author: archer
+  verified: false
+  description: 检测到apache-shiro系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: POST
+      path: /
+      headers:
+        Cookie: rememberMe=admin;rememberMe-K=admin
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: rememberMe")'
+  r1:
+    request:
+      method: GET
+      path: /
+      headers:
+        Cookie: rememberMe=admin;rememberMe-K=admin
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: rememberMe")'
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"</i> shiro</li>")
+expression: r0() || r1() || r2()

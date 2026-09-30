@@ -1,0 +1,19 @@
+id: web-glodon-console
+info:
+  name: glodon-console
+  author: archer
+  verified: false
+  description: 检测到glodon-console系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/scripts/dd_belatedpng.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"url: \"/console/account/logon\"")'
+expression: r0() || r1()

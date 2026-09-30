@@ -1,0 +1,19 @@
+id: web-webmin
+info:
+  name: webmin
+  author: archer
+  verified: false
+  description: 检测到webmin系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Webmin") && response.body.ibcontains(b"session_login")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"webmin server on")
+expression: r0() || r1()

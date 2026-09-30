@@ -1,0 +1,19 @@
+id: web-ikuai8-cloud
+info:
+  name: ikuai8-cloud
+  author: archer
+  verified: true
+  description: 检测到ikuai8-cloud系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<strong>we're sorry but ikuai cloud platform doesn't ")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-271448102"
+expression: r0() || r1()

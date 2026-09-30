@@ -1,0 +1,14 @@
+id: web-cmspro
+info:
+  name: cmspro
+  author: archer
+  verified: false
+  description: 检测到cmspro系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"开普互联") && response.body.ibcontains(b"CMS内容管理系统")
+expression: r0()

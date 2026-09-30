@@ -1,0 +1,14 @@
+id: web-huawei-jump-server
+info:
+  name: huawei-jump-server
+  author: archer
+  verified: true
+  description: 检测到huawei-jump-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"event_onusbkeychange=OnUsbKeyChange") && response.body.ibcontains(b"id=mTokenPlugin") && response.body.ibcontains(b"value=pluginLoaded") && response.icon_hash == "-1769281208"
+expression: r0()

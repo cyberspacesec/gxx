@@ -1,0 +1,14 @@
+id: web-kyan-design
+info:
+  name: kyan-design
+  author: archer
+  verified: false
+  description: 检测到kyan-design系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta name='author' content='http://www.kyanmedia.com'>")
+expression: r0()

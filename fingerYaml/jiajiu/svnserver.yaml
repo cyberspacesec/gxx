@@ -1,0 +1,14 @@
+id: web-SVNServer
+info:
+  name: SVN Server
+  author: archer
+  verified: false
+  description: 检测到SVN Server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"www-authenticate: Basic realm=\"VisualSVN Server\"")'
+expression: r0()

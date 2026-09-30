@@ -1,0 +1,24 @@
+id: web-om-video-conferencing
+info:
+  name: om-video-conferencing
+  author: archer
+  verified: false
+  description: 检测到om-video-conferencing系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<p><a href=\"http://www.omeeting.com\" target='_blank'>powered by")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"om视频会议")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onclick=\"gotomeeting('/gotomeeting.php")
+expression: r0() || r1() || r2()

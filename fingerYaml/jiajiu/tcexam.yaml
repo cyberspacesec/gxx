@@ -1,0 +1,19 @@
+id: web-tcexam
+info:
+  name: tcexam
+  author: archer
+  verified: false
+  description: 检测到tcexam系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a name=\"topofdoc\" id=\"topofdoc\"></a>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"nicola asuni - tecnick.com s.r.l.\" />")
+expression: r0() || r1()

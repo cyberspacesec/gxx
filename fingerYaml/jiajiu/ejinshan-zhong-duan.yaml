@@ -1,0 +1,14 @@
+id: web-ejinshan终端
+info:
+  name: ejinshan终端
+  author: archer
+  verified: false
+  description: 检测到ejinshan终端系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"net.ejinshan.avclient.apk") && response.body.ibcontains(b"金山终端安全系统")
+expression: r0()

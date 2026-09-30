@@ -1,0 +1,24 @@
+id: fingerYaml demo
+
+info:
+  name: fingerYaml demo test
+  author: zhizhuo
+  description: |
+    指纹对应的系统描述
+  reference:
+    - 对应产品的官网or开元地址
+  created: 2023/06/16
+
+set:
+  num: randomInt(800000000, 1000000000)
+  payload: randomLowercase(20)
+rules:
+  r0:
+    request:
+      type: http # 请求类型，可以不写默认就是http
+      method: GET # 请求方式，默认GET
+      path: / # 请求路径，默认/
+#      follow_redirects: true # 是否禁用自动重定向跟随
+    expression: response.status == 302 || response.body.bcontains(b'123') # 匹配规则
+
+expression: r0()

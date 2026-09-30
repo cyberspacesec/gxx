@@ -1,0 +1,19 @@
+id: web-zhongyou-system
+info:
+  name: zhongyou-system
+  author: archer
+  verified: false
+  description: 检测到zhongyou-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"background=zhongyou.jpg")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"众友科技巡检管理软件")
+expression: r0() || r1()

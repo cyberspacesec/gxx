@@ -1,0 +1,14 @@
+id: web-fe-oa
+info:
+  name: fe-oa
+  author: archer
+  verified: false
+  description: 检测到fe-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"js39/flyrise.stopbackspace.js")
+expression: r0()

@@ -1,0 +1,29 @@
+id: web-u-mail
+info:
+  name: u-mail
+  author: archer
+  verified: false
+  description: 检测到u-mail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<body link=\"white\" vlink=\"white\" alink=\"white\">")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta http-equiv=\"refresh\" content=\"0;url=./webmail/\">")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"power by <a href=\"http://www.comingchina.com\">u-mail邮件服务器</a>")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"u-mail webadmin 要求启用 javascript")
+expression: r0() || r1() || r2() || r3()

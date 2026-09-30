@@ -1,0 +1,14 @@
+id: web-奇安信-企业版控制中心
+info:
+  name: 奇安信-企业版控制中心
+  author: archer
+  verified: false
+  description: 检测到奇安信-企业版控制中心系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"360企业版控制中心")
+expression: r0()

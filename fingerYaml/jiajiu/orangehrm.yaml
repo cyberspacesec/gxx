@@ -1,0 +1,24 @@
+id: web-orangehrm
+info:
+  name: orangehrm
+  author: archer
+  verified: false
+  description: 检测到orangehrm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"welcome to the orangehrm ver")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"name=\"hdnusertimezoneoffset")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.orangehrm.com\" target=")
+expression: r0() || r1() || r2()

@@ -1,0 +1,24 @@
+id: web-southidc
+info:
+  name: southidc
+  author: archer
+  verified: false
+  description: 检测到southidc系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/southidckefu.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"copyright 2003-2015 - southidc.net")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/southidcj2f.js")
+expression: r0() || r1() || r2()

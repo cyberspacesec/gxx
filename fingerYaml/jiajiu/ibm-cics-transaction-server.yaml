@@ -1,0 +1,14 @@
+id: web-ibm-cics-transaction-server
+info:
+  name: ibm-cics-transaction-server
+  author: archer
+  verified: false
+  description: 检测到ibm-cics-transaction-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: ibm_cics_transaction_server")'
+expression: r0()

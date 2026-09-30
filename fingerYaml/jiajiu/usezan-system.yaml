@@ -1,0 +1,14 @@
+id: web-usezan-system
+info:
+  name: usezan-system
+  author: archer
+  verified: false
+  description: 检测到usezan-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/usezan/login/getlogin\"")
+expression: r0()

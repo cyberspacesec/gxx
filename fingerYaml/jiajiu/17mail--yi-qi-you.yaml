@@ -1,0 +1,14 @@
+id: web-17mail-易企邮
+info:
+  name: 17mail-易企邮
+  author: archer
+  verified: false
+  description: 检测到17mail-易企邮系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"//易企邮正式版发布")
+expression: r0()

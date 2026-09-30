@@ -1,0 +1,19 @@
+id: web-splunk
+info:
+  name: splunk
+  author: archer
+  verified: false
+  description: 检测到splunk系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 200 && response.body.ibcontains(b"content=\"Splunk Inc.\"") && response.raw_header.ibcontains(b"Server: Splunkd") && response.raw_header.ibcontains(b"Set-Cookie: splunkweb_uid")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 303 && response.body.ibcontains(b"<title>303 See Other</title>") && response.raw_header.ibcontains(b"Server: Splunkd") && response.raw_header.ibcontains(b"Set-Cookie: ROUTEID")'
+expression: r0() || r1()

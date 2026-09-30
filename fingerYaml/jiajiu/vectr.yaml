@@ -1,0 +1,14 @@
+id: web-vectr
+info:
+  name: vectr
+  author: archer
+  verified: false
+  description: 检测到vectr系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Location: /sra-purpletools-webui/app")'
+expression: r0()

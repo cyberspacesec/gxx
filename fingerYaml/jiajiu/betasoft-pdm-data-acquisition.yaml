@@ -1,0 +1,19 @@
+id: web-betasoft-pdm-data-acquisition
+info:
+  name: betasoft-pdm-data-acquisition
+  author: archer
+  verified: false
+  description: 检测到betasoft-pdm-data-acquisition系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"align=\"center\" class=\"login_pdm\">")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"background: no-repeat url(../images/login/pdmdenglu1_28.png);")'
+expression: r0() || r1()

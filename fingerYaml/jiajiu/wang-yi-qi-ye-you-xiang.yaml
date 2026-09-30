@@ -1,0 +1,14 @@
+id: web-网易企业邮箱
+info:
+  name: 网易企业邮箱
+  author: archer
+  verified: true
+  description: 检测到网易企业邮箱系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "554783085"
+expression: r0()

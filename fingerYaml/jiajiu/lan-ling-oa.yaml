@@ -1,0 +1,19 @@
+id: web-蓝凌OA
+info:
+  name: 蓝凌OA
+  author: archer
+  verified: true
+  description: 检测到蓝凌OA系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"lui_login_message_td")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "831854882"
+expression: r0() || r1()

@@ -1,0 +1,24 @@
+id: web-elastic
+info:
+  name: elastic
+  author: archer
+  verified: true
+  description: 检测到elastic系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"<title>elastic</title>") && response.raw_header.ibcontains(b"kbn-license-sig: *")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1148968788"
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1611729805"
+expression: r0() || r1() || r2()

@@ -1,0 +1,29 @@
+id: web-finecms
+info:
+  name: finecms
+  author: archer
+  verified: false
+  description: 检测到finecms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by finecms")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"dayrui@gmail.com")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"copyright\" content=\"finecms")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/statics/js/dayrui.js")
+expression: r0() || r1() || r2() || r3()

@@ -1,0 +1,24 @@
+id: web-信呼OA
+info:
+  name: 信呼OA
+  author: archer
+  verified: true
+  description: 检测到信呼OA系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"信呼开发团队")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1652488516"
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"技术支持：<a href=\"http://www.rockoa.com/\"")
+expression: r0() || r1() || r2()

@@ -1,0 +1,14 @@
+id: web-emerson-environmentalenergymonitoringsystem
+info:
+  name: emerson-environmentalenergymonitoringsystem
+  author: archer
+  verified: false
+  description: 检测到emerson-environmentalenergymonitoringsystem系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alert(\"网络断连或者idu-s没有启动.")
+expression: r0()

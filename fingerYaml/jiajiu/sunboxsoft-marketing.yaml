@@ -1,0 +1,14 @@
+id: web-sunboxsoft-marketing
+info:
+  name: sunboxsoft-marketing
+  author: archer
+  verified: false
+  description: 检测到sunboxsoft-marketing系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/sunbox/assets/js/ace.min.js")
+expression: r0()

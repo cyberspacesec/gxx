@@ -1,0 +1,14 @@
+id: web-acmailer-邮件系统
+info:
+  name: acmailer-邮件系统
+  author: archer
+  verified: false
+  description: 检测到acmailer-邮件系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.acmailer.jp\"><img src=\"img/logo.jpg")
+expression: r0()

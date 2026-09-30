@@ -1,0 +1,14 @@
+id: web-hortonworks-smartsense-tool
+info:
+  name: hortonworks-smartsense-tool
+  author: archer
+  verified: false
+  description: 检测到hortonworks-smartsense-tool系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"name=\"hstapp/config/environment\"")
+expression: r0()

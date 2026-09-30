@@ -1,0 +1,14 @@
+id: web-inspur-incloud-sphere
+info:
+  name: inspur-incloud-sphere
+  author: archer
+  verified: false
+  description: 检测到inspur-incloud-sphere系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"easyui-layout")
+expression: r0()

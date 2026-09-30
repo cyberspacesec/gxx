@@ -1,0 +1,14 @@
+id: web-kouton-ctbs
+info:
+  name: kouton-ctbs
+  author: archer
+  verified: false
+  description: 检测到kouton-ctbs系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"欢迎使用 kouton ctbs advanced web client 系统!")
+expression: r0()

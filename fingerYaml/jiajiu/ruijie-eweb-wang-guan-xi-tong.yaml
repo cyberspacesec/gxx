@@ -1,0 +1,14 @@
+id: web-ruijie-eweb网管系统
+info:
+  name: ruijie-eweb网管系统
+  author: archer
+  verified: false
+  description: 检测到ruijie-eweb网管系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>锐捷网络-EWEB网管系统</title>")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-promail
+info:
+  name: promail
+  author: archer
+  verified: false
+  description: 检测到promail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by squirrelmail.org. squirrelmail") && response.body.ibcontains(b"promail &trade; - login")
+expression: r0()

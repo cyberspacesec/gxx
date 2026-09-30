@@ -1,0 +1,19 @@
+id: web-colasoft-mdp
+info:
+  name: colasoft-mdp
+  author: archer
+  verified: false
+  description: 检测到colasoft-mdp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"科来 版权所有 保留所有权利")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"processtime\" time=\"0.000033\" >#processtime</div>")
+expression: r0() || r1()

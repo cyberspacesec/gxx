@@ -1,0 +1,14 @@
+id: web-bjqit-crm
+info:
+  name: bjqit-crm
+  author: archer
+  verified: false
+  description: 检测到bjqit-crm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=/css/ordercomplaint")
+expression: r0()

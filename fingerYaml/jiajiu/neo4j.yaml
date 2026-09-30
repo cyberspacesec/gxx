@@ -1,0 +1,29 @@
+id: web-neo4j
+info:
+  name: neo4j
+  author: archer
+  verified: false
+  description: 检测到neo4j系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"neo4j")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ng-show=\"neo4j.enterpriseedition")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"play-topic=\"neo4j-sync")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"{{ neo4j.version | neo4jdeveloperdoc }}/")
+expression: r0() || r1() || r2() || r3()

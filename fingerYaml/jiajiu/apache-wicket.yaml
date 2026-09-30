@@ -1,0 +1,19 @@
+id: web-apache-wicket
+info:
+  name: apache-wicket
+  author: archer
+  verified: false
+  description: 检测到apache-wicket系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"xmlns:wicket=")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/org.apache.wicket.")
+expression: r0() || r1()

@@ -1,0 +1,19 @@
+id: web-机智云邮
+info:
+  name: 机智云邮
+  author: archer
+  verified: true
+  description: 检测到机智云邮系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-278419579"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"cgijson/getloginimg.php?img=logo")
+expression: r0() || r1()

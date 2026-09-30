@@ -1,0 +1,19 @@
+id: web-vcalendar
+info:
+  name: vcalendar
+  author: archer
+  verified: false
+  description: 检测到vcalendar系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href=\"http://www.vcalendar.org\">vcalendar</a>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<link href=\"styles/basic/style.css\"")
+expression: r0() || r1()

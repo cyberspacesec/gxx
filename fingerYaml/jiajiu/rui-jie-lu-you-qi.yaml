@@ -1,0 +1,14 @@
+id: web-锐捷路由器
+info:
+  name: 锐捷路由器
+  author: archer
+  verified: true
+  description: 检测到锐捷路由器系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-692947551"
+expression: r0()

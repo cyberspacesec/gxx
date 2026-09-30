@@ -1,0 +1,19 @@
+id: web-安网科技-智能AC管理系统
+info:
+  name: 安网科技-智能AC管理系统
+  author: archer
+  verified: false
+  description: 检测到安网科技-智能AC管理系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/web/codeLogin")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>安网科技-智能路由系统</title>") && response.body.ibcontains(b"var save_time=72;//小时数")
+expression: r0() || r1()

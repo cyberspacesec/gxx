@@ -1,0 +1,19 @@
+id: web-blogenginenet
+info:
+  name: blogenginenet
+  author: archer
+  verified: false
+  description: 检测到blogenginenet系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"pics/blogengine.ico")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"http://www.dotnetblogengine.net")
+expression: r0() || r1()

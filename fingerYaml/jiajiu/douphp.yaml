@@ -1,0 +1,14 @@
+id: web-douphp
+info:
+  name: douphp
+  author: archer
+  verified: false
+  description: 检测到douphp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"douphp ")
+expression: r0()

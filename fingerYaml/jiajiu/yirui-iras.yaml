@@ -1,0 +1,19 @@
+id: web-yirui-iras
+info:
+  name: yirui-iras
+  author: archer
+  verified: false
+  description: 检测到yirui-iras系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/authjsp/login.jsp")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"fe0174bb-f093-42af-ab20-7ec621d10488")
+expression: r0() || r1()

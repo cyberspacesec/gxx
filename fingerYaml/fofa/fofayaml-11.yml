@@ -1,0 +1,20 @@
+---
+id: fofayaml-11
+info:
+  name: Dell-Printer
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: fofayaml-11'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Dell Laser Printer")
+expression: r0()
+
+...

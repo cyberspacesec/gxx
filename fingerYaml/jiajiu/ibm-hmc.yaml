@@ -1,0 +1,14 @@
+id: web-ibm-hmc
+info:
+  name: ibm-hmc
+  author: archer
+  verified: false
+  description: 检测到ibm-hmc系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<frame src=\"/preloginmonitor/welcome.jsp\"/>")
+expression: r0()

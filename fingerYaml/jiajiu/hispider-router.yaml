@@ -1,0 +1,14 @@
+id: web-hispider-router
+info:
+  name: hispider-router
+  author: archer
+  verified: false
+  description: 检测到hispider-router系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"login.pl\" method=\"post\"  onsubmit=\"encryptpasswd()")
+expression: r0()

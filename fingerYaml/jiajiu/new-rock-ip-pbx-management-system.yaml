@@ -1,0 +1,14 @@
+id: web-new-rock-ip-pbx-management-system
+info:
+  name: new-rock-ip-pbx-management-system
+  author: archer
+  verified: false
+  description: 检测到new-rock-ip-pbx-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var data = formatparams(params.data)")
+expression: r0()

@@ -1,0 +1,24 @@
+id: web-moodle
+info:
+  name: moodle
+  author: archer
+  verified: false
+  description: 检测到moodle系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"moodle\" href=\"http://moodle.org/")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"moodle")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"m.str = {\"moodle\":")
+expression: r0() || r1() || r2()

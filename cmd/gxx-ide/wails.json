@@ -1,0 +1,18 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "gxx-ide",
+  "outputfilename": "gxx-ide",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "zhizhuo"
+  },
+  "info": {
+    "productName": "GXX 指纹规则编辑器",
+    "productVersion": "1.1.9",
+    "copyright": "Copyright (c) 2026 zhizhuo",
+    "comments": "GXX Web 指纹规则可视化开发 IDE（与主项目共版本）"
+  }
+}

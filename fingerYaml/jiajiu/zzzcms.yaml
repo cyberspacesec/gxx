@@ -1,0 +1,14 @@
+id: web-zzzcms
+info:
+  name: zzzcms
+  author: archer
+  verified: false
+  description: 检测到zzzcms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Powered by <a href='http://zzzcms.com'>ZZZcms</a>")
+expression: r0()

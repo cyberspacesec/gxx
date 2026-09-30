@@ -1,0 +1,24 @@
+id: web-simbix-framework
+info:
+  name: simbix-framework
+  author: archer
+  verified: false
+  description: 检测到simbix-framework系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"simbix framework v")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"logo-lpage-owner.png")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div class=\"image\"><img src=\"/logo-lpage.png\" width=\"40\" height=\"40\" alt=\"simbix framework\" /></div>")
+expression: r0() || r1() || r2()

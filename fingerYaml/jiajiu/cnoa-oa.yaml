@@ -1,0 +1,19 @@
+id: web-cnoa-oa
+info:
+  name: cnoa-oa
+  author: archer
+  verified: false
+  description: 检测到cnoa-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"admin@cnoa.cn") && response.body.ibcontains(b"powered by 协众oa")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by cnoa.cn")
+expression: r0() || r1()

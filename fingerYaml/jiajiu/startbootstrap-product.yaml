@@ -1,0 +1,19 @@
+id: web-startbootstrap-product
+info:
+  name: startbootstrap-product
+  author: archer
+  verified: false
+  description: 检测到startbootstrap-product系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"img/portfolio/thumbnails/4.jpg\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"we've got what you need!</h2>")
+expression: r0() || r1()

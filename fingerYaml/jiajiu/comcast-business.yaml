@@ -1,0 +1,14 @@
+id: web-comcast-business
+info:
+  name: comcast-business
+  author: archer
+  verified: false
+  description: 检测到comcast-business系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"cmn/css/common-min.css")
+expression: r0()

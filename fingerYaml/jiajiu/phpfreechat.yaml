@@ -1,0 +1,19 @@
+id: web-phpfreechat
+info:
+  name: phpfreechat
+  author: archer
+  verified: false
+  description: 检测到phpfreechat系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by phpfreechat")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"http://www.phpfreechat.net/pub/")
+expression: r0() || r1()

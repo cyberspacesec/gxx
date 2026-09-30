@@ -1,0 +1,29 @@
+id: web-atlassian-jira
+info:
+  name: atlassian-jira
+  author: archer
+  verified: false
+  description: 检测到atlassian-jira系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Location: /secure/SetupMode!default.jspa")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"jira.webresources")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ams-build-number")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"com.atlassian.jira")
+expression: r0() || r1() || r2() || r3()

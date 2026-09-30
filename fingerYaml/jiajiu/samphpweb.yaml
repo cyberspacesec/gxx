@@ -1,0 +1,29 @@
+id: web-samphpweb
+info:
+  name: samphpweb
+  author: archer
+  verified: false
+  description: 检测到samphpweb系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"songinfo.php")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"copyright spacial audio solutions")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.spacialaudio.com/products/sambroadcaster/\"")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta http-equiv=\"refresh\" content=\"0;url=playing.html\">")
+expression: r0() || r1() || r2() || r3()

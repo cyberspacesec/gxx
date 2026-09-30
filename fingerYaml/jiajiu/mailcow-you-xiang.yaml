@@ -1,0 +1,14 @@
+id: web-Mailcow邮箱
+info:
+  name: Mailcow邮箱
+  author: archer
+  verified: true
+  description: 检测到Mailcow邮箱系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "2146763496"
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-wellcare-health-management-system
+info:
+  name: wellcare-health-management-system
+  author: archer
+  verified: false
+  description: 检测到wellcare-health-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/web/vfyphrmedical\">健康档案</a></li>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"www.wellcare.cn")
+expression: r0() || r1()

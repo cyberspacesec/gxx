@@ -1,0 +1,39 @@
+id: web-discuz
+info:
+  name: discuz
+  author: archer
+  verified: false
+  description: 检测到discuz系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"Discuz!") && response.body.ibcontains(b"discuz_uid")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"discuz")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"discuz_uid") && response.body.ibcontains(b"portal.php?mod=")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/forum.php?")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"discuz_tips")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <strong><a href=\"http://www.discuz.net")
+expression: r0() || r1() || r2() || r3() || r4() || r5()

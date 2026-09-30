@@ -1,0 +1,19 @@
+id: web-timelink
+info:
+  name: timelink
+  author: archer
+  verified: false
+  description: 检测到timelink系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"link international corp. all rights reserved")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<link rel=\"shortcut icon\" type=\"image/png\" href=\"/timelink/images/favicon.ico\"/>")
+expression: r0() || r1()

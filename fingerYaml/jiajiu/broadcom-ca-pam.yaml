@@ -1,0 +1,19 @@
+id: web-broadcom-ca-pam
+info:
+  name: broadcom-ca-pam
+  author: archer
+  verified: false
+  description: 检测到broadcom-ca-pam系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ispamclient = false")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/cspm/cleansession.jsp")
+expression: r0() || r1()

@@ -1,0 +1,19 @@
+id: web-astaro-command-center
+info:
+  name: astaro-command-center
+  author: archer
+  verified: false
+  description: 检测到astaro-command-center系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/js/_variables_from_backend.js?")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"commandcenter")
+expression: r0() || r1()

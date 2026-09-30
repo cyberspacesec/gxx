@@ -1,0 +1,19 @@
+id: web-valley-platform
+info:
+  name: valley-platform
+  author: archer
+  verified: false
+  description: 检测到valley-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"valley-platform.js")
+  r1:
+    request:
+      method: GET
+      path: /demo/form.jsp
+    expression: response.body.ibcontains(b"ValleyPlatform")
+expression: r0() || r1()

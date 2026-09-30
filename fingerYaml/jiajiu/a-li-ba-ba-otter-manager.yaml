@@ -1,0 +1,14 @@
+id: web-阿里巴巴otter-manager
+info:
+  name: 阿里巴巴otter-manager
+  author: archer
+  verified: false
+  description: 检测到阿里巴巴otter-manager系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Otter Manager") && response.body.ibcontains(b"channelList")
+expression: r0()

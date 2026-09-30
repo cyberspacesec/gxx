@@ -1,0 +1,19 @@
+id: web-useresponse
+info:
+  name: useresponse
+  author: archer
+  verified: false
+  description: 检测到useresponse系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<form id=\"system-form-registration\" enctype=\"application/x-www-form-urlencoded\" class=\"system-form-registration\" accept-charset=\"utf-8")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"customer feedback software, community support system\" target=\"_blank\" href=\"http://www.useresponse.com\" class=\"popup-logo\">")
+expression: r0() || r1()

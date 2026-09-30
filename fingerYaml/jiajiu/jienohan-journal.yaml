@@ -1,0 +1,14 @@
+id: web-jienohan-journal
+info:
+  name: jienohan-journal
+  author: archer
+  verified: false
+  description: 检测到jienohan-journal系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"tougao/misc.js")
+expression: r0()

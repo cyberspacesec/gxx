@@ -1,0 +1,14 @@
+id: web-合肥易用信息科技有限公司crm系统
+info:
+  name: 合肥易用信息科技有限公司crm系统
+  author: archer
+  verified: true
+  description: 检测到合肥易用信息科技有限公司crm系统系统特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "460806810"
+expression: r0()

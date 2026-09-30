@@ -1,0 +1,24 @@
+id: web-jenkins
+info:
+  name: jenkins
+  author: archer
+  verified: true
+  description: 检测到jenkins系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"x-jenkins: *") && response.raw_header.ibcontains(b"x-jenkins-session: *")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "81586312"
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"jenkins-agent-protocols")
+expression: r0() || r1() || r2()

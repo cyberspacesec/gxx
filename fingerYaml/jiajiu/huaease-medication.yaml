@@ -1,0 +1,14 @@
+id: web-huaease-medication
+info:
+  name: huaease-medication
+  author: archer
+  verified: false
+  description: 检测到huaease-medication系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"专业的web医学影像浏览器")
+expression: r0()

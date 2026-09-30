@@ -1,0 +1,14 @@
+id: web-owtware-iconn-end-user-calculation
+info:
+  name: owtware-iconn-end-user-calculation
+  author: archer
+  verified: false
+  description: 检测到owtware-iconn-end-user-calculation系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/res/api/owvmapi.js?")
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-54-customer-service
+info:
+  name: 54-customer-service
+  author: archer
+  verified: false
+  description: 检测到54-customer-service系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"http://code.54kefu.net/")
+expression: r0()

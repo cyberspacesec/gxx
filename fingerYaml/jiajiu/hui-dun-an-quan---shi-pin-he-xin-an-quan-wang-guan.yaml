@@ -1,0 +1,14 @@
+id: web-慧盾安全-视频核心安全网关
+info:
+  name: 慧盾安全-视频核心安全网关
+  author: archer
+  verified: false
+  description: 检测到慧盾安全-视频核心安全网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title').text('视频会议安全系统") && response.body.ibcontains(b"id=\"view-login\"")
+expression: r0()

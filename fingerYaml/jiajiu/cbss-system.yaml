@@ -1,0 +1,19 @@
+id: web-cbss-system
+info:
+  name: cbss-system
+  author: archer
+  verified: false
+  description: 检测到cbss-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"</a>登录cbss系统</p>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<li>com.cbss.xss.filter.xssfilter.dofilter")
+expression: r0() || r1()

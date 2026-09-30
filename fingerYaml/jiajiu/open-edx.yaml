@@ -1,0 +1,24 @@
+id: web-open-edx
+info:
+  name: open-edx
+  author: archer
+  verified: false
+  description: 检测到open-edx系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"footer-openedx")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"footer-about-openedx")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"alt=\"powered by open edx")
+expression: r0() || r1() || r2()

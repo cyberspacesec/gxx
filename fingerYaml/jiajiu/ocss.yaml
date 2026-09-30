@@ -1,0 +1,24 @@
+id: web-ocss
+info:
+  name: ocss
+  author: archer
+  verified: false
+  description: 检测到ocss系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"爱施德移动渠道管理系统")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<option value=\"age_sys\">代理商内部员工</option>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"爱施德 aisidi.com")
+expression: r0() || r1() || r2()

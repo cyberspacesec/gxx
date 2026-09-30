@@ -1,0 +1,14 @@
+id: web-ibm-web-traffic-express-caching-proxy
+info:
+  name: ibm-web-traffic-express-caching-proxy
+  author: archer
+  verified: false
+  description: 检测到ibm-web-traffic-express-caching-proxy系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/admin-bin/webexec/wte.html")
+expression: r0()

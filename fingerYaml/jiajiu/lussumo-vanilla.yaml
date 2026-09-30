@@ -1,0 +1,14 @@
+id: web-lussumo-vanilla
+info:
+  name: lussumo-vanilla
+  author: archer
+  verified: false
+  description: 检测到lussumo-vanilla系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"X-Powered-By: lussumo vanilla")'
+expression: r0()

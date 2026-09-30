@@ -1,0 +1,24 @@
+id: web-pixelpost
+info:
+  name: pixelpost
+  author: archer
+  verified: false
+  description: 检测到pixelpost系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"powered by pixelpost")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href=\"http://www.pixelpost.org")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"pixelpost - ")
+expression: r0() || r1() || r2()

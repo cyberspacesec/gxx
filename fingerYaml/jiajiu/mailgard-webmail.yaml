@@ -1,0 +1,14 @@
+id: web-mailgard-webmail
+info:
+  name: mailgard-webmail
+  author: archer
+  verified: false
+  description: 检测到mailgard-webmail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.open('http://www.hechen.com')")
+expression: r0()

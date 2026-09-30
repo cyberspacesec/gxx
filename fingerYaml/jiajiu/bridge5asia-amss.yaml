@@ -1,0 +1,19 @@
+id: web-bridge5asia-amss
+info:
+  name: bridge5asia-amss
+  author: archer
+  verified: false
+  description: 检测到bridge5asia-amss系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"education area management support system : amss++")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/statics/js/mdo-angular-cryptography.js")
+expression: r0() || r1()

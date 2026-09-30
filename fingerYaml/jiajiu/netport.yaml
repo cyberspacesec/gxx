@@ -1,0 +1,14 @@
+id: web-netport
+info:
+  name: netport
+  author: archer
+  verified: false
+  description: 检测到netport系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: netport software")'
+expression: r0()

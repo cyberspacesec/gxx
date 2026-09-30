@@ -1,0 +1,14 @@
+id: web-5vtechnologies-blueangelsoftwaresuite
+info:
+  name: 5vtechnologies-blueangelsoftwaresuite
+  author: zhizhuo
+  verified: true
+  description: 识别特定Web应用
+  created: 2025/04/15
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/cgi-bin/webctrl.cgi?action=index_page")
+expression: r0()

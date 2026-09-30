@@ -1,0 +1,24 @@
+id: web-深信服零信任访问控制系统aTrust
+info:
+  name: 深信服零信任访问控制系统aTrust
+  author: archer
+  verified: true
+  description: 检测到深信服零信任访问控制系统aTrust系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"atrusttray/.test")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "2080922081"
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 302 && response.body.ibcontains(b"<title>aTrust")
+expression: r0() || r1() || r2()

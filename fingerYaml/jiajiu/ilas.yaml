@@ -1,0 +1,19 @@
+id: web-ilas
+info:
+  name: ilas
+  author: archer
+  verified: false
+  description: 检测到ilas系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<iframe name=\"content\"  src=\"index_middle.html\" frameborder=\"auto")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<select id=\"selprovince\"   onchange=\"getcity(this.options[this.selectedindex].value)\">")
+expression: r0() || r1()

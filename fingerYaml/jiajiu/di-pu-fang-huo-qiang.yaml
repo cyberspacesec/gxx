@@ -1,0 +1,14 @@
+id: web-迪普防火墙
+info:
+  name: 迪普防火墙
+  author: archer
+  verified: true
+  description: 检测到迪普防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1826044321"
+expression: r0()

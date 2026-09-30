@@ -1,0 +1,19 @@
+id: web-apache-guacamole
+info:
+  name: apache-guacamole
+  author: archer
+  verified: false
+  description: 检测到apache-guacamole系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"images/guacamole-logo")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"guacamole - clientless remote desktop") && response.body.ibcontains(b"scripts/guac-ui.js")
+expression: r0() || r1()

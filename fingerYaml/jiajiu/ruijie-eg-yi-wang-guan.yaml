@@ -1,0 +1,14 @@
+id: web-ruijie-eg易网关
+info:
+  name: ruijie-eg易网关
+  author: archer
+  verified: false
+  description: 检测到ruijie-eg易网关系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"eg.css") && response.body.ibcontains(b"ruijie")
+expression: r0()

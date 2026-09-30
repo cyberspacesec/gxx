@@ -1,0 +1,24 @@
+id: web-luxcal
+info:
+  name: luxcal
+  author: archer
+  verified: false
+  description: 检测到luxcal系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"luxcal")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class='footlb'>lux")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"roel buining")
+expression: r0() || r1() || r2()

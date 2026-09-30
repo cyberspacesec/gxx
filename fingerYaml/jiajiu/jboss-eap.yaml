@@ -1,0 +1,19 @@
+id: web-jboss-eap
+info:
+  name: jboss-eap
+  author: archer
+  verified: false
+  description: 检测到jboss-eap系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<h3>your jboss enterprise application platform is running.</h3>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>JBoss EAP 7</title>")
+expression: r0() || r1()

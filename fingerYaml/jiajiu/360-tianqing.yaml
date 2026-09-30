@@ -1,0 +1,24 @@
+id: web-360-tianqing
+info:
+  name: 360-tianqing
+  author: archer
+  verified: false
+  description: 检测到360-tianqing系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"appid\":\"skylar6")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/task/index/detail?id={item.id}")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"已过期或者未授权，购买请联系4008-136-360")
+expression: r0() || r1() || r2()

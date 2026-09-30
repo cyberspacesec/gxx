@@ -1,0 +1,14 @@
+id: web-qingyuan-management-system
+info:
+  name: qingyuan-management-system
+  author: archer
+  verified: false
+  description: 检测到qingyuan-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"-moz-background-size") && response.body.ibcontains(b"class=\"u_logo fa fa-user\"")
+expression: r0()

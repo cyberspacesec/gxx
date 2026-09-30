@@ -1,0 +1,14 @@
+id: web-天融信-安全审计
+info:
+  name: 天融信-安全审计
+  author: archer
+  verified: false
+  description: 检测到天融信-安全审计系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>topsec单点登录系统") && response.body.ibcontains(b"<p>安全审计</p>")
+expression: r0()

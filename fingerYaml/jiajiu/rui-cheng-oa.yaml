@@ -1,0 +1,14 @@
+id: web-rui-cheng-oa
+info:
+  name: rui-cheng-oa
+  author: archer
+  verified: false
+  description: 检测到rui-cheng-oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"杭州瑞成信息技术有限公司")
+expression: r0()

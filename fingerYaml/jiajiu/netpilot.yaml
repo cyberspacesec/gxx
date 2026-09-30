@@ -1,0 +1,14 @@
+id: web-netpilot
+info:
+  name: netpilot
+  author: archer
+  verified: false
+  description: 检测到netpilot系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/sys/images/tree.css\" title=\"netpilot")
+expression: r0()

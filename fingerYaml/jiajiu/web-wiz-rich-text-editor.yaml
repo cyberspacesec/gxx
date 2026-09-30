@@ -1,0 +1,14 @@
+id: web-web-wiz-rich-text-editor
+info:
+  name: web-wiz-rich-text-editor
+  author: archer
+  verified: false
+  description: 检测到web-wiz-rich-text-editor系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"http://www.richtexteditor.org\"")
+expression: r0()

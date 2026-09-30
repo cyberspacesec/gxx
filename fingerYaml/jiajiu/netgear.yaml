@@ -1,0 +1,14 @@
+id: web-netgear
+info:
+  name: netgear
+  author: archer
+  verified: false
+  description: 检测到netgear系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"gigabit dual wan ssl vpn firewall fvs336gv3</div>")
+expression: r0()

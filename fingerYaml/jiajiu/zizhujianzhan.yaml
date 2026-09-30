@@ -1,0 +1,19 @@
+id: web-zizhujianzhan
+info:
+  name: zizhujianzhan
+  author: archer
+  verified: false
+  description: 检测到zizhujianzhan系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"模板系统xinnet")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"msnim:chat?contact=xinnet@hotmail.com")
+expression: r0() || r1()

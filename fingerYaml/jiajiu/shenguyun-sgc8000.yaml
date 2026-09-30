@@ -1,0 +1,14 @@
+id: web-shenguyun-sgc8000
+info:
+  name: shenguyun-sgc8000
+  author: archer
+  verified: false
+  description: 检测到shenguyun-sgc8000系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var granttype=\"authorization_code")
+expression: r0()

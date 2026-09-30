@@ -1,0 +1,14 @@
+id: web-深信服超融合平台
+info:
+  name: 深信服超融合平台
+  author: archer
+  verified: false
+  description: 检测到深信服超融合平台系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"common/resources/icon/enterprise_custom/favicon.ico")
+expression: r0()

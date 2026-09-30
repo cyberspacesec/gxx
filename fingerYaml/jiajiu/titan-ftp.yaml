@@ -1,0 +1,14 @@
+id: web-titan-ftp
+info:
+  name: titan-ftp
+  author: archer
+  verified: false
+  description: 检测到titan-ftp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: titan ftp server")'
+expression: r0()

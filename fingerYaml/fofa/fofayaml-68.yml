@@ -1,0 +1,20 @@
+---
+id: fofayaml-68
+info:
+  name: Fedora
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: fofayaml-68'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.raw_header.ibcontains(b"Fedora")
+expression: r0()
+
+...

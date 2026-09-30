@@ -1,0 +1,14 @@
+id: web-kaspersky-secure-mail-gateway
+info:
+  name: kaspersky-secure-mail-gateway
+  author: archer
+  verified: false
+  description: 检测到kaspersky-secure-mail-gateway系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"kaspersky secure mail gateway")
+expression: r0()

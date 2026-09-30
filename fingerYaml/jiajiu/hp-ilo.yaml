@@ -1,0 +1,19 @@
+id: web-hp-ilo
+info:
+  name: hp-ilo
+  author: archer
+  verified: false
+  description: 检测到hp-ilo系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.hp.com/go/ilo")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"js/ilo.js")
+expression: r0() || r1()

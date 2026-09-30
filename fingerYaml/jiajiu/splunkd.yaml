@@ -1,0 +1,14 @@
+id: web-splunkd
+info:
+  name: splunkd
+  author: archer
+  verified: false
+  description: 检测到splunkd系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.status == 200 && response.body.ibcontains(b"<title>splunkd</title>") && response.raw_header.ibcontains(b"Server: Splunkd")'
+expression: r0()

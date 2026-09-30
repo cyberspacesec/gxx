@@ -1,0 +1,14 @@
+id: web-monitoring-center
+info:
+  name: monitoring-center
+  author: archer
+  verified: false
+  description: 检测到monitoring-center系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"鹰眼盒子监控中心")
+expression: r0()

@@ -1,0 +1,19 @@
+id: web-pg-roomate-finder-solution
+info:
+  name: pg-roomate-finder-solution
+  author: archer
+  verified: false
+  description: 检测到pg-roomate-finder-solution系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by pg roomate finder solution")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href=\"http://www.realtysoft.pro")
+expression: r0() || r1()

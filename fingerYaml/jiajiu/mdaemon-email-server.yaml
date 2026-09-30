@@ -1,0 +1,24 @@
+id: web-mdaemon-email-server
+info:
+  name: mdaemon-email-server
+  author: archer
+  verified: false
+  description: 检测到mdaemon-email-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/worldclient.dll?view=main")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"mdaemon ")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<strong>mdaemon/worldclient")
+expression: r0() || r1() || r2()

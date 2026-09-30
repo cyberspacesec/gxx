@@ -1,0 +1,14 @@
+id: web-goonie-internet-public-ppinion-monitoring-system
+info:
+  name: goonie-internet-public-ppinion-monitoring-system
+  author: archer
+  verified: false
+  description: 检测到goonie-internet-public-ppinion-monitoring-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"网络舆情监控系统")
+expression: r0()

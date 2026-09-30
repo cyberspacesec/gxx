@@ -1,0 +1,14 @@
+id: web-eisoo-anybackup
+info:
+  name: eisoo-anybackup
+  author: archer
+  verified: false
+  description: 检测到eisoo-anybackup系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"topmask\"")
+expression: r0()

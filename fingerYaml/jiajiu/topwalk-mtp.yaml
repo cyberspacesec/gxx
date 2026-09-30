@@ -1,0 +1,14 @@
+id: web-topwalk-mtp
+info:
+  name: topwalk-mtp
+  author: archer
+  verified: false
+  description: 检测到topwalk-mtp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta http-equiv=\"refresh\" content=\"0;url=/usercertloginaction.action\" />")
+expression: r0()

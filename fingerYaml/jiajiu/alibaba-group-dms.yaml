@@ -1,0 +1,14 @@
+id: web-alibaba-group-dms
+info:
+  name: alibaba-group-dms
+  author: archer
+  verified: false
+  description: 检测到alibaba-group-dms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"copyright &copy;  dms  all rights reserved （alibaba 数据管理产品）")
+expression: r0()

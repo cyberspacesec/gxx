@@ -1,0 +1,14 @@
+id: web-synology-webstation
+info:
+  name: synology-webstation
+  author: archer
+  verified: false
+  description: 检测到synology-webstation系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"id=\"paragraph\">web station has been enabled. to finish setting up your website, please see the \"web service")
+expression: r0()

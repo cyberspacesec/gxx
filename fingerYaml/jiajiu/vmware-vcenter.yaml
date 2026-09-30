@@ -1,0 +1,24 @@
+id: web-vmware-vcenter
+info:
+  name: vmware-vcenter
+  author: archer
+  verified: false
+  description: 检测到vmware-vcenter系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/converter/vmware-converter-client.exe")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"vmware vcenter")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/vmw_nsx_logo-black-triangle-500w.png")
+expression: r0() || r1() || r2()

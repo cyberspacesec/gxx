@@ -1,0 +1,19 @@
+id: web-colasoft-tsa
+info:
+  name: colasoft-tsa
+  author: archer
+  verified: false
+  description: 检测到colasoft-tsa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"data-i18n=\"[html]username\">#username&nbsp;&nbsp;</td>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"nfr=\"true\"")
+expression: r0() || r1()

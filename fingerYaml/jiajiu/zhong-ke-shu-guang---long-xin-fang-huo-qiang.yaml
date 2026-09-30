@@ -1,0 +1,14 @@
+id: web-中科曙光-龙芯防火墙
+info:
+  name: 中科曙光-龙芯防火墙
+  author: archer
+  verified: false
+  description: 检测到中科曙光-龙芯防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"login_main_text\">曙光龙芯防火墙</div>")
+expression: r0()

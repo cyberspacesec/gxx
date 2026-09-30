@@ -1,0 +1,14 @@
+id: web-zhongan-xdecision
+info:
+  name: zhongan-xdecision
+  author: archer
+  verified: false
+  description: 检测到zhongan-xdecision系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div class=\"g-alert-content\" id=\"g-alert-contentsystem\">")
+expression: r0()

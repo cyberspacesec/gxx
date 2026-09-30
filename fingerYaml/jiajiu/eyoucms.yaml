@@ -1,0 +1,19 @@
+id: web-eyoucms
+info:
+  name: eyoucms
+  author: archer
+  verified: false
+  description: 检测到eyoucms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by eyoucms")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"name=\"generator\" content=\"eyoucms")
+expression: r0() || r1()

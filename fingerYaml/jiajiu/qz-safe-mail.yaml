@@ -1,0 +1,14 @@
+id: web-qz-safe-mail
+info:
+  name: qz-safe-mail
+  author: archer
+  verified: false
+  description: 检测到qz-safe-mail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/qzmail/index.php")
+expression: r0()

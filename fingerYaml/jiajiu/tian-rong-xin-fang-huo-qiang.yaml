@@ -1,0 +1,24 @@
+id: web-天融信防火墙
+info:
+  name: 天融信防火墙
+  author: archer
+  verified: false
+  description: 检测到天融信防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/home/index/getPowers/")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/cgi/maincgi.cgi?Url=VerifyCode")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<TITLE>Web User Login</TITLE>") && response.body.ibcontains(b"loginCheck")
+expression: r0() || r1() || r2()

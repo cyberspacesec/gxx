@@ -1,0 +1,14 @@
+id: web-碉堡堡垒机-产品
+info:
+  name: 碉堡堡垒机-产品
+  author: archer
+  verified: false
+  description: 检测到碉堡堡垒机-产品系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"碉堡堡垒机")
+expression: r0()

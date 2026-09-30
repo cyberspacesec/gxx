@@ -1,0 +1,14 @@
+id: web-veritas-netbackup
+info:
+  name: veritas-netbackup
+  author: archer
+  verified: false
+  description: 检测到veritas-netbackup系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/opscenter/features/common/images/favicon.ico\"")
+expression: r0()

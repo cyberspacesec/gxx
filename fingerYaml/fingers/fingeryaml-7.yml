@@ -1,0 +1,20 @@
+---
+id: fingeryaml-7
+info:
+  name: ACTFAX-ActiveFax
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: fingeryaml-7'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.raw_header.ibcontains(b"ActiveFax Version")
+expression: r0()
+
+...

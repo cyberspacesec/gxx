@@ -1,0 +1,19 @@
+id: web-chinatelecom-guestsupportsystem
+info:
+  name: chinatelecom-guestsupportsystem
+  author: archer
+  verified: false
+  description: 检测到chinatelecom-guestsupportsystem系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"nhmis.css\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var requiredfieldvalidator2 = document.all ")
+expression: r0() || r1()

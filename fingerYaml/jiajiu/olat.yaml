@@ -1,0 +1,39 @@
+id: web-olat
+info:
+  name: olat
+  author: archer
+  verified: false
+  description: 检测到olat系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"homepage of open source lms olat")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"olat")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"olat 是一个学习内容管理系统 (lcms).")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"olat - online learning and training")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"o_info.uriprefix=\"/olat/dmz/\";")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/olat/raw/")
+expression: r0() || r1() || r2() || r3() || r4() || r5()

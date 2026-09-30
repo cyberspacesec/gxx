@@ -1,0 +1,24 @@
+id: web-sony-liv
+info:
+  name: sony-liv
+  author: archer
+  verified: false
+  description: 检测到sony-liv系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta name=\"author\" content=\"sony pictures networks india pvt. ltd\">")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta name=\"twitter:image\" content=\"http://sonyliv.com/asset/socialsharelogo\"/>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"sony liv")
+expression: r0() || r1() || r2()

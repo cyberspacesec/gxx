@@ -1,0 +1,14 @@
+id: web-juniper-vpn
+info:
+  name: juniper-vpn
+  author: archer
+  verified: false
+  description: 检测到juniper-vpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"juniper networks vpn") && response.body.ibcontains(b"junos pulse secure access service")
+expression: r0()

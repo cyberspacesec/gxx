@@ -1,0 +1,20 @@
+---
+id: fofayaml-29
+info:
+  name: Biscom-Delivery-Server
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: fofayaml-29'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.bcontains(b"/bds/stylesheets/fds.css") || response.body.bcontains(b"bds/includes/fdsJavascript.do")
+expression: r0()
+
+...

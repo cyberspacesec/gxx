@@ -1,0 +1,59 @@
+id: web-通达OA
+info:
+  name: 通达OA
+  author: archer
+  verified: false
+  description: 检测到通达OA系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/static/images/tongda.ico\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"<a href='http://www.tongda2000.com/' target='_black'>通达官网</a>")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/images/tongda.ico")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Office Anywhere")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"login") && response.body.ibcontains(b"tongda2000")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/static/templates/2013_01/index.css/")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"javascript:document.form1.uname.focus()")
+  r7:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<link rel=\"shortcut icon\" href=\"/images/tongda.ico\" />")
+  r8:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"oa提示：不能登录oa")
+  r9:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"紧急通知：今日10点停电")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6() || r7() || r8() || r9()

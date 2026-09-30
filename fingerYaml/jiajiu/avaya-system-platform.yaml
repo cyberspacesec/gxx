@@ -1,0 +1,14 @@
+id: web-avaya-system-platform
+info:
+  name: avaya-system-platform
+  author: archer
+  verified: false
+  description: 检测到avaya-system-platform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"0;url=vsplogin.action")
+expression: r0()

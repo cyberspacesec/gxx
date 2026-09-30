@@ -1,0 +1,19 @@
+id: web-大华数字监控系统DSS
+info:
+  name: 大华数字监控系统DSS
+  author: archer
+  verified: true
+  description: 检测到大华数字监控系统DSS系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "411052691"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"include/skin/white/login.css") && response.body.ibcontains(b"dahua")
+expression: r0() || r1()

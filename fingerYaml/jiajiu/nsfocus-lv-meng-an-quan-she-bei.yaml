@@ -1,0 +1,14 @@
+id: web-NSFOCUS绿盟安全设备
+info:
+  name: NSFOCUS 绿盟安全设备
+  author: archer
+  verified: false
+  description: 检测到NSFOCUS 绿盟安全设备系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"NSFOCUS")
+expression: r0()

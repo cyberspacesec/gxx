@@ -1,0 +1,19 @@
+id: web-ruijie-router-nbr
+info:
+  name: ruijie-router-nbr
+  author: archer
+  verified: false
+  description: 检测到ruijie-router-nbr系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"web_monitor_config.htm") && response.body.ibcontains(b"锐捷网络")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"nbr路由器") && response.body.ibcontains(b"support.ruijie.com.cn")
+expression: r0() || r1()

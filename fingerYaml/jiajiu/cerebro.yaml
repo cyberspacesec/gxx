@@ -1,0 +1,14 @@
+id: web-cerebro
+info:
+  name: cerebro
+  author: archer
+  verified: false
+  description: 检测到cerebro系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"lang=\"en\" ng-app=\"cerebro")
+expression: r0()

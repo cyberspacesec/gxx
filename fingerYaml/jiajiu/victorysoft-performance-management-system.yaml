@@ -1,0 +1,19 @@
+id: web-victorysoft-performance-management-system
+info:
+  name: victorysoft-performance-management-system
+  author: archer
+  verified: false
+  description: 检测到victorysoft-performance-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"row fl-controls-left")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"casui/themes/siam/login.css")
+expression: r0() || r1()

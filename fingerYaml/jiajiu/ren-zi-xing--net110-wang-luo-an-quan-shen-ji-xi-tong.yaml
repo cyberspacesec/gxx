@@ -1,0 +1,14 @@
+id: web-任子行-net110网络安全审计系统
+info:
+  name: 任子行-net110网络安全审计系统
+  author: archer
+  verified: false
+  description: 检测到任子行-net110网络安全审计系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"simplemodal.1.4.1.min.js") && response.body.ibcontains(b"net110网络安全审计系统")
+expression: r0()

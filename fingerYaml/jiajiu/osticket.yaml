@@ -1,0 +1,14 @@
+id: web-osticket
+info:
+  name: osticket
+  author: archer
+  verified: false
+  description: 检测到osticket系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://osticket.com\">osticket.com")
+expression: r0()

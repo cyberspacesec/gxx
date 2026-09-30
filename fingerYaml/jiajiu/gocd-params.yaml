@@ -1,0 +1,19 @@
+id: web-gocd-params
+info:
+  name: gocd-params
+  author: archer
+  verified: true
+  description: 检测到gocd-params系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1576282848"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"gocd-params")
+expression: r0() || r1()

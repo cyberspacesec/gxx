@@ -1,0 +1,14 @@
+id: web-hycas-system
+info:
+  name: hycas-system
+  author: archer
+  verified: false
+  description: 检测到hycas-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/images/hyscm.jpg")
+expression: r0()

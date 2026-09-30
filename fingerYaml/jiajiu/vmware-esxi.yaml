@@ -1,0 +1,19 @@
+id: web-vmware-esxi
+info:
+  name: vmware-esxi
+  author: archer
+  verified: false
+  description: 检测到vmware-esxi系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ng-app=\"esxuiapp\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title ng-bind=\"$root.title\">")
+expression: r0() || r1()

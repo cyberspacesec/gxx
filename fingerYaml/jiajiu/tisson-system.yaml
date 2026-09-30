@@ -1,0 +1,14 @@
+id: web-tisson-system
+info:
+  name: tisson-system
+  author: archer
+  verified: false
+  description: 检测到tisson-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"dlqaweb_deploy/webresource.axd")
+expression: r0()

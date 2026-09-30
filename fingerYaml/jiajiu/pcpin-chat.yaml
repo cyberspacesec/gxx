@@ -1,0 +1,24 @@
+id: web-pcpin-chat
+info:
+  name: pcpin-chat
+  author: archer
+  verified: false
+  description: 检测到pcpin-chat系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"title=\"powered by pcpin chat")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"onclick=\"document.loginform.register.value=0; document.loginform.lostpassword.value=0")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.appname_='pcpin_chat'")
+expression: r0() || r1() || r2()

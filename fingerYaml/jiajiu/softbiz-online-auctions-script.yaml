@@ -1,0 +1,14 @@
+id: web-softbiz-online-auctions-script
+info:
+  name: softbiz-online-auctions-script
+  author: archer
+  verified: false
+  description: 检测到softbiz-online-auctions-script系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href=\"http://www.softbizscripts.com")
+expression: r0()

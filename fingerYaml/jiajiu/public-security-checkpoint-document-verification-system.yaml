@@ -1,0 +1,14 @@
+id: web-public-security-checkpoint-document-verification-system
+info:
+  name: public-security-checkpoint-document-verification-system
+  author: archer
+  verified: false
+  description: 检测到public-security-checkpoint-document-verification-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"公安检查站人脸/证件合一核录系统")
+expression: r0()

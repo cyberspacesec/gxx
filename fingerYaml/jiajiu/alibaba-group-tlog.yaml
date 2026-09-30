@@ -1,0 +1,14 @@
+id: web-alibaba-group-tlog
+info:
+  name: alibaba-group-tlog
+  author: archer
+  verified: false
+  description: 检测到alibaba-group-tlog系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"tlog 实时数据处理")
+expression: r0()

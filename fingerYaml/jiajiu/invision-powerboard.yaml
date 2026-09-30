@@ -1,0 +1,14 @@
+id: web-invision-powerboard
+info:
+  name: invision-powerboard
+  author: archer
+  verified: false
+  description: 检测到invision-powerboard系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by <a href=\"http://www.invisionboard.com")
+expression: r0()

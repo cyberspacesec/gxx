@@ -1,0 +1,24 @@
+id: web-odoo
+info:
+  name: odoo
+  author: archer
+  verified: true
+  description: 检测到odoo系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"odoo.__session_info__ = {")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<script id=\"web.layout.odooscript")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-617743584"
+expression: r0() || r1() || r2()

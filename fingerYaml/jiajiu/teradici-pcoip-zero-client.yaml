@@ -1,0 +1,19 @@
+id: web-teradici-pcoip-zero-client
+info:
+  name: teradici-pcoip-zero-client
+  author: archer
+  verified: false
+  description: 检测到teradici-pcoip-zero-client系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"pcoip&#174 zero client")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"password_value")
+expression: r0() || r1()

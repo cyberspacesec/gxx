@@ -1,0 +1,14 @@
+id: web-shop_builder-mallbuilder
+info:
+  name: shop_builder-mallbuilder
+  author: archer
+  verified: false
+  description: 检测到shop_builder-mallbuilder系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"mallbuilder") && response.body.ibcontains(b"powered by mallbuilder")
+expression: r0()

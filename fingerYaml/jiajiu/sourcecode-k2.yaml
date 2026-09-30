@@ -1,0 +1,19 @@
+id: web-sourcecode-k2
+info:
+  name: sourcecode-k2
+  author: archer
+  verified: false
+  description: 检测到sourcecode-k2系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"document.getelementbyid(\"redirectform\").action = \"../mxworkspace/login.aspx")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"document.getelementbyid(\"redirectform\").action = \"../workspace/default.aspx")
+expression: r0() || r1()

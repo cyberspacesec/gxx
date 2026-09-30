@@ -1,0 +1,24 @@
+id: web-power-powerpms
+info:
+  name: power-powerpms
+  author: archer
+  verified: false
+  description: 检测到power-powerpms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"apphub.server.registertohub(qrcodeid)")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/app_themes/default/assets/css/style.min.css")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/scripts/boot.js")
+expression: r0() || r1() || r2()

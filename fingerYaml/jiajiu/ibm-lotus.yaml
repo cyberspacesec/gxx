@@ -1,0 +1,29 @@
+id: web-ibm-lotus
+info:
+  name: ibm-lotus
+  author: archer
+  verified: false
+  description: 检测到ibm-lotus系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/names.nsf?login\" name=\"_dominoform")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"软标科技")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"domcfg.nsf") && response.body.ibcontains(b"login.nsf")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"esoaisapp/login.jsp") && response.body.ibcontains(b"main.nsf")
+expression: r0() || r1() || r2() || r3()

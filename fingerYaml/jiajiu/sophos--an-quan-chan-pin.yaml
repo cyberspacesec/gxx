@@ -1,0 +1,14 @@
+id: web-sophos-安全产品
+info:
+  name: sophos-安全产品
+  author: archer
+  verified: false
+  description: 检测到sophos-安全产品系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<span class='logosophosfooterfont'>protected by</span>") && response.body.ibcontains(b"blocked site")
+expression: r0()

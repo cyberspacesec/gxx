@@ -1,0 +1,20 @@
+---
+id: fofayaml-59
+info:
+  name: linuxmint
+  author: zhizhuo
+  verified: true
+  description: 'Converted from FOFA rule: fofayaml-59'
+  reference:
+    - https://example.com
+  tags: web,fofa,converted
+  created: 2025/04/07
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.raw_header.ibcontains(b"mint")
+expression: r0()
+
+...

@@ -1,0 +1,19 @@
+id: web-zonghousc-system
+info:
+  name: zonghousc-system
+  author: archer
+  verified: false
+  description: 检测到zonghousc-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"data-errormessage-value-missing=\"* 请录入用户名")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"style/default/frui.css")
+expression: r0() || r1()

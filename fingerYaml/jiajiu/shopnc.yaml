@@ -1,0 +1,24 @@
+id: web-shopnc
+info:
+  name: shopnc
+  author: archer
+  verified: false
+  description: 检测到shopnc系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by shopnc")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"copyright 2007-2014 shopnc inc")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"shopnc")
+expression: r0() || r1() || r2()

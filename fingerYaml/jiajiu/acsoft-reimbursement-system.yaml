@@ -1,0 +1,14 @@
+id: web-acsoft-reimbursement-system
+info:
+  name: acsoft-reimbursement-system
+  author: archer
+  verified: false
+  description: 检测到acsoft-reimbursement-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"dsitetitle\"") && response.body.ibcontains(b"by:lin.zhibin")
+expression: r0()

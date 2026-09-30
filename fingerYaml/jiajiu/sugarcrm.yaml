@@ -1,0 +1,24 @@
+id: web-sugarcrm
+info:
+  name: sugarcrm
+  author: archer
+  verified: false
+  description: 检测到sugarcrm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\" javascript:void window.open('http://support.sugarcrm.com')\">support</a>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"<img style=''margin-top: 2px'' border=''0'' width=''106'' height=''23'' src=''include/images/poweredby_sugarcrm.png'' alt=''powered by sugarcrm''>")'
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<script>var module_sugar_grp1 = 'users';</script><script>var action_sugar_grp1 = 'login';</script><script>jscal_today")
+expression: r0() || r1() || r2()

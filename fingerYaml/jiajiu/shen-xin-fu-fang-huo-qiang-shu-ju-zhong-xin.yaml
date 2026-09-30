@@ -1,0 +1,19 @@
+id: web-深信服防火墙数据中心
+info:
+  name: 深信服防火墙数据中心
+  author: archer
+  verified: false
+  description: 检测到深信服防火墙数据中心系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"commonFunction.js") && response.body.ibcontains(b"rsa.js") && response.body.ibcontains(b"LogInOut.php")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/LogInOut.php") && response.body.ibcontains(b"Redirect to...")
+expression: r0() || r1()

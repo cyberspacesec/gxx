@@ -1,0 +1,14 @@
+id: web-yiyu-opms
+info:
+  name: yiyu-opms
+  author: archer
+  verified: false
+  description: 检测到yiyu-opms系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"opms") && response.body.ibcontains(b"opms管理系统,织蝶-企业应用系统为您的企业保驾护航")
+expression: r0()

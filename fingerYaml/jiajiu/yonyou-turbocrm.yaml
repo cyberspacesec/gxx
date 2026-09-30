@@ -1,0 +1,19 @@
+id: web-yonyou-turbocrm
+info:
+  name: yonyou-turbocrm
+  author: archer
+  verified: false
+  description: 检测到yonyou-turbocrm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"CRM") && response.body.ibcontains(b"loginsys_osv") && response.body.ibcontains(b"用友")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"turboui.js")
+expression: r0() || r1()

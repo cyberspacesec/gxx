@@ -1,0 +1,28 @@
+id: web-Dify
+
+info:
+  name: Dify
+  author: zhizhuo
+  description: |
+    Dify 是开源的生成式AI应用开发平台，专注构建生产级Agentic工作流，提供从模型集成到应用部署的全流程解决方案。
+  reference:
+    -
+  created: 2025/12/05
+
+rules:
+  r0:
+    request:
+      type: http
+      method: GET
+      path: /
+      follow_redirects: true
+    expression: response.status == 307 && response.body.bcontains(b'apps')
+  r1:
+    request:
+      type: http
+      method: GET
+      path: /signin
+      follow_redirects: false
+    expression: response.status == 200 && (response.raw_header.ibcontains(b'next.js') || response.body.ibcontains(b'dify.ai'))
+
+expression: r0() || r1()

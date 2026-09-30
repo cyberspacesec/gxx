@@ -1,0 +1,14 @@
+id: web-phpremoteview
+info:
+  name: phpremoteview
+  author: archer
+  verified: false
+  description: 检测到phpremoteview系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"style=''font: 8pt verdana''>phpremoteview")'
+expression: r0()

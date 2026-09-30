@@ -1,0 +1,29 @@
+id: web-phpbb
+info:
+  name: phpbb
+  author: archer
+  verified: false
+  description: 检测到phpbb系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: phpbb3_")'
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"http://www.longluntan.com/zh/phpbb/")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"phpbb") && response.body.ibcontains(b"phpbb group\" />")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"start quick hack - phpbb statistics mod")
+expression: r0() || r1() || r2() || r3()

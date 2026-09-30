@@ -1,0 +1,19 @@
+id: web-yelala
+info:
+  name: yelala
+  author: archer
+  verified: false
+  description: 检测到yelala系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/public/js/knockout-3.4.1.debug.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"<form action=\"/index.php/home/login/login.html\" method=\"post\" id=\"login\" class=\"form\" data-bind=\"submit: submitform\">")'
+expression: r0() || r1()

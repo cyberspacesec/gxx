@@ -1,0 +1,19 @@
+id: web-solarwinds
+info:
+  name: solarwinds
+  author: archer
+  verified: true
+  description: 检测到solarwinds系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"solarwinds")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1776962843"
+expression: r0() || r1()

@@ -1,0 +1,14 @@
+id: web-pollutionsourcemonitoringdataexchangeplatform
+info:
+  name: pollutionsourcemonitoringdataexchangeplatform
+  author: archer
+  verified: false
+  description: 检测到pollutionsourcemonitoringdataexchangeplatform系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location.href = '/syncmodule/synchome/index';")
+expression: r0()

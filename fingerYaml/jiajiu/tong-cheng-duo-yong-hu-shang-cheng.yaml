@@ -1,0 +1,14 @@
+id: web-同城多用户商城
+info:
+  name: 同城多用户商城
+  author: archer
+  verified: false
+  description: 检测到同城多用户商城系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/style_chaoshi/")
+expression: r0()

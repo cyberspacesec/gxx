@@ -1,0 +1,14 @@
+id: web-multiabnle-m18
+info:
+  name: multiabnle-m18
+  author: archer
+  verified: false
+  description: 检测到multiabnle-m18系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<label>打开m18 app， 扫描二维码</label>")
+expression: r0()

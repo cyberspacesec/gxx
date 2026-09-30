@@ -1,0 +1,19 @@
+id: web-zkteco
+info:
+  name: zkteco
+  author: archer
+  verified: true
+  description: 检测到zkteco系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-1169502834"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"智慧园区综合管理平台")
+expression: r0() || r1()

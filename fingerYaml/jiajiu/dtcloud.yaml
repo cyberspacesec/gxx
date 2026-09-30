@@ -1,0 +1,19 @@
+id: web-dtcloud
+info:
+  name: dtcloud
+  author: archer
+  verified: true
+  description: 检测到dtcloud系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"DTCloud")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "1052083571"
+expression: r0() || r1()

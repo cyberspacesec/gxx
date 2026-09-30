@@ -1,0 +1,14 @@
+id: web-customer-service-operations-management-system
+info:
+  name: customer-service-operations-management-system
+  author: archer
+  verified: false
+  description: 检测到customer-service-operations-management-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div class=\"count-down\">页面在<em>5</em>秒后自动跳转至您有权限的页面</div>")
+expression: r0()

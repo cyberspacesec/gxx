@@ -1,0 +1,24 @@
+id: web-jetty
+info:
+  name: jetty
+  author: archer
+  verified: true
+  description: 检测到jetty系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-629047854"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Server: Jetty")'
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"Powered by Jetty://")
+expression: r0() || r1() || r2()

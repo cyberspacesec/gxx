@@ -1,0 +1,14 @@
+id: web-reddoxx
+info:
+  name: reddoxx
+  author: archer
+  verified: false
+  description: 检测到reddoxx系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"148779de-1cf1-49bb-8bdb-129321cf8974")
+expression: r0()

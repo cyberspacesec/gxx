@@ -1,0 +1,14 @@
+id: web-飞鱼星-路由器
+info:
+  name: 飞鱼星-路由器
+  author: archer
+  verified: false
+  description: 检测到飞鱼星-路由器系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"languagechange(share.ti_userpassword)")
+expression: r0()

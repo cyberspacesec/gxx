@@ -1,0 +1,24 @@
+id: web-天清汉马VPN
+info:
+  name: 天清汉马VPN
+  author: archer
+  verified: true
+  description: 检测到天清汉马VPN系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-15980305"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/vpn/user/common/") && response.body.ibcontains(b"/js/leadsec.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/vpn/common/js/leadsec.js") && response.body.ibcontains(b"/vpn/user/common/custom/auth_home.css")
+expression: r0() || r1() || r2()

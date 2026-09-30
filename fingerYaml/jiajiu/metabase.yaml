@@ -1,0 +1,19 @@
+id: web-metabase
+info:
+  name: metabase
+  author: archer
+  verified: false
+  description: 检测到metabase系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"_metabaseBootstrap") && response.body.ibcontains(b"_metabaseLocalization")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Metabase</title>")
+expression: r0() || r1()

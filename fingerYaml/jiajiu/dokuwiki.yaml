@@ -1,0 +1,24 @@
+id: web-dokuwiki
+info:
+  name: dokuwiki
+  author: archer
+  verified: false
+  description: 检测到dokuwiki系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"powered by dokuwiki")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"dokuwiki")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"dokuwiki")
+expression: r0() || r1() || r2()

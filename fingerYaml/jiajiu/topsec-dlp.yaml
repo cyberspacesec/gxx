@@ -1,0 +1,14 @@
+id: web-topsec-dlp
+info:
+  name: topsec-dlp
+  author: archer
+  verified: false
+  description: 检测到topsec-dlp系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<img src=\"static/images/login/loading.gif\" /><span id=\"message\">loading......</span>")
+expression: r0()

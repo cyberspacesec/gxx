@@ -1,0 +1,14 @@
+id: web-紫光集团-紫光防火墙
+info:
+  name: 紫光集团-紫光防火墙
+  author: archer
+  verified: false
+  description: 检测到紫光集团-紫光防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"紫光防火墙") && response.body.ibcontains(b"name=\"adminlogin\" action=\"/cgi-bin/manageaccount\">")
+expression: r0()

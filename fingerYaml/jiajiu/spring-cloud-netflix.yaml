@@ -1,0 +1,14 @@
+id: web-spring-cloud-netflix
+info:
+  name: spring-cloud-netflix
+  author: archer
+  verified: false
+  description: 检测到spring-cloud-netflix系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"x-application-context: hystrix-dashboard:")'
+expression: r0()

@@ -1,0 +1,14 @@
+id: web-riicy-睿博士云办公系统
+info:
+  name: riicy-睿博士云办公系统
+  author: archer
+  verified: false
+  description: 检测到riicy-睿博士云办公系统系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/user/toupdatepasswordpage.di") && response.body.ibcontains(b"/studentsign/tologin.di")
+expression: r0()

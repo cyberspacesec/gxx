@@ -1,0 +1,14 @@
+id: web-ibm-watchfire
+info:
+  name: ibm-watchfire
+  author: archer
+  verified: false
+  description: 检测到ibm-watchfire系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: 'response.raw_header.ibcontains(b"Set-Cookie: watchfiresessionid")'
+expression: r0()

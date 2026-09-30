@@ -1,0 +1,54 @@
+id: web-h3c-imc
+info:
+  name: h3c-imc
+  author: archer
+  verified: false
+  description: 检测到h3c-imc系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.status == 200 && response.body.ibcontains(b"/imc/login.jsf")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"imc来宾接入自助管理系统")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"login_logo_h3c.png.jsf")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"com_h3c_imc_usr_usermgr_alluser_overlaydiv")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action=\"/imc/login.jsf")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/imc/javax.faces.resource/images/login_logo_h3c.png.jsf?ln=primefaces-imc-new-webui")
+  r6:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<span class=\"cmn_mn_normalfont\">h3c 智能管理中心")
+  r7:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"h3c &#26234;&#33021;&#31649;&#29702;&#20013;&#24515;</span>") && response.body.ibcontains(b"src=\"/imc/faces/extensionresource/com.h3c.imc.component.util.extensionresourceloader/")
+  r8:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"/selfservice/javax.faces.resource/theme.css.xhtml?ln=primefaces-imc-classic-blue\"")
+expression: r0() || r1() || r2() || r3() || r4() || r5() || r6() || r7() || r8()

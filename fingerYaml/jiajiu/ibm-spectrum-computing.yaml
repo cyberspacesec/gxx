@@ -1,0 +1,19 @@
+id: web-ibm-spectrum-computing
+info:
+  name: ibm-spectrum-computing
+  author: archer
+  verified: false
+  description: 检测到ibm-spectrum-computing系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/platform/framework/logout/logout.action")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ssoclient_")
+expression: r0() || r1()

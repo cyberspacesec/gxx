@@ -1,0 +1,19 @@
+id: web-apache-hadoop-yarn
+info:
+  name: apache-hadoop-yarn
+  author: archer
+  verified: false
+  description: 检测到apache-hadoop-yarn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/static/yarn.css")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"yarn.dt.plugins.js")
+expression: r0() || r1()

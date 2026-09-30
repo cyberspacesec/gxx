@@ -1,0 +1,14 @@
+id: web-netscout-ngeniusone
+info:
+  name: netscout-ngeniusone
+  author: archer
+  verified: false
+  description: 检测到netscout-ngeniusone系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var newpath = \"/common/ngeniusdirect.jsp")
+expression: r0()

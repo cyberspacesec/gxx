@@ -1,0 +1,19 @@
+id: web-seo-panel
+info:
+  name: seo-panel
+  author: archer
+  verified: false
+  description: 检测到seo-panel系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<p class=\"note error\">javascript is turned off in your web browser. turn it on to take full advantage of this site, then refresh the page.</p>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"var wantproceed = 'do you really want to proceed?';") && response.body.ibcontains(b"var wantproceed = 'wollen sie wirklich fortfahren?';")
+expression: r0() || r1()

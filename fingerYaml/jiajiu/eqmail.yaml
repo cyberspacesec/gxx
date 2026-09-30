@@ -1,0 +1,19 @@
+id: web-eqmail
+info:
+  name: eqmail
+  author: archer
+  verified: false
+  description: 检测到eqmail系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"eqmail.ico")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<frame src=\"/cgi-bin/eqwebmail?empty=1")
+expression: r0() || r1()

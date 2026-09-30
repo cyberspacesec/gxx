@@ -1,0 +1,24 @@
+id: web-movable-type
+info:
+  name: movable-type
+  author: archer
+  verified: false
+  description: 检测到movable-type系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"movable type version")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"movable type")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"rel=\"generator\">movable type")
+expression: r0() || r1() || r2()

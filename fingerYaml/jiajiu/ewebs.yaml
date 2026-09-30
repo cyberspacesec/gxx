@@ -1,0 +1,24 @@
+id: web-ewebs
+info:
+  name: ewebs
+  author: archer
+  verified: false
+  description: 检测到ewebs系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ClientDownload.xgi") && response.body.ibcontains(b"NewSoft")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/js/xajax05/xajax_js/xajax_core.js")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href='../client/ewebsclientsetup.exe'></a> </td>")
+expression: r0() || r1() || r2()

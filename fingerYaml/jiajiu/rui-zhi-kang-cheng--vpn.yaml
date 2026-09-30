@@ -1,0 +1,14 @@
+id: web-瑞智康诚-vpn
+info:
+  name: 瑞智康诚-vpn
+  author: archer
+  verified: false
+  description: 检测到瑞智康诚-vpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"no-js\">请先启用javascript") && response.body.ibcontains(b"class=\"col-md-12 col-xs-12 col-lg-12 external_signin_links\"")
+expression: r0()

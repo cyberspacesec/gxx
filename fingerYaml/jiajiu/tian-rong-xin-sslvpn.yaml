@@ -1,0 +1,14 @@
+id: web-天融信SSLVPN
+info:
+  name: 天融信 SSL VPN
+  author: archer
+  verified: false
+  description: 检测到天融信 SSL VPN系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"vone/pub/common/images/Top/spacer.gif")
+expression: r0()

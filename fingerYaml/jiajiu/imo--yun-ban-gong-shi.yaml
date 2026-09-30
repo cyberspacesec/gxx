@@ -1,0 +1,14 @@
+id: web-imo-云办公室
+info:
+  name: imo-云办公室
+  author: archer
+  verified: false
+  description: 检测到imo-云办公室系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"download/imo_setup.exe")
+expression: r0()

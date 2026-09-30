@@ -1,0 +1,24 @@
+id: web-xheditor
+info:
+  name: xheditor
+  author: archer
+  verified: false
+  description: 检测到xheditor系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"xheditor_lang/zh-cn.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"xheditor")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b".xheditor(")
+expression: r0() || r1() || r2()

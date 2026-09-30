@@ -1,0 +1,19 @@
+id: web-alibaba-nacos
+info:
+  name: alibaba-nacos
+  author: archer
+  verified: false
+  description: 检测到alibaba-nacos系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Nacos</title>")
+  r1:
+    request:
+      method: GET
+      path: /nacos/
+    expression: response.body.ibcontains(b"<title>Nacos</title>")
+expression: r0() || r1()

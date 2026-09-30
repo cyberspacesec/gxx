@@ -1,0 +1,24 @@
+id: web-team-board
+info:
+  name: team-board
+  author: archer
+  verified: false
+  description: 检测到team-board系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<a href=\"licence.asp\"><b style='color:#ff9900'>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=http://www.team5.cn\"><b>team ")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"team5.cn by daymoon")
+expression: r0() || r1() || r2()

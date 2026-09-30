@@ -1,0 +1,14 @@
+id: web-NodeExporter-Metrics
+info:
+  name: Node Exporter - Metrics
+  author: archer
+  verified: false
+  description: 检测到Node Exporter - Metrics系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<title>Node Exporter</title>")
+expression: r0()

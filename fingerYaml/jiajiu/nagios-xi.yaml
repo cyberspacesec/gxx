@@ -1,0 +1,19 @@
+id: web-nagios-xi
+info:
+  name: nagios-xi
+  author: archer
+  verified: false
+  description: 检测到nagios-xi系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"click the link below to get started using nagios xi.")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/nagiosxi/images/favicon.ico")
+expression: r0() || r1()

@@ -1,0 +1,14 @@
+id: web-network-tracker
+info:
+  name: network-tracker
+  author: archer
+  verified: false
+  description: 检测到network-tracker系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b">network tracker<")
+expression: r0()

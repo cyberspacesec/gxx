@@ -1,0 +1,19 @@
+id: web-parature
+info:
+  name: parature
+  author: archer
+  verified: false
+  description: 检测到parature系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"kbfolder.asp?deptid=")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"redirectportalurl('/ics/support/custhandler.asp?")
+expression: r0() || r1()

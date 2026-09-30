@@ -1,0 +1,19 @@
+id: web-devaldi-flexpaper
+info:
+  name: devaldi-flexpaper
+  author: archer
+  verified: false
+  description: 检测到devaldi-flexpaper系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"login to the flexpaper console")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://flexpaper.devaldi.com/plugins.htm\"")
+expression: r0() || r1()

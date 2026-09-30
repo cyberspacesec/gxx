@@ -1,0 +1,29 @@
+id: web-gzqxrh-system
+info:
+  name: gzqxrh-system
+  author: archer
+  verified: false
+  description: 检测到gzqxrh-system系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"广州全息若海信息科技有限公司")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/scripts/easyui/jquery.easyui.min.js\"")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: 'response.body.ibcontains(b"style=\"vertical-align: middle; cursor: pointer")'
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"响应键盘的回车事件")
+expression: r0() || r1() || r2() || r3()

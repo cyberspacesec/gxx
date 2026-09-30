@@ -1,0 +1,19 @@
+id: web-emerson-xweb-evo
+info:
+  name: emerson-xweb-evo
+  author: archer
+  verified: false
+  description: 检测到emerson-xweb-evo系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"img/xweb-logo.png\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/css/images/logo_xweb_alpha.png\"")
+expression: r0() || r1()

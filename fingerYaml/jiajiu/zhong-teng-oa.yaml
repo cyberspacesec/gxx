@@ -1,0 +1,14 @@
+id: web-中腾oa
+info:
+  name: 中腾oa
+  author: archer
+  verified: false
+  description: 检测到中腾oa系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"login") && response.body.ibcontains(b"systemAction") && response.body.ibcontains(b"zt_webframe")
+expression: r0()

@@ -1,0 +1,24 @@
+id: web-techbridge-cloud-conference
+info:
+  name: techbridge-cloud-conference
+  author: archer
+  verified: false
+  description: 检测到techbridge-cloud-conference系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"href=\"http://www.techbridge-inc.com/\" target=\"_blank\"></a></span>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/images/web_meeting/tool_bg.jpg")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/joinmeeting.js")
+expression: r0() || r1() || r2()

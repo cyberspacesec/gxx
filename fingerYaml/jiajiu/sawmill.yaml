@@ -1,0 +1,19 @@
+id: web-sawmill
+info:
+  name: sawmill
+  author: archer
+  verified: false
+  description: 检测到sawmill系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<div id=\"password:error")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"src=\"/picts/sawmill_logo.png")
+expression: r0() || r1()

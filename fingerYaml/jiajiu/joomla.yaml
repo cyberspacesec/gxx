@@ -1,0 +1,29 @@
+id: web-joomla
+info:
+  name: joomla
+  author: archer
+  verified: false
+  description: 检测到joomla系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<meta name=\"keywords\" content=\"joomla, Joomla\" />")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"content=\"joomla")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/media/system/js/core.js")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/media/system/js/mootools-core.js")
+expression: r0() || r1() || r2() || r3()

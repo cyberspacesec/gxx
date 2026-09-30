@@ -1,0 +1,19 @@
+id: web-mas-mobile-agent-serve
+info:
+  name: mas-mobile-agent-serve
+  author: archer
+  verified: false
+  description: 检测到mas-mobile-agent-serve系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"action='/mas_security_check'>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"if(!isnotnull(document.forms[0].filepath.value, \"证书文件\"))")
+expression: r0() || r1()

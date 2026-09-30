@@ -1,0 +1,29 @@
+id: web-深信服防火墙
+info:
+  name: 深信服防火墙
+  author: archer
+  verified: true
+  description: 检测到深信服防火墙系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "-885859535"
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "123821839"
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b" = function(str, key)") && response.body.ibcontains(b"content=\"must-revalidate\"") && response.body.ibcontains(b"content=\"text/html; charset=utf-8\"/>")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b" = function(str, key)") && response.body.ibcontains(b"content=\"webkit")
+expression: r0() || r1() || r2() || r3()

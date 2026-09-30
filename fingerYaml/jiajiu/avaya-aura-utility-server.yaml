@@ -1,0 +1,29 @@
+id: web-avaya-aura-utility-server
+info:
+  name: avaya-aura-utility-server
+  author: archer
+  verified: false
+  description: 检测到avaya-aura-utility-server系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"vmstitle\">avaya aura&#8482;&nbsp;utility server")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/webhelp/base/utility_toc.htm")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"avaya aura&reg;&nbsp;utility services")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"avaya inc. all rights reserved")
+expression: r0() || r1() || r2() || r3()

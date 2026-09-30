@@ -1,0 +1,14 @@
+id: web-云深互联-红芯安全管控平台
+info:
+  name: 云深互联-红芯安全管控平台
+  author: archer
+  verified: false
+  description: 检测到云深互联-红芯安全管控平台系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"红芯安全管控平台")
+expression: r0()

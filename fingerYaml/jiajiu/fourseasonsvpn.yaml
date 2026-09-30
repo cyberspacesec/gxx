@@ -1,0 +1,14 @@
+id: web-fourseasonsvpn
+info:
+  name: fourseasonsvpn
+  author: archer
+  verified: false
+  description: 检测到fourseasonsvpn系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"imgs/fs-black-box.jpg") && response.body.ibcontains(b"fs vpn")
+expression: r0()

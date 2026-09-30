@@ -1,0 +1,24 @@
+id: web-yunhezi
+info:
+  name: yunhezi
+  author: archer
+  verified: false
+  description: 检测到yunhezi系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ui/js/seaconfig.js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"ui/skins/black/style.css")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"class=\"client-list dm-clear\">")
+expression: r0() || r1() || r2()

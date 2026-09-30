@@ -1,0 +1,19 @@
+id: web-avaya-application-enablement-services
+info:
+  name: avaya-application-enablement-services
+  author: archer
+  verified: false
+  description: 检测到avaya-application-enablement-services系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"<b>application enablement services&nbsp;</b>")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"avaya")
+expression: r0() || r1()

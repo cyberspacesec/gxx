@@ -1,0 +1,14 @@
+id: web-网心云设备
+info:
+  name: 网心云设备
+  author: archer
+  verified: false
+  description: 检测到网心云设备系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"favicon.png") && response.body.ibcontains(b"网心云设备")
+expression: r0()

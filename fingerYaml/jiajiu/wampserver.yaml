@@ -1,0 +1,14 @@
+id: web-WAMPSERVER
+info:
+  name: WAMPSERVER
+  author: archer
+  verified: true
+  description: 检测到WAMPSERVER系统或组件的特征
+  created: 2025/04/16
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.icon_hash == "443944613"
+expression: r0()

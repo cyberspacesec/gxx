@@ -1,0 +1,19 @@
+id: web-good10000-tios
+info:
+  name: good10000-tios
+  author: archer
+  verified: false
+  description: 检测到good10000-tios系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"value=\"https://mail.sinopec.com/owa/\"")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"北京万佳信科技有限公司")
+expression: r0() || r1()

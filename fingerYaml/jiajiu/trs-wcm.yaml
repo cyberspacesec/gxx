@@ -1,0 +1,39 @@
+id: web-trs-wcm
+info:
+  name: trs-wcm
+  author: archer
+  verified: false
+  description: 检测到trs-wcm系统或组件的特征
+  created: 2025/04/24
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/wcm/app/js")
+  r1:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"0;url=/wcm")
+  r2:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"window.location.href = \"/wcm\";")
+  r3:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"forum.trs.com.cn")
+  r4:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/wcm\" target=\"_blank\">网站管理") && response.body.ibcontains(b"wcm")
+  r5:
+    request:
+      method: GET
+      path: /
+    expression: response.body.ibcontains(b"/wcm\" target=\"_blank\">管理")
+expression: r0() || r1() || r2() || r3() || r4() || r5()
