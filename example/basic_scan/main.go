@@ -14,7 +14,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/cyberspacesec/gxx/sdk"
+	"github.com/cyberspacesec/gxx/v2/sdk"
 )
 
 func main() {

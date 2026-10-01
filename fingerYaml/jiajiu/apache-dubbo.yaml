@@ -1,9 +1,12 @@
 id: web-apache-dubbo
 info:
+  tags: framework
+  reference:
+    - https://dubbo.apache.org/
   name: apache-dubbo
   author: archer
   verified: false
-  description: 检测到apache-dubbo系统或组件的特征
+  description: 微服务 RPC 通信、服务发现与治理框架。
   created: 2025/04/24
 rules:
   r0:

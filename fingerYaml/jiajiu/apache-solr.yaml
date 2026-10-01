@@ -1,9 +1,12 @@
 id: web-apache-solr
 info:
+  tags: database
+  reference:
+    - https://solr.apache.org/
   name: apache-solr
   author: archer
   verified: false
-  description: 检测到apache-solr系统或组件的特征
+  description: 提供全文检索与数据分析功能的搜索平台。
   created: 2025/04/24
 rules:
   r0:

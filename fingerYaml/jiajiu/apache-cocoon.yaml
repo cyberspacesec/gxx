@@ -1,9 +1,12 @@
 id: web-apache-cocoon
 info:
+  tags: framework
+  reference:
+    - https://cocoon.apache.org/
   name: apache-cocoon
   author: archer
   verified: false
-  description: 检测到apache-cocoon系统或组件的特征
+  description: 基于组件和管道的数据处理与 Web 发布框架。
   created: 2025/04/24
 rules:
   r0:

@@ -33,7 +33,7 @@ defer engine.Close()
 ## 调试
 
 ```go
-import "github.com/cyberspacesec/gxx/sdk/debug"
+import "github.com/cyberspacesec/gxx/v2/sdk/debug"
 
 stats := debug.HostRateLimiterStatsOf(engine)
 fmt.Printf("enabled=%v cached=%d qps=%.1f burst=%d\n",

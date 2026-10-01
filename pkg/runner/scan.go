@@ -10,16 +10,17 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/cyberspacesec/gxx/pkg/cel"
-	"github.com/cyberspacesec/gxx/pkg/finger"
-	"github.com/cyberspacesec/gxx/pkg/network"
-	"github.com/cyberspacesec/gxx/pkg/wappalyzer"
-	"github.com/cyberspacesec/gxx/types"
-	"github.com/cyberspacesec/gxx/utils/common"
-	"github.com/cyberspacesec/gxx/utils/logger"
-	"github.com/cyberspacesec/gxx/utils/proto"
+	"github.com/cyberspacesec/gxx/v2/pkg/cel"
+	"github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/pkg/network"
+	"github.com/cyberspacesec/gxx/v2/pkg/wappalyzer"
+	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/v2/utils/common"
+	"github.com/cyberspacesec/gxx/v2/utils/logger"
+	"github.com/cyberspacesec/gxx/v2/utils/proto"
 	"io"
 	"net/url"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -408,6 +409,7 @@ func (r *Runner) evaluateFingerprint(ctx context.Context, fg *finger.Finger, tar
 	customLib.SetContext(ctx)
 	customLib.SetRequestOptions(r.httpClient, r.buildHTTPOptions(timeout, true))
 	customLib.SetReverseConfig(r.cfg.Reverse)
+	customLib.SetEvidenceEnabled(r.cfg.CaptureEvidence)
 	cache := baseInfo.cache
 	varMap := acquireVarMap()
 	defer releaseVarMap(varMap)
@@ -436,6 +438,10 @@ func (r *Runner) evaluateFingerprint(ctx context.Context, fg *finger.Finger, tar
 		customLib.PreRegisterRuleFunctions(ruleKeys)
 	}
 
+	var matchedRules []SubRuleMatch
+	var versions []string
+	versionConflict := false
+	detailsTruncated := false
 	for _, rule := range fg.Rules {
 		reqCopy := rule.Value.Request
 		reqCopy.Path = finger.SetVariableMap(strings.TrimSpace(reqCopy.Path), varMap)
@@ -493,12 +499,15 @@ func (r *Runner) evaluateFingerprint(ctx context.Context, fg *finger.Finger, tar
 			}
 		}
 
+		customLib.SetEvidenceEnabled(r.cfg.CaptureEvidence)
 		result, err := customLib.Evaluate(ruleCopy.Value.Expression, varMap)
+		ruleMatched := false
 		if err != nil {
 			r.log.Debug("规则 %s CEL解析错误：%v", ruleCopy.Key, err)
 			customLib.WriteRuleFunctionsROptions(ruleCopy.Key, false)
 		} else {
 			if rb, ok := result.Value().(bool); ok {
+				ruleMatched = rb
 				customLib.WriteRuleFunctionsROptions(ruleCopy.Key, rb)
 			} else {
 				r.log.Debug("规则 %s CEL结果非布尔值（%T）", ruleCopy.Key, result.Value())
@@ -506,8 +515,38 @@ func (r *Runner) evaluateFingerprint(ctx context.Context, fg *finger.Finger, tar
 			}
 		}
 
-		if len(ruleCopy.Value.Output) > 0 {
-			finger.IsFuzzSet(ruleCopy.Value.Output, varMap, customLib)
+		if ruleMatched {
+			var detail SubRuleMatch
+			captureDetail := r.cfg.CaptureEvidence && len(matchedRules) < 64
+			if r.cfg.CaptureEvidence && !captureDetail {
+				detailsTruncated = true
+			}
+			if captureDetail {
+				detail = SubRuleMatch{Key: ruleCopy.Key, Expression: ruleCopy.Value.Expression, Method: reqCopy.Method, Path: reqCopy.Path, URL: urlStr}
+				if response, ok := varMap["response"].(*proto.Response); ok {
+					detail.StatusCode = response.Status
+				}
+				detail.Evidence, detail.EvidenceTruncated = customLib.Evidence(varMap)
+			}
+			if len(ruleCopy.Value.Output) > 0 {
+				customLib.SetEvidenceEnabled(false)
+				outputs := finger.EvaluateOutput(ruleCopy.Value.Output, varMap, customLib)
+				if found := strings.TrimSpace(outputs["product_version"]); found != "" {
+					if !slices.Contains(versions, found) {
+						if len(versions) < 16 {
+							versions = append(versions, found)
+						} else {
+							versionConflict = true
+						}
+					}
+				}
+				if captureDetail {
+					detail.Outputs = outputs
+				}
+			}
+			if captureDetail {
+				matchedRules = append(matchedRules, detail)
+			}
 		}
 	}
 
@@ -524,6 +563,13 @@ func (r *Runner) evaluateFingerprint(ctx context.Context, fg *finger.Finger, tar
 	}
 	resultData := acquireFingerMatch(fg)
 	resultData.Result = true
+	resultData.MatchedRules = matchedRules
+	resultData.DetailsTruncated = detailsTruncated
+	resultData.ProductVersions = versions
+	resultData.VersionConflict = versionConflict || len(versions) > 1
+	if !resultData.VersionConflict && len(versions) == 1 {
+		resultData.ProductVersion = versions[0]
+	}
 	if req, ok := varMap["request"].(*proto.Request); ok {
 		resultData.Request = req
 	}

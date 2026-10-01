@@ -1,12 +1,12 @@
 id: aircube-login
 info:
+  reference:
+    - https://techspecs.ui.com/uisp/wired/acb-ac
   name: AirCube
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: aircube-login'
-  reference:
-    - https://example.com
-  tags: web,fofa,converted
+  description: Ubiquiti 提供的无线网络接入设备。
+  tags: web,fofa,converted,device
   created: 2025/04/07
 rules:
   r0:

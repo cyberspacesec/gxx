@@ -1,9 +1,12 @@
 id: web-apache-activemq
 info:
+  tags: middleware
+  reference:
+    - https://activemq.apache.org/
   name: apache-activemq
   author: archer
   verified: false
-  description: 检测到apache-activemq系统或组件的特征
+  description: 支持多协议消息传递的 Java 消息代理。
   created: 2025/04/24
 rules:
   r0:

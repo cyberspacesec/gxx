@@ -1,9 +1,12 @@
 id: web-apache-nifi
 info:
+  tags: middleware
+  reference:
+    - https://nifi.apache.org/
   name: apache-nifi
   author: archer
   verified: false
-  description: 检测到apache-nifi系统或组件的特征
+  description: 用于处理、路由与分发数据流的平台。
   created: 2025/04/24
 rules:
   r0:

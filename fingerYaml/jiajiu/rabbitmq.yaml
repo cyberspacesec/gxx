@@ -1,9 +1,12 @@
 id: web-rabbitmq
 info:
+  tags: middleware
+  reference:
+    - https://www.rabbitmq.com/
   name: rabbitmq
   author: archer
   verified: false
-  description: 检测到rabbitmq系统或组件的特征
+  description: 支持消息队列与多种消息传输协议的消息代理。
   created: 2025/04/24
 rules:
   r0:

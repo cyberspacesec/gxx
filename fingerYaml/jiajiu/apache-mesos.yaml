@@ -1,9 +1,12 @@
 id: web-apache-mesos
 info:
+  tags: middleware
+  reference:
+    - https://mesos.apache.org/
   name: apache-mesos
   author: archer
   verified: false
-  description: 检测到apache-mesos系统或组件的特征
+  description: 管理和调度分布式集群计算资源的平台。
   created: 2025/04/24
 rules:
   r0:

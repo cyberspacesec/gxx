@@ -1,12 +1,12 @@
 id: apache-detect
 info:
+  reference:
+    - https://httpd.apache.org/
   name: Apache
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: apache-detect'
-  reference:
-    - https://example.com
-  tags: web,fofa,converted
+  description: 提供 HTTP 服务的开源 Web 服务器。
+  tags: web,fofa,converted,web-server
   created: 2025/04/07
 rules:
   r0:

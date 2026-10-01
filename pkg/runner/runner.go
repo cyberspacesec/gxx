@@ -18,11 +18,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/cyberspacesec/gxx/internal/lifecycle"
-	"github.com/cyberspacesec/gxx/pkg/network"
-	"github.com/cyberspacesec/gxx/types"
-	"github.com/cyberspacesec/gxx/utils/logger"
-	"github.com/cyberspacesec/gxx/utils/output"
+	"github.com/cyberspacesec/gxx/v2/internal/lifecycle"
+	"github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/pkg/network"
+	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/v2/utils/logger"
+	"github.com/cyberspacesec/gxx/v2/utils/output"
 	"maps"
 	"sync/atomic"
 	"time"
@@ -82,6 +83,7 @@ func NewRunner(cfg ScanConfig, pocOptions types.YamlFingerType) (*Runner, error)
 		r.httpClient.SetHTTPDebug(true)
 	}
 	r.store = NewFingerStore(r.log)
+	r.store.captureEvidence = cfg.CaptureEvidence
 	if err := r.store.Load(pocOptions); err != nil {
 		_ = r.Close()
 		return nil, fmt.Errorf("加载指纹规则失败: %w", err)
@@ -154,6 +156,9 @@ func (r *Runner) FingerCount() int {
 	}
 	return r.store.Count()
 }
+
+// RuleMetadata 返回当前规则快照的元数据。
+func (r *Runner) RuleMetadata() []finger.Metadata { return r.store.Metadata() }
 
 // PoolStats 规则池任务统计快照。
 func (r *Runner) PoolStats() RulePoolStats {

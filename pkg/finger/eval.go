@@ -16,10 +16,10 @@ import (
 	"github.com/google/cel-go/cel"
 	"gopkg.in/yaml.v2"
 
-	celPkg "github.com/cyberspacesec/gxx/pkg/cel"
-	"github.com/cyberspacesec/gxx/types"
-	"github.com/cyberspacesec/gxx/utils/common"
-	"github.com/cyberspacesec/gxx/utils/proto"
+	celPkg "github.com/cyberspacesec/gxx/v2/pkg/cel"
+	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/v2/utils/common"
+	"github.com/cyberspacesec/gxx/v2/utils/proto"
 )
 
 // IsFuzzSet 解析Set中的定义变量

@@ -179,7 +179,7 @@ if errors.Is(err, sdk.ErrEngineClosed) {
 ## 调试 / 运维 API（`gxx/sdk/debug`）
 
 ```go
-import "github.com/cyberspacesec/gxx/sdk/debug"
+import "github.com/cyberspacesec/gxx/v2/sdk/debug"
 
 stats := debug.MemoryStatsOf(engine)            // 实时内存快照
 debug.ForceGC()                                 // 强制 GC（仅诊断）

@@ -34,11 +34,12 @@ type programKey struct {
 	env        *cel.Env
 	expression string
 	compact    bool
+	evidence   bool
 }
 
 func getBaseEnv() *cel.Env {
 	baseEnvOnce.Do(func() {
-		opts := append(ReadCompileOptions(), cel.Variable(ruleResultsVariable, cel.MapType(cel.StringType, cel.BoolType)))
+		opts := append(ReadCompileOptions(), cel.Variable(ruleResultsVariable, cel.MapType(cel.StringType, cel.BoolType)), cel.EnableMacroCallTracking())
 		var err error
 		baseEnv, err = cel.NewEnv(opts...)
 		if err != nil {
@@ -51,13 +52,16 @@ func getBaseEnv() *cel.Env {
 // CustomLib 只保存本次求值的数据。环境和程序是有界缓存中的不可变对象。
 // 零参数规则函数在解析时展开为输入变量访问，程序不捕获其他扫描的可变状态。
 type CustomLib struct {
-	env          *cel.Env
-	prepared     *PreparedLibrary
-	declarations map[string]*cel.Type
-	ruleResults  map[string]bool
-	ctx          context.Context
-	requests     evaluationContext
-	activation   evaluationActivation
+	env             *cel.Env
+	prepared        *PreparedLibrary
+	declarations    map[string]*cel.Type
+	ruleResults     map[string]bool
+	ctx             context.Context
+	requests        evaluationContext
+	activation      evaluationActivation
+	evidenceEnabled bool
+	trace           evaluationTrace
+	lastTrace       *evidencePlan
 }
 
 func NewCustomLib() *CustomLib { return &CustomLib{} }
@@ -109,8 +113,9 @@ func (c *CustomLib) getEnv() (*cel.Env, error) {
 	return env, nil
 }
 
-func compileProgram(env *cel.Env, expression string, compact bool) (cel.Program, error) {
-	key := programKey{env: env, expression: expression, compact: compact}
+func compileProgram(env *cel.Env, expression string, compact bool, evidence ...bool) (cel.Program, error) {
+	traceEnabled := len(evidence) > 0 && evidence[0]
+	key := programKey{env: env, expression: expression, compact: compact, evidence: traceEnabled}
 	if p, ok := programCache.Get(key); ok {
 		return p, nil
 	}
@@ -133,6 +138,11 @@ func compileProgram(env *cel.Env, expression string, compact bool) (cel.Program,
 		}
 	}
 	programOptions := []cel.ProgramOption{cel.InterruptCheckFrequency(100)}
+	var tracePlan *evidencePlan
+	if traceEnabled {
+		tracePlan = newEvidencePlan(tree)
+	}
+	programOptions = append(programOptions, cel.CustomDecoratorV2(tracePlan.decorate))
 	nodes, hasLoop, waits := 0, false, false
 	ast.PreOrderVisit(tree.NativeRep().Expr(), ast.NewExprVisitor(func(e ast.Expr) {
 		nodes++
@@ -153,7 +163,11 @@ func compileProgram(env *cel.Env, expression string, compact bool) (cel.Program,
 	}
 	p, err := runtimeEnv.Program(tree, programOptions...)
 	if err == nil {
-		p = &compiledProgram{Program: p, hasLoop: hasLoop, waits: waits}
+		if tracePlan != nil {
+			// 节点 ID 仅供解释器构建期间装饰使用，求值阶段使用连续索引。
+			tracePlan.indices = nil
+		}
+		p = &compiledProgram{Program: p, hasLoop: hasLoop, waits: waits, evidence: tracePlan}
 		programCache.Set(key, p)
 	}
 	return p, err
@@ -164,8 +178,9 @@ func compileProgram(env *cel.Env, expression string, compact bool) (cel.Program,
 // 包含推导循环的程序保留 ContextEval 的周期中断和成本限制。
 type compiledProgram struct {
 	cel.Program
-	hasLoop bool
-	waits   bool
+	hasLoop  bool
+	waits    bool
+	evidence *evidencePlan
 }
 
 func (p *compiledProgram) ContextEval(ctx context.Context, input any) (ref.Val, *cel.EvalDetails, error) {
@@ -188,7 +203,7 @@ func (c *CustomLib) Prepare(expression string) error {
 	if err != nil {
 		return err
 	}
-	_, err = compileProgram(env, expression, true)
+	_, err = compileProgram(env, expression, true, c.evidenceEnabled)
 	return err
 }
 
@@ -209,11 +224,20 @@ func (c *CustomLib) EvaluateContext(ctx context.Context, expression string, vari
 		return nil, err
 	}
 	c.requests.ctx = ctx
+	c.lastTrace = nil
+	c.trace = evaluationTrace{}
+	c.requests.trace = nil
+	if c.evidenceEnabled {
+		c.requests.trace = &c.trace
+	}
 	c.activation = evaluationActivation{variables: variables, rules: c.ruleResults, state: &c.requests}
 	defer func() { c.activation = evaluationActivation{} }()
 	if c.prepared != nil && env == c.prepared.env {
 		for _, p := range c.prepared.programs {
 			if p.expression == expression {
+				if compiled, ok := p.program.(*compiledProgram); ok {
+					c.lastTrace = compiled.evidence
+				}
 				out, _, err := p.program.ContextEval(ctx, &c.activation)
 				if ctx.Err() != nil {
 					return nil, ctx.Err()
@@ -222,7 +246,18 @@ func (c *CustomLib) EvaluateContext(ctx context.Context, expression string, vari
 			}
 		}
 	}
-	return evalContext(ctx, env, expression, &c.activation, true)
+	p, err := compileProgram(env, expression, true, c.evidenceEnabled)
+	if err != nil {
+		return nil, err
+	}
+	if compiled, ok := p.(*compiledProgram); ok {
+		c.lastTrace = compiled.evidence
+	}
+	out, _, err := p.ContextEval(ctx, &c.activation)
+	if ctx.Err() != nil {
+		return nil, ctx.Err()
+	}
+	return out, err
 }
 
 func evalContext(ctx context.Context, env *cel.Env, expression string, params any, compact bool) (ref.Val, error) {

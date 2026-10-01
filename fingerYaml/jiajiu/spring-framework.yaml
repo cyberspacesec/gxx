@@ -1,9 +1,12 @@
 id: web-spring-framework
 info:
+  tags: framework
+  reference:
+    - https://spring.io/projects/spring-framework
   name: spring-framework
   author: archer
   verified: true
-  description: 检测到spring-framework系统或组件的特征
+  description: 提供依赖注入、应用集成与 Web 开发能力的 Java 框架。
   created: 2025/04/24
 rules:
   r0:

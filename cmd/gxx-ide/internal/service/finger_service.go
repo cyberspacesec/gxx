@@ -9,10 +9,10 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	celpkg "github.com/cyberspacesec/gxx/pkg/cel"
-	fingerpkg "github.com/cyberspacesec/gxx/pkg/finger"
-	"github.com/cyberspacesec/gxx/pkg/network"
-	"github.com/cyberspacesec/gxx/utils/proto"
+	celpkg "github.com/cyberspacesec/gxx/v2/pkg/cel"
+	fingerpkg "github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/pkg/network"
+	"github.com/cyberspacesec/gxx/v2/utils/proto"
 
 	"github.com/cyberspacesec/gxx/cmd/gxx-ide/internal/model"
 	"github.com/cyberspacesec/gxx/cmd/gxx-ide/internal/response"
@@ -140,8 +140,8 @@ func (s *FingerService) Run(ctx context.Context, in *model.RunFingerprintInput) 
 			record.NonBoolResult = true
 			customLib.WriteRuleFunctionsROptions(ruleCopy.Key, false)
 		}
-		if len(ruleCopy.Value.Output) > 0 {
-			fingerpkg.IsFuzzSet(ruleCopy.Value.Output, varMap, customLib)
+		if record.Result && len(ruleCopy.Value.Output) > 0 {
+			fingerpkg.EvaluateOutput(ruleCopy.Value.Output, varMap, customLib)
 		}
 		out.Rules = append(out.Rules, record)
 	}

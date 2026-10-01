@@ -1,9 +1,12 @@
 id: web-apache-oozie-web-console
 info:
+  tags: application
+  reference:
+    - https://oozie.apache.org/
   name: apache-oozie-web-console
   author: archer
   verified: false
-  description: 检测到apache-oozie-web-console系统或组件的特征
+  description: 用于 Hadoop 作业编排与调度的工作流系统。
   created: 2025/04/24
 rules:
   r0:

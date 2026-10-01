@@ -1,9 +1,12 @@
 id: web-apache-forrest
 info:
+  tags: application
+  reference:
+    - https://forrest.apache.org/
   name: apache-forrest
   author: archer
   verified: false
-  description: 检测到apache-forrest系统或组件的特征
+  description: 将多种来源内容组织为网站及文档的发布框架。
   created: 2025/04/24
 rules:
   r0:

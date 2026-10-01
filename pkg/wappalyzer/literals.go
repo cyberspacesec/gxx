@@ -1,7 +1,7 @@
 package wappalyzer
 
 import (
-	"github.com/cyberspacesec/gxx/internal/literal"
+	"github.com/cyberspacesec/gxx/v2/internal/literal"
 	"regexp/syntax"
 	"slices"
 	"strings"

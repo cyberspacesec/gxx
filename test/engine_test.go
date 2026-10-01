@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cyberspacesec/gxx/sdk"
-	"github.com/cyberspacesec/gxx/utils/logger"
+	"github.com/cyberspacesec/gxx/v2/sdk"
+	"github.com/cyberspacesec/gxx/v2/utils/logger"
 )
 
 func newTestHTTPServer(t *testing.T) *httptest.Server {

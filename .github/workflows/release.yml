@@ -201,13 +201,14 @@ jobs:
       - name: 验证外部模块安装与 SDK 扫描
         env:
           RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_VERSION: ${{ needs.metadata.outputs.version }}
         shell: bash
         run: |
           consumer="$(mktemp -d)"
           cp .github/scripts/sdk-check.go "$consumer/main.go"
           cd "$consumer"
           go mod init sdk-release-check
-          go get "github.com/cyberspacesec/gxx/sdk@$RELEASE_TAG"
+          go get "github.com/cyberspacesec/gxx/v2/sdk@$RELEASE_TAG"
           go run .
       - name: 上传并发布
         env:

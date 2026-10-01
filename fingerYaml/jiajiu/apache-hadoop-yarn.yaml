@@ -1,9 +1,12 @@
 id: web-apache-hadoop-yarn
 info:
+  tags: middleware
+  reference:
+    - https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html
   name: apache-hadoop-yarn
   author: archer
   verified: false
-  description: 检测到apache-hadoop-yarn系统或组件的特征
+  description: Hadoop 集群的资源管理与作业调度组件。
   created: 2025/04/24
 rules:
   r0:

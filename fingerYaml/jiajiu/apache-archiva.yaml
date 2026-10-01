@@ -1,9 +1,12 @@
 id: web-apache-archiva
 info:
+  tags: application
+  reference:
+    - https://archiva.apache.org/
   name: apache-archiva
   author: archer
   verified: false
-  description: 检测到apache-archiva系统或组件的特征
+  description: 用于构建产物存储、代理和检索的仓库管理器。
   created: 2025/04/24
 rules:
   r0:

@@ -1,12 +1,12 @@
 id: aem-cms
 info:
+  reference:
+    - https://business.adobe.com/products/experience-manager.html
   name: AEM Finder
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: aem-cms'
-  reference:
-    - https://example.com
-  tags: web,fofa,converted
+  description: Adobe 提供的内容、站点与数字资产管理平台。
+  tags: web,fofa,converted,cms
   created: 2025/04/07
 rules:
   r0:

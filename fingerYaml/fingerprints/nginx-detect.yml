@@ -1,0 +1,20 @@
+id: nginx-detect
+info:
+  name: nginx
+  author: zhizhuo
+  verified: false
+  description: 提供 HTTP 服务和反向代理的开源 Web 服务器。
+  reference:
+    - https://nginx.org/en/
+  tags: web-server,reverse-proxy
+  created: 2026/10/01
+rules:
+  r0:
+    request:
+      method: GET
+      path: /
+    expression: '"server" in response.headers && response.headers["server"].matches("(?i)^nginx(?:/|$)")'
+    output:
+      product_version: >-
+        "(?i)^nginx/(?<version>[0-9]+(?:[.][0-9]+){1,3}(?:[-_][a-zA-Z0-9.]+)?)".submatch(response.headers["server"])["version"]
+expression: r0()

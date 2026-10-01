@@ -1,4 +1,4 @@
-module github.com/cyberspacesec/gxx
+module github.com/cyberspacesec/gxx/v2
 
 go 1.25.0
 

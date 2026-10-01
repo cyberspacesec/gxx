@@ -1,9 +1,12 @@
 id: web-apache-ranger
 info:
+  tags: security
+  reference:
+    - https://ranger.apache.org/
   name: apache-ranger
   author: archer
   verified: false
-  description: 检测到apache-ranger系统或组件的特征
+  description: 用于数据平台权限管理、授权与审计的框架。
   created: 2025/04/24
 rules:
   r0:

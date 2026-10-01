@@ -4,8 +4,6 @@ info:
   author: zhizhuo
   verified: true
   description: 'Converted from FOFA rule: fingeryaml-25'
-  reference:
-    - https://example.com
   tags: web,fofa,converted
   created: 2025/04/07
 rules:

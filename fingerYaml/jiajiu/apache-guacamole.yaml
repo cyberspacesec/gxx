@@ -1,9 +1,12 @@
 id: web-apache-guacamole
 info:
+  tags: application
+  reference:
+    - https://guacamole.apache.org/
   name: apache-guacamole
   author: archer
   verified: false
-  description: 检测到apache-guacamole系统或组件的特征
+  description: 通过浏览器访问远程桌面的网关。
   created: 2025/04/24
 rules:
   r0:

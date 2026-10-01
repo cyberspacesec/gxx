@@ -1,9 +1,12 @@
 id: web-apache-wicket
 info:
+  tags: framework
+  reference:
+    - https://wicket.apache.org/
   name: apache-wicket
   author: archer
   verified: false
-  description: 检测到apache-wicket系统或组件的特征
+  description: 基于组件的 Java Web 应用框架。
   created: 2025/04/24
 rules:
   r0:

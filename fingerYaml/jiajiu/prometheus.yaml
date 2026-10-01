@@ -1,9 +1,12 @@
 id: web-prometheus
 info:
+  tags: application
+  reference:
+    - https://prometheus.io/
   name: prometheus
   author: archer
   verified: false
-  description: 检测到prometheus系统或组件的特征
+  description: 用于指标采集、时序数据查询与告警的监控系统。
   created: 2025/04/24
 rules:
   r0:

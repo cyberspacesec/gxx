@@ -1,9 +1,12 @@
 id: web-apache-flink
 info:
+  tags: middleware
+  reference:
+    - https://flink.apache.org/
   name: apache-flink
   author: archer
   verified: false
-  description: 检测到apache-flink系统或组件的特征
+  description: 面向有界与无界数据流的分布式处理引擎。
   created: 2025/04/24
 rules:
   r0:

@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/cyberspacesec/gxx/pkg/runner"
-	"github.com/cyberspacesec/gxx/types"
+	"github.com/cyberspacesec/gxx/v2/pkg/runner"
+	"github.com/cyberspacesec/gxx/v2/types"
 
 	"github.com/projectdiscovery/goflags"
 )

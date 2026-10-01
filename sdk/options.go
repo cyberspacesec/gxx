@@ -7,14 +7,18 @@ package sdk
 
 import (
 	"fmt"
-	"github.com/cyberspacesec/gxx/types"
+	"github.com/cyberspacesec/gxx/v2/types"
 	"log/slog"
 	"time"
 )
 
 // engineConfig 引擎内部配置，外部只能通过 Option 修改。
 type engineConfig struct {
-	reverse types.ReverseConfig
+	matchDetails      bool
+	products          []ProductDefinition
+	assessments       []RuleAssessment
+	ruleSourceVersion string
+	reverse           types.ReverseConfig
 	// 指纹相关
 	fingerOptions FingerOptions
 
@@ -56,9 +60,23 @@ type engineConfig struct {
 	customWriters  []Writer
 }
 
+// WithRuleAssessments 提供带规则摘要的样本测试记录或校准置信度。
+// 测试记录只作用于完全相同的规则内容。
+func WithRuleAssessments(assessments []RuleAssessment) Option {
+	snapshot := cloneAssessments(assessments)
+	return func(c *engineConfig) error {
+		if err := validateAssessments(snapshot); err != nil {
+			return err
+		}
+		c.assessments = cloneAssessments(snapshot)
+		return nil
+	}
+}
+
 // defaultEngineConfig 返回引擎的默认配置。
 func defaultEngineConfig() engineConfig {
 	return engineConfig{
+		matchDetails:       true,
 		timeout:            10 * time.Second,
 		insecureSkipVerify: true,
 		disableKeepAlives:  false,
@@ -73,6 +91,29 @@ func defaultEngineConfig() engineConfig {
 		enableRateLimit:    false,
 		rateLimitQPS:       50,
 		rateLimitBurst:     100,
+	}
+}
+
+// WithMatchDetails 控制命中子规则与证据回传；产品版本和元数据始终保留。
+func WithMatchDetails(enabled bool) Option {
+	return func(c *engineConfig) error { c.matchDetails = enabled; return nil }
+}
+
+// WithRuleSourceVersion 声明外部规则包的版本，不影响 SDK 的版本。
+func WithRuleSourceVersion(version string) Option {
+	return func(c *engineConfig) error { c.ruleSourceVersion = version; return nil }
+}
+
+// WithProductCatalog 将系统产品目录映射到明确的规则 ID，不从规则作者推测厂商。
+// 参数及每个 Engine 的配置均使用独立副本。
+func WithProductCatalog(products []ProductDefinition) Option {
+	snapshot := cloneProductDefinitions(products)
+	return func(c *engineConfig) error {
+		if err := validateProductDefinitions(snapshot); err != nil {
+			return err
+		}
+		c.products = cloneProductDefinitions(snapshot)
+		return nil
 	}
 }
 

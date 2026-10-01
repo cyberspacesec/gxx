@@ -3,8 +3,8 @@ package finger
 import (
 	"bytes"
 	"context"
-	"github.com/cyberspacesec/gxx/pkg/network"
-	"github.com/cyberspacesec/gxx/utils/common"
+	"github.com/cyberspacesec/gxx/v2/pkg/network"
+	"github.com/cyberspacesec/gxx/v2/utils/common"
 	"net/http"
 	"net/http/httptest"
 	"strings"

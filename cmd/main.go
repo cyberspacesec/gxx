@@ -9,9 +9,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/cyberspacesec/gxx/cmd/cli"
-	"github.com/cyberspacesec/gxx/utils/logger"
-	"github.com/cyberspacesec/gxx/utils/output"
+	"github.com/cyberspacesec/gxx/v2/cmd/cli"
+	"github.com/cyberspacesec/gxx/v2/utils/logger"
+	"github.com/cyberspacesec/gxx/v2/utils/output"
 	"os"
 	"path/filepath"
 	"strings"

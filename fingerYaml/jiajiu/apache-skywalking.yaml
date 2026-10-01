@@ -1,9 +1,12 @@
 id: web-apache-skywalking
 info:
+  tags: application
+  reference:
+    - https://skywalking.apache.org/
   name: apache-skywalking
   author: archer
   verified: false
-  description: 检测到apache-skywalking系统或组件的特征
+  description: 面向应用和分布式服务的可观测性平台。
   created: 2025/04/24
 rules:
   r0:

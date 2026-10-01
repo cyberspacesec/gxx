@@ -1,9 +1,12 @@
 id: web-zabbix
 info:
+  tags: application
+  reference:
+    - https://www.zabbix.com/
   name: zabbix
   author: archer
   verified: false
-  description: 检测到zabbix系统或组件的特征
+  description: 用于监控网络、服务器与应用状态的系统。
   created: 2025/04/24
 rules:
   r0:

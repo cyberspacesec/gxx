@@ -13,8 +13,8 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"github.com/cyberspacesec/gxx/utils/common"
-	"github.com/cyberspacesec/gxx/utils/proto"
+	"github.com/cyberspacesec/gxx/v2/utils/common"
+	"github.com/cyberspacesec/gxx/v2/utils/proto"
 	"github.com/phuslu/lru"
 	"math/rand"
 	"net"
@@ -170,38 +170,6 @@ var functionEnvOptions = []cel.EnvOption{
 		),
 	),
 	// bytes methods
-	cel.Function("bcontains",
-		cel.MemberOverload("bytes_bcontains_bytes",
-			[]*cel.Type{cel.BytesType, cel.BytesType}, cel.BoolType,
-			cel.BinaryBinding(func(lhs ref.Val, rhs ref.Val) ref.Val {
-				v1, ok := lhs.(types.Bytes)
-				if !ok {
-					return types.ValOrErr(lhs, "unexpected type '%v' passed to bcontains", lhs.Type())
-				}
-				v2, ok := rhs.(types.Bytes)
-				if !ok {
-					return types.ValOrErr(rhs, "unexpected type '%v' passed to bcontains", rhs.Type())
-				}
-				return types.Bool(bytes.Contains(v1, v2))
-			}),
-		),
-	),
-	cel.Function("ibcontains",
-		cel.MemberOverload("bytes_ibcontains_bytes",
-			[]*cel.Type{cel.BytesType, cel.BytesType}, cel.BoolType,
-			cel.BinaryBinding(func(lhs ref.Val, rhs ref.Val) ref.Val {
-				v1, ok := lhs.(types.Bytes)
-				if !ok {
-					return types.ValOrErr(lhs, "unexpected type '%v' passed to bcontains", lhs.Type())
-				}
-				v2, ok := rhs.(types.Bytes)
-				if !ok {
-					return types.ValOrErr(rhs, "unexpected type '%v' passed to bcontains", rhs.Type())
-				}
-				return types.Bool(bytes.Contains(bytes.ToLower(v1), bytes.ToLower(v2)))
-			}),
-		),
-	),
 	cel.Function("bstartsWith",
 		cel.MemberOverload("bytes_bstartsWith_bytes",
 			[]*cel.Type{cel.BytesType, cel.BytesType}, cel.BoolType,
@@ -397,31 +365,6 @@ var functionEnvOptions = []cel.EnvOption{
 		),
 	),
 	// regex
-	cel.Function("bmatches",
-		cel.MemberOverload("string_bmatches_bytes",
-			[]*cel.Type{cel.StringType, cel.BytesType}, cel.BoolType,
-			cel.BinaryBinding(func(lhs ref.Val, rhs ref.Val) ref.Val {
-				var isMatch = false
-				var err error
-				v1, ok := lhs.(types.String)
-				if !ok {
-					return types.ValOrErr(lhs, "unexpected type '%v' passed to bmatches", lhs.Type())
-				}
-				v2, ok := rhs.(types.Bytes)
-				if !ok {
-					return types.ValOrErr(rhs, "unexpected type '%v' passed to bmatches", rhs.Type())
-				}
-				re, err := getCachedRegexp2(string(v1), 0)
-				if err != nil {
-					return types.NewErr("正则表达式无效: %v", err)
-				}
-				if isMatch, err = re.MatchString(string(v2)); err != nil {
-					return types.NewErr("%v", err)
-				}
-				return types.Bool(isMatch)
-			}),
-		),
-	),
 	cel.Function("submatch",
 		cel.MemberOverload("string_submatch_string",
 			[]*cel.Type{cel.StringType, cel.StringType}, cel.MapType(cel.StringType, cel.StringType),
@@ -434,36 +377,6 @@ var functionEnvOptions = []cel.EnvOption{
 				v2, ok := rhs.(types.String)
 				if !ok {
 					return types.ValOrErr(rhs, "unexpected type '%v' passed to submatch", rhs.Type())
-				}
-				re, err := getCachedRegexp2(string(v1), regexp2.RE2)
-				if err != nil {
-					return types.NewErr("正则表达式无效: %v", err)
-				}
-				if m, _ := re.FindStringMatch(string(v2)); m != nil {
-					gps := m.Groups()
-					for n, gp := range gps {
-						if n == 0 {
-							continue
-						}
-						resultMap[gp.Name] = gp.String()
-					}
-				}
-				return types.NewStringStringMap(types.DefaultTypeAdapter, resultMap)
-			}),
-		),
-	),
-	cel.Function("bsubmatch",
-		cel.MemberOverload("string_bsubmatch_bytes",
-			[]*cel.Type{cel.StringType, cel.BytesType}, cel.MapType(cel.StringType, cel.StringType),
-			cel.BinaryBinding(func(lhs ref.Val, rhs ref.Val) ref.Val {
-				resultMap := make(map[string]string)
-				v1, ok := lhs.(types.String)
-				if !ok {
-					return types.ValOrErr(lhs, "unexpected type '%v' passed to bsubmatch", lhs.Type())
-				}
-				v2, ok := rhs.(types.Bytes)
-				if !ok {
-					return types.ValOrErr(rhs, "unexpected type '%v' passed to bsubmatch", rhs.Type())
 				}
 				re, err := getCachedRegexp2(string(v1), regexp2.RE2)
 				if err != nil {

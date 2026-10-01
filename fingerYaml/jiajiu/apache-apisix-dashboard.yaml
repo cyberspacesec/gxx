@@ -1,9 +1,12 @@
 id: web-apache-apisix-dashboard
 info:
+  tags: hosting-panel
+  reference:
+    - https://github.com/apache/apisix-dashboard
   name: apache-apisix-dashboard
   author: archer
   verified: true
-  description: 检测到apache-apisix-dashboard系统或组件的特征
+  description: Apache APISIX 的 Web 管理界面。
   created: 2025/04/24
 rules:
   r0:

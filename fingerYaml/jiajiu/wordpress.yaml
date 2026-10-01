@@ -1,9 +1,12 @@
 id: web-wordpress
 info:
+  tags: cms
+  reference:
+    - https://wordpress.org/
   name: wordpress
   author: archer
   verified: false
-  description: 检测到wordpress系统或组件的特征
+  description: 开源内容管理与站点发布系统。
   created: 2025/04/16
 rules:
   r0:
@@ -16,6 +19,9 @@ rules:
       method: GET
       path: /
     expression: response.body.ibcontains(b"name=\"generator\" content=\"wordpress ")
+    output:
+      product_version: >-
+        "(?i)content=\\\"wordpress (?<version>[0-9]+(?:[.][0-9]+){1,3}(?:[-_][a-zA-Z0-9.]+)?)".bsubmatch(response.body)["version"]
   r2:
     request:
       method: GET

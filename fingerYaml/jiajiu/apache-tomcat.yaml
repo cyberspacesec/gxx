@@ -1,9 +1,12 @@
 id: web-apache-tomcat
 info:
+  tags: middleware
+  reference:
+    - https://tomcat.apache.org/
   name: apache-tomcat
   author: archer
   verified: true
-  description: 检测到apache-tomcat系统或组件的特征
+  description: 实现 Jakarta Servlet 等规范的 Web 应用容器。
   created: 2025/04/24
 rules:
   r0:
@@ -11,11 +14,17 @@ rules:
       method: GET
       path: /
     expression: response.status == 404 && response.body.ibcontains(b"<h3>Apache Tomcat/")
+    output:
+      product_version: >-
+        "(?i)<(?:title|h3)>Apache Tomcat/(?<version>[0-9]+(?:[.][0-9]+){1,3})".bsubmatch(response.body)["version"]
   r1:
     request:
       method: GET
       path: /
     expression: response.status == 200 && response.body.ibcontains(b"<title>Apache Tomcat/")
+    output:
+      product_version: >-
+        "(?i)<(?:title|h3)>Apache Tomcat/(?<version>[0-9]+(?:[.][0-9]+){1,3})".bsubmatch(response.body)["version"]
   r2:
     request:
       method: GET

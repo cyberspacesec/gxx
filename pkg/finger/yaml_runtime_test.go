@@ -2,7 +2,6 @@ package finger
 
 import (
 	"fmt"
-	"reflect"
 	"sync"
 	"testing"
 
@@ -37,7 +36,7 @@ func TestConcurrentYAMLParsesKeepIndependentOrder(t *testing.T) {
 
 func TestYAMLRuleFieldsAndSourceOrder(t *testing.T) {
 	var fg Finger
-	document := "rules:\n  second:\n    request:\n      method: GET\n      path: /test\n      headers:\n        X-Test: configured\n    expression: first\n    expressions: [a, b]\n    output:\n      value: result\n    stop_if_match: true\n    stop_if_mismatch: true\n    before_sleep: 2\n  first:\n    expression: last\n"
+	document := "rules:\n  second:\n    request:\n      method: GET\n      path: /test\n      headers:\n        X-Test: configured\n    expression: first\n    output:\n      value: result\n  first:\n    expression: last\n"
 	if err := yaml.Unmarshal([]byte(document), &fg); err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +44,7 @@ func TestYAMLRuleFieldsAndSourceOrder(t *testing.T) {
 		t.Fatalf("源文件顺序不一致: %+v", fg.Rules)
 	}
 	r := fg.Rules[0].Value
-	if r.Request.Method != "GET" || r.Request.Path != "/test" || r.Request.Headers["X-Test"] != "configured" || r.Expression != "first" || !reflect.DeepEqual(r.Expressions, []string{"a", "b"}) || len(r.Output) != 1 || !r.StopIfMatch || !r.StopIfMismatch || r.BeforeSleep != 2 {
+	if r.Request.Method != "GET" || r.Request.Path != "/test" || r.Request.Headers["X-Test"] != "configured" || r.Expression != "first" || len(r.Output) != 1 || r.Output[0].Key != "value" || r.Output[0].Value != "result" {
 		t.Fatalf("规则字段丢失: %+v", r)
 	}
 }

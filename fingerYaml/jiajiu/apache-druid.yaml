@@ -1,9 +1,12 @@
 id: web-apache-druid
 info:
+  tags: database
+  reference:
+    - https://druid.apache.org/
   name: apache-druid
   author: archer
   verified: false
-  description: 检测到apache-druid系统或组件的特征
+  description: 面向实时数据分析的分布式数据库。
   created: 2025/04/24
 rules:
   r0:

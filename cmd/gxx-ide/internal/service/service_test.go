@@ -82,3 +82,33 @@ func TestCELDebugCanBeCanceled(t *testing.T) {
 		t.Fatalf("%v %v", time.Since(start), err)
 	}
 }
+
+func TestFingerprintOutputsRequireSuccessfulRuleAndExtraction(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/plain")
+		fmt.Fprint(w, "version/1.2.3")
+	}))
+	defer server.Close()
+	for _, extract := range []string{`"version/(?<version>[0-9.]+)".bsubmatch(response.body)["version"]`, `"[".bsubmatch(response.body)["version"]`} {
+		yaml := "id: output\ninfo:\n  name: 输出测试\nrules:\n  r0:\n    request:\n      method: GET\n      path: /\n    expression: false\n    output:\n      unmatch_output: '\"incorrect\"'\n  r1:\n    request:\n      method: GET\n      path: /\n    expression: true\n    output:\n      product_version: '" + extract + "'\nexpression: r1()\n"
+		result, err := NewFingerService().Run(context.Background(), &model.RunFingerprintInput{YAML: yaml, Target: server.URL, TimeoutSeconds: 2})
+		if err != nil || !result.FinalResult {
+			t.Fatalf("%+v %v", result, err)
+		}
+		found := false
+		for _, variable := range result.Variables {
+			if variable.Key == "unmatch_output" {
+				t.Fatal("未命中子规则输出出现在调试变量中")
+			}
+			if variable.Key == "product_version" {
+				found = true
+				if !strings.Contains(variable.Value, "1.2.3") {
+					t.Fatalf("提取表达式原文成为版本: %+v", variable)
+				}
+			}
+		}
+		if found == strings.Contains(extract, `"["`) {
+			t.Fatalf("提取失败仍返回版本或成功版本缺失: %+v", result.Variables)
+		}
+	}
+}

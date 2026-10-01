@@ -1,9 +1,12 @@
 id: web-资产灯塔系统
 info:
+  tags: security
+  reference:
+    - https://github.com/tophant-ai/ARL-doc
   name: 资产灯塔系统
   author: archer
   verified: false
-  description: 检测到资产灯塔系统系统或组件的特征
+  description: 资产发现、指纹识别与安全监测系统。
   created: 2025/04/24
 rules:
   r0:

@@ -1,9 +1,12 @@
 id: web-apache-storm
 info:
+  tags: middleware
+  reference:
+    - https://storm.apache.org/
   name: apache-storm
   author: archer
   verified: false
-  description: 检测到apache-storm系统或组件的特征
+  description: 用于实时数据流处理的分布式计算系统。
   created: 2025/04/24
 rules:
   r0:

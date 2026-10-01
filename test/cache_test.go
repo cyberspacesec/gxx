@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cyberspacesec/gxx/pkg/runner"
-	"github.com/cyberspacesec/gxx/utils/proto"
+	"github.com/cyberspacesec/gxx/v2/pkg/runner"
+	"github.com/cyberspacesec/gxx/v2/utils/proto"
 )
 
 func TestShouldUseCache_BasicFlow(t *testing.T) {

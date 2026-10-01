@@ -9,7 +9,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/cyberspacesec/gxx/utils/proto"
+	"github.com/cyberspacesec/gxx/v2/utils/proto"
 )
 
 func indexedLibrary(t *testing.T) (*PreparedLibrary, []string) {

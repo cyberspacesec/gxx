@@ -8,7 +8,7 @@
 package cel
 
 import (
-	"github.com/cyberspacesec/gxx/utils/proto"
+	"github.com/cyberspacesec/gxx/v2/utils/proto"
 
 	"github.com/google/cel-go/cel"
 )

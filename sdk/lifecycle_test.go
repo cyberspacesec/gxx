@@ -3,7 +3,7 @@ package sdk_test
 import (
 	"context"
 	"fmt"
-	"github.com/cyberspacesec/gxx/sdk"
+	"github.com/cyberspacesec/gxx/v2/sdk"
 	"net/http"
 	"net/http/httptest"
 	"sync/atomic"

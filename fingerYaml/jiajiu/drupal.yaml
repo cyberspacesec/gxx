@@ -1,9 +1,12 @@
 id: web-drupal
 info:
+  tags: cms
+  reference:
+    - https://www.drupal.org/
   name: drupal
   author: archer
   verified: false
-  description: 检测到drupal系统或组件的特征
+  description: 用于内容管理和站点发布的开源平台。
   created: 2025/04/24
 rules:
   r0:

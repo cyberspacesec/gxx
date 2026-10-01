@@ -1,9 +1,12 @@
 id: web-kibana
 info:
+  tags: application
+  reference:
+    - https://www.elastic.co/kibana
   name: kibana
   author: archer
   verified: false
-  description: 检测到kibana系统或组件的特征
+  description: 用于查询、分析和可视化 Elasticsearch 数据的应用。
   created: 2025/04/24
 rules:
   r0:

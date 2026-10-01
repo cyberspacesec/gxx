@@ -1,9 +1,12 @@
 id: web-apache-ofbiz
 info:
+  tags: application
+  reference:
+    - https://ofbiz.apache.org/
   name: apache-ofbiz
   author: archer
   verified: false
-  description: 检测到apache-ofbiz系统或组件的特征
+  description: 包含 ERP、CRM 和电子商务功能的业务应用框架。
   created: 2025/04/24
 rules:
   r0:

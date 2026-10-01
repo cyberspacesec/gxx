@@ -1,13 +1,13 @@
 ---
 id: fofayaml-44
 info:
+  reference:
+    - https://learn.microsoft.com/en-us/windows/
   name: WINDOWS 32bit
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: fofayaml-44'
-  reference:
-    - https://example.com
-  tags: web,fofa,converted
+  description: Microsoft 的操作系统；响应标记不等同于主机系统已核实。
+  tags: web,fofa,converted,operating-system
   created: 2025/04/07
 rules:
   r0:

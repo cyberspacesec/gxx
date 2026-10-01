@@ -1,9 +1,12 @@
 id: web-apache-couchdb
 info:
+  tags: database
+  reference:
+    - https://couchdb.apache.org/
   name: apache-couchdb
   author: archer
   verified: true
-  description: 检测到apache-couchdb系统或组件的特征
+  description: 使用 JSON 文档和 HTTP 接口的数据库。
   created: 2025/04/24
 rules:
   r0:

@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cyberspacesec/gxx/sdk"
+	"github.com/cyberspacesec/gxx/v2/sdk"
 )
 
 // TestEngine_WithOutputFile_JSON 验证 sdk.WithOutputFile 在 Engine.Scan 完成后

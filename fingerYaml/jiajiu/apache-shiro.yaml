@@ -1,9 +1,12 @@
 id: web-apache-shiro
 info:
+  tags: framework
+  reference:
+    - https://shiro.apache.org/
   name: apache-shiro
   author: archer
   verified: false
-  description: 检测到apache-shiro系统或组件的特征
+  description: 提供身份认证、授权与会话管理的 Java 安全框架。
   created: 2025/04/24
 rules:
   r0:

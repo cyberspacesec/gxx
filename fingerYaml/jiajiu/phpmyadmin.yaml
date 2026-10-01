@@ -1,9 +1,12 @@
 id: web-phpmyadmin
 info:
+  tags: application
+  reference:
+    - https://www.phpmyadmin.net/
   name: phpmyadmin
   author: archer
   verified: false
-  description: 检测到phpmyadmin系统或组件的特征
+  description: 通过 Web 界面管理 MySQL 与 MariaDB 数据库的工具。
   created: 2025/04/24
 rules:
   r0:

@@ -14,6 +14,7 @@ type bodyKey struct {
 type responseCache struct {
 	mu      sync.RWMutex
 	lower   map[bodyKey][]byte
+	runes   map[bodyKey][]rune
 	bytes   int
 	matches map[literalBodyKey]literalMatches
 }
@@ -143,6 +144,9 @@ func (cache *responseCache) inputCost(key bodyKey) int {
 	if _, found := cache.lower[key]; found {
 		return 0
 	}
+	if _, found := cache.runes[key]; found {
+		return 0
+	}
 	if _, found := cache.matches[literalBodyKey{bodyKey: key}]; found {
 		return 0
 	}
@@ -150,4 +154,34 @@ func (cache *responseCache) inputCost(key bodyKey) int {
 		return 0
 	}
 	return key.size
+}
+
+// regexResponseRunes 让同一只读响应的正则匹配共用字符缓冲，受同一预算约束。
+func regexResponseRunes(ctx context.Context, value []byte) []rune {
+	cache, ok := ctx.Value(responseCacheKey{}).(*responseCache)
+	if !ok || len(value) < 64 {
+		return []rune(string(value))
+	}
+	key := bodyKey{&value[0], len(value)}
+	cache.mu.RLock()
+	runes, found := cache.runes[key]
+	cache.mu.RUnlock()
+	if found {
+		return runes
+	}
+	cache.mu.Lock()
+	defer cache.mu.Unlock()
+	if runes, found = cache.runes[key]; found {
+		return runes
+	}
+	runes = []rune(string(value))
+	cost := cache.inputCost(key) + 4*cap(runes)
+	if cache.bytes+cost <= responseCacheBudget {
+		if cache.runes == nil {
+			cache.runes = make(map[bodyKey][]rune)
+		}
+		cache.runes[key] = runes
+		cache.bytes += cost
+	}
+	return runes
 }

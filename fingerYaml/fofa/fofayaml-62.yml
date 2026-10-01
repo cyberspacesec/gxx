@@ -4,9 +4,7 @@ info:
   name: Redhat
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: fofayaml-62'
-  reference:
-    - https://example.com
+  description: 依据响应头中的 Red Hat 名称标记识别，不能据此确认具体操作系统发行版。
   tags: web,fofa,converted
   created: 2025/04/07
 rules:

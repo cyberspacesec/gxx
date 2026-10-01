@@ -17,11 +17,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/cyberspacesec/gxx/internal/lifecycle"
-	"github.com/cyberspacesec/gxx/pkg/runner"
-	"github.com/cyberspacesec/gxx/pkg/wappalyzer"
-	"github.com/cyberspacesec/gxx/types"
-	"github.com/cyberspacesec/gxx/utils/logger"
+	"github.com/cyberspacesec/gxx/v2/internal/lifecycle"
+	"github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/pkg/runner"
+	"github.com/cyberspacesec/gxx/v2/pkg/wappalyzer"
+	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/v2/utils/logger"
 	"iter"
 	"log/slog"
 	"os"
@@ -48,11 +49,13 @@ type TargetCallback func(result *TargetResult) bool
 
 // Engine 指纹识别引擎实例。
 type Engine struct {
-	life   *lifecycle.Gate
-	cfg    engineConfig
-	runner *runner.Runner
-	writer Writer
-	closed atomic.Bool
+	life        *lifecycle.Gate
+	cfg         engineConfig
+	runner      *runner.Runner
+	writer      Writer
+	closed      atomic.Bool
+	products    map[string]ProductInfo
+	assessments map[string]RuleAssessment
 }
 
 // NewEngine 创建并初始化 Engine 实例。
@@ -85,6 +88,7 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		cfg.logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug}))
 	}
 	scanCfg := runner.ScanConfig{
+		CaptureEvidence:    cfg.matchDetails,
 		Reverse:            cfg.reverse,
 		Logger:             logger.FromSlog(cfg.logger),
 		CacheMaxBytes:      uint64(cfg.cacheMaxBytes),
@@ -129,7 +133,20 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		return nil, err
 	}
 
-	return &Engine{cfg: cfg, runner: r, writer: writer, life: lifecycle.New(0)}, nil
+	products, err := productIndex(cfg.products)
+	if err != nil {
+		_ = r.Close()
+		_ = writer.Close()
+		return nil, err
+	}
+	assessments := make(map[string]RuleAssessment, len(builtinCatalog.Validations)+len(cfg.assessments))
+	for id, assessment := range builtinCatalog.Validations {
+		assessments[id] = assessment
+	}
+	for _, assessment := range cfg.assessments {
+		assessments[assessment.RuleID] = assessment
+	}
+	return &Engine{cfg: cfg, runner: r, writer: writer, life: lifecycle.New(0), products: products, assessments: assessments}, nil
 }
 
 // buildWriter 根据 engineConfig 装配最终的 Writer：
@@ -299,7 +316,7 @@ func (e *Engine) Scan(ctx context.Context, target string) (*TargetResult, error)
 	if res == nil {
 		return nil, fmt.Errorf("%w: target=%s", ErrEmptyResult, target)
 	}
-	out := convertTargetResult(res)
+	out := e.convertTargetResult(res)
 	e.dispatchWriter(ctx, out)
 	return out, nil
 }
@@ -426,7 +443,7 @@ func (e *Engine) ScanIterator(ctx context.Context, targets iter.Seq[string], cb 
 				return
 			}
 
-			out := convertTargetResult(res)
+			out := e.convertTargetResult(res)
 			e.dispatchWriter(batchCtx, out)
 
 			cbMu.Lock()
@@ -532,7 +549,7 @@ func (e *Engine) NormalizeURL(ctx context.Context, target string) (string, error
 
 // ─────────────── 内部转换 ───────────────
 
-func convertTargetResult(r *runner.TargetResult) *TargetResult {
+func (e *Engine) convertTargetResult(r *runner.TargetResult) *TargetResult {
 	tr := &TargetResult{
 		URL:        r.URL,
 		StatusCode: r.StatusCode,
@@ -554,17 +571,17 @@ func convertTargetResult(r *runner.TargetResult) *TargetResult {
 			continue
 		}
 		tr.Matches = append(tr.Matches, FingerMatch{
-			Info: FingerInfo{
-				ID:          m.Finger.Id,
-				Name:        m.Finger.Info.Name,
-				Author:      m.Finger.Info.Author,
-				Severity:    m.Finger.Info.Severity,
-				Description: m.Finger.Info.Description,
-				Tags:        m.Finger.Info.Tags,
-			},
-			Result: m.Result,
+			Info:             e.convertFingerInfo(finger.Metadata{ID: m.Finger.Id, Info: m.Finger.Info, Source: m.Finger.Source}),
+			Result:           m.Result,
+			Expression:       m.Finger.Expression,
+			ProductVersion:   m.ProductVersion,
+			ProductVersions:  m.ProductVersions,
+			VersionConflict:  m.VersionConflict,
+			DetailsTruncated: m.DetailsTruncated,
+			MatchedRules:     convertSubRuleMatches(m.MatchedRules),
 		})
 	}
+	tr.Products = aggregateProducts(tr.Matches)
 	return tr
 }
 

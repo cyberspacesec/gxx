@@ -1,9 +1,12 @@
 id: web-thinkphp
 info:
+  tags: framework
+  reference:
+    - https://www.thinkphp.cn/
   name: thinkphp
   author: archer
   verified: true
-  description: 检测到thinkphp系统或组件的特征
+  description: 用于构建 Web 应用的 PHP 开发框架。
   created: 2025/04/24
 rules:
   r0:

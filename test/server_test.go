@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/cyberspacesec/gxx/pkg/finger"
-	"github.com/cyberspacesec/gxx/types"
+	"github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/types"
 	"net/http"
 )
 

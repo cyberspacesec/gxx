@@ -14,10 +14,10 @@ import (
 	"testing"
 	"time"
 
-	finger2 "github.com/cyberspacesec/gxx/fingerYaml"
-	"github.com/cyberspacesec/gxx/pkg/cel"
-	"github.com/cyberspacesec/gxx/pkg/finger"
-	"github.com/cyberspacesec/gxx/pkg/network"
+	finger2 "github.com/cyberspacesec/gxx/v2/fingerYaml"
+	"github.com/cyberspacesec/gxx/v2/pkg/cel"
+	"github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/pkg/network"
 )
 
 const embeddedScheme = "embedded://"

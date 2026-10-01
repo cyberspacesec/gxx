@@ -1,9 +1,12 @@
 id: web-debian
 info:
+  tags: operating-system
+  reference:
+    - https://www.debian.org/
   name: debian
   author: archer
   verified: false
-  description: 检测到debian系统或组件的特征
+  description: 开源操作系统发行版；响应标记不等同于主机系统已核实。
   created: 2025/04/24
 rules:
   r0:

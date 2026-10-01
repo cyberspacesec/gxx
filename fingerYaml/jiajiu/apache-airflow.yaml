@@ -1,9 +1,12 @@
 id: web-apache-airflow
 info:
+  tags: application
+  reference:
+    - https://airflow.apache.org/
   name: apache-airflow
   author: archer
   verified: false
-  description: 检测到apache-airflow系统或组件的特征
+  description: 以代码定义、调度和监控工作流的平台。
   created: 2025/04/24
 rules:
   r0:

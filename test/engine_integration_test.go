@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cyberspacesec/gxx/sdk"
+	"github.com/cyberspacesec/gxx/v2/sdk"
 )
 
 // TestEngine_ScanCallback_Integration 外网流式回调（go test -tags=integration，需网络可达）。

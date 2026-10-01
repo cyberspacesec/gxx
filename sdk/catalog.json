@@ -1,0 +1,1332 @@
+{
+  "products": [
+    {
+      "id": "apache.http-server",
+      "name": "Apache HTTP Server",
+      "category": "web-server",
+      "tags": [
+        "web-server"
+      ],
+      "references": [
+        "https://httpd.apache.org/"
+      ],
+      "rule_ids": [
+        "apache-detect",
+        "web-apache-http",
+        "web-apache2-ubuntu默认页面"
+      ],
+      "aliases": [
+        "Apache",
+        "apache-http",
+        "Apache2 Ubuntu默认页面"
+      ],
+      "vendor": "Apache Software Foundation",
+      "cpe": [
+        "cpe:2.3:a:apache:http_server:*:*:*:*:*:*:*:*"
+      ],
+      "description": "提供 HTTP 服务的开源 Web 服务器。"
+    },
+    {
+      "id": "wordpress.wordpress",
+      "name": "WordPress",
+      "category": "cms",
+      "tags": [
+        "cms"
+      ],
+      "references": [
+        "https://wordpress.org/"
+      ],
+      "rule_ids": [
+        "web-wordpress"
+      ],
+      "aliases": [
+        "wordpress"
+      ],
+      "vendor": "WordPress",
+      "cpe": [
+        "cpe:2.3:a:wordpress:wordpress:*:*:*:*:*:*:*:*"
+      ],
+      "description": "开源内容管理与站点发布系统。"
+    },
+    {
+      "id": "alibaba.fastjson",
+      "name": "Fastjson",
+      "category": "library",
+      "tags": [
+        "library"
+      ],
+      "references": [
+        "https://github.com/alibaba/fastjson"
+      ],
+      "rule_ids": [
+        "web-alibaba-fastjson"
+      ],
+      "aliases": [
+        "alibaba-fastjson",
+        "Fastjson 1"
+      ],
+      "vendor": "Alibaba",
+      "cpe": [
+        "cpe:2.3:a:alibaba:fastjson:*:*:*:*:*:*:*:*"
+      ],
+      "description": "Java JSON 解析库，依据 Fastjson 1 的异常类和解析器类名称识别。"
+    },
+    {
+      "id": "arl.arl",
+      "name": "ARL 资产侦察灯塔系统",
+      "category": "security",
+      "tags": [
+        "security"
+      ],
+      "references": [
+        "https://github.com/tophant-ai/ARL-doc"
+      ],
+      "rule_ids": [
+        "web-arl",
+        "web-资产灯塔系统"
+      ],
+      "aliases": [
+        "arl",
+        "资产灯塔系统",
+        "ARL"
+      ],
+      "description": "资产发现、指纹识别与安全监测系统。"
+    },
+    {
+      "id": "nginx.nginx",
+      "name": "nginx",
+      "category": "web-server",
+      "tags": [
+        "web-server"
+      ],
+      "references": [
+        "https://nginx.org/en/"
+      ],
+      "rule_ids": [
+        "nginx-detect"
+      ],
+      "aliases": [
+        "NGINX"
+      ],
+      "description": "提供 HTTP 服务和反向代理的开源 Web 服务器。"
+    },
+    {
+      "id": "apache.activemq",
+      "name": "Apache ActiveMQ",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://activemq.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-activemq"
+      ],
+      "aliases": [
+        "apache-activemq"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "支持多协议消息传递的 Java 消息代理。"
+    },
+    {
+      "id": "apache.airflow",
+      "name": "Apache Airflow",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://airflow.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-airflow"
+      ],
+      "aliases": [
+        "apache-airflow"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "以代码定义、调度和监控工作流的平台。"
+    },
+    {
+      "id": "apache.ambari",
+      "name": "Apache Ambari",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://ambari.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-ambari"
+      ],
+      "aliases": [
+        "apache-ambari"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "Hadoop 集群的部署、管理与监控平台。"
+    },
+    {
+      "id": "apache.apisix",
+      "name": "Apache APISIX",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://apisix.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-apisix"
+      ],
+      "aliases": [
+        "apache-apisix"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "用于 API 和微服务流量管理的网关。"
+    },
+    {
+      "id": "apache.apisix-dashboard",
+      "name": "Apache APISIX Dashboard",
+      "category": "hosting-panel",
+      "tags": [
+        "hosting-panel"
+      ],
+      "references": [
+        "https://github.com/apache/apisix-dashboard"
+      ],
+      "rule_ids": [
+        "web-apache-apisix-dashboard"
+      ],
+      "aliases": [
+        "apache-apisix-dashboard"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "Apache APISIX 的 Web 管理界面。"
+    },
+    {
+      "id": "apache.archiva",
+      "name": "Apache Archiva",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://archiva.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-archiva"
+      ],
+      "aliases": [
+        "apache-archiva"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "用于构建产物存储、代理和检索的仓库管理器。"
+    },
+    {
+      "id": "apache.axis",
+      "name": "Apache Axis",
+      "category": "framework",
+      "tags": [
+        "framework"
+      ],
+      "references": [
+        "https://axis.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-axis"
+      ],
+      "aliases": [
+        "apache-axis"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "基于 Java 的 SOAP Web 服务框架。"
+    },
+    {
+      "id": "apache.axis2",
+      "name": "Apache Axis2",
+      "category": "framework",
+      "tags": [
+        "framework"
+      ],
+      "references": [
+        "https://axis.apache.org/axis2/java/core/"
+      ],
+      "rule_ids": [
+        "web-apache-axis2"
+      ],
+      "aliases": [
+        "apache-axis2"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "SOAP 和 Web 服务的实现框架。"
+    },
+    {
+      "id": "apache.cocoon",
+      "name": "Apache Cocoon",
+      "category": "framework",
+      "tags": [
+        "framework"
+      ],
+      "references": [
+        "https://cocoon.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-cocoon"
+      ],
+      "aliases": [
+        "apache-cocoon"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "基于组件和管道的数据处理与 Web 发布框架。"
+    },
+    {
+      "id": "apache.couchdb",
+      "name": "Apache CouchDB",
+      "category": "database",
+      "tags": [
+        "database"
+      ],
+      "references": [
+        "https://couchdb.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-couchdb"
+      ],
+      "aliases": [
+        "apache-couchdb"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "使用 JSON 文档和 HTTP 接口的数据库。"
+    },
+    {
+      "id": "apache.druid",
+      "name": "Apache Druid",
+      "category": "database",
+      "tags": [
+        "database"
+      ],
+      "references": [
+        "https://druid.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-druid"
+      ],
+      "aliases": [
+        "apache-druid"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "面向实时数据分析的分布式数据库。"
+    },
+    {
+      "id": "apache.dubbo",
+      "name": "Apache Dubbo",
+      "category": "framework",
+      "tags": [
+        "framework"
+      ],
+      "references": [
+        "https://dubbo.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-dubbo",
+        "apache-dubbo"
+      ],
+      "aliases": [
+        "apache-dubbo",
+        "Apache dubbo"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "微服务 RPC 通信、服务发现与治理框架。"
+    },
+    {
+      "id": "apache.flink",
+      "name": "Apache Flink",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://flink.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-flink"
+      ],
+      "aliases": [
+        "apache-flink"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "面向有界与无界数据流的分布式处理引擎。"
+    },
+    {
+      "id": "apache.forrest",
+      "name": "Apache Forrest",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://forrest.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-forrest"
+      ],
+      "aliases": [
+        "apache-forrest"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "将多种来源内容组织为网站及文档的发布框架。"
+    },
+    {
+      "id": "apache.guacamole",
+      "name": "Apache Guacamole",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://guacamole.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-guacamole"
+      ],
+      "aliases": [
+        "apache-guacamole"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "通过浏览器访问远程桌面的网关。"
+    },
+    {
+      "id": "apache.hadoop",
+      "name": "Apache Hadoop",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://hadoop.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-hadoop"
+      ],
+      "aliases": [
+        "apache-hadoop"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "面向大规模数据的分布式存储与处理框架。"
+    },
+    {
+      "id": "apache.hadoop-yarn",
+      "name": "Apache Hadoop YARN",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html"
+      ],
+      "rule_ids": [
+        "web-apache-hadoop-yarn"
+      ],
+      "aliases": [
+        "apache-hadoop-yarn"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "Hadoop 集群的资源管理与作业调度组件。"
+    },
+    {
+      "id": "apache.kylin",
+      "name": "Apache Kylin",
+      "category": "database",
+      "tags": [
+        "database"
+      ],
+      "references": [
+        "https://kylin.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-kylin"
+      ],
+      "aliases": [
+        "apache-kylin"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "面向多维分析与大规模数据查询的 OLAP 引擎。"
+    },
+    {
+      "id": "apache.mesos",
+      "name": "Apache Mesos",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://mesos.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-mesos"
+      ],
+      "aliases": [
+        "apache-mesos"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "管理和调度分布式集群计算资源的平台。"
+    },
+    {
+      "id": "apache.nifi",
+      "name": "Apache NiFi",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://nifi.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-nifi"
+      ],
+      "aliases": [
+        "apache-nifi"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "用于处理、路由与分发数据流的平台。"
+    },
+    {
+      "id": "apache.ofbiz",
+      "name": "Apache OFBiz",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://ofbiz.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-ofbiz"
+      ],
+      "aliases": [
+        "apache-ofbiz"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "包含 ERP、CRM 和电子商务功能的业务应用框架。"
+    },
+    {
+      "id": "apache.oozie-web-console",
+      "name": "Apache Oozie",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://oozie.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-oozie-web-console"
+      ],
+      "aliases": [
+        "apache-oozie-web-console"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "用于 Hadoop 作业编排与调度的工作流系统。"
+    },
+    {
+      "id": "apache.ranger",
+      "name": "Apache Ranger",
+      "category": "security",
+      "tags": [
+        "security"
+      ],
+      "references": [
+        "https://ranger.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-ranger"
+      ],
+      "aliases": [
+        "apache-ranger"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "用于数据平台权限管理、授权与审计的框架。"
+    },
+    {
+      "id": "apache.shiro",
+      "name": "Apache Shiro",
+      "category": "framework",
+      "tags": [
+        "framework"
+      ],
+      "references": [
+        "https://shiro.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-shiro"
+      ],
+      "aliases": [
+        "apache-shiro"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "提供身份认证、授权与会话管理的 Java 安全框架。"
+    },
+    {
+      "id": "apache.skywalking",
+      "name": "Apache SkyWalking",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://skywalking.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-skywalking"
+      ],
+      "aliases": [
+        "apache-skywalking"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "面向应用和分布式服务的可观测性平台。"
+    },
+    {
+      "id": "apache.solr",
+      "name": "Apache Solr",
+      "category": "database",
+      "tags": [
+        "database"
+      ],
+      "references": [
+        "https://solr.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-solr"
+      ],
+      "aliases": [
+        "apache-solr"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "提供全文检索与数据分析功能的搜索平台。"
+    },
+    {
+      "id": "apache.storm",
+      "name": "Apache Storm",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://storm.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-storm"
+      ],
+      "aliases": [
+        "apache-storm"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "用于实时数据流处理的分布式计算系统。"
+    },
+    {
+      "id": "apache.struts",
+      "name": "Apache Struts",
+      "category": "framework",
+      "tags": [
+        "framework"
+      ],
+      "references": [
+        "https://struts.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-struts"
+      ],
+      "aliases": [
+        "apache-struts"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "基于 MVC 模式的 Java Web 应用框架。"
+    },
+    {
+      "id": "apache.superset",
+      "name": "Apache Superset",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://superset.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-superset"
+      ],
+      "aliases": [
+        "apache-superset"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "用于数据探索和可视化的业务分析平台。"
+    },
+    {
+      "id": "apache.tomcat",
+      "name": "Apache Tomcat",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://tomcat.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-tomcat"
+      ],
+      "aliases": [
+        "apache-tomcat"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "实现 Jakarta Servlet 等规范的 Web 应用容器。"
+    },
+    {
+      "id": "apache.unomi",
+      "name": "Apache Unomi",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://unomi.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-unomi"
+      ],
+      "aliases": [
+        "apache-unomi"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "用于管理用户画像和行为数据的客户数据平台。"
+    },
+    {
+      "id": "apache.wicket",
+      "name": "Apache Wicket",
+      "category": "framework",
+      "tags": [
+        "framework"
+      ],
+      "references": [
+        "https://wicket.apache.org/"
+      ],
+      "rule_ids": [
+        "web-apache-wicket"
+      ],
+      "aliases": [
+        "apache-wicket"
+      ],
+      "vendor": "Apache Software Foundation",
+      "description": "基于组件的 Java Web 应用框架。"
+    },
+    {
+      "id": "jenkins.jenkins",
+      "name": "Jenkins",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://www.jenkins.io/"
+      ],
+      "rule_ids": [
+        "web-jenkins"
+      ],
+      "aliases": [
+        "jenkins"
+      ],
+      "description": "用于构建、测试和交付流程自动化的服务器。"
+    },
+    {
+      "id": "grafana.grafana",
+      "name": "Grafana",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://grafana.com/oss/grafana/"
+      ],
+      "rule_ids": [
+        "web-grafana"
+      ],
+      "aliases": [
+        "grafana"
+      ],
+      "vendor": "Grafana Labs",
+      "description": "用于查询、可视化与监控指标和日志的应用。"
+    },
+    {
+      "id": "elastic.kibana",
+      "name": "Kibana",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://www.elastic.co/kibana"
+      ],
+      "rule_ids": [
+        "web-kibana"
+      ],
+      "aliases": [
+        "kibana"
+      ],
+      "vendor": "Elastic",
+      "description": "用于查询、分析和可视化 Elasticsearch 数据的应用。"
+    },
+    {
+      "id": "prometheus.prometheus",
+      "name": "Prometheus",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://prometheus.io/"
+      ],
+      "rule_ids": [
+        "web-prometheus"
+      ],
+      "aliases": [
+        "prometheus"
+      ],
+      "description": "用于指标采集、时序数据查询与告警的监控系统。"
+    },
+    {
+      "id": "zabbix.zabbix",
+      "name": "Zabbix",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://www.zabbix.com/"
+      ],
+      "rule_ids": [
+        "web-zabbix"
+      ],
+      "aliases": [
+        "zabbix"
+      ],
+      "vendor": "Zabbix",
+      "description": "用于监控网络、服务器与应用状态的系统。"
+    },
+    {
+      "id": "rabbitmq.rabbitmq",
+      "name": "RabbitMQ",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://www.rabbitmq.com/"
+      ],
+      "rule_ids": [
+        "web-rabbitmq"
+      ],
+      "aliases": [
+        "rabbitmq"
+      ],
+      "description": "支持消息队列与多种消息传输协议的消息代理。"
+    },
+    {
+      "id": "gitlab.gitlab",
+      "name": "GitLab",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://about.gitlab.com/"
+      ],
+      "rule_ids": [
+        "web-gitlab"
+      ],
+      "aliases": [
+        "gitlab"
+      ],
+      "vendor": "GitLab",
+      "description": "提供代码托管、协作与持续集成能力的开发平台。"
+    },
+    {
+      "id": "drupal.drupal",
+      "name": "Drupal",
+      "category": "cms",
+      "tags": [
+        "cms"
+      ],
+      "references": [
+        "https://www.drupal.org/"
+      ],
+      "rule_ids": [
+        "web-drupal"
+      ],
+      "aliases": [
+        "drupal"
+      ],
+      "description": "用于内容管理和站点发布的开源平台。"
+    },
+    {
+      "id": "joomla.joomla",
+      "name": "Joomla",
+      "category": "cms",
+      "tags": [
+        "cms"
+      ],
+      "references": [
+        "https://www.joomla.org/"
+      ],
+      "rule_ids": [
+        "web-joomla"
+      ],
+      "aliases": [
+        "joomla"
+      ],
+      "description": "用于内容管理和站点发布的开源平台。"
+    },
+    {
+      "id": "phpmyadmin.phpmyadmin",
+      "name": "phpMyAdmin",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://www.phpmyadmin.net/"
+      ],
+      "rule_ids": [
+        "web-phpmyadmin"
+      ],
+      "aliases": [
+        "phpmyadmin"
+      ],
+      "description": "通过 Web 界面管理 MySQL 与 MariaDB 数据库的工具。"
+    },
+    {
+      "id": "thinkphp.thinkphp",
+      "name": "ThinkPHP",
+      "category": "framework",
+      "tags": [
+        "framework"
+      ],
+      "references": [
+        "https://www.thinkphp.cn/"
+      ],
+      "rule_ids": [
+        "web-thinkphp"
+      ],
+      "aliases": [
+        "thinkphp"
+      ],
+      "description": "用于构建 Web 应用的 PHP 开发框架。"
+    },
+    {
+      "id": "oracle.weblogic",
+      "name": "Oracle WebLogic Server",
+      "category": "middleware",
+      "tags": [
+        "middleware"
+      ],
+      "references": [
+        "https://www.oracle.com/middleware/technologies/weblogic.html"
+      ],
+      "rule_ids": [
+        "web-oracle-weblogic"
+      ],
+      "aliases": [
+        "oracle-weblogic"
+      ],
+      "vendor": "Oracle",
+      "description": "提供企业 Java 应用运行与管理能力的应用服务器。"
+    },
+    {
+      "id": "spring.framework",
+      "name": "Spring Framework",
+      "category": "framework",
+      "tags": [
+        "framework"
+      ],
+      "references": [
+        "https://spring.io/projects/spring-framework"
+      ],
+      "rule_ids": [
+        "web-spring-framework"
+      ],
+      "aliases": [
+        "spring-framework"
+      ],
+      "description": "提供依赖注入、应用集成与 Web 开发能力的 Java 框架。"
+    },
+    {
+      "id": "aprelium.abyss",
+      "name": "Abyss Web Server",
+      "category": "web-server",
+      "tags": [
+        "web-server"
+      ],
+      "references": [
+        "https://aprelium.com/abyssws/"
+      ],
+      "rule_ids": [
+        "abyss-web-server"
+      ],
+      "aliases": [
+        "Detect Abyss Web Server"
+      ],
+      "vendor": "Aprelium",
+      "description": "Aprelium 提供的 Web 服务器。"
+    },
+    {
+      "id": "adobe.aem",
+      "name": "Adobe Experience Manager",
+      "category": "cms",
+      "tags": [
+        "cms"
+      ],
+      "references": [
+        "https://business.adobe.com/products/experience-manager.html"
+      ],
+      "rule_ids": [
+        "aem-cms"
+      ],
+      "aliases": [
+        "AEM Finder"
+      ],
+      "vendor": "Adobe",
+      "description": "Adobe 提供的内容、站点与数字资产管理平台。"
+    },
+    {
+      "id": "ubiquiti.aircube",
+      "name": "airCube",
+      "category": "device",
+      "tags": [
+        "device"
+      ],
+      "references": [
+        "https://techspecs.ui.com/uisp/wired/acb-ac"
+      ],
+      "rule_ids": [
+        "aircube-login"
+      ],
+      "aliases": [
+        "AirCube"
+      ],
+      "vendor": "Ubiquiti",
+      "description": "Ubiquiti 提供的无线网络接入设备。"
+    },
+    {
+      "id": "actfax.activefax",
+      "name": "ActiveFax",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://www.actfax.com/"
+      ],
+      "rule_ids": [
+        "fingeryaml-7"
+      ],
+      "aliases": [
+        "ACTFAX-ActiveFax"
+      ],
+      "description": "用于企业传真发送、接收与管理的软件。"
+    },
+    {
+      "id": "apple.macos",
+      "name": "macOS",
+      "category": "operating-system",
+      "tags": [
+        "operating-system"
+      ],
+      "references": [
+        "https://www.apple.com/macos/"
+      ],
+      "rule_ids": [
+        "fofayaml-38"
+      ],
+      "aliases": [
+        "MacOS"
+      ],
+      "vendor": "Apple",
+      "description": "Apple 的桌面操作系统；响应标记不等同于主机系统已核实。"
+    },
+    {
+      "id": "microsoft.windows",
+      "name": "Windows",
+      "category": "operating-system",
+      "tags": [
+        "operating-system"
+      ],
+      "references": [
+        "https://learn.microsoft.com/en-us/windows/"
+      ],
+      "rule_ids": [
+        "fofayaml-41",
+        "fofayaml-44"
+      ],
+      "aliases": [
+        "windows 64bit",
+        "WINDOWS 32bit"
+      ],
+      "vendor": "Microsoft",
+      "description": "Microsoft 的操作系统；响应标记不等同于主机系统已核实。"
+    },
+    {
+      "id": "scientificlinux.scientificlinux",
+      "name": "Scientific Linux",
+      "category": "operating-system",
+      "tags": [
+        "operating-system"
+      ],
+      "references": [
+        "https://scientificlinux.org/"
+      ],
+      "rule_ids": [
+        "fofayaml-50"
+      ],
+      "aliases": [
+        "Scientific Linux"
+      ],
+      "description": "面向科研使用场景的 Linux 发行版；响应标记不等同于主机系统已核实。"
+    },
+    {
+      "id": "oracle.solaris",
+      "name": "Oracle Solaris",
+      "category": "operating-system",
+      "tags": [
+        "operating-system"
+      ],
+      "references": [
+        "https://www.oracle.com/solaris/"
+      ],
+      "rule_ids": [
+        "fofayaml-53"
+      ],
+      "aliases": [
+        "Oracle Solaris"
+      ],
+      "vendor": "Oracle",
+      "description": "Oracle 的 Unix 操作系统；响应标记不等同于主机系统已核实。"
+    },
+    {
+      "id": "freebsd.freebsd",
+      "name": "FreeBSD",
+      "category": "operating-system",
+      "tags": [
+        "operating-system"
+      ],
+      "references": [
+        "https://www.freebsd.org/"
+      ],
+      "rule_ids": [
+        "fofayaml-56"
+      ],
+      "aliases": [
+        "FreeBSD"
+      ],
+      "description": "开源类 Unix 操作系统；响应标记不等同于主机系统已核实。"
+    },
+    {
+      "id": "linuxmint.linuxmint",
+      "name": "Linux Mint",
+      "category": "operating-system",
+      "tags": [
+        "operating-system"
+      ],
+      "references": [
+        "https://linuxmint.com/"
+      ],
+      "rule_ids": [
+        "fofayaml-59"
+      ],
+      "aliases": [
+        "linuxmint"
+      ],
+      "description": "Linux 桌面发行版；响应标记不等同于主机系统已核实。"
+    },
+    {
+      "id": "opensuse.opensuse",
+      "name": "openSUSE",
+      "category": "operating-system",
+      "tags": [
+        "operating-system"
+      ],
+      "references": [
+        "https://www.opensuse.org/"
+      ],
+      "rule_ids": [
+        "fofayaml-65"
+      ],
+      "aliases": [
+        "openSUSE"
+      ],
+      "description": "Linux 发行版；响应标记不等同于主机系统已核实。"
+    },
+    {
+      "id": "fedora.fedora",
+      "name": "Fedora Linux",
+      "category": "operating-system",
+      "tags": [
+        "operating-system"
+      ],
+      "references": [
+        "https://fedoraproject.org/"
+      ],
+      "rule_ids": [
+        "fofayaml-68"
+      ],
+      "aliases": [
+        "Fedora"
+      ],
+      "description": "Linux 发行版；响应标记不等同于主机系统已核实。"
+    },
+    {
+      "id": "debian.debian",
+      "name": "Debian",
+      "category": "operating-system",
+      "tags": [
+        "operating-system"
+      ],
+      "references": [
+        "https://www.debian.org/"
+      ],
+      "rule_ids": [
+        "fofayaml-77",
+        "web-debian"
+      ],
+      "aliases": [
+        "Debian",
+        "debian"
+      ],
+      "description": "开源操作系统发行版；响应标记不等同于主机系统已核实。"
+    },
+    {
+      "id": "openprinting.cups",
+      "name": "CUPS",
+      "category": "application",
+      "tags": [
+        "application"
+      ],
+      "references": [
+        "https://openprinting.github.io/cups/"
+      ],
+      "rule_ids": [
+        "fofayaml-8"
+      ],
+      "aliases": [
+        "CUPS"
+      ],
+      "vendor": "OpenPrinting",
+      "description": "OpenPrinting 维护的打印服务系统。"
+    }
+  ],
+  "validations": {
+    "web-apache-http": {
+      "rule_id": "web-apache-http",
+      "rule_sha256": "842e9ad2bf5802af7856e9a879b10cf37ae3ad365a91eaeadc3e9b6e20e15f41",
+      "validation": {
+        "status": "sample-tested",
+        "method": "synthetic-http-fixtures",
+        "positive_samples": 2,
+        "negative_samples": 1,
+        "reviewed_at": "2026-10-01",
+        "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+      },
+      "confidence": null
+    },
+    "web-资产灯塔系统": {
+      "rule_id": "web-资产灯塔系统",
+      "rule_sha256": "c56eeba93b72f3b3e7546ec48fd83b2c8dd0ac6b4682902a21a945e7d8be8c4d",
+      "validation": {
+        "status": "sample-tested",
+        "method": "synthetic-http-fixtures",
+        "positive_samples": 1,
+        "negative_samples": 1,
+        "reviewed_at": "2026-10-01",
+        "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+      },
+      "confidence": null
+    },
+    "web-wordpress": {
+      "rule_id": "web-wordpress",
+      "rule_sha256": "df51a63a5555a426d7f048333223d4f783fce5d36f7a2c9796c88ba9eff9e39a",
+      "validation": {
+        "status": "sample-tested",
+        "method": "synthetic-http-fixtures",
+        "positive_samples": 4,
+        "negative_samples": 1,
+        "reviewed_at": "2026-10-01",
+        "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+      },
+      "confidence": null
+    },
+    "web-apache-tomcat": {
+      "rule_id": "web-apache-tomcat",
+      "rule_sha256": "5de52b17668613e4a64f2fa7197cb301021f2273e386d6eeb2eecac729d63b5d",
+      "validation": {
+        "status": "sample-tested",
+        "method": "synthetic-http-fixtures",
+        "positive_samples": 3,
+        "negative_samples": 1,
+        "reviewed_at": "2026-10-01",
+        "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+      },
+      "confidence": null
+    },
+    "web-alibaba-fastjson": {
+      "rule_id": "web-alibaba-fastjson",
+      "rule_sha256": "4e68fac649c7cedc06a9f8c60364a646c9db499f2e27a3604cd0cea9ac2ab1fe",
+      "validation": {
+        "status": "sample-tested",
+        "method": "synthetic-http-fixtures",
+        "positive_samples": 4,
+        "negative_samples": 8,
+        "reviewed_at": "2026-10-01",
+        "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+      },
+      "confidence": null
+    },
+    "web-arl": {
+      "rule_id": "web-arl",
+      "rule_sha256": "84a241df9529cbe28481b49f53dd8bba2a2561bee9dc5b7004ab069e6011a148",
+      "validation": {
+        "status": "sample-tested",
+        "method": "synthetic-http-fixtures",
+        "positive_samples": 1,
+        "negative_samples": 1,
+        "reviewed_at": "2026-10-01",
+        "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+      },
+      "confidence": null
+    },
+    "web-jenkins": {
+      "rule_id": "web-jenkins",
+      "rule_sha256": "1ec6b71857ceaf62d23616d3eb8c6f86904f4b5f065350fd35960e98cb8fc2c1",
+      "validation": {
+        "status": "sample-tested",
+        "method": "synthetic-http-fixtures",
+        "positive_samples": 2,
+        "negative_samples": 2,
+        "reviewed_at": "2026-10-01",
+        "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+      },
+      "confidence": null
+    },
+    "nginx-detect": {
+      "rule_id": "nginx-detect",
+      "rule_sha256": "5724b5c3e325afc445c0a05d14a777c544876ab8ab84509406ee44d5c0c14925",
+      "validation": {
+        "status": "sample-tested",
+        "method": "synthetic-http-fixtures",
+        "positive_samples": 3,
+        "negative_samples": 2,
+        "reviewed_at": "2026-10-01",
+        "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+      },
+      "confidence": null
+    }
+  }
+}

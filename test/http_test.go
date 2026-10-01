@@ -10,7 +10,7 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/cyberspacesec/gxx/pkg/network"
+	"github.com/cyberspacesec/gxx/v2/pkg/network"
 	"golang.org/x/net/context"
 	"io"
 	"net/http"

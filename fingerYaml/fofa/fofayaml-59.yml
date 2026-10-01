@@ -1,13 +1,13 @@
 ---
 id: fofayaml-59
 info:
+  reference:
+    - https://linuxmint.com/
   name: linuxmint
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: fofayaml-59'
-  reference:
-    - https://example.com
-  tags: web,fofa,converted
+  description: Linux 桌面发行版；响应标记不等同于主机系统已核实。
+  tags: web,fofa,converted,operating-system
   created: 2025/04/07
 rules:
   r0:

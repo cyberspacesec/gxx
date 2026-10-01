@@ -1,9 +1,12 @@
 id: web-apache-apisix
 info:
+  tags: middleware
+  reference:
+    - https://apisix.apache.org/
   name: apache-apisix
   author: archer
   verified: false
-  description: 检测到apache-apisix系统或组件的特征
+  description: 用于 API 和微服务流量管理的网关。
   created: 2025/04/24
 rules:
   r0:

@@ -5,8 +5,8 @@ Package debug 提供 GXX 引擎的运维与调试 helper。
 内存和 GC 数据描述整个 Go 进程，限流器统计描述指定实例。
 
 	import (
-	    "github.com/cyberspacesec/gxx/sdk"
-	    "github.com/cyberspacesec/gxx/sdk/debug"
+	    "github.com/cyberspacesec/gxx/v2/sdk"
+	    "github.com/cyberspacesec/gxx/v2/sdk/debug"
 	)
 
 	engine, _ := sdk.NewEngine(ctx, sdk.WithMemoryMonitor(true))
@@ -21,7 +21,7 @@ package debug
 import (
 	"runtime"
 
-	"github.com/cyberspacesec/gxx/sdk"
+	"github.com/cyberspacesec/gxx/v2/sdk"
 )
 
 // MemoryStats 内存统计快照（外部友好字段名 + JSON tag）。

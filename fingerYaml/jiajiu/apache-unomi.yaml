@@ -1,9 +1,12 @@
 id: web-apache-unomi
 info:
+  tags: middleware
+  reference:
+    - https://unomi.apache.org/
   name: apache-unomi
   author: archer
   verified: false
-  description: 检测到apache-unomi系统或组件的特征
+  description: 用于管理用户画像和行为数据的客户数据平台。
   created: 2025/04/24
 rules:
   r0:

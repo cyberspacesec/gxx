@@ -1,9 +1,12 @@
 id: web-oracle-weblogic
 info:
+  tags: middleware
+  reference:
+    - https://www.oracle.com/middleware/technologies/weblogic.html
   name: oracle-weblogic
   author: archer
   verified: false
-  description: 检测到oracle-weblogic系统或组件的特征
+  description: 提供企业 Java 应用运行与管理能力的应用服务器。
   created: 2025/04/24
 rules:
   r0:

@@ -1,13 +1,13 @@
 ---
 id: fofayaml-53
 info:
+  reference:
+    - https://www.oracle.com/solaris/
   name: Oracle Solaris
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: fofayaml-53'
-  reference:
-    - https://example.com
-  tags: web,fofa,converted
+  description: Oracle 的 Unix 操作系统；响应标记不等同于主机系统已核实。
+  tags: web,fofa,converted,operating-system
   created: 2025/04/07
 rules:
   r0:

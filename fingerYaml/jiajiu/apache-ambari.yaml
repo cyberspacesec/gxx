@@ -1,9 +1,12 @@
 id: web-apache-ambari
 info:
+  tags: application
+  reference:
+    - https://ambari.apache.org/
   name: apache-ambari
   author: archer
   verified: false
-  description: 检测到apache-ambari系统或组件的特征
+  description: Hadoop 集群的部署、管理与监控平台。
   created: 2025/04/24
 rules:
   r0:

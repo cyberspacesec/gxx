@@ -7,12 +7,12 @@ package runner
 
 import (
 	"fmt"
-	fingerYaml "github.com/cyberspacesec/gxx/fingerYaml"
-	"github.com/cyberspacesec/gxx/pkg/cel"
-	"github.com/cyberspacesec/gxx/pkg/finger"
-	"github.com/cyberspacesec/gxx/types"
-	"github.com/cyberspacesec/gxx/utils/common"
-	"github.com/cyberspacesec/gxx/utils/logger"
+	fingerYaml "github.com/cyberspacesec/gxx/v2/fingerYaml"
+	"github.com/cyberspacesec/gxx/v2/pkg/cel"
+	"github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/v2/utils/common"
+	"github.com/cyberspacesec/gxx/v2/utils/logger"
 	"os"
 	"path/filepath"
 	"strings"
@@ -21,10 +21,11 @@ import (
 
 // FingerStore 指纹规则集合实例。
 type FingerStore struct {
-	mu      sync.RWMutex
-	fingers []*finger.Finger
-	plans   []fingerExecutionPlan
-	log     logger.Sink
+	mu              sync.RWMutex
+	fingers         []*finger.Finger
+	plans           []fingerExecutionPlan
+	log             logger.Sink
+	captureEvidence bool
 }
 
 // 执行清单与只读规则快照同时发布，按连续索引取得程序及调度条件。
@@ -74,6 +75,11 @@ func (fs *FingerStore) Load(options types.YamlFingerType) error {
 					return fmt.Errorf("读取 %s: %w", path, err)
 				}
 				if poc != nil {
+					relative, err := filepath.Rel(options.PocFile, path)
+					if err != nil {
+						return err
+					}
+					poc.Source.Path = filepath.ToSlash(relative)
 					next = append(next, poc)
 				}
 			}
@@ -133,7 +139,7 @@ func (fs *FingerStore) prepare() {
 			continue
 		}
 		expressions = append(expressions, fg.Expression)
-		if plan, err := cel.PrepareLibrary(keys, expressions); err == nil {
+		if plan, err := cel.PrepareLibrary(keys, expressions, fs.captureEvidence); err == nil {
 			plans[i].prepared = plan
 			plans[i].cacheOnly = plan.BatchSafe() && hasOnlyRootRequests(fg)
 		}
@@ -157,4 +163,32 @@ func (fs *FingerStore) Count() int {
 	fs.mu.RLock()
 	defer fs.mu.RUnlock()
 	return len(fs.fingers)
+}
+
+// Metadata 返回独立的元数据副本，不暴露可修改的执行规则。
+func (fs *FingerStore) Metadata() []finger.Metadata {
+	fs.mu.RLock()
+	defer fs.mu.RUnlock()
+	result := make([]finger.Metadata, len(fs.fingers))
+	for index, rule := range fs.fingers {
+		result[index] = finger.Metadata{ID: rule.Id, Info: rule.Info, Source: rule.Source}
+		result[index].Info.Reference = append([]string(nil), rule.Info.Reference...)
+		result[index].Transport, result[index].Expression = rule.Transport, rule.Expression
+		result[index].Detection = make([]finger.DetectionRule, len(rule.Rules))
+		for position, subrule := range rule.Rules {
+			value := finger.DetectionRule{Key: subrule.Key, Transport: subrule.Value.Request.Type, Method: subrule.Value.Request.Method, Path: subrule.Value.Request.Path, Expression: subrule.Value.Expression}
+			for _, output := range subrule.Value.Output {
+				key, keyOK := output.Key.(string)
+				expression, expressionOK := output.Value.(string)
+				if keyOK && expressionOK {
+					if value.Output == nil {
+						value.Output = make(map[string]string)
+					}
+					value.Output[key] = expression
+				}
+			}
+			result[index].Detection[position] = value
+		}
+	}
+	return result
 }

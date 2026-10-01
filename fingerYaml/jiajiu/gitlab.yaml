@@ -1,9 +1,12 @@
 id: web-gitlab
 info:
+  tags: application
+  reference:
+    - https://about.gitlab.com/
   name: gitlab
   author: archer
   verified: false
-  description: 检测到gitlab系统或组件的特征
+  description: 提供代码托管、协作与持续集成能力的开发平台。
   created: 2025/04/24
 rules:
   r0:

@@ -1,13 +1,13 @@
 ---
 id: fofayaml-8
 info:
+  reference:
+    - https://openprinting.github.io/cups/
   name: CUPS
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: fofayaml-8'
-  reference:
-    - https://example.com
-  tags: web,fofa,converted
+  description: OpenPrinting 维护的打印服务系统。
+  tags: web,fofa,converted,application
   created: 2025/04/07
 rules:
   r0:

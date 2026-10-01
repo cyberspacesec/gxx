@@ -5,8 +5,8 @@ Package runner sync.Pool 集合：RuleTask / varMap / FingerMatch。
 package runner
 
 import (
-	"github.com/cyberspacesec/gxx/pkg/cel"
-	"github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/pkg/cel"
+	"github.com/cyberspacesec/gxx/v2/pkg/finger"
 	"sync"
 )
 
@@ -73,10 +73,7 @@ func releaseVarMap(m map[string]any) {
 
 func acquireFingerMatch(fg *finger.Finger) *FingerMatch {
 	m := matchPool.Get().(*FingerMatch)
-	m.Finger = fg
-	m.Result = false
-	m.Request = nil
-	m.Response = nil
+	*m = FingerMatch{Finger: fg}
 	return m
 }
 
@@ -84,9 +81,6 @@ func releaseFingerMatch(m *FingerMatch) {
 	if m == nil {
 		return
 	}
-	m.Finger = nil
-	m.Result = false
-	m.Request = nil
-	m.Response = nil
+	*m = FingerMatch{}
 	matchPool.Put(m)
 }

@@ -21,7 +21,7 @@ make build-gui
 
 # 跨平台批量打包（产物写入仓库根 build/，与 gxx CLI 同目录）
 make package-gui
-# 例如 build/gxx-ide_mac_arm64_1.1.9.zip
+# 例如 build/gxx-ide_mac_arm64_2.0.0.zip
 ```
 
 ## 仅启动后端 API

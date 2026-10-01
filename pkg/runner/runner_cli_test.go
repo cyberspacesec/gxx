@@ -3,8 +3,8 @@ package runner
 import (
 	"context"
 	"fmt"
-	"github.com/cyberspacesec/gxx/types"
-	"github.com/cyberspacesec/gxx/utils/logger"
+	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/v2/utils/logger"
 	"net/http"
 	"net/http/httptest"
 	"os"

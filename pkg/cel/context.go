@@ -3,9 +3,10 @@ package cel
 import (
 	"context"
 	"fmt"
-	"github.com/cyberspacesec/gxx/pkg/network"
-	scantypes "github.com/cyberspacesec/gxx/types"
-	"github.com/cyberspacesec/gxx/utils/proto"
+	"github.com/cyberspacesec/gxx/v2/pkg/network"
+	scantypes "github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	"github.com/dlclark/regexp2"
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/common/ast"
 	"github.com/google/cel-go/common/types"
@@ -23,6 +24,7 @@ type evaluationContext struct {
 	client  *network.HTTPClient
 	options network.OptionsRequest
 	reverse scantypes.ReverseConfig
+	trace   *evaluationTrace
 }
 
 func (v *evaluationContext) ConvertToNative(t reflect.Type) (any, error) {
@@ -103,6 +105,63 @@ func contextEnvOptions() []cel.EnvOption {
 			return types.Bool(containsResponse(state.ctx, []byte(args[1].(types.Bytes)), []byte(args[2].(types.Bytes)), name == "ibcontains"))
 		}))))
 	}
+	opts = append(opts, cel.Macros(cel.ReceiverMacro("bsubmatch", 1, func(eh cel.MacroExprFactory, target ast.Expr, args []ast.Expr) (ast.Expr, *cel.Error) {
+		return eh.NewCall("__gxx_bsubmatch", eh.NewIdent(contextVariable), target, args[0]), nil
+	})))
+	opts = append(opts, cel.Function("__gxx_bsubmatch", cel.Overload("gxx_bsubmatch_context_string_bytes", []*cel.Type{cel.DynType, cel.StringType, cel.BytesType}, cel.MapType(cel.StringType, cel.StringType), cel.FunctionBinding(func(args ...ref.Val) ref.Val {
+		state, ok := args[0].Value().(*evaluationContext)
+		if !ok {
+			return types.NewErr("缺少执行上下文")
+		}
+		pattern, ok := args[1].(types.String)
+		if !ok {
+			return types.NewErr("正则表达式必须为 string")
+		}
+		value, ok := args[2].(types.Bytes)
+		if !ok {
+			return types.NewErr("正则提取输入必须为 bytes")
+		}
+		re, err := getCachedRegexp2(string(pattern), regexp2.RE2)
+		if err != nil {
+			return types.NewErr("正则表达式无效: %v", err)
+		}
+		// 字符缓冲与匹配函数共用扫描预算，分组字符串独立于完整响应。
+		result := make(map[string]string)
+		if match, _ := re.FindRunesMatch(regexResponseRunes(state.ctx, value)); match != nil {
+			for index, group := range match.Groups() {
+				if index != 0 {
+					result[group.Name] = group.String()
+				}
+			}
+		}
+		return types.NewStringStringMap(types.DefaultTypeAdapter, result)
+	}))))
+	opts = append(opts, cel.Macros(cel.ReceiverMacro("bmatches", 1, func(eh cel.MacroExprFactory, target ast.Expr, args []ast.Expr) (ast.Expr, *cel.Error) {
+		return eh.NewCall("__gxx_bmatches", eh.NewIdent(contextVariable), target, args[0]), nil
+	})))
+	opts = append(opts, cel.Function("__gxx_bmatches", cel.Overload("gxx_bmatches_context_string_bytes", []*cel.Type{cel.DynType, cel.StringType, cel.BytesType}, cel.BoolType, cel.FunctionBinding(func(args ...ref.Val) ref.Val {
+		state, ok := args[0].Value().(*evaluationContext)
+		if !ok {
+			return types.NewErr("缺少执行上下文")
+		}
+		pattern, ok := args[1].(types.String)
+		if !ok {
+			return types.NewErr("正则表达式必须为 string")
+		}
+		value, ok := args[2].(types.Bytes)
+		if !ok {
+			return types.NewErr("响应查找参数必须为 bytes")
+		}
+		re, err := getCachedRegexp2(string(pattern), 0)
+		if err != nil {
+			return types.NewErr("正则表达式无效: %v", err)
+		}
+		matched, err := re.MatchRunes(regexResponseRunes(state.ctx, value))
+		if err != nil {
+			return types.NewErr("%v", err)
+		}
+		return types.Bool(matched)
+	}))))
 
 	opts = append(opts, cel.Macros(cel.GlobalMacro("sleep", 1, func(eh cel.MacroExprFactory, _ ast.Expr, args []ast.Expr) (ast.Expr, *cel.Error) {
 		return eh.NewCall("__gxx_sleep", eh.NewIdent(contextVariable), args[0]), nil

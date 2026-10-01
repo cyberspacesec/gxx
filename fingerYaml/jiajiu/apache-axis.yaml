@@ -1,9 +1,12 @@
 id: web-apache-axis
 info:
+  tags: framework
+  reference:
+    - https://axis.apache.org/
   name: apache-axis
   author: archer
   verified: false
-  description: 检测到apache-axis系统或组件的特征
+  description: 基于 Java 的 SOAP Web 服务框架。
   created: 2025/04/24
 rules:
   r0:

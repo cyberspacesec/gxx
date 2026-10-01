@@ -1,13 +1,13 @@
 ---
 id: fofayaml-77
 info:
+  reference:
+    - https://www.debian.org/
   name: Debian
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: fofayaml-77'
-  reference:
-    - https://example.com
-  tags: web,fofa,converted
+  description: 开源操作系统发行版；响应标记不等同于主机系统已核实。
+  tags: web,fofa,converted,operating-system
   created: 2025/04/07
 rules:
   r0:

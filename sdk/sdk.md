@@ -10,13 +10,13 @@
 GXX SDK 是 GXX 指纹识别引擎的 Go 库接口。所有对外类型均在 `sdk` 包内定义，调用方无需导入任何内部包。
 
 ```go
-import "github.com/cyberspacesec/gxx/sdk"
+import "github.com/cyberspacesec/gxx/v2/sdk"
 ```
 
 运维 / 调试接口在独立子包：
 
 ```go
-import "github.com/cyberspacesec/gxx/sdk/debug"
+import "github.com/cyberspacesec/gxx/v2/sdk/debug"
 ```
 
 ---
@@ -26,10 +26,10 @@ import "github.com/cyberspacesec/gxx/sdk/debug"
 在调用方的 Go 模块中执行：
 
 ```bash
-go get github.com/cyberspacesec/gxx/sdk@v1.1.9
+go get github.com/cyberspacesec/gxx/v2/sdk@v2.0.0
 ```
 
-模块路径为 `github.com/cyberspacesec/gxx`，调用方无需配置本地 `replace`。使用 `@latest` 获取最新稳定版本。
+模块路径为 `github.com/cyberspacesec/gxx/v2`，调用方无需配置本地 `replace`。使用 `@latest` 获取最新稳定版本。主版本遵循 [Go 模块语义导入版本规范](https://go.dev/doc/modules/major-version)。
 
 ```go
 package main
@@ -40,7 +40,7 @@ import (
     "log"
     "time"
 
-    "github.com/cyberspacesec/gxx/sdk"
+    "github.com/cyberspacesec/gxx/v2/sdk"
 )
 
 func main() {
@@ -93,6 +93,8 @@ func main() {
 | `(*Engine).NormalizeURL(ctx, target) (string, error)` | 探测 http/https 协议并返回规范化 URL（遵守 ctx 与 WithTimeout） |
 | `(*Engine).LoadFingerOptions(opts) error` | 运行期重新加载指纹规则 |
 | `(*Engine).FingerCount() int` | 当前加载的指纹数量 |
+| `(*Engine).RuleCatalog(ctx) ([]RuleMetadata, error)` | 全部规则来源、产品目录、检测条件与质量缺项 |
+| `ProductCatalog() ([]ProductDefinition, error)` | 内置产品目录的独立副本 |
 | `(*Engine).PoolStats() PoolStats` | 规则池统计快照 |
 | `(*Engine).ResetPoolStats()` | 重置统计计数 |
 | `(*Engine).CacheStats() map[string]any` | 缓存统计快照（含 hit ratio） |
@@ -107,6 +109,10 @@ func main() {
 | Option | 默认值 | 说明 |
 |--------|--------|------|
 | `WithFingerOptions(opts FingerOptions)` | 空（嵌入式指纹库） | 指纹规则文件 / 目录 |
+| `WithMatchDetails(enabled bool)` | `true` | 回传成功子规则与证据，关闭时仍保留产品版本和元数据 |
+| `WithProductCatalog(products []ProductDefinition)` | 内置目录 | 实例产品目录，按明确的规则 ID 映射；同一产品 ID 的元数据一致覆盖 |
+| `WithRuleAssessments(assessments []RuleAssessment)` | 内置记录 | 按规则 ID 与 SHA256 绑定的测试记录、外部校准置信度 |
+| `WithRuleSourceVersion(version string)` | 空 | 外部规则包的来源版本 |
 | `WithProxy(addr string)` | `""` | http/https/socks5 代理 |
 | `WithTimeout(d time.Duration)` | `10s` | 请求超时（支持亚秒，如 `500*time.Millisecond`） |
 | `WithTimeoutSeconds(seconds int)` | — | 请求超时（整秒） |
@@ -172,6 +178,7 @@ type TargetResult struct {
     TechStack  *TechStack    `json:"tech_stack,omitempty"`
     ICP        string        `json:"icp,omitempty"`
     Certs      []CertInfo    `json:"certs,omitempty"`
+    Products   []ProductMatch `json:"products,omitempty"`
 }
 ```
 
@@ -179,10 +186,72 @@ type TargetResult struct {
 
 ```go
 type FingerMatch struct {
-    Info   FingerInfo `json:"info"`
-    Result bool       `json:"result"`
+    Info             FingerInfo     `json:"info"`
+    Result           bool           `json:"result"`
+    Expression       string         `json:"expression"`
+    ProductVersion   string         `json:"product_version,omitempty"`
+    ProductVersions  []string       `json:"product_versions,omitempty"`
+    VersionConflict  bool           `json:"version_conflict,omitempty"`
+    DetailsTruncated bool           `json:"details_truncated,omitempty"`
+    MatchedRules     []SubRuleMatch `json:"matched_rules,omitempty"`
 }
 ```
+
+### 规则与产品信息
+
+`FingerInfo.Author` 保存规则作者，`Vendor` 来自独立产品目录。`Tags` 为 `[]string`，未知标签不归入 Web。`References` 保存可追溯的 HTTP/HTTPS 产品依据，过滤空值和 `example.com` 占位链接。`Created` 保留规则创建时间。
+
+`Verified` 为 `*bool`：`nil` 表示源 YAML 未声明；`false` 和 `true` 分别表示来源标注未验证、已验证。`VerificationStatus` 使用 `unknown`、`unverified`、`declared-verified`。来源声明与 `Validation` 的样本测试状态独立，不相互替代。`Confidence` 为 `*float64`，默认 JSON `null`；有限合成样本没有经过实际部署数据校准，因此不会赋值为 `1`。
+
+`Source.Path`、`Source.SHA256`、`Source.Version` 保存实际规则来源。内置文件仅在摘要与内置内容一致时使用 SDK 源版本；外部版本由 `WithRuleSourceVersion` 声明。`ProductVersion` 仅来自成功匹配子规则的成功 `output.product_version` 提取，缺失、提取失败或冲突时为空。多个不同版本保留在 `ProductVersions` 并标记 `VersionConflict`。`Server.Version` 是服务响应头信息，不自动用作全部命中产品的版本。
+
+`ProductInfo` 包含目录 ID、规范名称、厂商、分类、标签、别名、参考链接及 CPE。目录 ID 是稳定的 GXX 产品标识，不声称其本身属于其他标准；CPE 仅在有字典依据时填写，产品通配 CPE 不代表检测到漏洞。未知产品不从作者、拼音或规则名猜测厂商与 CPE。
+
+`TargetResult.Matches` 保留每条规则结果；`Products` 按产品目录 ID 归并，并通过 `RuleIDs` 保留来源。没有目录的规则保持独立产品条目，产品 ID 为空，不强行合并。ARL 的两条等价规则保留原始命中，产品展示归并为一个条目。
+
+### 命中证据
+
+`MatchedRules` 包含成功匹配的子规则名称、表达式、请求方法、路径、URL、状态码、输出与 `Evidence`。`FingerMatch.Expression` 保留组合表达式；仅由否定子规则结果组成的匹配允许成功子规则集合为空。每个证据对应实际执行的逻辑分支，不重新执行 CEL、I/O 或随机函数。
+
+证据位置为原字段的字节区间 `[Start, End)`，不是字符索引；`-1` 表示不存在位置或无法准确定位。`Field` 标识 `response.body`、`response.raw_header`、`response.headers.server` 等字段；`SnippetStart` 表示片段起点。UTF-8 内容直接返回，二进制片段使用 `base64`，高亮时先按 `Encoding` 解码。否定条件可返回 `Matched=false` 的缺失证据，不伪造正文位置。动态表达式或不支持定位的计算仍返回表达式与实际布尔结果。
+
+证据使用固定预算：每次表达式最多追踪 128 个布尔节点，成功子规则最多 64 条，每条最多 16 个证据，每个片段最多 256 个原始字节。超出节点或证据数量时设置 `EvidenceTruncated`，超出子规则数量设置 `DetailsTruncated`；片段无法覆盖完整匹配范围时设置证据的 `Truncated`。证据表达式文本最多 512 字节，完整子规则表达式仍可读取。公开输出最多 64 个普通文本或整数项，保留产品版本，单项最多 512 字节；执行变量保留完整值，不通过结果持有完整响应正文。
+
+`WithMatchDetails(false)` 适合无需详情的场景。正文读取维持 512 KiB；favicon 按完整内容流式计算哈希，不采用正文上限。大小写处理、图标哈希算法和实例资源隔离保持相同语义。响应归一化与正则字符缓冲共用每目标 8 MiB 的估算缓存预算。
+
+### 目录导入与扩展
+
+```go
+catalog, err := engine.RuleCatalog(ctx)
+if err != nil {
+    return err
+}
+for _, rule := range catalog {
+    // 按规则 ID 和 SHA256 导入，并独立保存作者、厂商及来源验证声明。
+    fmt.Println(rule.Info.ID, rule.Info.Author, rule.Info.Vendor,
+        rule.Info.VerificationStatus, rule.Info.Validation, rule.MissingMetadata)
+    // Detection 提供子规则条件、传输协议、路径和版本提取表达式。
+}
+```
+
+`MissingMetadata` 使用 `product-catalog`、`vendor`、`tags`、`references`、`sample-validation`、`version-extractor`，表示待补充数据，不表示规则无效。`Transport` 来自实际子规则请求类型，混合规则使用 `mixed`；HTTP 协议不能替代产品分类。
+
+系统产品目录通过 `WithProductCatalog` 提供 `ProductDefinition`，以 `RuleIDs` 显式关联。目录按产品 ID 统一元数据，多实例独立复制。`WithRuleAssessments` 的记录必须包含方法、样本数、适用范围和规则 SHA256；文件内容变化后旧记录不生效。输入参数与返回的数组、指针可由调用方保存和修改，不影响其他实例。
+
+```go
+engine, err := sdk.NewEngine(ctx,
+    sdk.WithProductCatalog([]sdk.ProductDefinition{{
+        ProductInfo: sdk.ProductInfo{
+            ID: "system.product", Name: "产品名称", Vendor: "产品厂商",
+            Category: "cms", Tags: []string{"cms"},
+        },
+        RuleIDs: []string{"rule-id"},
+    }}),
+    sdk.WithRuleSourceVersion("rules-2026-10-01"),
+)
+```
+
+目录覆盖与样本测试范围见 [指纹数据与验证](../docs/指纹数据与验证.md)。完整 API 类型以 [`sdk.go`](sdk.go) 和 [`metadata.go`](metadata.go) 为准。
 
 ### BaseInfo
 
@@ -464,8 +533,8 @@ if err == nil {
 
 ```go
 import (
-    "github.com/cyberspacesec/gxx/sdk"
-    "github.com/cyberspacesec/gxx/sdk/debug"
+    "github.com/cyberspacesec/gxx/v2/sdk"
+    "github.com/cyberspacesec/gxx/v2/sdk/debug"
 )
 
 engine, _ := sdk.NewEngine(ctx, sdk.WithMemoryMonitor(true))

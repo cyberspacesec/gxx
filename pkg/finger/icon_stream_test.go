@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cyberspacesec/gxx/pkg/network"
+	"github.com/cyberspacesec/gxx/v2/pkg/network"
 )
 
 type iconFragmentReader struct {

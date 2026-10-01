@@ -1,13 +1,13 @@
 ---
 id: fingeryaml-7
 info:
+  reference:
+    - https://www.actfax.com/
   name: ACTFAX-ActiveFax
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: fingeryaml-7'
-  reference:
-    - https://example.com
-  tags: web,fofa,converted
+  description: 用于企业传真发送、接收与管理的软件。
+  tags: web,fofa,converted,application
   created: 2025/04/07
 rules:
   r0:

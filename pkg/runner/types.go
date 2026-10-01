@@ -7,11 +7,12 @@ import (
 	"golang.org/x/sync/singleflight"
 	"time"
 
-	"github.com/cyberspacesec/gxx/pkg/finger"
-	"github.com/cyberspacesec/gxx/pkg/wappalyzer"
-	"github.com/cyberspacesec/gxx/types"
-	"github.com/cyberspacesec/gxx/utils/logger"
-	"github.com/cyberspacesec/gxx/utils/proto"
+	"github.com/cyberspacesec/gxx/v2/pkg/cel"
+	"github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/pkg/wappalyzer"
+	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/v2/utils/logger"
+	"github.com/cyberspacesec/gxx/v2/utils/proto"
 	"net/http"
 )
 
@@ -53,10 +54,28 @@ type TargetResult struct {
 
 // FingerMatch 单条指纹匹配结果。
 type FingerMatch struct {
-	Finger   *finger.Finger
-	Result   bool
-	Request  *proto.Request
-	Response *proto.Response
+	Finger           *finger.Finger
+	Result           bool
+	Request          *proto.Request
+	Response         *proto.Response
+	MatchedRules     []SubRuleMatch
+	ProductVersion   string
+	ProductVersions  []string
+	VersionConflict  bool
+	DetailsTruncated bool
+}
+
+// SubRuleMatch 只记录成功匹配的子规则，不保留原始响应。
+type SubRuleMatch struct {
+	Key               string
+	Expression        string
+	Method            string
+	Path              string
+	URL               string
+	StatusCode        int32
+	Evidence          []cel.Evidence
+	EvidenceTruncated bool
+	Outputs           map[string]string
 }
 
 // BaseInfo 仅含规则匹配所需的少量基础字段，放入 varMap 给 CEL 使用。
@@ -71,6 +90,7 @@ type BaseInfo struct {
 
 // ScanConfig 扫描配置参数。
 type ScanConfig struct {
+	CaptureEvidence   bool
 	Reverse           types.ReverseConfig
 	Proxy             string
 	Timeout           time.Duration

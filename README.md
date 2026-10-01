@@ -49,7 +49,7 @@ gxx -u https://example.com -rt 500
 在调用方的 Go 模块内安装 SDK：
 
 ```bash
-go get github.com/cyberspacesec/gxx/sdk@v1.1.9
+go get github.com/cyberspacesec/gxx/v2/sdk@v2.0.0
 ```
 
 发布包见 [GitHub Releases](https://github.com/cyberspacesec/gxx/releases)，自动测试与发布流程见 [构建与发布](docs/构建与发布.md)。
@@ -60,7 +60,7 @@ package main
 import (
     "context"
     "fmt"
-    "github.com/cyberspacesec/gxx/sdk"
+    "github.com/cyberspacesec/gxx/v2/sdk"
     "log"
 )
 
@@ -89,6 +89,8 @@ func main() {
 ```
 
 详细 SDK 文档参见 [sdk/sdk.md](sdk/sdk.md)。
+
+规则导入使用 `RuleCatalog`，识别结果分别返回作者、厂商、来源验证声明、样本记录、产品版本及可定位的命中证据；`Products` 按规范产品目录归并并保留命中规则。字段约定、数据覆盖范围和测试方法见[指纹数据与验证](docs/指纹数据与验证.md)。
 
 favicon 候选、重定向资源解析、内联图标哈希与 ICP 备案识别的范围和限制参见 [网站元数据识别](docs/网站元数据识别.md)。
 

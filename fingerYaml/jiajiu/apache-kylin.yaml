@@ -1,9 +1,12 @@
 id: web-apache-kylin
 info:
+  tags: database
+  reference:
+    - https://kylin.apache.org/
   name: apache-kylin
   author: archer
   verified: false
-  description: 检测到apache-kylin系统或组件的特征
+  description: 面向多维分析与大规模数据查询的 OLAP 引擎。
   created: 2025/04/24
 rules:
   r0:

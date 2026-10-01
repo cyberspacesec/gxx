@@ -1,9 +1,12 @@
 id: web-apache-superset
 info:
+  tags: application
+  reference:
+    - https://superset.apache.org/
   name: apache-superset
   author: archer
   verified: false
-  description: 检测到apache-superset系统或组件的特征
+  description: 用于数据探索和可视化的业务分析平台。
   created: 2025/04/24
 rules:
   r0:

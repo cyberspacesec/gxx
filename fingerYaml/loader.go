@@ -8,8 +8,8 @@ import (
 	"os"
 	"path/filepath"
 
-	finger2 "github.com/cyberspacesec/gxx/pkg/finger"
-	"github.com/cyberspacesec/gxx/utils/common"
+	finger2 "github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/utils/common"
 )
 
 const defaultFingerDir = "fingerYaml"
@@ -63,6 +63,12 @@ func GetFingerYaml() ([]*finger2.Finger, error) {
 			return fmt.Errorf("读取 %s 出错: %w", path, err)
 		}
 		if poc != nil {
+			relative, err := filepath.Rel(root, path)
+			if err != nil {
+				return err
+			}
+			poc.Source.Path = filepath.ToSlash(relative)
+			poc.Source.Builtin = matchesBuiltin(poc.Source.Path, poc.Source.SHA256)
 			allFinger = append(allFinger, poc)
 		}
 		return nil

@@ -1,9 +1,12 @@
 id: web-joomla
 info:
+  tags: cms
+  reference:
+    - https://www.joomla.org/
   name: joomla
   author: archer
   verified: false
-  description: 检测到joomla系统或组件的特征
+  description: 用于内容管理和站点发布的开源平台。
   created: 2025/04/24
 rules:
   r0:

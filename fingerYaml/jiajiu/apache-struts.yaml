@@ -1,9 +1,12 @@
 id: web-apache-struts
 info:
+  tags: framework
+  reference:
+    - https://struts.apache.org/
   name: apache-struts
   author: archer
   verified: false
-  description: 检测到apache-struts系统或组件的特征
+  description: 基于 MVC 模式的 Java Web 应用框架。
   created: 2025/04/24
 rules:
   r0:

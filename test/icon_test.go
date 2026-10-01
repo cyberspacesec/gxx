@@ -10,8 +10,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/cyberspacesec/gxx/pkg/finger"
-	"github.com/cyberspacesec/gxx/pkg/network"
+	"github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/pkg/network"
 	"io"
 	"net/http"
 	"os"

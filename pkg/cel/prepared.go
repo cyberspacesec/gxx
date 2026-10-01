@@ -16,7 +16,7 @@ type PreparedLibrary struct {
 	batchSafe bool
 }
 
-func PrepareLibrary(rules, expressions []string) (*PreparedLibrary, error) {
+func PrepareLibrary(rules, expressions []string, evidence ...bool) (*PreparedLibrary, error) {
 	lib := NewCustomLib()
 	lib.PreRegisterRuleFunctions(rules)
 	env, err := lib.getEnv()
@@ -25,7 +25,7 @@ func PrepareLibrary(rules, expressions []string) (*PreparedLibrary, error) {
 	}
 	p := &PreparedLibrary{env: env, rules: append([]string(nil), rules...), programs: make([]preparedExpression, 0, len(expressions)), batchSafe: true}
 	for _, expression := range expressions {
-		program, err := compileProgram(env, expression, true)
+		program, err := compileProgram(env, expression, true, evidence...)
 		if err != nil {
 			return nil, err
 		}

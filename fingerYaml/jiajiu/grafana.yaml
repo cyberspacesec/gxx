@@ -1,9 +1,12 @@
 id: web-grafana
 info:
+  tags: application
+  reference:
+    - https://grafana.com/oss/grafana/
   name: grafana
   author: archer
   verified: false
-  description: 检测到grafana系统或组件的特征
+  description: 用于查询、可视化与监控指标和日志的应用。
   created: 2025/04/24
 rules:
   r0:

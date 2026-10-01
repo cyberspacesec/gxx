@@ -3,9 +3,9 @@ package sdk_test
 import (
 	"context"
 	"fmt"
-	fy "github.com/cyberspacesec/gxx/fingerYaml"
-	gcel "github.com/cyberspacesec/gxx/pkg/cel"
-	"github.com/cyberspacesec/gxx/sdk"
+	fy "github.com/cyberspacesec/gxx/v2/fingerYaml"
+	gcel "github.com/cyberspacesec/gxx/v2/pkg/cel"
+	"github.com/cyberspacesec/gxx/v2/sdk"
 	"net/http"
 	"net/http/httptest"
 	"sort"
@@ -37,6 +37,14 @@ func TestEmbeddedFingerprintsCompile(t *testing.T) {
 			expressions++
 			if err := lib.Prepare(r.Value.Expression); err != nil {
 				t.Errorf("%s/%s: %v", f.Id, r.Key, err)
+			}
+			for _, output := range r.Value.Output {
+				if expression, ok := output.Value.(string); ok {
+					expressions++
+					if err := lib.Prepare(expression); err != nil {
+						t.Errorf("%s/%s output: %v", f.Id, r.Key, err)
+					}
+				}
 			}
 		}
 		expressions++

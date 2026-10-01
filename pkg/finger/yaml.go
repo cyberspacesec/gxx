@@ -8,9 +8,10 @@
 package finger
 
 import (
+	"crypto/sha256"
 	"embed"
 	"fmt"
-	"github.com/cyberspacesec/gxx/utils/common"
+	"github.com/cyberspacesec/gxx/v2/utils/common"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -38,6 +39,14 @@ type Finger struct {
 	Expression string        `yaml:"expression"`
 	Info       Info          `yaml:"info"`
 	Gopoc      string        `yaml:"gopoc"` // Gopoc 脚本名称
+	Source     Source        `yaml:"-"`
+}
+
+// Source 记录实际加载的规则文件；摘要只在加载时计算。
+type Source struct {
+	Path    string
+	SHA256  string
+	Builtin bool
 }
 type Payloads struct {
 	Continue bool          `yaml:"continue"`
@@ -54,13 +63,9 @@ type RuleMap struct {
 type RuleMapSlice []RuleMap
 
 type Rule struct {
-	Request        RuleRequest   `yaml:"request"`
-	Expression     string        `yaml:"expression"`
-	Expressions    []string      `yaml:"expressions"`
-	Output         yaml.MapSlice `yaml:"output"`
-	StopIfMatch    bool          `yaml:"stop_if_match"`
-	StopIfMismatch bool          `yaml:"stop_if_mismatch"`
-	BeforeSleep    int           `yaml:"before_sleep"`
+	Request    RuleRequest   `yaml:"request"`
+	Expression string        `yaml:"expression"`
+	Output     yaml.MapSlice `yaml:"output"`
 }
 type RuleRequest struct {
 	Type            string            `yaml:"type"`         // 传输方式，默认 http，可选：tcp,udp,ssl,go 等任意扩展
@@ -79,17 +84,36 @@ type RuleRequest struct {
 
 // Info 以下开始是 信息部分
 type Info struct {
-	Name           string         `yaml:"name"`
-	Author         string         `yaml:"author"`
-	Severity       string         `yaml:"severity"`
-	Verified       bool           `yaml:"verified"`
-	Description    string         `yaml:"description"`
-	Reference      []string       `yaml:"reference"`
-	Affected       string         `yaml:"affected"`  // 影响版本
-	Solutions      string         `yaml:"solutions"` // 解决方案
-	Tags           string         `yaml:"tags"`      // 标签
-	Classification Classification `yaml:"classification"`
-	Created        string         `yaml:"created"` // create time
+	Name             string         `yaml:"name"`
+	Author           string         `yaml:"author"`
+	Severity         string         `yaml:"severity"`
+	Verified         bool           `yaml:"verified"`
+	VerifiedDeclared bool           `yaml:"-"`
+	Description      string         `yaml:"description"`
+	Reference        []string       `yaml:"reference"`
+	Affected         string         `yaml:"affected"`  // 影响版本
+	Solutions        string         `yaml:"solutions"` // 解决方案
+	Tags             string         `yaml:"tags"`      // 标签
+	Classification   Classification `yaml:"classification"`
+	Created          string         `yaml:"created"` // create time
+}
+
+// UnmarshalYAML 区分未填写 verified 与明确的 false，保留原始声明。
+func (i *Info) UnmarshalYAML(unmarshal func(any) error) error {
+	type plainInfo Info
+	var value plainInfo
+	if err := unmarshal(&value); err != nil {
+		return err
+	}
+	var declaration struct {
+		Verified *bool `yaml:"verified"`
+	}
+	if err := unmarshal(&declaration); err != nil {
+		return err
+	}
+	*i = Info(value)
+	i.VerifiedDeclared = declaration.Verified != nil
+	return nil
 }
 
 type Classification struct {
@@ -173,6 +197,7 @@ func Load(fileName string, Fingers embed.FS) (*Finger, error) {
 		fmt.Printf("[-] load poc %s error2: %v\n", filePath, err)
 		return nil, err
 	}
+	p.Source = Source{Path: filepath.ToSlash(filePath), SHA256: fmt.Sprintf("%x", sha256.Sum256(yamlFile)), Builtin: true}
 	return p, err
 }
 
@@ -180,15 +205,14 @@ func Load(fileName string, Fingers embed.FS) (*Finger, error) {
 func Read(fileName string) (*Finger, error) {
 	p := &Finger{}
 
-	file, err := os.Open(fileName)
+	content, err := os.ReadFile(fileName)
 	if err != nil {
 		return p, err
 	}
-	defer file.Close()
-
-	if err := yaml.NewDecoder(file).Decode(&p); err != nil {
+	if err := yaml.Unmarshal(content, p); err != nil {
 		return p, err
 	}
+	p.Source = Source{Path: filepath.Base(fileName), SHA256: fmt.Sprintf("%x", sha256.Sum256(content))}
 	return p, nil
 }
 

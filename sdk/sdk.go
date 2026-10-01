@@ -30,9 +30,9 @@ package sdk
 
 import (
 	"fmt"
-	"github.com/cyberspacesec/gxx/pkg/network"
-	"github.com/cyberspacesec/gxx/pkg/runner"
-	"github.com/cyberspacesec/gxx/types"
+	"github.com/cyberspacesec/gxx/v2/pkg/network"
+	"github.com/cyberspacesec/gxx/v2/pkg/runner"
+	"github.com/cyberspacesec/gxx/v2/types"
 	"os"
 )
 
@@ -100,30 +100,46 @@ type TechStack struct {
 
 // FingerInfo 指纹规则元信息。
 type FingerInfo struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Author      string `json:"author,omitempty"`
-	Severity    string `json:"severity,omitempty"`
-	Description string `json:"description,omitempty"`
-	Tags        string `json:"tags,omitempty"`
+	ID                 string         `json:"id"`
+	Name               string         `json:"name"`
+	Author             string         `json:"author,omitempty"`
+	Severity           string         `json:"severity,omitempty"`
+	Description        string         `json:"description,omitempty"`
+	Tags               []string       `json:"tags,omitempty"`
+	Vendor             string         `json:"vendor,omitempty"`
+	Verified           *bool          `json:"verified"`
+	VerificationStatus string         `json:"verification_status"`
+	Confidence         *float64       `json:"confidence"`
+	References         []string       `json:"references,omitempty"`
+	Created            string         `json:"created,omitempty"`
+	Source             RuleSource     `json:"source"`
+	Product            *ProductInfo   `json:"product,omitempty"`
+	Validation         ValidationInfo `json:"validation"`
 }
 
 // FingerMatch 单条指纹匹配结果。
 type FingerMatch struct {
-	Info   FingerInfo `json:"info"`
-	Result bool       `json:"result"`
+	Info             FingerInfo     `json:"info"`
+	Result           bool           `json:"result"`
+	Expression       string         `json:"expression"`
+	ProductVersion   string         `json:"product_version,omitempty"`
+	ProductVersions  []string       `json:"product_versions,omitempty"`
+	VersionConflict  bool           `json:"version_conflict,omitempty"`
+	DetailsTruncated bool           `json:"details_truncated,omitempty"`
+	MatchedRules     []SubRuleMatch `json:"matched_rules,omitempty"`
 }
 
 // TargetResult 单个目标的完整扫描结果。
 type TargetResult struct {
-	URL        string        `json:"url"`
-	StatusCode int32         `json:"status_code"`
-	Title      string        `json:"title"`
-	Server     *ServerInfo   `json:"server,omitempty"`
-	Matches    []FingerMatch `json:"matches"`
-	TechStack  *TechStack    `json:"tech_stack,omitempty"`
-	ICP        string        `json:"icp,omitempty"`
-	Certs      []CertInfo    `json:"certs,omitempty"`
+	URL        string         `json:"url"`
+	StatusCode int32          `json:"status_code"`
+	Title      string         `json:"title"`
+	Server     *ServerInfo    `json:"server,omitempty"`
+	Matches    []FingerMatch  `json:"matches"`
+	TechStack  *TechStack     `json:"tech_stack,omitempty"`
+	ICP        string         `json:"icp,omitempty"`
+	Certs      []CertInfo     `json:"certs,omitempty"`
+	Products   []ProductMatch `json:"products,omitempty"`
 }
 
 // BaseInfo 目标基础信息（不含指纹匹配）。

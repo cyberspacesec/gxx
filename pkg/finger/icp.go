@@ -2,7 +2,7 @@ package finger
 
 import (
 	"bytes"
-	"github.com/cyberspacesec/gxx/utils/common"
+	"github.com/cyberspacesec/gxx/v2/utils/common"
 	"html"
 	"net/url"
 	"strings"

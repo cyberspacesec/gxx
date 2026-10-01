@@ -1,12 +1,12 @@
 id: abyss-web-server
 info:
+  reference:
+    - https://aprelium.com/abyssws/
   name: Detect Abyss Web Server
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: abyss-web-server'
-  reference:
-    - https://example.com
-  tags: web,fofa,converted
+  description: Aprelium 提供的 Web 服务器。
+  tags: web,fofa,converted,web-server
   created: 2025/04/07
 rules:
   r0:

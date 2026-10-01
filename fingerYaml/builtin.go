@@ -2,13 +2,19 @@
 package utils
 
 import (
+	"crypto/sha256"
 	"embed"
 	"fmt"
 	"io/fs"
 
-	finger2 "github.com/cyberspacesec/gxx/pkg/finger"
-	"github.com/cyberspacesec/gxx/utils/common"
+	finger2 "github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/v2/utils/common"
 )
+
+func matchesBuiltin(path, digest string) bool {
+	content, err := embeddedFingerFS.ReadFile(path)
+	return err == nil && fmt.Sprintf("%x", sha256.Sum256(content)) == digest
+}
 
 //go:embed all:fingerprints all:fingers all:fofa all:jiajiu
 var embeddedFingerFS embed.FS

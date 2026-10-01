@@ -1,12 +1,12 @@
 id: apache-dubbo
 info:
+  reference:
+    - https://dubbo.apache.org/
   name: Apache dubbo
   author: zhizhuo
   verified: true
-  description: 'Converted from FOFA rule: apache-dubbo'
-  reference:
-    - https://example.com
-  tags: web,fofa,converted
+  description: 微服务 RPC 通信、服务发现与治理框架。
+  tags: web,fofa,converted,framework
   created: 2025/04/07
 rules:
   r0:

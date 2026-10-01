@@ -14,7 +14,7 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	fingerpkg "github.com/cyberspacesec/gxx/pkg/finger"
+	fingerpkg "github.com/cyberspacesec/gxx/v2/pkg/finger"
 
 	"github.com/cyberspacesec/gxx/cmd/gxx-ide/internal/model"
 	"github.com/cyberspacesec/gxx/cmd/gxx-ide/internal/response"
