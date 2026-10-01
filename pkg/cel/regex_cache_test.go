@@ -8,7 +8,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	"github.com/cyberspacesec/gxx/utils/proto"
 	"github.com/dlclark/regexp2"
 )
 

@@ -208,7 +208,7 @@ jobs:
           cp .github/scripts/sdk-check.go "$consumer/main.go"
           cd "$consumer"
           go mod init sdk-release-check
-          go get "github.com/cyberspacesec/gxx/v2/sdk@$RELEASE_TAG"
+          go get "github.com/cyberspacesec/gxx/sdk@$RELEASE_TAG"
           go run .
       - name: 上传并发布
         env:

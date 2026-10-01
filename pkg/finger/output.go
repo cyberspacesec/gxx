@@ -5,7 +5,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	gcel "github.com/cyberspacesec/gxx/v2/pkg/cel"
+	gcel "github.com/cyberspacesec/gxx/pkg/cel"
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/common/types"
 	"gopkg.in/yaml.v2"

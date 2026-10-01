@@ -7,7 +7,7 @@ package sdk
 
 import (
 	"fmt"
-	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/types"
 	"log/slog"
 	"time"
 )

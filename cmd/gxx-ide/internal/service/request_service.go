@@ -18,10 +18,10 @@ import (
 	"time"
 	"unicode/utf8"
 
-	fingerpkg "github.com/cyberspacesec/gxx/v2/pkg/finger"
-	"github.com/cyberspacesec/gxx/v2/pkg/network"
-	"github.com/cyberspacesec/gxx/v2/types"
-	"github.com/cyberspacesec/gxx/v2/utils/common"
+	fingerpkg "github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/pkg/network"
+	"github.com/cyberspacesec/gxx/types"
+	"github.com/cyberspacesec/gxx/utils/common"
 
 	"github.com/cyberspacesec/gxx/cmd/gxx-ide/internal/model"
 	"github.com/cyberspacesec/gxx/cmd/gxx-ide/internal/response"

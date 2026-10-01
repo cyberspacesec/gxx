@@ -10,7 +10,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/cyberspacesec/gxx/v2/utils/common"
+	"github.com/cyberspacesec/gxx/utils/common"
 )
 
 func TestScanEntryMetadataAfterRedirect(t *testing.T) {

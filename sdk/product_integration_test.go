@@ -15,9 +15,9 @@ import (
 	"sync/atomic"
 	"testing"
 
-	fy "github.com/cyberspacesec/gxx/v2/fingerYaml"
-	"github.com/cyberspacesec/gxx/v2/pkg/network"
-	"github.com/cyberspacesec/gxx/v2/sdk"
+	fy "github.com/cyberspacesec/gxx/fingerYaml"
+	"github.com/cyberspacesec/gxx/pkg/network"
+	"github.com/cyberspacesec/gxx/sdk"
 )
 
 type productSample struct {

@@ -8,8 +8,8 @@ import (
 	"os"
 	"path/filepath"
 
-	finger2 "github.com/cyberspacesec/gxx/v2/pkg/finger"
-	"github.com/cyberspacesec/gxx/v2/utils/common"
+	finger2 "github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/utils/common"
 )
 
 const defaultFingerDir = "fingerYaml"

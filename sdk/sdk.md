@@ -10,13 +10,13 @@
 GXX SDK 是 GXX 指纹识别引擎的 Go 库接口。所有对外类型均在 `sdk` 包内定义，调用方无需导入任何内部包。
 
 ```go
-import "github.com/cyberspacesec/gxx/v2/sdk"
+import "github.com/cyberspacesec/gxx/sdk"
 ```
 
 运维 / 调试接口在独立子包：
 
 ```go
-import "github.com/cyberspacesec/gxx/v2/sdk/debug"
+import "github.com/cyberspacesec/gxx/sdk/debug"
 ```
 
 ---
@@ -26,10 +26,10 @@ import "github.com/cyberspacesec/gxx/v2/sdk/debug"
 在调用方的 Go 模块中执行：
 
 ```bash
-go get github.com/cyberspacesec/gxx/v2/sdk@v2.0.0
+go get github.com/cyberspacesec/gxx/sdk@v1.2.0
 ```
 
-模块路径为 `github.com/cyberspacesec/gxx/v2`，调用方无需配置本地 `replace`。使用 `@latest` 获取最新稳定版本。主版本遵循 [Go 模块语义导入版本规范](https://go.dev/doc/modules/major-version)。
+模块路径为 `github.com/cyberspacesec/gxx`，调用方无需配置本地 `replace`。使用 `@latest` 获取当前版本线的最新稳定版本，按当前字段适配调用代码；`FingerInfo.Tags` 为 `[]string`。
 
 ```go
 package main
@@ -40,7 +40,7 @@ import (
     "log"
     "time"
 
-    "github.com/cyberspacesec/gxx/v2/sdk"
+    "github.com/cyberspacesec/gxx/sdk"
 )
 
 func main() {
@@ -533,8 +533,8 @@ if err == nil {
 
 ```go
 import (
-    "github.com/cyberspacesec/gxx/v2/sdk"
-    "github.com/cyberspacesec/gxx/v2/sdk/debug"
+    "github.com/cyberspacesec/gxx/sdk"
+    "github.com/cyberspacesec/gxx/sdk/debug"
 )
 
 engine, _ := sdk.NewEngine(ctx, sdk.WithMemoryMonitor(true))

@@ -10,7 +10,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/cyberspacesec/gxx/v2/pkg/network"
+	"github.com/cyberspacesec/gxx/pkg/network"
 	"os"
 	"testing"
 	"time"

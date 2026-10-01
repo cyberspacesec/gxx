@@ -8,8 +8,8 @@ import (
 	"sync"
 	"testing"
 
-	gcel "github.com/cyberspacesec/gxx/v2/pkg/cel"
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	gcel "github.com/cyberspacesec/gxx/pkg/cel"
+	"github.com/cyberspacesec/gxx/utils/proto"
 )
 
 func TestEvidenceUsesExecutedLogicalBranches(t *testing.T) {

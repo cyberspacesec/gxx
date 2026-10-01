@@ -9,7 +9,7 @@ package finger
 
 import (
 	"fmt"
-	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/types"
 	"net/http"
 	"regexp"
 	"strings"

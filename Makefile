@@ -7,18 +7,18 @@ all: release
 build:
 	@echo "构建项目（不嵌入指纹库）..."
 	@BUILD_DATE=$$(date +"%Y-%m-%d") && \
-	GXX_VERSION="2.0.0" && \
+	GXX_VERSION="1.2.0" && \
 	GXX_AUTHOR="zhizhuo" && \
-	go build -ldflags "-X 'github.com/cyberspacesec/gxx/v2/cmd/cli.defaultVersion=$$GXX_VERSION' -X 'github.com/cyberspacesec/gxx/v2/cmd/cli.defaultAuthor=$$GXX_AUTHOR' -X 'github.com/cyberspacesec/gxx/v2/cmd/cli.defaultBuildDate=$$BUILD_DATE'" -o gxx ./cmd/main.go
+	go build -ldflags "-X 'github.com/cyberspacesec/gxx/cmd/cli.defaultVersion=$$GXX_VERSION' -X 'github.com/cyberspacesec/gxx/cmd/cli.defaultAuthor=$$GXX_AUTHOR' -X 'github.com/cyberspacesec/gxx/cmd/cli.defaultBuildDate=$$BUILD_DATE'" -o gxx ./cmd/main.go
 	@echo "构建完成：使用磁盘 fingerYaml/ 目录（需与二进制同目录或工作目录下）"
 
 # 构建项目（嵌入指纹库）
 build-embed:
 	@echo "构建项目（嵌入指纹库）..."
 	@BUILD_DATE=$$(date +"%Y-%m-%d") && \
-	GXX_VERSION="2.0.0" && \
+	GXX_VERSION="1.2.0" && \
 	GXX_AUTHOR="zhizhuo" && \
-	go build -tags embed -ldflags "-X 'github.com/cyberspacesec/gxx/v2/cmd/cli.defaultVersion=$$GXX_VERSION' -X 'github.com/cyberspacesec/gxx/v2/cmd/cli.defaultAuthor=$$GXX_AUTHOR' -X 'github.com/cyberspacesec/gxx/v2/cmd/cli.defaultBuildDate=$$BUILD_DATE'" -o gxx ./cmd/main.go
+	go build -tags embed -ldflags "-X 'github.com/cyberspacesec/gxx/cmd/cli.defaultVersion=$$GXX_VERSION' -X 'github.com/cyberspacesec/gxx/cmd/cli.defaultAuthor=$$GXX_AUTHOR' -X 'github.com/cyberspacesec/gxx/cmd/cli.defaultBuildDate=$$BUILD_DATE'" -o gxx ./cmd/main.go
 	@echo "构建完成：指纹库已嵌入二进制（单文件部署）"
 
 # 使用build.sh脚本构建发布包（默认嵌入指纹库）
@@ -104,7 +104,7 @@ package-gui: ensure-wails
 	@mkdir -p build
 	@cd cmd/gxx-ide && PATH="$(GOPATH_BIN):$$PATH" go run ./scripts/packager \
 		--output=../../build \
-		--version=2.0.0 \
+		--version=1.2.0 \
 		--name=gxx-ide
 	@echo "打包完成：build/gxx-ide_*.zip（与 gxx CLI 同目录）"
 

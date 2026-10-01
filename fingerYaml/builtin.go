@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"io/fs"
 
-	finger2 "github.com/cyberspacesec/gxx/v2/pkg/finger"
-	"github.com/cyberspacesec/gxx/v2/utils/common"
+	finger2 "github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/utils/common"
 )
 
 func matchesBuiltin(path, digest string) bool {

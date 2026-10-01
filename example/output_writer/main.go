@@ -17,7 +17,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/cyberspacesec/gxx/v2/sdk"
+	"github.com/cyberspacesec/gxx/sdk"
 )
 
 // countingWriter 累计目标数量，演示如何实现 sdk.Writer 接口。

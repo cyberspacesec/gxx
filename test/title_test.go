@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/pkg/finger"
 	"io"
 	"net/http"
 	"net/url"

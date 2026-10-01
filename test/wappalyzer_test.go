@@ -17,7 +17,7 @@ import (
 	"strings"
 	"testing"
 
-	wappalyzers "github.com/cyberspacesec/gxx/v2/pkg/wappalyzer"
+	wappalyzers "github.com/cyberspacesec/gxx/pkg/wappalyzer"
 	wappalyzer "github.com/projectdiscovery/wappalyzergo"
 )
 

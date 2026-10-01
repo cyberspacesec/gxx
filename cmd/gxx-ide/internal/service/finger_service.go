@@ -9,10 +9,10 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	celpkg "github.com/cyberspacesec/gxx/v2/pkg/cel"
-	fingerpkg "github.com/cyberspacesec/gxx/v2/pkg/finger"
-	"github.com/cyberspacesec/gxx/v2/pkg/network"
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	celpkg "github.com/cyberspacesec/gxx/pkg/cel"
+	fingerpkg "github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/pkg/network"
+	"github.com/cyberspacesec/gxx/utils/proto"
 
 	"github.com/cyberspacesec/gxx/cmd/gxx-ide/internal/model"
 	"github.com/cyberspacesec/gxx/cmd/gxx-ide/internal/response"

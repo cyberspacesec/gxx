@@ -35,7 +35,7 @@ GXX IDE 是 **GXX 指纹引擎的伴随工具**：
 
 ```
 cmd/gxx-ide/                            # 独立 Go module（go.mod 与主项目隔离）
-├── go.mod                              # require gin/swag/wails，replace github.com/cyberspacesec/gxx/v2 => ../..
+├── go.mod                              # require gin/swag/wails，replace github.com/cyberspacesec/gxx => ../..
 ├── main.go                             # 入口：启动 Gin server (goroutine) + Wails GUI
 ├── wails.json                          # Wails 项目配置
 ├── docs/                               # swag init 生成的 OpenAPI 文档（含占位）
@@ -262,21 +262,21 @@ cd cmd/gxx-ide && go run ./scripts/packager --platforms=darwin/arm64,windows/amd
 `scripts/packager` 关键行为：
 
 - **默认输出到仓库根 `build/`**，与主项目 `build.sh` 的 `gxx_*.zip` 同目录；
-- **zip 命名与 CLI 一致**：`gxx-ide_mac_arm64_2.0.0.zip`、`gxx-ide_win_x64_2.0.0.zip` 等；
+- **zip 命名与 CLI 一致**：`gxx-ide_mac_arm64_1.2.0.zip`、`gxx-ide_win_x64_1.2.0.zip` 等；
 - **版本号**默认读取 `wails.json` 的 `info.productVersion`；
 - **`--clean` 只删 `build/gxx-ide_*.zip`**，不会误删 `gxx_*.zip`；
 - **每个平台构建前清空 `cmd/gxx-ide/build/bin/`**，避免 `.app` bundle 污染下一平台；
 - **跨编译时默认 `CGO_ENABLED=0`**（除非用户显式覆盖）。
 
-打包产物示例（与 `gxx_mac_arm64_2.0.0.zip` 并列）：
+打包产物示例（与 `gxx_mac_arm64_1.2.0.zip` 并列）：
 
 ```
 build/
-├── gxx_mac_arm64_2.0.0.zip          # CLI
-├── gxx_mac_x64_2.0.0.zip
-├── gxx-ide_mac_arm64_2.0.0.zip      # IDE（内含 gxx-ide.app）
-├── gxx-ide_mac_x64_2.0.0.zip
-└── gxx-ide_win_x64_2.0.0.zip        # IDE（内含 gxx-ide.exe）
+├── gxx_mac_arm64_1.2.0.zip          # CLI
+├── gxx_mac_x64_1.2.0.zip
+├── gxx-ide_mac_arm64_1.2.0.zip      # IDE（内含 gxx-ide.app）
+├── gxx-ide_mac_x64_1.2.0.zip
+└── gxx-ide_win_x64_1.2.0.zip        # IDE（内含 gxx-ide.exe）
 ```
 
 ---
@@ -287,7 +287,7 @@ build/
 |--------|---------|
 | 根目录 `go.mod` | `cmd/gxx-ide/go.mod`（独立 module） |
 | `go build ./...` 主二进制 | `wails build` 出 GUI 二进制 |
-| `pkg/cel` / `pkg/finger` / `pkg/network` | 通过 `replace github.com/cyberspacesec/gxx/v2 => ../..` 复用 |
+| `pkg/cel` / `pkg/finger` / `pkg/network` | 通过 `replace github.com/cyberspacesec/gxx => ../..` 复用 |
 | `sdk.*` | **不依赖** SDK，避免引入 Engine 全局状态 |
 | 主二进制体积 | 完全不受 GUI 影响 |
 

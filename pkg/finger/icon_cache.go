@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cyberspacesec/gxx/v2/pkg/network"
+	"github.com/cyberspacesec/gxx/pkg/network"
 )
 
 // normalizeIconURL 去除片段，保留路径、查询参数顺序与编码。

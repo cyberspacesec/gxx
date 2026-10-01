@@ -1,7 +1,7 @@
 package output
 
 import (
-	"github.com/cyberspacesec/gxx/v2/utils/logger"
+	"github.com/cyberspacesec/gxx/utils/logger"
 	"sync"
 )
 

@@ -9,7 +9,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	"github.com/cyberspacesec/gxx/utils/proto"
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/common/ast"
 	"github.com/google/cel-go/common/operators"

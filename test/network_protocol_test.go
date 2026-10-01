@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cyberspacesec/gxx/v2/pkg/network"
+	"github.com/cyberspacesec/gxx/pkg/network"
 )
 
 func TestHTTPClient_CheckProtocol_HTTPOnly(t *testing.T) {

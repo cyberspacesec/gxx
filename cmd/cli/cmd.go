@@ -10,10 +10,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/cyberspacesec/gxx/v2/pkg/runner"
-	"github.com/cyberspacesec/gxx/v2/types"
-	"github.com/cyberspacesec/gxx/v2/utils/logger"
-	"github.com/cyberspacesec/gxx/v2/utils/output"
+	"github.com/cyberspacesec/gxx/pkg/runner"
+	"github.com/cyberspacesec/gxx/types"
+	"github.com/cyberspacesec/gxx/utils/logger"
+	"github.com/cyberspacesec/gxx/utils/output"
 )
 
 // Run 执行批量扫描。

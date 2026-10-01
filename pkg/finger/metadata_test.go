@@ -14,8 +14,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/cyberspacesec/gxx/v2/pkg/network"
-	"github.com/cyberspacesec/gxx/v2/utils/common"
+	"github.com/cyberspacesec/gxx/pkg/network"
+	"github.com/cyberspacesec/gxx/utils/common"
 )
 
 // 参考历史编码定义，独立验证补齐、行宽以及最终换行。

@@ -3,9 +3,9 @@ package sdk_test
 import (
 	"context"
 	"fmt"
-	fy "github.com/cyberspacesec/gxx/v2/fingerYaml"
-	gcel "github.com/cyberspacesec/gxx/v2/pkg/cel"
-	"github.com/cyberspacesec/gxx/v2/sdk"
+	fy "github.com/cyberspacesec/gxx/fingerYaml"
+	gcel "github.com/cyberspacesec/gxx/pkg/cel"
+	"github.com/cyberspacesec/gxx/sdk"
 	"net/http"
 	"net/http/httptest"
 	"sort"

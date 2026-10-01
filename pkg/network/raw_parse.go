@@ -8,7 +8,7 @@
 package network
 
 import (
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	"github.com/cyberspacesec/gxx/utils/proto"
 )
 
 func RawParse(nc *Client, data []byte, res []byte, variableMap map[string]any) error {

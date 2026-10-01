@@ -3,7 +3,7 @@ module github.com/cyberspacesec/gxx/cmd/gxx-ide
 go 1.25.0
 
 require (
-	github.com/cyberspacesec/gxx/v2 v2.0.0
+	github.com/cyberspacesec/gxx v1.2.0
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/swaggo/files v1.0.1
@@ -114,4 +114,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/cyberspacesec/gxx/v2 => ../..
+replace github.com/cyberspacesec/gxx => ../..

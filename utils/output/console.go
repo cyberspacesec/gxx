@@ -9,9 +9,9 @@ package output
 
 import (
 	"fmt"
-	"github.com/cyberspacesec/gxx/v2/pkg/finger"
-	"github.com/cyberspacesec/gxx/v2/utils/progress"
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	"github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/utils/progress"
+	"github.com/cyberspacesec/gxx/utils/proto"
 	"path/filepath"
 	"strings"
 

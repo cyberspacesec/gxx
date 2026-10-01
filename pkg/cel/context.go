@@ -3,9 +3,9 @@ package cel
 import (
 	"context"
 	"fmt"
-	"github.com/cyberspacesec/gxx/v2/pkg/network"
-	scantypes "github.com/cyberspacesec/gxx/v2/types"
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	"github.com/cyberspacesec/gxx/pkg/network"
+	scantypes "github.com/cyberspacesec/gxx/types"
+	"github.com/cyberspacesec/gxx/utils/proto"
 	"github.com/dlclark/regexp2"
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/common/ast"

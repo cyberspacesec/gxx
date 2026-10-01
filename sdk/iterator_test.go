@@ -3,7 +3,7 @@ package sdk_test
 import (
 	"context"
 	"errors"
-	"github.com/cyberspacesec/gxx/v2/sdk"
+	"github.com/cyberspacesec/gxx/sdk"
 	"sync/atomic"
 	"testing"
 )

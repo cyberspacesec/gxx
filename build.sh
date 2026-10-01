@@ -3,7 +3,7 @@
 # 设置应用名称和版本号
 APP_NAME="gxx"
 IDE_APP_NAME="gxx-ide"
-VERSION="${GXX_VERSION:-2.0.0}"
+VERSION="${GXX_VERSION:-1.2.0}"
 AUTHOR="zhizhuo"
 # 添加构建时间
 BUILD_DATE="${GXX_BUILD_DATE:-$(date -u +"%Y-%m-%d")}"
@@ -120,7 +120,7 @@ build() {
     fi
 
     # 添加版本和作者信息到 ldflags
-    LDFLAGS="$LDFLAGS -X 'github.com/cyberspacesec/gxx/v2/cmd/cli.defaultVersion=$VERSION' -X 'github.com/cyberspacesec/gxx/v2/cmd/cli.defaultAuthor=$AUTHOR' -X 'github.com/cyberspacesec/gxx/v2/cmd/cli.defaultBuildDate=$BUILD_DATE'"
+    LDFLAGS="$LDFLAGS -X 'github.com/cyberspacesec/gxx/cmd/cli.defaultVersion=$VERSION' -X 'github.com/cyberspacesec/gxx/cmd/cli.defaultAuthor=$AUTHOR' -X 'github.com/cyberspacesec/gxx/cmd/cli.defaultBuildDate=$BUILD_DATE'"
 
     # 构建参数
     local build_args=(-ldflags "$LDFLAGS" -o "$OUTPUT_FILE")

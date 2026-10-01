@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/pkg/finger"
 )
 
 // TestExtractICPFromBaidu 请求百度首页并尝试提取ICP备案信息

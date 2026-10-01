@@ -16,7 +16,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/axgle/mahonia"
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	"github.com/cyberspacesec/gxx/utils/proto"
 	"github.com/spaolacci/murmur3"
 	"math/big"
 	"math/rand"

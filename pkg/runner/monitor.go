@@ -10,7 +10,7 @@ PerformanceMonitor 完全实例化：调用方持有独立监控器，
 package runner
 
 import (
-	"github.com/cyberspacesec/gxx/v2/utils/logger"
+	"github.com/cyberspacesec/gxx/utils/logger"
 	"runtime"
 	"runtime/debug"
 	"runtime/metrics"

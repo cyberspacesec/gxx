@@ -16,11 +16,11 @@ import (
 	"testing"
 	"time"
 
-	gcel "github.com/cyberspacesec/gxx/v2/pkg/cel"
-	"github.com/cyberspacesec/gxx/v2/pkg/finger"
-	"github.com/cyberspacesec/gxx/v2/pkg/network"
-	"github.com/cyberspacesec/gxx/v2/pkg/runner"
-	"github.com/cyberspacesec/gxx/v2/sdk"
+	gcel "github.com/cyberspacesec/gxx/pkg/cel"
+	"github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/pkg/network"
+	"github.com/cyberspacesec/gxx/pkg/runner"
+	"github.com/cyberspacesec/gxx/sdk"
 	celgo "github.com/google/cel-go/cel"
 )
 

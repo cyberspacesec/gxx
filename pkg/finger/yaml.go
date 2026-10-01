@@ -11,7 +11,7 @@ import (
 	"crypto/sha256"
 	"embed"
 	"fmt"
-	"github.com/cyberspacesec/gxx/v2/utils/common"
+	"github.com/cyberspacesec/gxx/utils/common"
 	"io/fs"
 	"os"
 	"path/filepath"

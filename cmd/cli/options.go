@@ -9,7 +9,7 @@ package cli
 
 import (
 	"fmt"
-	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/types"
 	"path/filepath"
 	"strings"
 

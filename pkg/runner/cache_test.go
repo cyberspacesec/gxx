@@ -3,7 +3,7 @@ package runner
 import (
 	"bytes"
 	"context"
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	"github.com/cyberspacesec/gxx/utils/proto"
 	"sync"
 	"sync/atomic"
 	"testing"

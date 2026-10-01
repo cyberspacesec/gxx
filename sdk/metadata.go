@@ -13,13 +13,13 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/cyberspacesec/gxx/v2/pkg/cel"
-	"github.com/cyberspacesec/gxx/v2/pkg/finger"
-	"github.com/cyberspacesec/gxx/v2/pkg/runner"
+	"github.com/cyberspacesec/gxx/pkg/cel"
+	"github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/pkg/runner"
 )
 
 // Version 是 SDK 源版本，不能作为被识别产品的版本。
-const Version = "2.0.0"
+const Version = "1.2.0"
 
 type RuleSource struct {
 	Path    string `json:"path"`

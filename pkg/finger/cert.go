@@ -10,7 +10,7 @@ package finger
 import (
 	"crypto/sha1"
 	"encoding/hex"
-	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/types"
 	"net/http"
 	"strings"
 	"time"

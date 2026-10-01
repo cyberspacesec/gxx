@@ -30,9 +30,9 @@ package sdk
 
 import (
 	"fmt"
-	"github.com/cyberspacesec/gxx/v2/pkg/network"
-	"github.com/cyberspacesec/gxx/v2/pkg/runner"
-	"github.com/cyberspacesec/gxx/v2/types"
+	"github.com/cyberspacesec/gxx/pkg/network"
+	"github.com/cyberspacesec/gxx/pkg/runner"
+	"github.com/cyberspacesec/gxx/types"
 	"os"
 )
 

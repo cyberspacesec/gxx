@@ -49,7 +49,7 @@ gxx -u https://example.com -rt 500
 在调用方的 Go 模块内安装 SDK：
 
 ```bash
-go get github.com/cyberspacesec/gxx/v2/sdk@v2.0.0
+go get github.com/cyberspacesec/gxx/sdk@v1.2.0
 ```
 
 发布包见 [GitHub Releases](https://github.com/cyberspacesec/gxx/releases)，自动测试与发布流程见 [构建与发布](docs/构建与发布.md)。
@@ -60,7 +60,7 @@ package main
 import (
     "context"
     "fmt"
-    "github.com/cyberspacesec/gxx/v2/sdk"
+    "github.com/cyberspacesec/gxx/sdk"
     "log"
 )
 

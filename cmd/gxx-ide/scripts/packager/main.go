@@ -4,12 +4,12 @@
 //
 //	go run ./scripts/packager
 //	go run ./scripts/packager --platforms=darwin/arm64,windows/amd64
-//	go run ./scripts/packager --output=../../build --version=2.0.0
+//	go run ./scripts/packager --output=../../build --version=1.2.0
 //
 // 默认把 zip 产物写入仓库根目录 build/，命名与主项目 build.sh 一致：
 //
-//	gxx-ide_mac_arm64_2.0.0.zip
-//	gxx-ide_win_x64_2.0.0.zip
+//	gxx-ide_mac_arm64_1.2.0.zip
+//	gxx-ide_win_x64_1.2.0.zip
 //
 // 清理（--clean）仅删除 build/gxx-ide_*.zip，不会触碰 gxx_*.zip 等 CLI 产物。
 package main

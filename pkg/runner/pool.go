@@ -9,9 +9,9 @@ package runner
 import (
 	"context"
 	"fmt"
-	"github.com/cyberspacesec/gxx/v2/pkg/cel"
-	"github.com/cyberspacesec/gxx/v2/pkg/finger"
-	"github.com/cyberspacesec/gxx/v2/utils/logger"
+	"github.com/cyberspacesec/gxx/pkg/cel"
+	"github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/utils/logger"
 	"sync"
 	"sync/atomic"
 	"time"

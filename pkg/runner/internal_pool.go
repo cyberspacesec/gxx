@@ -5,8 +5,8 @@ Package runner sync.Pool 集合：RuleTask / varMap / FingerMatch。
 package runner
 
 import (
-	"github.com/cyberspacesec/gxx/v2/pkg/cel"
-	"github.com/cyberspacesec/gxx/v2/pkg/finger"
+	"github.com/cyberspacesec/gxx/pkg/cel"
+	"github.com/cyberspacesec/gxx/pkg/finger"
 	"sync"
 )
 

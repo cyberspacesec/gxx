@@ -10,10 +10,10 @@ CacheManager 完全实例化，调用方持有独立缓存。
 package runner
 
 import (
-	"github.com/cyberspacesec/gxx/v2/pkg/finger"
-	"github.com/cyberspacesec/gxx/v2/utils/common"
-	"github.com/cyberspacesec/gxx/v2/utils/logger"
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	"github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/utils/common"
+	"github.com/cyberspacesec/gxx/utils/logger"
+	"github.com/cyberspacesec/gxx/utils/proto"
 	"net/url"
 	"strings"
 	"sync/atomic"

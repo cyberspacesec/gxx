@@ -3,8 +3,8 @@ package output
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/cyberspacesec/gxx/v2/utils/logger"
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	"github.com/cyberspacesec/gxx/utils/logger"
+	"github.com/cyberspacesec/gxx/utils/proto"
 	"io"
 	"net"
 	"os"

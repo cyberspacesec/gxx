@@ -10,8 +10,8 @@ package network
 import (
 	"context"
 	"fmt"
-	"github.com/cyberspacesec/gxx/v2/utils/common"
-	"github.com/cyberspacesec/gxx/v2/utils/proto"
+	"github.com/cyberspacesec/gxx/utils/common"
+	"github.com/cyberspacesec/gxx/utils/proto"
 	"io"
 	"net/http"
 	"net/http/httputil"

@@ -7,12 +7,12 @@ package runner
 
 import (
 	"fmt"
-	fingerYaml "github.com/cyberspacesec/gxx/v2/fingerYaml"
-	"github.com/cyberspacesec/gxx/v2/pkg/cel"
-	"github.com/cyberspacesec/gxx/v2/pkg/finger"
-	"github.com/cyberspacesec/gxx/v2/types"
-	"github.com/cyberspacesec/gxx/v2/utils/common"
-	"github.com/cyberspacesec/gxx/v2/utils/logger"
+	fingerYaml "github.com/cyberspacesec/gxx/fingerYaml"
+	"github.com/cyberspacesec/gxx/pkg/cel"
+	"github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/types"
+	"github.com/cyberspacesec/gxx/utils/common"
+	"github.com/cyberspacesec/gxx/utils/logger"
 	"os"
 	"path/filepath"
 	"strings"
