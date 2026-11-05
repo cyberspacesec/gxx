@@ -9,6 +9,7 @@ package cli
 
 import (
 	"fmt"
+	"github.com/cyberspacesec/gxx/pkg/network"
 	"github.com/cyberspacesec/gxx/types"
 	"path/filepath"
 	"strings"
@@ -32,7 +33,7 @@ func NewCmdOptions() (*types.CmdOptions, error) {
 		flagSet.StringVar(&options.SockOutput, "sock", "", "socket文件输出路径，启用后以JSON格式输出到socket文件"),
 	)
 	flagSet.CreateGroup("debug", "调试",
-		flagSet.StringVar(&options.Proxy, "proxy", "", "要使用的http/socks5代理列表（逗号分隔或文件输入）"),
+		flagSet.StringVar(&options.Proxy, "proxy", "", "代理地址（单个），支持 http/https/socks5/socks5h，如 socks5://127.0.0.1:1080"),
 		flagSet.StringVar(&options.PocOptions.PocYaml, "p", "", "测试单个的yaml文件"),
 		flagSet.StringVar(&options.PocOptions.PocFile, "pf", "", "测试指定目录下面所有的yaml文件"),
 		flagSet.IntVar(&options.Timeout, "timeout", 3, "所有请求的超时时间（秒），默认3秒"),
@@ -76,6 +77,13 @@ func verifyOptions(opt *types.CmdOptions) error {
 		ext := strings.ToLower(filepath.Ext(opt.SockOutput))
 		if ext != ".sock" {
 			return fmt.Errorf("socket输出文件必须使用.sock扩展名")
+		}
+	}
+
+	// 验证代理地址（单个 URL；支持 http/https/socks5/socks5h/socks4/socks4a）
+	if opt.Proxy != "" {
+		if _, err := network.ValidateProxyURL(opt.Proxy); err != nil {
+			return err
 		}
 	}
 

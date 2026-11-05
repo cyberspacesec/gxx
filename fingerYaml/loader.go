@@ -14,25 +14,61 @@ import (
 
 const defaultFingerDir = "fingerYaml"
 
-// findFingerYamlDir 从当前工作目录向上查找仓库内的 fingerYaml/。
+// bundledFingerSubdirs 是随仓库分发的指纹库的已知顶层子目录。
+// 用于判定某个 fingerYaml/ 是否为真正的内置规则库，而非恰好同名的无关目录。
+var bundledFingerSubdirs = []string{"fingerprints", "fingers", "fofa", "jiajiu"}
+
+// findFingerYamlDir 从工作目录逐级向上、并在可执行文件所在目录查找内置指纹库。
+//
+// 关键约束：只接受"看起来像内置库"的 fingerYaml/（包含其已知子目录中的至少两个）。
+// 旧实现接受任意祖先目录中的 fingerYaml/，导致某个无关的、甚至只有一两条规则的
+// 同名目录被静默采用，悄悄覆盖完整规则库（审查问题 S1）。结构校验既保留了从子目录
+// 运行时能找到仓库根部规则库的便利，又避免了误用无关目录；自定义规则应通过
+// PocFile/PocYaml 显式指定，而非依赖向上查找。
 func findFingerYamlDir() (string, error) {
-	wd, err := os.Getwd()
-	if err != nil {
-		return "", err
+	seen := make(map[string]struct{})
+	var roots []string
+	if wd, err := os.Getwd(); err == nil {
+		for dir := wd; ; {
+			roots = append(roots, dir)
+			parent := filepath.Dir(dir)
+			if parent == dir {
+				break
+			}
+			dir = parent
+		}
 	}
-	dir := wd
-	for {
+	if exe, err := os.Executable(); err == nil {
+		roots = append(roots, filepath.Dir(exe))
+	}
+	for _, dir := range roots {
 		candidate := filepath.Join(dir, defaultFingerDir)
-		if st, err := os.Stat(candidate); err == nil && st.IsDir() {
+		if _, ok := seen[candidate]; ok {
+			continue
+		}
+		seen[candidate] = struct{}{}
+		if looksLikeBundledLibrary(candidate) {
 			return candidate, nil
 		}
-		parent := filepath.Dir(dir)
-		if parent == dir {
-			break
-		}
-		dir = parent
 	}
-	return "", fmt.Errorf("指纹目录 %s 不可用（已从 %s 向上查找）", defaultFingerDir, wd)
+	return "", fmt.Errorf("未找到内置指纹库目录 %s（需包含 %v 等子目录）", defaultFingerDir, bundledFingerSubdirs)
+}
+
+// looksLikeBundledLibrary 判断目录是否为内置指纹库：存在且包含至少两个已知子目录。
+func looksLikeBundledLibrary(dir string) bool {
+	if st, err := os.Stat(dir); err != nil || !st.IsDir() {
+		return false
+	}
+	matched := 0
+	for _, sub := range bundledFingerSubdirs {
+		if st, err := os.Stat(filepath.Join(dir, sub)); err == nil && st.IsDir() {
+			matched++
+			if matched >= 2 {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // GetFingerPath 返回磁盘指纹库目录。

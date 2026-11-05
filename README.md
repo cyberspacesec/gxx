@@ -7,7 +7,9 @@ GXX 是一款高性能指纹识别工具，基于 YAML 配置的 CEL 表达式�
 - **YAML 规则引擎** - 基于 CEL 表达式的指纹匹配，规则简洁强大
 - **高性能并发** - ants 协程池 + 两级并发（URL 级 + 规则级），支持大规模目标
 - **多协议支持** - HTTP/HTTPS、TCP、UDP、Raw HTTP
-- **技术栈识别** - 内置 Wappalyzer 引擎识别网站技术组件
+- **代理链路** - HTTP/HTTPS/SOCKS5/SOCKS5h 代理；TCP 经 CONNECT/SOCKS5，UDP 经 SOCKS5 UDP ASSOCIATE
+- **字符集识别** - 按 Content-Type / `<meta charset>` 解码 UTF-8/GBK/GB18030/Big5/Shift_JIS/ISO-8859-1，未声明时回退 GB18030
+- **技术栈识别** - 内置 Wappalyzer 引擎识别网站技术组件，分类覆盖 Web 服务器、CMS、数据库、电商、CDN、统计分析等，未归类项保留在 Other
 - **多格式输出** - TXT / CSV / JSON，支持 Unix Domain Socket 实时推送
 - **SDK 接口** - 独立 SDK 包，所有对外类型自包含，支持 `context.Context`；自带实例化 Writer 抽象（`WithOutputFile` / `WithSockOutputFile` / `WithWriter`），多 Engine 互不影响
 - **内存优化** - 有界 CEL / 正则缓存 + 响应复用 + 请求缓存字节预算
@@ -28,8 +30,10 @@ gxx -u https://example.com
 # 从文件批量扫描
 gxx -f targets.txt
 
-# 使用代理
+# 使用代理（支持 http/https/socks5/socks5h，单个地址）
 gxx -u https://example.com --proxy http://127.0.0.1:8080
+gxx -u https://example.com --proxy socks5://127.0.0.1:1080
+gxx -u https://example.com --proxy socks5h://user:pass@127.0.0.1:1080
 
 # 输出为 CSV（格式由扩展名自动识别）
 gxx -u https://example.com -o results.csv
@@ -49,7 +53,7 @@ gxx -u https://example.com -rt 500
 在调用方的 Go 模块内安装 SDK：
 
 ```bash
-go get github.com/cyberspacesec/gxx/sdk@v1.2.0
+go get github.com/cyberspacesec/gxx/sdk@v1.3.0
 ```
 
 发布包见 [GitHub Releases](https://github.com/cyberspacesec/gxx/releases)，自动测试与发布流程见 [构建与发布](docs/构建与发布.md)。
@@ -114,12 +118,28 @@ favicon 候选、重定向资源解析、内联图标哈希与 ICP 备案识别�
 ### 调试选项
 | 参数 | 说明 |
 |------|------|
-| `--proxy` | HTTP/SOCKS5 代理 |
+| `--proxy` | 代理地址（单个）：http/https/socks5/socks5h。HTTP/TCP 规则可走全部协议，UDP 规则仅 socks5/socks5h |
 | `-p` | 测试单个 YAML 文件 |
 | `-pf` | 测试指定目录的 YAML 文件 |
 | `--debug` | 开启调试模式 |
 | `--no-file-log` | 禁用文件日志 |
 | `--timeout` | 请求超时（秒，默认 3） |
+
+## 代理与 TCP/UDP 通信
+
+`--proxy`（CLI）/ `sdk.WithProxy`（SDK）接受单个代理地址，支持以下协议：
+
+| 代理协议 | HTTP/HTTPS 与 TCP 规则 | UDP 规则 | 说明 |
+|---|---|---|---|
+| `http://` / `https://` | ✅ CONNECT 隧道 | ❌ 明确报错 | HTTP 代理不支持 UDP |
+| `socks5://` | ✅ | ✅ UDP ASSOCIATE | 标准 SOCKS5 |
+| `socks5h://` | ✅ | ✅ | 由代理解析目标域名（远程 DNS）；与 socks5 等价归一化 |
+| `socks4://` / `socks4a://` | ✅ | ❌ | SOCKS4 无 UDP |
+
+- 支持 `user:pass@` 形式的用户名/密码认证。
+- TCP/UDP 规则（`type: tcp` / `type: udp`）与 Raw HTTP 规则均遵循该代理设置与取消、超时。
+- UDP over SOCKS5 为自实现的 UDP ASSOCIATE：保持 TCP 控制连接，另建 UDP 中继套接字并按 RFC 1928 封装/剥离数据报头。
+- TCP+TLS（如 `type: tcp` 的 LTS/SSL）与 HTTP 使用同一套扫描 TLS 策略（最低 TLS 1.0 + 完整套件），兼容老旧设备。
 
 ## 项目结构
 
@@ -163,7 +183,7 @@ gxx/
                                                      (2348条规则×200并发)
 ```
 
-1. **存活探测**：对目标发起 GET / 请求，获取标题、证书、服务器信息、ICP 备案号、Wappalyzer 技术栈
+1. **存活探测**：对目标发起 GET / 请求，获取标题、证书、服务器信息、ICP 备案号、Wappalyzer 技术栈；响应正文按声明字符集解码为 UTF-8（Content-Type 或 `<meta charset>`），未声明时回退 GB18030
 2. **缓存预热**：将基础响应写入缓存，后续规则匹配时直接复用（TTL + W-TinyLFU 自适应淘汰；普通构建优先使用磁盘 `fingerYaml/`，缺失时回退内置规则；`make build-embed` 的默认库使用内置规则）
 3. **规则匹配**：2348 条指纹规则通过 Runner 实例内的 `*RulePool`（默认 200 并发）并行执行 CEL 表达式评估
 4. **结果输出**：匹配结果实时输出到控制台 + 文件 + Socket

@@ -20,7 +20,6 @@ import (
 	"regexp"
 	"strings"
 	"unicode"
-	"unicode/utf8"
 )
 
 // GetTitle 从网页中提取标题
@@ -40,36 +39,10 @@ func GetTitle(urlStr string, resp *http.Response) string {
 
 // GetTitleFromBody 消费已限长的正文，附加资源继承同一次扫描的请求策略。
 func GetTitleFromBody(ctx context.Context, urlStr string, resp *http.Response, bodyBytes []byte, client *network.HTTPClient, options network.OptionsRequest) string {
-	// 解析字符集并转换编码
-	body := bodyBytes
-	contentType := resp.Header.Get("Content-Type")
-
-	// 检查和处理编码
-	charsetRegex := titlePattern1
-	charsetMatch := charsetRegex.FindStringSubmatch(contentType)
-	if len(charsetMatch) < 2 {
-		// 如果 HTTP 头中没有指定字符集，尝试从 HTML 内容中查找
-		metaCharsetRegex := titlePattern2
-		metaMatch := metaCharsetRegex.FindSubmatch(body)
-		if len(metaMatch) >= 2 {
-			charsetMatch = []string{"", string(metaMatch[1])}
-		}
-	}
-
-	// 根据检测到的字符集进行转换
-	if len(charsetMatch) >= 2 {
-		charset := strings.ToLower(charsetMatch[1])
-		logger.FromContext(ctx).Debug("检测到字符集: %s", charset)
-
-		if charset != "utf-8" && charset != "utf8" {
-			// 使用 common.Str2UTF8 函数转换为 UTF-8
-			body = titleUTF8Bytes(body)
-			logger.FromContext(ctx).Debug("已将内容从 %s 转换为 UTF-8", charset)
-		}
-	} else {
-		// 如果无法检测到字符集，尝试转换为 UTF-8
-		body = titleUTF8Bytes(body)
-	}
+	// 按响应声明的字符集解码为 UTF-8（Content-Type 或正文内 <meta charset>），
+	// 未声明时合法 UTF-8 原样保留、其余按 GB18030 兜底。统一走 decodeHTMLBody，
+	// 修复 Big5 / Shift_JIS / ISO-8859-1 等页面标题乱码。
+	body := decodeHTMLBody(bodyBytes, resp.Header.Get("Content-Type"))
 
 	// 解析URL
 	parsedURL, err := url.Parse(urlStr)
@@ -173,7 +146,7 @@ func GetTitleFromBody(ctx context.Context, urlStr string, resp *http.Response, b
 				break
 			}
 
-			jsContent := titleUTF8Bytes(bodyBytes)
+			jsContent := decodeHTMLBody(bodyBytes, respTitle.Header.Get("Content-Type"))
 			titleRegex := titlePattern6
 			titleMatches := titleRegex.FindSubmatch(jsContent)
 			if len(titleMatches) > 1 {
@@ -188,14 +161,6 @@ func GetTitleFromBody(ctx context.Context, urlStr string, resp *http.Response, b
 
 	// 返回值可能来自整页 HTML 或脚本的子串，结果只持有标题本身。
 	return strings.Clone(title)
-}
-
-// 合法 UTF-8 正文保持只读字节视图，编码回退才建立转换后的独立数组。
-func titleUTF8Bytes(body []byte) []byte {
-	if utf8.Valid(body) {
-		return body
-	}
-	return []byte(common.Str2UTF8(string(body)))
 }
 
 // cleanTitle 移除空白字符并清理标题字符串
@@ -229,8 +194,6 @@ func cleanTitle(title string) string {
 }
 
 var (
-	titlePattern1 = regexp.MustCompile(`(?i)charset=["']?([\w-]+)["']?`)
-	titlePattern2 = regexp.MustCompile(`(?i)<meta\s+.*?charset=["']?([\w-]+)["']?.*?>`)
 	titlePattern3 = regexp.MustCompile(`(?is)<title>(.*?)</title>`)
 	titlePattern4 = regexp.MustCompile(`(?i)document\.title.*?=.*?\((.*?)\)`)
 	titlePattern5 = regexp.MustCompile(`(?i)type="text/javascript".*?src="(.*?)"`)

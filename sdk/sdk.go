@@ -83,7 +83,7 @@ type CertInfo struct {
 	CRLDistributionPoints []string `json:"crl_distribution_points,omitempty"`
 }
 
-// TechStack 站点技术栈信息。
+// TechStack 站点技术栈信息。命名字段覆盖高价值分类，其余识别结果归入 Other，不丢弃。
 type TechStack struct {
 	WebServers           []string `json:"web_servers,omitempty"`
 	ReverseProxies       []string `json:"reverse_proxies,omitempty"`
@@ -95,6 +95,12 @@ type TechStack struct {
 	Caching              []string `json:"caching,omitempty"`
 	Security             []string `json:"security,omitempty"`
 	HostingPanels        []string `json:"hosting_panels,omitempty"`
+	CMS                  []string `json:"cms,omitempty"`
+	Databases            []string `json:"databases,omitempty"`
+	Ecommerce            []string `json:"ecommerce,omitempty"`
+	CDN                  []string `json:"cdn,omitempty"`
+	Analytics            []string `json:"analytics,omitempty"`
+	OperatingSystems     []string `json:"operating_systems,omitempty"`
 	Other                []string `json:"other,omitempty"`
 }
 

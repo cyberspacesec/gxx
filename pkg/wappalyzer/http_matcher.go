@@ -12,11 +12,36 @@ import (
 	"golang.org/x/net/html"
 )
 
+// httpPattern 的每个 literalGroups 元素都是必要条件：匹配必须同时满足所有组，
+// 每组至少出现其中一个字面量。literalIDs 与 literalGroups 一一对应。
 type httpPattern struct {
-	source     string
-	literals   []string
-	literalIDs []int
+	source        string
+	literalGroups [][]string
+	literalIDs    [][]int
 }
+
+// mayMatch 判断预筛选能否排除该模式：所有组都满足时才可能匹配，任一组的字面量全部缺失
+// 即可证明正则不会匹配。bits 非空时查 Aho-Corasick 结果位图，否则在 filterData 中逐个查找。
+func (p *httpPattern) mayMatch(bits []uint64, filterData string) bool {
+	for group, ids := range p.literalIDs {
+		found := false
+		for i, id := range ids {
+			if bits != nil {
+				found = bits[id/64]&(uint64(1)<<uint(id%64)) != 0
+			} else {
+				found = strings.Contains(filterData, p.literalGroups[group][i])
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			return false
+		}
+	}
+	return true
+}
+
 type patternGroup struct {
 	app      string
 	patterns []*httpPattern
@@ -55,15 +80,19 @@ func newHTTPMatcher(data string) (*httpMatcher, error) {
 		if p := patterns[source]; p != nil {
 			return p
 		}
-		p := &httpPattern{source: source, literals: requiredLiterals(source)}
-		for _, word := range p.literals {
-			id, ok := wordIDs[word]
-			if !ok {
-				id = len(words)
-				wordIDs[word] = id
-				words = append(words, word)
+		p := &httpPattern{source: source, literalGroups: requiredLiteralGroups(source)}
+		for _, group := range p.literalGroups {
+			ids := make([]int, len(group))
+			for i, word := range group {
+				id, ok := wordIDs[word]
+				if !ok {
+					id = len(words)
+					wordIDs[word] = id
+					words = append(words, word)
+				}
+				ids[i] = id
 			}
-			p.literalIDs = append(p.literalIDs, id)
+			p.literalIDs = append(p.literalIDs, ids)
 		}
 		patterns[source] = p
 		return p
@@ -138,21 +167,8 @@ func (m *httpMatcher) matchGroup(g patternGroup, data string, bits []uint64, fir
 		filterData = normalizeForFilter(data)
 	}
 	for _, p := range g.patterns {
-		if len(p.literalIDs) > 0 {
-			present := false
-			for i, id := range p.literalIDs {
-				if bits != nil {
-					present = bits[id/64]&(uint64(1)<<uint(id%64)) != 0
-				} else {
-					present = strings.Contains(filterData, p.literals[i])
-				}
-				if present {
-					break
-				}
-			}
-			if !present {
-				continue
-			}
+		if !p.mayMatch(bits, filterData) {
+			continue
 		}
 		compiled := m.program(p.source)
 		if compiled == nil {

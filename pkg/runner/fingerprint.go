@@ -88,6 +88,10 @@ func (fs *FingerStore) Load(options types.YamlFingerType) error {
 		if err != nil {
 			return err
 		}
+		// 显式指定目录却未解析出任何规则时报错，避免静默加载 0 条规则（旧行为会让扫描永不命中）。
+		if len(next) == 0 {
+			return fmt.Errorf("指纹目录 %s 中未找到有效的 yaml 规则", options.PocFile)
+		}
 		fs.fingers = next
 		fs.prepare()
 		return nil
@@ -105,6 +109,9 @@ func (fs *FingerStore) Load(options types.YamlFingerType) error {
 		if poc != nil {
 			next = append(next, poc)
 		}
+	}
+	if len(next) == 0 {
+		return fmt.Errorf("指纹文件 %s 未解析出有效规则", options.PocYaml)
 	}
 	fs.fingers = next
 	fs.prepare()
@@ -151,7 +158,7 @@ func hasOnlyRootRequests(fg *finger.Finger) bool {
 	for _, rule := range fg.Rules {
 		req := rule.Value.Request
 		path := strings.TrimSpace(req.Path)
-		if !strings.EqualFold(req.Method, "GET") || req.Type != "" && !strings.EqualFold(req.Type, common.HttpType) || path != "" && path != "/" || req.FollowRedirects || len(req.Headers) != 0 || req.Body != "" || req.Raw != "" {
+		if !strings.EqualFold(req.Method, "GET") || req.Type != "" && !strings.EqualFold(req.Type, common.HttpType) || path != "" && path != "/" || !req.ShouldFollowRedirects() || len(req.Headers) != 0 || req.Body != "" || req.Raw != "" {
 			return false
 		}
 	}

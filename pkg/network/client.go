@@ -52,25 +52,27 @@ func NewHTTPClient() *HTTPClient {
 	c.tlsConfig = &tls.Config{
 		InsecureSkipVerify: true,
 		MinVersion:         tls.VersionTLS10,
-		CipherSuites: []uint16{
-			tls.TLS_RSA_WITH_AES_128_GCM_SHA256,
-			tls.TLS_RSA_WITH_AES_128_CBC_SHA256,
-			tls.TLS_RSA_WITH_AES_128_CBC_SHA,
-			tls.TLS_RSA_WITH_AES_256_CBC_SHA,
-			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-			tls.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
-			tls.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-			tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
-			tls.TLS_ECDHE_RSA_WITH_RC4_128_SHA,
-			tls.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
-			tls.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,
-			tls.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,
-			tls.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
-			tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
-		},
+		CipherSuites:       scannerCipherSuites(),
 	}
 	return c
+}
+
+// scannerCipherSuites 返回扫描用的 TLS 1.0–1.2 套件：Go 实现的全部套件，包含已被标记为
+// 不安全的 RSA 密钥交换、CBC-SHA256、RC4 等。指纹识别需要尽可能握手成功，包括老旧设备。
+//
+// 不能手写清单：旧的手写清单漏掉了 ECDSA+AES-GCM，导致使用 ECDSA 证书的现代站点握手失败；
+// 也不能改用 Go 默认值：1.22 起默认集已移除 RSA 密钥交换，老旧设备将无法握手。
+// 这里直接取标准库的完整列表，随 Go 版本自动保持完整。
+func scannerCipherSuites() []uint16 {
+	secure, insecure := tls.CipherSuites(), tls.InsecureCipherSuites()
+	ids := make([]uint16, 0, len(secure)+len(insecure))
+	for _, suite := range secure {
+		ids = append(ids, suite.ID)
+	}
+	for _, suite := range insecure {
+		ids = append(ids, suite.ID)
+	}
+	return ids
 }
 
 // SetHTTPDebug 启用 HTTP 原始报文 dump（仅 Debug 模式应开启）。
@@ -273,6 +275,18 @@ func (c *HTTPClient) configureClient(options OptionsRequest) (*retryablehttp.Cli
 
 	opts := retryablehttp.DefaultOptionsSingle
 	opts.Timeout = options.Timeout
+	// 扫描场景下收敛重试：默认 RetryMax=5 + RetryWaitMin=1s 会让不可达/拒绝连接的目标
+	// 一直重试到整体超时（实测关闭端口要耗满 timeout）。扫描目标多为一次性探测，
+	// 过度重试只会拖慢吞吐，这里降到 1 次重试、更短退避，既容忍瞬时抖动又快速失败。
+	opts.RetryMax = 1
+	opts.RetryWaitMin = 200 * time.Millisecond
+	opts.RetryWaitMax = 600 * time.Millisecond
+	// retryablehttp 遇到畸形 HTTP 响应时会用库内部的 net.Dial 重发请求（Raw TCP 回退）。
+	// 代理是通过 Transport.DialContext 注入的，这条回退路径看不到它，会直连目标并泄漏真实出口。
+	// 配置了代理时必须关闭回退；未配置代理时保留，仍可兼容返回非标准 HTTP 报文的设备。
+	if options.Proxy != "" {
+		opts.RawTCPFallbackEnabled = false
+	}
 
 	client := retryablehttp.NewClient(opts)
 
@@ -326,15 +340,16 @@ func (c *HTTPClient) createTransport(proxyURL string) (*http.Transport, error) {
 	if proxyURL == "" {
 		transport = newBaseTransport()
 	} else {
-		proxy, err := url.Parse(proxyURL)
+		proxy, err := normalizeProxyURL(proxyURL)
 		if err != nil {
-			return nil, fmt.Errorf("代理地址解析失败: %v", err)
+			return nil, err
 		}
 		dialer, err := proxyclient.NewClient(proxy)
 		if err != nil {
 			return nil, fmt.Errorf("创建代理客户端失败: %v", err)
 		}
 		transport = newBaseTransport()
+		// HTTP 请求始终为 TCP；UDP 仅出现在 TCP/UDP 规则路径（见 network.DialContext）。
 		transport.DialContext = dialer.DialContext
 	}
 

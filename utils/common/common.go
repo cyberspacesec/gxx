@@ -175,12 +175,42 @@ func FromHex(data string) string {
 	return data
 }
 
+// ValidUTF8Truncated 与 utf8.Valid 的区别在于：容忍末尾一个被截断的不完整多字节序列。
+//
+// 响应正文受读取上限约束，截断位置可能恰好落在多字节字符中间。这种正文仍然是 UTF-8，
+// 不能因为最后半个字符就判为非 UTF-8、再把整页按 GB18030 重新解码（会让中文内容整体错位）。
+// 只放宽末尾最多 utf8.UTFMax-1 个字节，其余部分必须是合法 UTF-8。
+func ValidUTF8Truncated(data []byte) bool {
+	if utf8.Valid(data) {
+		return true
+	}
+	for i := 1; i < utf8.UTFMax && i <= len(data); i++ {
+		if utf8.RuneStart(data[len(data)-i]) {
+			return !utf8.FullRune(data[len(data)-i:]) && utf8.Valid(data[:len(data)-i])
+		}
+	}
+	return false
+}
+
+// ValidUTF8TruncatedString 是 ValidUTF8Truncated 的字符串版本。
+func ValidUTF8TruncatedString(s string) bool {
+	if utf8.ValidString(s) {
+		return true
+	}
+	for i := 1; i < utf8.UTFMax && i <= len(s); i++ {
+		if utf8.RuneStart(s[len(s)-i]) {
+			return !utf8.FullRuneInString(s[len(s)-i:]) && utf8.ValidString(s[:len(s)-i])
+		}
+	}
+	return false
+}
+
 // Str2UTF8 字符串转 utf 8
 func Str2UTF8(str string) string {
 	if len(str) == 0 {
 		return ""
 	}
-	if !utf8.ValidString(str) {
+	if !ValidUTF8TruncatedString(str) {
 		return mahonia.NewDecoder("gb18030").ConvertString(str)
 	}
 	return str

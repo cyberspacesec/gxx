@@ -62,10 +62,13 @@ func (f OutputFormat) normalize() OutputFormat {
 // 调用方也可自行实现该接口（如对接 Kafka、Webhook 等），并通过
 // sdk.WithWriter(w) 注入到 Engine。
 //
-// Write 必须满足以下并发约束：
+// Write 必须满足以下并发与所有权约束：
 //   - 同一实例可能被多 goroutine 并发调用，实现需自行保证线程安全；
 //   - Write 收到 nil 时必须直接返回 nil，不得 panic；
-//   - 即便返回 error，Engine 也只会记录日志，不会终止扫描。
+//   - 即便返回 error，Engine 也只会记录日志，不会终止扫描；
+//   - result 仅在本次调用期间有效、且与调用方拿到的 *TargetResult 是同一指针：
+//     实现必须把它视为只读，不得修改；若需在 Write 返回后异步使用，必须先自行深拷贝。
+//     内置 FileWriter（异步队列）在入队前已深拷贝，SockWriter 在调用内同步序列化，均安全。
 //
 // Close 在 Engine.Close 中被调用，实现应释放底层资源并 flush 缓冲；
 // 重复调用必须幂等。
@@ -472,6 +475,7 @@ type sockWriter struct {
 	path      string
 	listener  net.Listener
 	acceptWG  sync.WaitGroup
+	connWG    sync.WaitGroup // 跟踪每个连接的 handleConn goroutine
 
 	mu    sync.Mutex
 	conns map[net.Conn]struct{}
@@ -600,8 +604,8 @@ func (s *sockWriter) Write(ctx context.Context, result *TargetResult) error {
 //
 // 关闭顺序：
 //  1. 关闭 listener，acceptLoop 在下次 Accept 失败时退出；
-//  2. 等待 acceptWG，确保后台 goroutine 不会继续操作 conns；
-//  3. 断开所有现存连接并删除 socket 文件。
+//  2. 等待 acceptWG，确保不再接受新连接；
+//  3. 断开所有现存连接，等待每个连接的 handleConn goroutine 退出，再删除 socket 文件。
 func (s *sockWriter) Close() error {
 	if s == nil {
 		return nil
@@ -620,6 +624,8 @@ func (s *sockWriter) Close() error {
 		}
 		s.conns = make(map[net.Conn]struct{})
 		s.mu.Unlock()
+		// 等待每个连接的 handleConn goroutine 退出，保证 Close 返回时后台 goroutine 已全部终止。
+		s.connWG.Wait()
 		_ = os.Remove(s.path)
 	})
 	return s.closeErr
@@ -639,12 +645,14 @@ func (s *sockWriter) acceptLoop() {
 		s.mu.Lock()
 		s.conns[conn] = struct{}{}
 		s.mu.Unlock()
+		s.connWG.Add(1)
 		go s.handleConn(conn)
 	}
 }
 
 // handleConn 持有连接直到对端断开；本端不消费客户端数据，仅用于探测断连。
 func (s *sockWriter) handleConn(conn net.Conn) {
+	defer s.connWG.Done()
 	buf := make([]byte, 256)
 	for {
 		if _, err := conn.Read(buf); err != nil {
@@ -664,9 +672,18 @@ func defaultErrorLogger(format string, args ...any) {
 }
 
 // cloneTargetResult 为异步消费者创建独立快照，返回值仍归调用方所有。
+// 必须深拷贝嵌套的切片与 map：异步 Writer 在后台序列化快照时，调用方可能并发修改
+// 自己持有的返回结果（如写 MatchedRules.Outputs、ProductVersions），浅拷贝会触发数据竞争。
 func cloneTargetResult(r *TargetResult) *TargetResult {
 	c := *r
 	c.Matches = slices.Clone(r.Matches)
+	for i := range c.Matches {
+		c.Matches[i] = cloneFingerMatch(c.Matches[i])
+	}
+	c.Products = slices.Clone(r.Products)
+	for i := range c.Products {
+		c.Products[i] = cloneProductMatch(c.Products[i])
+	}
 	if r.Server != nil {
 		v := *r.Server
 		c.Server = &v
@@ -683,6 +700,12 @@ func cloneTargetResult(r *TargetResult) *TargetResult {
 		v.Caching = slices.Clone(v.Caching)
 		v.Security = slices.Clone(v.Security)
 		v.HostingPanels = slices.Clone(v.HostingPanels)
+		v.CMS = slices.Clone(v.CMS)
+		v.Databases = slices.Clone(v.Databases)
+		v.Ecommerce = slices.Clone(v.Ecommerce)
+		v.CDN = slices.Clone(v.CDN)
+		v.Analytics = slices.Clone(v.Analytics)
+		v.OperatingSystems = slices.Clone(v.OperatingSystems)
 		v.Other = slices.Clone(v.Other)
 		c.TechStack = &v
 	}
@@ -699,6 +722,53 @@ func cloneTargetResult(r *TargetResult) *TargetResult {
 	}
 	return &c
 }
+
+// cloneFingerMatch 深拷贝一条命中结果的切片与 map 字段。
+func cloneFingerMatch(m FingerMatch) FingerMatch {
+	m.ProductVersions = slices.Clone(m.ProductVersions)
+	m.Info = cloneFingerInfo(m.Info)
+	m.MatchedRules = slices.Clone(m.MatchedRules)
+	for i := range m.MatchedRules {
+		rule := &m.MatchedRules[i]
+		rule.Evidence = slices.Clone(rule.Evidence)
+		if rule.Outputs != nil {
+			outputs := make(map[string]string, len(rule.Outputs))
+			for k, v := range rule.Outputs {
+				outputs[k] = v
+			}
+			rule.Outputs = outputs
+		}
+	}
+	return m
+}
+
+// cloneFingerInfo 深拷贝指纹元信息中的切片、指针与产品目录字段。
+func cloneFingerInfo(info FingerInfo) FingerInfo {
+	info.Tags = slices.Clone(info.Tags)
+	info.References = slices.Clone(info.References)
+	if info.Verified != nil {
+		v := *info.Verified
+		info.Verified = &v
+	}
+	if info.Confidence != nil {
+		v := *info.Confidence
+		info.Confidence = &v
+	}
+	if info.Product != nil {
+		p := cloneProduct(*info.Product)
+		info.Product = &p
+	}
+	return info
+}
+
+// cloneProductMatch 深拷贝产品聚合结果。
+func cloneProductMatch(p ProductMatch) ProductMatch {
+	p.ProductInfo = cloneProduct(p.ProductInfo)
+	p.Versions = slices.Clone(p.Versions)
+	p.RuleIDs = slices.Clone(p.RuleIDs)
+	return p
+}
+
 func cloneCertName(n CertName) CertName {
 	n.Organization = slices.Clone(n.Organization)
 	n.OrganizationalUnit = slices.Clone(n.OrganizationalUnit)

@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"regexp/syntax"
+	"sort"
 	"strings"
 	"sync"
 	"testing"
@@ -148,6 +149,183 @@ func TestAllHTTPPatternsConservativeFilter(t *testing.T) {
 	if verified < 1000 {
 		t.Fatal("正例覆盖不足")
 	}
+}
+
+// 合取预筛选要求每一组都命中，比单组更严格；必须对全部上游模式证明它同样不会漏掉真实匹配。
+// 正例由语法树生成并经上游判定，预筛选只读取与生产路径相同的归一化文本。
+func TestAllHTTPPatternsConjunctiveFilterNeverExcludesMatch(t *testing.T) {
+	var data upstream.Fingerprints
+	if err := json.Unmarshal([]byte(upstream.GetRawFingerprints()), &data); err != nil {
+		t.Fatal(err)
+	}
+	sources := make(map[string]struct{})
+	for _, f := range data.Apps {
+		for _, source := range f.Headers {
+			sources[source] = struct{}{}
+		}
+		for _, source := range f.Cookies {
+			sources[source] = struct{}{}
+		}
+		for _, source := range f.HTML {
+			sources[source] = struct{}{}
+		}
+		for _, source := range f.ScriptSrc {
+			sources[source] = struct{}{}
+		}
+		for _, patterns := range f.Meta {
+			for _, source := range patterns {
+				sources[source] = struct{}{}
+			}
+		}
+	}
+	verified, multiGroup := 0, 0
+	for source := range sources {
+		groups := requiredLiteralGroups(source)
+		if len(groups) == 0 {
+			continue
+		}
+		if len(groups) > 1 {
+			multiGroup++
+		}
+		pattern, err := upstream.ParsePattern(source)
+		if err != nil {
+			continue
+		}
+		expression, _, _ := strings.Cut(source, `\;`)
+		tree, err := syntax.Parse("(?i)"+expression, syntax.Perl)
+		if err != nil {
+			continue
+		}
+		p := &httpPattern{source: source, literalGroups: groups, literalIDs: make([][]int, len(groups))}
+		for i, group := range groups {
+			p.literalIDs[i] = make([]int, len(group))
+		}
+		for variant := 0; variant < 16; variant++ {
+			witness := patternWitness(tree, variant)
+			if len(witness) > 1<<20 {
+				continue
+			}
+			for _, text := range []string{witness, strings.ToLower(witness), strings.ToUpper(witness), strings.ReplaceAll(strings.ToLower(witness), "s", "ſ"), "prefix " + witness + " suffix"} {
+				if matched, _ := pattern.Evaluate(strings.ToLower(text)); !matched {
+					continue
+				}
+				verified++
+				if !p.mayMatch(nil, normalizeForFilter(strings.ToLower(text))) {
+					t.Fatalf("合取预筛选漏匹配: pattern=%q groups=%q text=%q", source, groups, text)
+				}
+			}
+		}
+	}
+	t.Logf("HTTP 模式=%d 多组模式=%d 上游确认正例=%d", len(sources), multiGroup, verified)
+	if verified < 1000 || multiGroup < 500 {
+		t.Fatalf("覆盖不足: 正例=%d 多组模式=%d", verified, multiGroup)
+	}
+}
+
+// 位图路径与逐字符串查找路径必须得出相同结论，二者分别服务正文/脚本与 header/cookie/meta。
+func TestMayMatchBitsAndContainsAgree(t *testing.T) {
+	m, err := newHTTPMatcher(upstream.GetRawFingerprints())
+	if err != nil {
+		t.Fatal(err)
+	}
+	rng := rand.New(rand.NewSource(7))
+	var all []*httpPattern
+	for _, g := range m.body {
+		all = append(all, g.patterns...)
+	}
+	for _, g := range m.scripts {
+		all = append(all, g.patterns...)
+	}
+	words := []string{"wp-content", "jquery", "react", "<link", " href=", "stylesheet", "/wp-includes/", "bootstrap", "angular", "vue", "tilda", "pure", ".css", ".js", "generator"}
+	buffer := m.bits.Get().(*[]uint64)
+	defer m.bits.Put(buffer)
+	bits := *buffer
+	for i := 0; i < 300; i++ {
+		var b strings.Builder
+		for n := rng.Intn(40); n > 0; n-- {
+			b.WriteString(words[rng.Intn(len(words))])
+			b.WriteByte(" <>/\"'="[rng.Intn(7)])
+		}
+		data := normalizeForFilter(strings.ToLower(b.String()))
+		m.literals.match(data, bits)
+		for _, p := range all {
+			if a, c := p.mayMatch(bits, data), p.mayMatch(nil, data); a != c {
+				t.Fatalf("两条路径结论不一致: pattern=%q data=%q bits=%v contains=%v", p.source, data, a, c)
+			}
+		}
+	}
+}
+
+// 用接近真实网页的大小与结构对拍完整输出，覆盖合取过滤真正生效的场景：
+// 页面同时出现部分字面量（如 "<link"）但不满足全部组。
+func TestHTTPMatcherUpstreamParityRealisticPages(t *testing.T) {
+	m, err := newHTTPMatcher(upstream.GetRawFingerprints())
+	if err != nil {
+		t.Fatal(err)
+	}
+	reference, err := upstream.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+	fragments := []string{
+		`<link rel="stylesheet" href="/static/css/app.css">`,
+		`<link rel='stylesheet' id='wp-block-library-css' href='/wp-includes/css/dist/block-library/style.min.css'>`,
+		`<link rel="stylesheet" href="/wp-content/themes/twentytwenty/style.css">`,
+		`<link href="https://static.tildacdn.com/css/tilda-grid.css" rel="stylesheet">`,
+		`<link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">`,
+		`<script src="/static/js/jquery-3.6.0.min.js"></script>`,
+		`<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>`,
+		`<script src="/assets/react.production.min.js"></script>`,
+		`<meta name="generator" content="WordPress 6.4.2">`,
+		`<meta name="generator" content="Hugo 0.120.0">`,
+		`<div class="container"><p>Powered by Discuz! X3.4</p></div>`,
+		`<div id="app" data-v-app></div><span class="ng-scope">x</span>`,
+		`<a href="/login">登录</a><span>版权所有 © 2026</span>`,
+		`<p>` + strings.Repeat("lorem ipsum dolor sit amet ", 40) + `</p>`,
+	}
+	headers := []map[string][]string{
+		nil,
+		{"Server": {"nginx/1.24.0"}},
+		{"Server": {"Apache/2.4.58 (Ubuntu)"}, "X-Powered-By": {"PHP/8.2.12"}},
+		{"Set-Cookie": {"PHPSESSID=abc; path=/", "wordpress_test_cookie=WP+Cookie+check; path=/"}},
+	}
+	// 合取过滤是否生效取决于页面中出现哪些片段的组合，与页面大小无关；用大量小页面覆盖组合，
+	// 只保留少量大页面。上游参照实现对每个页面都运行全部正则，开销远高于被测实现。
+	// 本测试是单线程的，竞态检测无法从中发现问题（并发安全由 TestHTTPMatcherUpstreamParity 覆盖），
+	// 因此 -race 与 -short 下缩减页面数，避免拖慢 CI 而不损失检测能力。
+	pages := 200
+	if raceEnabled || testing.Short() {
+		pages = 20
+	}
+	rng := rand.New(rand.NewSource(20261105))
+	for i := 0; i < pages; i++ {
+		var b strings.Builder
+		b.WriteString(`<!DOCTYPE html><html><head><title>页面</title>`)
+		target := 1<<10 + rng.Intn(3<<10)
+		if i%50 == 0 {
+			target = 64 << 10
+		}
+		for b.Len() < target {
+			b.WriteString(fragments[rng.Intn(len(fragments))])
+			b.WriteByte('\n')
+		}
+		b.WriteString(`</body></html>`)
+		header := headers[i%len(headers)]
+		got := m.FingerprintWithInfo(header, []byte(b.String()))
+		want := reference.FingerprintWithInfo(header, []byte(b.String()))
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("第 %d 个页面（%d 字节）输出不一致:\ngot=%v\nwant=%v", i, b.Len(), keys(got), keys(want))
+		}
+	}
+}
+
+func keys(m map[string]upstream.AppInfo) []string {
+	out := make([]string, 0, len(m))
+	for k := range m {
+		out = append(out, k)
+	}
+	sort.Strings(out)
+	return out
 }
 
 func TestHTTPMatcherUpstreamParity(t *testing.T) {

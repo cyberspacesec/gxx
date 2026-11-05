@@ -79,7 +79,13 @@ type RuleRequest struct {
 	Path            string            `yaml:"path"`
 	Headers         map[string]string `yaml:"headers"`
 	Body            string            `yaml:"body"`
-	FollowRedirects bool              `yaml:"follow_redirects"` // 是否跟随重定向，默认跟随重定向
+	FollowRedirects *bool             `yaml:"follow_redirects,omitempty"` // 是否跟随重定向：true 跟随，false 不跟随，未声明时默认跟随
+}
+
+// ShouldFollowRedirects 返回该请求是否跟随重定向。
+// 未声明 follow_redirects 时默认跟随，与规则格式文档以及 IDE 生成的规则保持一致。
+func (r RuleRequest) ShouldFollowRedirects() bool {
+	return r.FollowRedirects == nil || *r.FollowRedirects
 }
 
 // Info 以下开始是 信息部分

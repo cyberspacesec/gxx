@@ -92,7 +92,6 @@ func NewRulePool(workerCount int, taskHandler func(*RuleTask), logs ...logger.Si
 	rp := &RulePool{}
 	rp.curWorkers.Store(int64(workerCount))
 
-	maxBlocking := workerCount * 2
 	handler := func(i interface{}) {
 		switch task := i.(type) {
 		case *RuleTask:
@@ -107,10 +106,13 @@ func NewRulePool(workerCount int, taskHandler func(*RuleTask), logs ...logger.Si
 			log.Error("invalid rule task type")
 		}
 	}
+	// 不限制阻塞提交数（ants 中 0 表示不限）。被阻塞的只是调用 Invoke 的提交方，数量已被
+	// Runner 的 URL 并发槽位限定；若在此设置上限，URL 并发超过规则并发的 2 倍时，多余的
+	// 提交会被 ErrPoolOverload 拒绝，指纹任务被静默丢弃，导致漏报。任务应当排队等待。
 	p, err := NewWorkPoolWithFunc(
 		workerCount,
 		handler,
-		maxBlocking,
+		0,
 		2*time.Minute,
 		func(i interface{}) {
 			atomic.AddInt64(&rp.stats.FailedTasks, 1)

@@ -86,6 +86,16 @@ func HandleMatchResults(targetResult *TargetResult, output string, sockOutput st
 			techParts = append(techParts, fmt.Sprintf("Web框架：[%s] ", strings.Join(targetResult.Wappalyzer.WebFrameworks, ", ")))
 		}
 
+		// CMS
+		if len(targetResult.Wappalyzer.CMS) > 0 {
+			techParts = append(techParts, fmt.Sprintf("CMS：[%s] ", strings.Join(targetResult.Wappalyzer.CMS, ", ")))
+		}
+
+		// 数据库
+		if len(targetResult.Wappalyzer.Databases) > 0 {
+			techParts = append(techParts, fmt.Sprintf("数据库：[%s] ", strings.Join(targetResult.Wappalyzer.Databases, ", ")))
+		}
+
 		// JS框架和库 (合并展示，减少输出宽度)
 		jsComponents := append([]string{}, targetResult.Wappalyzer.JavaScriptFrameworks...)
 		jsComponents = append(jsComponents, targetResult.Wappalyzer.JavaScriptLibraries...)

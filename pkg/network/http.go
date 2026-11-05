@@ -11,6 +11,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 	"sync"
 	"time"
 
@@ -105,6 +106,11 @@ func createRedirectPolicy(followRedirects bool) func(*http.Request, []*http.Requ
 		if len(via) >= maxRedirects {
 			return fmt.Errorf("达到最大重定向次数: %d", maxRedirects)
 		}
+		// 跨源重定向时剥离自定义请求头，避免把 API Token 等敏感头发往第三方。
+		// Go 自身只剥离 Authorization/Cookie 等固定敏感头，不处理任意自定义头。
+		if len(via) > 0 && !sameRedirectOrigin(via[0].URL, req.URL) {
+			stripCrossOriginHeaders(req)
+		}
 		if len(via) > 0 {
 			originalReq := via[len(via)-1]
 			if originalReq.Body != nil && originalReq.Body != http.NoBody {
@@ -148,6 +154,32 @@ func createRedirectPolicy(followRedirects bool) func(*http.Request, []*http.Requ
 			}
 		}
 		return nil
+	}
+}
+
+// redirectSafeHeaders 跨源重定向时允许保留的请求头（大小写规范化后比较）。
+var redirectSafeHeaders = map[string]struct{}{
+	"User-Agent":      {},
+	"Accept":          {},
+	"Accept-Language": {},
+	"Accept-Encoding": {},
+	"Referer":         {},
+}
+
+// sameRedirectOrigin 判断两个 URL 是否同源（scheme + host 相同）。
+func sameRedirectOrigin(a, b *url.URL) bool {
+	if a == nil || b == nil {
+		return false
+	}
+	return strings.EqualFold(a.Scheme, b.Scheme) && strings.EqualFold(a.Host, b.Host)
+}
+
+// stripCrossOriginHeaders 删除不在安全白名单内的请求头，防止自定义头跨源泄漏。
+func stripCrossOriginHeaders(req *http.Request) {
+	for key := range req.Header {
+		if _, ok := redirectSafeHeaders[http.CanonicalHeaderKey(key)]; !ok {
+			req.Header.Del(key)
+		}
 	}
 }
 

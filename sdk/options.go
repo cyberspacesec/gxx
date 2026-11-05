@@ -242,7 +242,11 @@ func WithCacheSize(size int) Option {
 	}
 }
 
-// WithCacheTTL 设置缓存条目的 TTL（默认 10 分钟）。
+// WithCacheTTL 设置请求缓存条目的 TTL（默认 10 分钟）。
+//
+// 注意：请求缓存按单次 Scan 作用域隔离，扫描结束即清理，因此 TTL 实际只约束
+// 同一次扫描内（通常亚秒级）的条目存活。它不是跨扫描的缓存，调大 TTL 不会让
+// 不同次扫描复用响应；此选项主要为长耗时单目标扫描预留。
 func WithCacheTTL(ttl time.Duration) Option {
 	return func(c *engineConfig) error {
 		if ttl <= 0 {

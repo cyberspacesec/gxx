@@ -17,7 +17,6 @@ import (
 	"github.com/cyberspacesec/gxx/utils/proto"
 	"net/http"
 	"strings"
-	"unicode/utf8"
 )
 
 // formatPath 格式化路径
@@ -154,17 +153,21 @@ func BuildProtoRequest(resp *http.Response, method, body, path string) *proto.Re
 // 调用后不得修改输入；GB18030 回退与字符串入口一致。Raw 与 Body 仍使用
 // 各自的数组，消息发布后可由同次扫描中的规则共享读取。
 func BuildProtoResponseOwned(ctx context.Context, resp *http.Response, body []byte, latency int64, client *network.HTTPClient, options network.OptionsRequest) *proto.Response {
-	if !utf8.Valid(body) {
-		body = []byte(common.Str2UTF8(string(body)))
-	}
+	body = decodeHTMLBody(body, responseContentType(resp))
 	return buildProtoResponseBody(ctx, resp, body, latency, client, options)
+}
+
+// responseContentType 安全读取响应的 Content-Type（resp/Header 可能为 nil）。
+func responseContentType(resp *http.Response) string {
+	if resp == nil || resp.Header == nil {
+		return ""
+	}
+	return resp.Header.Get("Content-Type")
 }
 
 // BuildBaseProtoResponseOwned 构造扫描入口响应。pageURL 为最终页面地址，
 // 仅用于资源解析；规则缓存和 proto.Response.Url 继续使用目标地址。
 func BuildBaseProtoResponseOwned(ctx context.Context, resp *http.Response, body []byte, latency int64, client *network.HTTPClient, options network.OptionsRequest, pageURL string) *proto.Response {
-	if !utf8.Valid(body) {
-		body = []byte(common.Str2UTF8(string(body)))
-	}
+	body = decodeHTMLBody(body, responseContentType(resp))
 	return buildProtoResponsePage(ctx, resp, body, latency, client, options, pageURL)
 }

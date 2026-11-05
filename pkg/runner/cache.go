@@ -234,9 +234,9 @@ func (cm *CacheManager) ShouldUseCache(rule finger.RuleMap, target string) (bool
 	}
 
 	urlStr := common.RemoveTrailingSlash(target)
-	// actualFollowRedirects 与 pkg/finger/runner.go 中实际请求行为对齐（!rule.Request.FollowRedirects）；
+	// actualFollowRedirects 与 pkg/finger/runner.go 中实际请求行为对齐（rule.Request.ShouldFollowRedirects）；
 	// 缓存键必须反映真实重定向行为，否则查 cache 时永远 miss。
-	actualFollowRedirects := !rule.Value.Request.FollowRedirects
+	actualFollowRedirects := rule.Value.Request.ShouldFollowRedirects()
 	cacheKey := cm.requestKey(urlStr, method, actualFollowRedirects)
 	if logger.IsDebugEnabled(cm.log) {
 		cm.log.Debug("读取请求缓存：%s %s %t", urlStr, method, actualFollowRedirects)

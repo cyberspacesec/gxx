@@ -31,7 +31,7 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 	if options.Timeout <= 0 {
 		options.Timeout = defaultTimeout
 	}
-	options.FollowRedirects = !rule.Request.FollowRedirects
+	options.FollowRedirects = rule.Request.ShouldFollowRedirects()
 	if len(rule.Request.Headers) > 0 {
 		headers := make(map[string]string, len(options.CustomHeaders)+len(rule.Request.Headers))
 		for k, v := range options.CustomHeaders {

@@ -26,7 +26,7 @@ import "github.com/cyberspacesec/gxx/sdk/debug"
 在调用方的 Go 模块中执行：
 
 ```bash
-go get github.com/cyberspacesec/gxx/sdk@v1.2.0
+go get github.com/cyberspacesec/gxx/sdk@v1.3.0
 ```
 
 模块路径为 `github.com/cyberspacesec/gxx`，调用方无需配置本地 `replace`。使用 `@latest` 获取当前版本线的最新稳定版本，按当前字段适配调用代码；`FingerInfo.Tags` 为 `[]string`。
@@ -113,7 +113,7 @@ func main() {
 | `WithProductCatalog(products []ProductDefinition)` | 内置目录 | 实例产品目录，按明确的规则 ID 映射；同一产品 ID 的元数据一致覆盖 |
 | `WithRuleAssessments(assessments []RuleAssessment)` | 内置记录 | 按规则 ID 与 SHA256 绑定的测试记录、外部校准置信度 |
 | `WithRuleSourceVersion(version string)` | 空 | 外部规则包的来源版本 |
-| `WithProxy(addr string)` | `""` | http/https/socks5 代理 |
+| `WithProxy(addr string)` | `""` | 单个代理地址：http/https/socks5/socks5h（socks4/socks4a 仅 TCP）。UDP 规则仅 socks5/socks5h |
 | `WithTimeout(d time.Duration)` | `10s` | 请求超时（支持亚秒，如 `500*time.Millisecond`） |
 | `WithTimeoutSeconds(seconds int)` | — | 请求超时（整秒） |
 | `WithInsecureSkipVerify(skip bool)` | `true` | 跳过 TLS 验证 |
@@ -161,6 +161,8 @@ if errors.Is(err, sdk.ErrEmptyTarget) {
     // 跳过空目标
 }
 ```
+
+扫描类方法（`Scan` / `ScanBatch` / `ScanCallback` / `ScanIterator` / `GetBaseInfo` / `WappalyzerScan` / `NormalizeURL`）的目标失败错误统一包装 `ErrScanFailed`，底层原因用 `errors.Join` 附加，可用 `errors.Is(err, sdk.ErrScanFailed)` 统一判定。`ScanIterator` / `ScanCallback` 聚合各目标错误，条数上限 100，超出仅计数并追加一条截断汇总，避免大批量失败时错误链无界增长。引擎在扫描在途时被 `Close`，返回的是 context 取消错误（`context.Canceled`）而非 `ErrEngineClosed`——两者都表示应停止。
 
 ---
 
@@ -272,14 +274,26 @@ type BaseInfo struct {
 ```go
 type TechStack struct {
     WebServers           []string
-    ProgrammingLanguages []string
-    WebFrameworks        []string
+    ReverseProxies       []string
     JavaScriptFrameworks []string
     JavaScriptLibraries  []string
+    WebFrameworks        []string
+    StaticSiteGenerator  []string
+    ProgrammingLanguages []string
+    Caching              []string
     Security             []string
-    // ... 见 sdk.go
+    HostingPanels        []string
+    CMS                  []string // 内容管理系统（WordPress、Drupal 等）
+    Databases            []string // 数据库
+    Ecommerce            []string // 电商平台
+    CDN                  []string // 内容分发网络
+    Analytics            []string // 统计分析
+    OperatingSystems     []string // 操作系统
+    Other                []string // 其余未归入命名分类的识别结果，不丢弃
 }
 ```
+
+命名字段覆盖高价值分类；上游其余分类（Live chat、CRM、Widgets 等）归入 `Other`，每个切片去重并排序，同一输入输出稳定。
 
 ### FingerOptions
 
@@ -608,6 +622,10 @@ fmt.Printf("enabled=%v cached_hosts=%d qps=%.1f\n", rl.Enabled, rl.CachedHosts, 
 
 - 大响应的重复字节包含查询可使用按需构造的 8 KiB 片段位图。候选仍调用原始包含函数，位图饱和、响应太小或复用次数不足时使用直接匹配；相关响应数据共用单次扫描 8 MiB 的估算预算
 - 技术栈识别按响应字段建立索引，正文通过必要字面量索引筛选候选；全部 HTTP 规则保持可用，候选由上游解析器判定。编译正则按 512 条工作集共享缓存，淘汰后可重新编译，不裁剪规则；覆盖大量不同模式的负载可能增加编译开销
+- 响应正文按声明的字符集解码为 UTF-8：优先 Content-Type 头，其次正文前部的 `<meta charset>`，支持 UTF-8/GBK/GB18030/Big5/Shift_JIS/ISO-8859-1 等；无任何声明时合法 UTF-8 原样保留，否则按 GB18030 兜底（面向省略或错误标注字符集的中文站点）。CEL 规则中的 `response.body` / 标题 / ICP 均基于解码后的 UTF-8 字节
+- 跨源重定向会剥离自定义请求头（`WithCustomHeaders` 注入的头、以及 Go 自身处理的 Authorization/Cookie），仅保留 UA/Accept/Accept-Language/Referer，避免 Token 等敏感头泄漏给第三方；同源重定向保留全部头
+- CookieJar 属于 Engine 的 HTTP 客户端，在实例生命周期内按 host 持久：同一 Engine 对同一目标多次扫描会携带上一次写入的会话 Cookie。需要完全无状态、可复现的重复扫描时，为每次独立扫描使用新的 Engine
+- 自定义 `Writer.Write` 收到的 `*TargetResult` 与调用方拿到的是同一指针，必须视为只读、不得在返回后异步持有；需异步使用时自行深拷贝。内置 FileWriter 入队前已深拷贝，SockWriter 在调用内同步序列化
 - CLI 输出完成后只保留汇总计数，不保留全量结果；目标去重集合仍随唯一目标数增长
 - 不要用每目标强制 GC 控制内存；RSS 还包括 Go 运行时保留页、线程栈和原生组件，通常高于存活堆
 - 所有对外类型均在 `sdk` 包内定义，**不需要**导入 `gxx/types` 或 `gxx/pkg/*` 等内部包

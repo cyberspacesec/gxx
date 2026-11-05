@@ -15,8 +15,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/chainreactors/proxyclient"
-
 	"io"
 	"net"
 	"net/url"
@@ -135,6 +133,7 @@ func (c *Client) waitRetry() error {
 }
 
 // DialContext 保持代理、取消和 TLS 策略在初次连接与重试时一致。
+// 支持 TCP/UDP 经 HTTP、SOCKS5、SOCKS5h 代理（UDP 仅 SOCKS5 系）。
 func DialContext(ctx context.Context, network, address, proxyURL string, timeout time.Duration, useTLS bool, serverName string, insecure bool) (net.Conn, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
@@ -142,26 +141,19 @@ func DialContext(ctx context.Context, network, address, proxyURL string, timeout
 	if timeout <= 0 {
 		timeout = DefaultDialTimeout
 	}
+	proxy, err := normalizeProxyURL(proxyURL)
+	if err != nil {
+		return nil, err
+	}
 	dialCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
-	dial := (&net.Dialer{Timeout: timeout}).DialContext
-	if proxyURL != "" {
-		u, err := url.Parse(proxyURL)
-		if err != nil {
-			return nil, err
-		}
-		proxy, err := proxyclient.NewClient(u)
-		if err != nil {
-			return nil, err
-		}
-		dial = proxy.DialContext
-	}
-	conn, err := dial(dialCtx, network, address)
+	conn, err := dialThroughProxy(dialCtx, network, address, proxy, timeout)
 	if err != nil {
 		return nil, err
 	}
 	if useTLS {
-		secure := tls.Client(conn, &tls.Config{ServerName: serverName, InsecureSkipVerify: insecure})
+		// 与 HTTP 路径统一的扫描 TLS 策略：最低 TLS 1.0 + 完整套件，兼容老旧设备。
+		secure := tls.Client(conn, &tls.Config{ServerName: serverName, InsecureSkipVerify: insecure, MinVersion: tls.VersionTLS10, CipherSuites: scannerCipherSuites()})
 		if err = secure.HandshakeContext(dialCtx); err != nil {
 			_ = conn.Close()
 			return nil, err

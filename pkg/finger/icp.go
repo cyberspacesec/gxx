@@ -15,7 +15,7 @@ func ExtractICPRecordFromBody(body []byte) string {
 	if !metadataMayContainICP(body) {
 		return ""
 	}
-	if !utf8.Valid(body) {
+	if !common.ValidUTF8Truncated(body) {
 		return extractICPText(common.Str2UTF8(string(body)))
 	}
 	return extractICPText(body)
@@ -26,7 +26,7 @@ func ExtractICPRecord(body string) string {
 	if !metadataMayContainICP(body) {
 		return ""
 	}
-	if !utf8.ValidString(body) {
+	if !common.ValidUTF8TruncatedString(body) {
 		return extractICPText(common.Str2UTF8(body))
 	}
 	return extractICPText(body)

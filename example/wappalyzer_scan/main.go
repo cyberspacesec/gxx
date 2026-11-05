@@ -75,6 +75,12 @@ func printTechStack(ts *sdk.TechStack) {
 		}
 	}
 	printCategory("Web服务器", ts.WebServers)
+	printCategory("CMS", ts.CMS)
+	printCategory("数据库", ts.Databases)
+	printCategory("电商", ts.Ecommerce)
+	printCategory("CDN", ts.CDN)
+	printCategory("统计分析", ts.Analytics)
+	printCategory("操作系统", ts.OperatingSystems)
 	printCategory("编程语言", ts.ProgrammingLanguages)
 	printCategory("Web框架", ts.WebFrameworks)
 	printCategory("JS框架", ts.JavaScriptFrameworks)

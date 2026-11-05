@@ -332,15 +332,13 @@ loop:
 			continue
 		}
 
+		// 规则池不限制阻塞提交数，Submit 会排队等待空闲 worker；返回错误只意味着规则池已关闭。
 		if err := r.pool.Submit(task); err != nil {
-			time.Sleep(1 * time.Millisecond)
-			if err = r.pool.Submit(task); err != nil {
-				r.log.Debug("提交指纹任务失败: %s, 错误: %v", fg.Id, err)
-				wg.Done()
-				<-limiter
-				releaseRuleTask(task)
-				continue
-			}
+			r.log.Debug("规则池已关闭，放弃提交指纹任务: %s, 错误: %v", fg.Id, err)
+			wg.Done()
+			<-limiter
+			releaseRuleTask(task)
+			continue
 		}
 		submitted++
 	}
@@ -353,6 +351,11 @@ loop:
 	wg.Wait()
 	close(resultChan)
 	collectorWG.Wait()
+
+	// 规则并发完成顺序不确定，按指纹 ID 排序使同一目标的命中结果稳定可复现。
+	slices.SortFunc(matches, func(a, b *FingerMatch) int {
+		return strings.Compare(a.Finger.Id, b.Finger.Id)
+	})
 
 	r.log.Debug("目标 %s 指纹识别完成，耗时: %v, 匹配数量: %d/%d, 实际任务数: %d",
 		target, time.Since(startTime), len(matches), len(snap), submitted)
@@ -459,7 +462,7 @@ func (r *Runner) evaluateFingerprint(ctx context.Context, fg *finger.Finger, tar
 			varMap["request"] = cachedReq
 			varMap["response"] = cachedResp
 		} else {
-			ruleOpts := r.buildHTTPOptions(timeout, !reqCopy.FollowRedirects)
+			ruleOpts := r.buildHTTPOptions(timeout, reqCopy.ShouldFollowRedirects())
 			var err error
 			// 仅合并同次扫描内本就允许缓存的普通 GET；请求状态、取消和配置不跨扫描共享。
 			if strings.EqualFold(reqCopy.Method, "GET") && len(reqCopy.Headers) == 0 && reqCopy.Body == "" && reqCopy.Raw == "" && (reqCopy.Type == "" || strings.EqualFold(reqCopy.Type, common.HttpType)) {

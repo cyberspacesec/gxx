@@ -5,6 +5,7 @@ import (
 	_ "embed"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math"
 	"net/url"
@@ -13,13 +14,14 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/cyberspacesec/gxx/internal/lifecycle"
 	"github.com/cyberspacesec/gxx/pkg/cel"
 	"github.com/cyberspacesec/gxx/pkg/finger"
 	"github.com/cyberspacesec/gxx/pkg/runner"
 )
 
 // Version 是 SDK 源版本，不能作为被识别产品的版本。
-const Version = "1.2.0"
+const Version = "1.3.0"
 
 type RuleSource struct {
 	Path    string `json:"path"`
@@ -145,8 +147,8 @@ func ProductCatalog() ([]ProductDefinition, error) {
 func (e *Engine) RuleCatalog(ctx context.Context) ([]RuleMetadata, error) {
 	ctx, done, err := e.life.Begin(ctx)
 	if err != nil {
-		if e.IsClosed() {
-			return nil, ErrEngineClosed
+		if errors.Is(err, lifecycle.ErrClosed) {
+			err = ErrEngineClosed
 		}
 		return nil, err
 	}

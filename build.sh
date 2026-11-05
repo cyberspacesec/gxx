@@ -3,7 +3,7 @@
 # 设置应用名称和版本号
 APP_NAME="gxx"
 IDE_APP_NAME="gxx-ide"
-VERSION="${GXX_VERSION:-1.2.0}"
+VERSION="${GXX_VERSION:-1.3.0}"
 AUTHOR="zhizhuo"
 # 添加构建时间
 BUILD_DATE="${GXX_BUILD_DATE:-$(date -u +"%Y-%m-%d")}"

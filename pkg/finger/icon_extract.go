@@ -275,7 +275,8 @@ func GetPageIconHash(ctx context.Context, client *network.HTTPClient, pageURL st
 		if hash != "" && hash != "0" {
 			return hash
 		}
-		// 无声明图标时仍给默认地址第二次机会，应对短暂的 404/5xx。
+		// 无声明图标时给默认地址第二次机会，容忍 /favicon.ico 的瞬时 404/5xx。
+		// 失败不写长期缓存，因此这是有意的少量重试；社交图片后备依赖此次确认默认图标确实缺失。
 		if declared == 0 && !iconContextExpired(ctx) {
 			hash = getIconHashExactCached(ctx, client, raw, proxy, timeout, headers)
 			if hash != "" && hash != "0" {

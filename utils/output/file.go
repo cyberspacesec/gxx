@@ -245,8 +245,9 @@ func WriteFingerprints(opts *WriteOptions) error {
 			Certs:       opts.Certs,
 		}
 
-		// 序列化为JSON
-		jsonData, err := json.MarshalIndent(jsonOutput, "", "")
+		// 序列化为单行 JSON：输出是 JSON Lines，每个目标恰好占一行，与 SDK 的 FileWriter 和 Socket 输出一致。
+		// 不能用 MarshalIndent：即使缩进为空串，它也会在每个字段后换行，使一条结果被拆成十几行。
+		jsonData, err := json.Marshal(jsonOutput)
 		if err != nil {
 			return fmt.Errorf("JSON序列化失败: %v", err)
 		}

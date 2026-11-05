@@ -270,7 +270,8 @@ Finger {
 
 #### 5.3.3 信息提取子模块
 
-- **`title.go`**：3 层兜底（HTML `<title>` → JS `document.title` → i18n JS 文件中的 `top.login.title`），自动处理 GBK/UTF-8 字符集
+- **`charset.go`**：`decodeHTMLBody(body, contentType)` 统一字符集解码。按显式声明（Content-Type 头或正文前部 `<meta charset>`）用 `golang.org/x/text/encoding/htmlindex` 解码，支持 UTF-8/GBK/GB18030/Big5/Shift_JIS/ISO-8859-1 等；无声明时合法（含末尾截断）UTF-8 原样保留，其余按 GB18030 兜底。基础响应（`req.go`）与标题提取（`title.go`）共用
+- **`title.go`**：3 层兜底（HTML `<title>` → JS `document.title` → i18n JS 文件中的 `top.login.title`），正文经 `decodeHTMLBody` 解码后再提取
 - **`icp.go`**：扫描可见文本中的短候选，处理实体、行内标签、全角和 GB18030；排除脚本、注释、模板与属性样例，备案官网锚文本优先
 - **`icon_extract.go` / `icon.go` / `icon_stream.go`**：依次验证声明图标、根路径和图片线索，按固定块计算完整资源的 Mmh3 Hash；资源缓存属于当前 HTTP 客户端。入口页和根路径 GET HTML 提取图标，其他规则路径不重复提取
 - **`cert.go`**：提取 Subject/Issuer 全字段、NotBefore/NotAfter、SAN（DNS/IP/URI/Email）、CRL/OCSP/CA 链 URL、SPKI 的 SHA1 公钥指纹
@@ -318,6 +319,17 @@ CEL 编译结果 `cel.Program` 是 stateless / thread-safe / cacheable 的，所
 - **Client 缓存**（`clientCache sync.Map`）：按 `(proxy, timeout, followRedirects)` 三元组缓存 `*retryablehttp.Client`，避免每次请求新建
 - **CookieJar**：自动按域名路径管理 Cookie（基于 `golang.org/x/net/publicsuffix`）
 - **LoggingTransport**：DEBUG 模式下转储请求/响应头到日志（不含 body）
+- **TLS 套件**：取标准库实现的全部套件（`tls.CipherSuites()` + `tls.InsecureCipherSuites()`），最低 TLS 1.0。扫描需要尽可能握手成功，包含老旧设备依赖的 RSA 密钥交换、CBC-SHA256 等；不能手写清单（曾漏掉 ECDSA+AES-GCM），也不能用 Go 默认值（1.22 起已移除 RSA 密钥交换）
+- **代理与 Raw TCP 回退**：`retryablehttp` 遇到畸形 HTTP 响应时会用库内部的 `net.Dial` 直连重发，看不到注入在 Transport 上的代理。因此配置了代理时关闭该回退（避免泄漏真实出口）；无代理时保留，用于兼容返回非标准 HTTP 报文的设备
+- **重试收敛**：扫描用 `RetryMax=1`、退避 200–600ms，避免默认 `RetryMax=5 + 1s` 让不可达/拒绝连接的目标一直重试到整体超时；既容忍瞬时抖动又快速失败
+- **跨源头剥离**（`createRedirectPolicy`）：跨源重定向删除非白名单请求头（仅保留 UA/Accept/Accept-Language/Referer），避免 `WithCustomHeaders` 注入的 Token 等泄漏给第三方；同源保留
+
+#### 5.5.1b 代理与 TCP/UDP（`proxy.go`）
+
+- **协议归一化**（`normalizeProxyURL`）：支持 `http/https/socks5/socks5h/socks4/socks4a`；`socks5h` 归一化为 `socks5`（SOCKS5 请求以 FQDN 发送目标，天然满足远程 DNS），底层 `proxyclient` 未注册 `socks5h` 方案
+- **统一拨号**（`dialThroughProxy`）：直连用 `net.Dialer`；TCP 走 `proxyclient`（HTTP CONNECT / SOCKS5）；UDP 仅 SOCKS5，HTTP/SOCKS4 代理 + UDP 明确报错
+- **SOCKS5 UDP ASSOCIATE**：`proxyclient` 的 UDP 实现会丢弃中继地址、仍返回 TCP 控制连接（数据报无法到达目标），因此 gxx 自行实现 RFC 1928：保持 TCP 控制连接存活，另建 UDP 套接字到中继地址，对每个数据报封装/剥离 SOCKS5 UDP 头（`socks5UDPConn` 实现 `net.Conn`）
+- **TCP+TLS 统一策略**：`DialContext` 的 TLS 路径与 HTTP 使用同一 `scannerCipherSuites()`（最低 TLS 1.0 + 完整套件），不再使用 Go 默认（最低 TLS 1.2）
 
 #### 5.5.2 协议探测（`CheckProtocol`）
 
@@ -341,7 +353,7 @@ CEL 编译结果 `cel.Program` 是 stateless / thread-safe / cacheable 的，所
 |------|------|------|
 | TXT | `file.go` 字符串拼接 | 含分隔线和换行 |
 | CSV | `encoding/csv` + UTF-8 BOM | Excel 友好 |
-| JSON | `encoding/json.MarshalIndent` | 每行一个 JSON 对象 |
+| JSON | `encoding/json.Marshal` | JSON Lines：每个目标一行，与 SDK `FileWriter`、Socket 输出一致 |
 | Socket | Unix Domain Socket + JSON | 实时推送，支持多客户端连接 |
 
 **线程安全**：所有写操作通过 `mu sync.Mutex` 串行化；Socket 连接集合通过 `sockConnMutex` 保护。
@@ -593,6 +605,10 @@ goreleaser release --snapshot --clean
 5. `utils/output/file.go` 的全局 `mu sync.Mutex` 仅服务于 CLI 路径；SDK 使用 `sdk.Writer`。同一自定义 Writer 或输出路径被多个实例显式传入时，调用方负责共享资源的生命周期
 6. CSV 输出未使用 `strings.Replace` 转义 quote 字符（依赖 `encoding/csv` 自动处理），但 Headers 字段做了 `\n → \\n` 的人工转义，建议统一策略
 7. YAML 规则解析使用调用内状态；并发加载、直接解码 `Rule` 和重复规则名称均有回归用例
+8. **CookieJar 为实例级持久状态**：同一 Engine 对同一目标多次扫描会携带上一次的会话 Cookie，图标哈希缓存也按 Cookie 摘要隔离。需要完全无状态、可复现的重复扫描时，为每次独立扫描新建 Engine。这是有意的实例作用域设计，非缺陷
+9. **技术栈只用最终响应头**：重定向中间跳（如 302 上的 `Set-Cookie` / `X-Powered-By`）不参与 Wappalyzer 识别，仅最终到达页面的响应头参与。改为跟踪全链路响应头需更大改动，当前按最终响应识别
+10. **磁盘指纹库查找**：默认（非 embed）构建从工作目录逐级向上、以及二进制同级目录查找 `fingerYaml/`，但只接受"看起来像内置库"的目录（含 `fingerprints`/`fingers`/`fofa`/`jiajiu` 中至少两个子目录），避免无关同名目录被静默采用。自定义规则请用 `PocFile`/`PocYaml` 显式指定
+11. **字符集解码**：`decodeHTMLBody` 按显式声明解码，无声明时 UTF-8 保留、否则 GB18030 兜底。页面谎报字符集（如标 utf-8 实为 GBK）时以标注为准，由 GB18030 兜底覆盖常见中文误标
 
 ---
 

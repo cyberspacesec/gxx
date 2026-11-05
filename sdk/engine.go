@@ -114,6 +114,20 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		scanCfg.RateLimitBurst = 0
 	}
 
+	// 先完成不依赖 runner/writer 的产品目录与测试记录构建：这样它们失败时无需、也不会
+	// 关闭调用方经 WithWriter 注入的自定义 Writer（审查问题 4.a）。
+	products, err := productIndex(cfg.products)
+	if err != nil {
+		return nil, err
+	}
+	assessments := make(map[string]RuleAssessment, len(builtinCatalog.Validations)+len(cfg.assessments))
+	for id, assessment := range builtinCatalog.Validations {
+		assessments[id] = assessment
+	}
+	for _, assessment := range cfg.assessments {
+		assessments[assessment.RuleID] = assessment
+	}
+
 	r, err := runner.NewRunner(scanCfg, cfg.fingerOptions.toInternal())
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrEngineNotReady, err)
@@ -127,24 +141,11 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		r.HTTPClient().SetDisableKeepAlives(true)
 	}
 
+	// Writer 最后构造；其后再无可能失败的步骤，不会出现"构造失败却已关闭调用方 Writer"。
 	writer, err := buildWriter(cfg)
 	if err != nil {
 		_ = r.Close()
 		return nil, err
-	}
-
-	products, err := productIndex(cfg.products)
-	if err != nil {
-		_ = r.Close()
-		_ = writer.Close()
-		return nil, err
-	}
-	assessments := make(map[string]RuleAssessment, len(builtinCatalog.Validations)+len(cfg.assessments))
-	for id, assessment := range builtinCatalog.Validations {
-		assessments[id] = assessment
-	}
-	for _, assessment := range cfg.assessments {
-		assessments[assessment.RuleID] = assessment
 	}
 	return &Engine{cfg: cfg, runner: r, writer: writer, life: lifecycle.New(0), products: products, assessments: assessments}, nil
 }
@@ -409,6 +410,7 @@ func (e *Engine) ScanIterator(ctx context.Context, targets iter.Seq[string], cb 
 	var cbStopped atomic.Bool
 	var errorMu sync.Mutex
 	var targetErrors []error
+	var droppedErrors int64
 
 	for t := range targets {
 		if batchCtx.Err() != nil {
@@ -438,7 +440,14 @@ func (e *Engine) ScanIterator(ctx context.Context, targets iter.Seq[string], cb 
 					err = ErrEmptyResult
 				}
 				errorMu.Lock()
-				targetErrors = append(targetErrors, fmt.Errorf("target %q: %w", target, err))
+				// 每条目标错误统一包装 ErrScanFailed，与单目标 Scan 的错误语义一致，
+				// 使调用方可用 errors.Is(err, ErrScanFailed) 判定。
+				// 错误条数封顶，避免大批量失败目标（如整段不可达网段）时错误链无界增长占用内存。
+				if len(targetErrors) < maxIteratorErrors {
+					targetErrors = append(targetErrors, fmt.Errorf("target %q: %w", target, errors.Join(ErrScanFailed, err)))
+				} else {
+					droppedErrors++
+				}
 				errorMu.Unlock()
 				return
 			}
@@ -461,8 +470,15 @@ func (e *Engine) ScanIterator(ctx context.Context, targets iter.Seq[string], cb 
 	if err := ctx.Err(); err != nil {
 		return err
 	}
+	if droppedErrors > 0 {
+		targetErrors = append(targetErrors, fmt.Errorf("%w: 另有 %d 个目标失败（错误详情已按上限 %d 截断）", ErrScanFailed, droppedErrors, maxIteratorErrors))
+	}
 	return errors.Join(targetErrors...)
 }
+
+// maxIteratorErrors 限制 ScanIterator/ScanCallback 聚合返回的错误条数上限，
+// 超出后仅计数，避免大批量失败目标时错误链无界增长。
+const maxIteratorErrors = 100
 
 // GetBaseInfo 仅获取目标基础信息（不执行指纹匹配）。
 func (e *Engine) GetBaseInfo(ctx context.Context, target string) (*BaseInfo, error) {
@@ -485,7 +501,7 @@ func (e *Engine) GetBaseInfo(ctx context.Context, target string) (*BaseInfo, err
 	}
 	base, err := e.runner.GetBaseInfo(ctx, target)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("get base info %q: %w", target, errors.Join(ErrScanFailed, err))
 	}
 	if base == nil {
 		return nil, fmt.Errorf("%w: target=%s", ErrEmptyResult, target)
@@ -544,7 +560,11 @@ func (e *Engine) NormalizeURL(ctx context.Context, target string) (string, error
 	if timeout <= 0 {
 		timeout = 10 * time.Second
 	}
-	return e.runner.HTTPClient().CheckProtocol(ctx, target, e.cfg.proxy, timeout)
+	normalized, err := e.runner.HTTPClient().CheckProtocol(ctx, target, e.cfg.proxy, timeout)
+	if err != nil {
+		return "", fmt.Errorf("normalize url %q: %w", target, errors.Join(ErrScanFailed, err))
+	}
+	return normalized, nil
 }
 
 // ─────────────── 内部转换 ───────────────
@@ -605,6 +625,12 @@ func convertTechStack(w *wappalyzer.TypeWappalyzer) *TechStack {
 		Caching:              w.Caching,
 		Security:             w.Security,
 		HostingPanels:        w.HostingPanels,
+		CMS:                  w.CMS,
+		Databases:            w.Databases,
+		Ecommerce:            w.Ecommerce,
+		CDN:                  w.CDN,
+		Analytics:            w.Analytics,
+		OperatingSystems:     w.OperatingSystems,
 		Other:                w.Other,
 	}
 }
