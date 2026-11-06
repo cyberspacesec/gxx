@@ -4,12 +4,16 @@ import (
 	"bufio"
 	"context"
 	"crypto/tls"
+	"crypto/x509"
+	"encoding/base64"
 	"encoding/binary"
 	"errors"
 	"fmt"
 	"io"
 	"net"
+	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -109,11 +113,114 @@ func dialThroughProxy(ctx context.Context, network, address string, proxy *url.U
 			return nil, fmt.Errorf("%s 代理不支持 UDP（仅 socks5/socks5h 支持）", proxyBaseScheme(proxy))
 		}
 	}
-	dial, err := proxyclient.NewClient(proxy)
-	if err != nil {
-		return nil, fmt.Errorf("创建代理客户端失败: %w", err)
+	switch proxyBaseScheme(proxy) {
+	case schemeHTTP, schemeHTTPS:
+		// HTTP(S) 代理自实现 CONNECT，修正 proxyclient 忽略 ctx/超时、吞掉非 2xx 错误、
+		// 丢弃隧道首批缓冲字节的问题。
+		return dialHTTPConnect(ctx, network, address, proxy, timeout)
+	default:
+		// SOCKS4/SOCKS5(+TLS) 仍由 proxyclient 处理，其 Dial 会向上游拨号传递 ctx。
+		dial, err := proxyclient.NewClient(applyProxyTLSDefaults(proxy))
+		if err != nil {
+			return nil, fmt.Errorf("创建代理客户端失败: %w", err)
+		}
+		return dial.DialContext(ctx, network, address)
 	}
-	return dial.DialContext(ctx, network, address)
+}
+
+// prefixConn 在底层连接前插入一段预读字节，保证 CONNECT 响应之后被缓冲的隧道首批数据不丢失。
+type prefixConn struct {
+	net.Conn
+	prefix []byte
+}
+
+func (c *prefixConn) Read(p []byte) (int, error) {
+	if len(c.prefix) > 0 {
+		n := copy(p, c.prefix)
+		c.prefix = c.prefix[n:]
+		return n, nil
+	}
+	return c.Conn.Read(p)
+}
+
+// dialHTTPConnect 经 HTTP(S) 代理用 CONNECT 建立到目标的 TCP 隧道。
+// 与 proxyclient v1.0.2 不同：拨号与 CONNECT 交互都受 ctx/超时约束，取消时立即中断；
+// 代理返回非 2xx 时返回明确错误而非已关闭的连接；并保留响应后属于隧道的缓冲字节。
+func dialHTTPConnect(ctx context.Context, network, address string, proxy *url.URL, timeout time.Duration) (net.Conn, error) {
+	switch strings.ToLower(network) {
+	case "tcp", "tcp4", "tcp6":
+	default:
+		return nil, fmt.Errorf("HTTP(S) 代理不支持 %s（仅 TCP）", network)
+	}
+	if timeout <= 0 {
+		timeout = DefaultDialTimeout
+	}
+	conn, err := (&net.Dialer{Timeout: timeout}).DialContext(ctx, "tcp", proxy.Host)
+	if err != nil {
+		return nil, fmt.Errorf("连接 HTTP 代理失败: %w", err)
+	}
+	// ctx 取消时关闭连接，让阻塞的握手读写立即返回。
+	stop := context.AfterFunc(ctx, func() { _ = conn.Close() })
+	fail := func(err error) (net.Conn, error) {
+		stop()
+		_ = conn.Close()
+		return nil, err
+	}
+	// CONNECT 交互的截止时间取 ctx 截止时间与单次超时的较早者。
+	deadline := time.Now().Add(timeout)
+	if d, ok := ctx.Deadline(); ok && d.Before(deadline) {
+		deadline = d
+	}
+	_ = conn.SetDeadline(deadline)
+
+	if proxyUsesTLS(proxy) { // https 代理：先与代理完成 TLS（证书校验策略同 proxyTLSConfig）
+		tlsConf, cfgErr := proxyTLSConfig(proxy)
+		if cfgErr != nil {
+			return fail(cfgErr)
+		}
+		tlsConn := tls.Client(conn, tlsConf)
+		if err = tlsConn.HandshakeContext(ctx); err != nil {
+			return fail(fmt.Errorf("HTTP 代理 TLS 握手失败: %w", err))
+		}
+		conn = tlsConn
+	}
+
+	var req strings.Builder
+	req.WriteString("CONNECT " + address + " HTTP/1.1\r\nHost: " + address + "\r\n")
+	if proxy.User != nil {
+		if user := proxy.User.Username(); user != "" {
+			password, _ := proxy.User.Password()
+			token := base64.StdEncoding.EncodeToString([]byte(user + ":" + password))
+			req.WriteString("Proxy-Authorization: Basic " + token + "\r\n")
+		}
+	}
+	req.WriteString("\r\n")
+	if _, err = conn.Write([]byte(req.String())); err != nil {
+		return fail(fmt.Errorf("发送 CONNECT 请求失败: %w", err))
+	}
+	br := bufio.NewReader(conn)
+	resp, err := http.ReadResponse(br, &http.Request{Method: http.MethodConnect})
+	if err != nil {
+		return fail(fmt.Errorf("读取 CONNECT 响应失败: %w", err))
+	}
+	_ = resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return fail(fmt.Errorf("HTTP 代理拒绝 CONNECT（状态 %s）", resp.Status))
+	}
+	if !stop() { // ctx 已在握手期间取消，连接可能已被关闭
+		_ = conn.Close()
+		return nil, ctx.Err()
+	}
+	_ = conn.SetDeadline(time.Time{}) // 清除握手期截止时间，隧道生命周期由调用方管理
+	if n := br.Buffered(); n > 0 {
+		buffered := make([]byte, n)
+		if _, err = io.ReadFull(br, buffered); err != nil {
+			_ = conn.Close()
+			return nil, fmt.Errorf("读取隧道缓冲数据失败: %w", err)
+		}
+		return &prefixConn{Conn: conn, prefix: buffered}, nil
+	}
+	return conn, nil
 }
 
 // ───────────────────────── SOCKS5 UDP ASSOCIATE ─────────────────────────
@@ -146,6 +253,12 @@ func dialSOCKS5UDP(ctx context.Context, proxy *url.URL, target string, timeout t
 	if err != nil {
 		return nil, fmt.Errorf("解析 UDP 目标地址失败: %w", err)
 	}
+	var tlsConf *tls.Config
+	if strings.HasSuffix(strings.ToLower(proxy.Scheme), "+tls") {
+		if tlsConf, err = proxyTLSConfig(proxy); err != nil {
+			return nil, err
+		}
+	}
 	ctrl, err := (&net.Dialer{Timeout: timeout}).DialContext(ctx, "tcp", proxy.Host)
 	if err != nil {
 		return nil, fmt.Errorf("连接 SOCKS5 代理失败: %w", err)
@@ -155,11 +268,11 @@ func dialSOCKS5UDP(ctx context.Context, proxy *url.URL, target string, timeout t
 	} else if timeout > 0 {
 		_ = ctrl.SetDeadline(time.Now().Add(timeout))
 	}
-	if proxyBaseScheme(proxy) == schemeSOCKS5 && strings.HasSuffix(strings.ToLower(proxy.Scheme), "+tls") {
-		tlsConn := tls.Client(ctrl, &tls.Config{ServerName: proxy.Hostname(), InsecureSkipVerify: true})
+	if tlsConf != nil {
+		tlsConn := tls.Client(ctrl, tlsConf)
 		if err = tlsConn.HandshakeContext(ctx); err != nil {
 			_ = ctrl.Close()
-			return nil, err
+			return nil, fmt.Errorf("SOCKS5 代理 TLS 握手失败: %w", err)
 		}
 		ctrl = tlsConn
 	}
@@ -187,6 +300,74 @@ func dialSOCKS5UDP(ctx context.Context, proxy *url.URL, target string, timeout t
 	// 控制连接不再需要读写截止时间，清除以免影响保活。
 	_ = ctrl.SetDeadline(time.Time{})
 	return &socks5UDPConn{ctrl: ctrl, relay: udpConn, header: header}, nil
+}
+
+// proxyUsesTLS 判断代理连接本身是否经 TLS（https 或 *+tls，如 socks5+tls）。
+func proxyUsesTLS(proxy *url.URL) bool {
+	if proxy == nil {
+		return false
+	}
+	scheme := strings.ToLower(proxy.Scheme)
+	return scheme == schemeHTTPS || strings.HasSuffix(scheme, "+tls")
+}
+
+// lowerProxyQuery 返回代理 URL 的查询参数，键统一转小写（参数名不区分大小写）。
+func lowerProxyQuery(proxy *url.URL) url.Values {
+	lowered := url.Values{}
+	for key, values := range proxy.Query() {
+		lowered[strings.ToLower(key)] = values
+	}
+	return lowered
+}
+
+// proxySkipVerify 判定是否跳过代理证书校验。默认跳过，与扫描目标的 TLS 策略一致
+// （整个扫描器默认不校验证书）。显式 tls-insecure-skip-verify 优先（true=跳过，
+// 其余=校验）；仅提供 tls-ca-file / tls-domain 时视为显式要求校验。
+func proxySkipVerify(query url.Values) bool {
+	if raw := query.Get("tls-insecure-skip-verify"); raw != "" {
+		return strings.EqualFold(raw, "true")
+	}
+	return query.Get("tls-ca-file") == "" && query.Get("tls-domain") == ""
+}
+
+// applyProxyTLSDefaults 为经 TLS 的代理注入默认证书校验策略（默认跳过），使 proxyclient
+// 的 TCP 路径与 gxx 自实现的 UDP 路径行为一致。非 TLS 代理（http/socks5/socks4）原样返回。
+// 返回克隆，避免修改调用方持有的原始 URL。
+func applyProxyTLSDefaults(proxy *url.URL) *url.URL {
+	if !proxyUsesTLS(proxy) {
+		return proxy
+	}
+	query := lowerProxyQuery(proxy)
+	query.Set("tls-insecure-skip-verify", strconv.FormatBool(proxySkipVerify(query)))
+	clone := *proxy
+	clone.RawQuery = query.Encode()
+	return &clone
+}
+
+// proxyTLSConfig 构造 socks5+tls 控制连接的 TLS 配置。默认跳过代理证书校验（与扫描
+// 目标一致），查询参数与 proxyclient 的 TCP 路径相同：tls-insecure-skip-verify=false
+// 显式开启校验，tls-domain 指定校验名，tls-ca-file 指定信任的 CA。参数名不区分大小写。
+func proxyTLSConfig(proxy *url.URL) (*tls.Config, error) {
+	query := lowerProxyQuery(proxy)
+	conf := &tls.Config{
+		ServerName:         query.Get("tls-domain"),
+		InsecureSkipVerify: proxySkipVerify(query),
+	}
+	if conf.ServerName == "" {
+		conf.ServerName = proxy.Hostname()
+	}
+	if caFile := query.Get("tls-ca-file"); caFile != "" {
+		data, err := os.ReadFile(caFile)
+		if err != nil {
+			return nil, fmt.Errorf("读取代理 CA 文件失败: %w", err)
+		}
+		pool := x509.NewCertPool()
+		if !pool.AppendCertsFromPEM(data) {
+			return nil, fmt.Errorf("代理 CA 文件没有可用证书: %s", caFile)
+		}
+		conf.RootCAs = pool
+	}
+	return conf, nil
 }
 
 // socks5Handshake 完成方法协商与可选的用户名/密码认证（RFC 1929）。
@@ -405,7 +586,7 @@ func (c *socks5UDPConn) Close() error {
 func (c *socks5UDPConn) LocalAddr() net.Addr  { return c.relay.LocalAddr() }
 func (c *socks5UDPConn) RemoteAddr() net.Addr { return c.relay.RemoteAddr() }
 
-// SetDeadline 同时作用于控制连接与中继连接的读写截止时间。
+// SetDeadline 等方法只作用于 UDP 中继连接；控制连接建立关联后不再读写，只负责维持关联。
 func (c *socks5UDPConn) SetDeadline(t time.Time) error      { return c.relay.SetDeadline(t) }
 func (c *socks5UDPConn) SetReadDeadline(t time.Time) error  { return c.relay.SetReadDeadline(t) }
 func (c *socks5UDPConn) SetWriteDeadline(t time.Time) error { return c.relay.SetWriteDeadline(t) }

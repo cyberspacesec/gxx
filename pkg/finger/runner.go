@@ -140,8 +140,10 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
 	}(resp.Body)
-	newURL, err := url.Parse(NewUrlStr)
-	resp.Request.URL = newURL
+	// 请求已按 NewUrlStr 发出，解析通常不会失败；失败时保留响应自带的 URL，避免置空后在构造请求时解引用 nil。
+	if newURL, parseErr := url.Parse(NewUrlStr); parseErr == nil {
+		resp.Request.URL = newURL
+	}
 	// 处理请求的raw
 	protoReq := buildProtoRequest(resp, rule.Request)
 	variableMap["request"] = protoReq

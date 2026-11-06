@@ -97,6 +97,9 @@ func TestGetWappalyserInfo(t *testing.T) {
 	fmt.Println(strings.Repeat("=", 50))
 
 	jsonData, err := json.MarshalIndent(res, "", " ")
+	if err != nil {
+		t.Fatal(err)
+	}
 	fmt.Println(string(jsonData))
 	fmt.Println(strings.Repeat("=", 50))
 
@@ -134,11 +137,17 @@ func TestWappalyzerGet(t *testing.T) {
 
 	fingerprintsWithCats := wappalyzerClient.FingerprintWithInfo(resp.Header, data)
 	jsonDataS, err := json.MarshalIndent(fingerprintsWithCats, "", " ")
+	if err != nil {
+		t.Fatal(err)
+	}
 	fmt.Println(string(jsonDataS))
 	fmt.Println(strings.Repeat("=", 50))
 	a := FormatData(fingerprintsWithCats)
 
 	jsonData, err := json.MarshalIndent(a, "", " ")
+	if err != nil {
+		t.Fatal(err)
+	}
 	fmt.Println(string(jsonData))
 	fmt.Println(strings.Repeat("=", 50))
 

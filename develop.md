@@ -24,7 +24,7 @@ GXX 是一款用 Go 编写的网络资产指纹识别引擎，核心目标是「
 
 | 层级 | 关键依赖 | 用途 |
 |------|---------|------|
-| 语言 | Go 1.25 | 主体语言 |
+| 语言 | Go 1.26 | 主体语言 |
 | 表达式引擎 | `github.com/google/cel-go` | CEL 规则编译与求值 |
 | 并发池 | `github.com/panjf2000/ants/v2` | URL/规则两级协程池 |
 | HTTP 客户端 | `github.com/zan8in/retryablehttp` | 带重试的 HTTP 客户端 |
@@ -330,6 +330,8 @@ CEL 编译结果 `cel.Program` 是 stateless / thread-safe / cacheable 的，所
 - **统一拨号**（`dialThroughProxy`）：直连用 `net.Dialer`；TCP 走 `proxyclient`（HTTP CONNECT / SOCKS5）；UDP 仅 SOCKS5，HTTP/SOCKS4 代理 + UDP 明确报错
 - **SOCKS5 UDP ASSOCIATE**：`proxyclient` 的 UDP 实现会丢弃中继地址、仍返回 TCP 控制连接（数据报无法到达目标），因此 gxx 自行实现 RFC 1928：保持 TCP 控制连接存活，另建 UDP 套接字到中继地址，对每个数据报封装/剥离 SOCKS5 UDP 头（`socks5UDPConn` 实现 `net.Conn`）
 - **TCP+TLS 统一策略**：`DialContext` 的 TLS 路径与 HTTP 使用同一 `scannerCipherSuites()`（最低 TLS 1.0 + 完整套件），不再使用 Go 默认（最低 TLS 1.2）
+- **代理证书默认不校验**：扫描器对目标证书默认 `InsecureSkipVerify`，代理证书保持一致——`https` 与 `socks5+tls` 的 TLS 代理默认跳过证书校验，TCP（`proxyclient`）与 UDP（自实现）走同一判定 `proxySkipVerify`，行为一致。`applyProxyTLSDefaults` 在构造 `proxyclient` 前注入默认值，UDP 路径由 `proxyTLSConfig` 直接应用
+- **代理校验可选开启**（查询参数，名称不区分大小写，与 `proxyclient` TCP 路径同名）：`tls-insecure-skip-verify=false` 显式开启校验；`tls-ca-file` 指定信任的 CA（显式提供即视为要求校验）；`tls-domain` 指定校验用的 ServerName。CA 文件无法读取或不含证书时直接报错
 
 #### 5.5.2 协议探测（`CheckProtocol`）
 

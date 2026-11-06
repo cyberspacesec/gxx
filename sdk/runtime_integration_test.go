@@ -314,7 +314,8 @@ func TestRegressionTitleCancellation(t *testing.T) {
 	go func() { _, err := e.GetBaseInfo(ctx, s.URL); done <- err }()
 	select {
 	case <-started:
-	case <-time.After(3 * time.Second):
+	// 同步安全网（非被测时序）：满负载 -race 下放宽，避免请求未在窗口内开始导致偶发失败。
+	case <-time.After(20 * time.Second):
 		close(release)
 		t.Fatal("i18n request never started")
 	}

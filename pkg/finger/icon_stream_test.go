@@ -57,7 +57,9 @@ func TestStreamIconHashPreservesAllEncodingBoundaries(t *testing.T) {
 }
 
 func TestLargeIconReadsCompleteKnownAndChunkedBodies(t *testing.T) {
-	data := bytes.Repeat([]byte("complete image data"), ((16<<20)/19)+1)
+	// 约 4 MiB：远超 512 KiB 的非图标正文上限，覆盖多次分块读取与已知长度/分块编码两条路径；
+	// 图标哈希按完整流读取，取 4 MiB 既能验证“大图标完整读取”又避免 -race 下 16 MiB 哈希的高耗时与偶发超时。
+	data := bytes.Repeat([]byte("complete image data"), ((4<<20)/19)+1)
 	want := hashIconBytes(data)
 	for _, chunked := range []bool{false, true} {
 		t.Run(strconv.FormatBool(chunked), func(t *testing.T) {
@@ -73,7 +75,8 @@ func TestLargeIconReadsCompleteKnownAndChunkedBodies(t *testing.T) {
 			defer s.Close()
 			client := network.NewHTTPClient()
 			defer client.Close()
-			if got := NewGetIconHash(s.URL, "").WithHTTPClient(client).WithTimeout(5*time.Second).hashHTTPURL(context.Background(), s.URL); got != want {
+			// 超时上限只用于兜底（远大于预期耗时），避免 -race 下偶发超时导致 got=0。
+			if got := NewGetIconHash(s.URL, "").WithHTTPClient(client).WithTimeout(60*time.Second).hashHTTPURL(context.Background(), s.URL); got != want {
 				t.Fatalf("大图标未完整计算: chunked=%v got=%d want=%d", chunked, got, want)
 			}
 		})

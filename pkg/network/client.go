@@ -344,13 +344,22 @@ func (c *HTTPClient) createTransport(proxyURL string) (*http.Transport, error) {
 		if err != nil {
 			return nil, err
 		}
-		dialer, err := proxyclient.NewClient(proxy)
-		if err != nil {
-			return nil, fmt.Errorf("创建代理客户端失败: %v", err)
-		}
 		transport = newBaseTransport()
 		// HTTP 请求始终为 TCP；UDP 仅出现在 TCP/UDP 规则路径（见 network.DialContext）。
-		transport.DialContext = dialer.DialContext
+		switch proxyBaseScheme(proxy) {
+		case schemeHTTP, schemeHTTPS:
+			// HTTP(S) 代理走自实现的 CONNECT 拨号，修正 proxyclient 的 ctx/超时与错误传播问题。
+			p := proxy
+			transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
+				return dialHTTPConnect(ctx, network, addr, p, DefaultDialTimeout)
+			}
+		default:
+			dialer, derr := proxyclient.NewClient(applyProxyTLSDefaults(proxy))
+			if derr != nil {
+				return nil, fmt.Errorf("创建代理客户端失败: %v", derr)
+			}
+			transport.DialContext = dialer.DialContext
+		}
 	}
 
 	c.transportCache.Store(proxyURL, transport)

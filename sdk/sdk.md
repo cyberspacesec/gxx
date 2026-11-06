@@ -1,6 +1,6 @@
 # GXX SDK 使用文档
 
-> 通过可复用的 `*sdk.Engine` 实例进行扫描，构建需要 Go 1.25.0 或更高版本。
+> 通过可复用的 `*sdk.Engine` 实例进行扫描，构建需要 Go 1.26.0 或更高版本。
 > API 设计对标 [nuclei v3](https://github.com/projectdiscovery/nuclei) `NewNucleiEngineCtx` + Functional Options + Callback 模式，并遵循 [Effective Go](https://go.dev/doc/effective_go) 与 [Uber Go 风格指南](https://github.com/uber-go/guide)。
 
 ---
@@ -113,10 +113,10 @@ func main() {
 | `WithProductCatalog(products []ProductDefinition)` | 内置目录 | 实例产品目录，按明确的规则 ID 映射；同一产品 ID 的元数据一致覆盖 |
 | `WithRuleAssessments(assessments []RuleAssessment)` | 内置记录 | 按规则 ID 与 SHA256 绑定的测试记录、外部校准置信度 |
 | `WithRuleSourceVersion(version string)` | 空 | 外部规则包的来源版本 |
-| `WithProxy(addr string)` | `""` | 单个代理地址：http/https/socks5/socks5h（socks4/socks4a 仅 TCP）。UDP 规则仅 socks5/socks5h |
+| `WithProxy(addr string)` | `""` | 单个代理地址：http/https/socks5/socks5h（socks4/socks4a 仅 TCP）。UDP 规则仅 socks5/socks5h。证书默认不校验（含 TLS 代理）；TLS 代理可用 `?tls-insecure-skip-verify=false` 开启校验，`tls-ca-file`/`tls-domain` 指定信任根与校验名 |
 | `WithTimeout(d time.Duration)` | `10s` | 请求超时（支持亚秒，如 `500*time.Millisecond`） |
 | `WithTimeoutSeconds(seconds int)` | — | 请求超时（整秒） |
-| `WithInsecureSkipVerify(skip bool)` | `true` | 跳过 TLS 验证 |
+| `WithInsecureSkipVerify(skip bool)` | `true` | 是否跳过**目标**证书校验（默认跳过）；代理证书校验由代理地址的查询参数单独控制 |
 | `WithDisableKeepAlives(disable bool)` | `false` | 禁用 HTTP Keep-Alive |
 | `WithCustomHeaders(map[string]string)` | nil | 当前实例的请求头，构造时复制 |
 | `WithReverseConfig(config ReverseConfig)` | 空配置 | 当前实例的 Ceye / JNDI 反连服务，按值复制 |

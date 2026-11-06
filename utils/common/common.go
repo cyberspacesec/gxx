@@ -46,8 +46,6 @@ const (
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyz"
-const letterNumberBytes = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-const lowletterNumberBytes = "0123456789abcdefghijklmnopqrstuvwxyz"
 const (
 	letterIdxBits = 6                    // 6 bits to represent a letter index
 	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
@@ -434,7 +432,6 @@ func ParseAddress(address string) (AddressInfo, error) {
 
 // GetRandomIP 获取随机ip地址
 func GetRandomIP() string {
-	rand.Seed(time.Now().UnixNano())
 	ip := make(net.IP, 4)
 	binary.BigEndian.PutUint32(ip, rand.Uint32())
 	return ip.String()

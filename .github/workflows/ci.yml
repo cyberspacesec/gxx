@@ -31,14 +31,15 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: '1.25.0'
+          go-version: '1.26.10'
           cache-dependency-path: go.sum
       - name: 静态检查
         run: go vet ./...
       - name: 单元与集成测试
         run: go test -count=1 ./...
       - name: 并发竞态检查
-        run: go test -race -count=1 ./...
+        # wappalyzer/test 等重包在 -race 下耗时较长（数百秒），显式放宽单包超时（默认 10m），避免高负载 runner 偶发超时。
+        run: go test -race -count=1 -timeout 20m ./...
       - name: 内置指纹库测试
         run: go test -tags embed -count=1 ./sdk ./pkg/cel ./pkg/runner ./pkg/wappalyzer ./fingerYaml
       - name: 核对依赖文件
@@ -54,7 +55,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: '1.25.0'
+          go-version: '1.26.10'
           cache-dependency-path: |
             go.sum
             cmd/gxx-ide/go.sum

@@ -17,7 +17,7 @@ GXX 是一款高性能指纹识别工具，基于 YAML 配置的 CEL 表达式�
   内置 HTTP / CEL 自定义语法高亮、请求测试、逐 rule 调试、Swagger API，
   详见 [GXX-IDE.md](GXX-IDE.md)
 
-构建需要 **Go 1.25.0+**。IDE 前端需要 Node.js 20.19+ 或 22.12+。
+构建需要 **Go 1.26.0+**。IDE 前端需要 Node.js 20.19+ 或 22.12+。
 
 ## 快速开始
 
@@ -140,6 +140,7 @@ favicon 候选、重定向资源解析、内联图标哈希与 ICP 备案识别�
 - TCP/UDP 规则（`type: tcp` / `type: udp`）与 Raw HTTP 规则均遵循该代理设置与取消、超时。
 - UDP over SOCKS5 为自实现的 UDP ASSOCIATE：保持 TCP 控制连接，另建 UDP 中继套接字并按 RFC 1928 封装/剥离数据报头。
 - TCP+TLS（如 `type: tcp` 的 LTS/SSL）与 HTTP 使用同一套扫描 TLS 策略（最低 TLS 1.0 + 完整套件），兼容老旧设备。
+- **证书默认不校验**：目标与代理证书默认都不校验（TCP/UDP/HTTP 一致）。TLS 代理（`https` / `socks5+tls`）可用查询参数显式开启：`?tls-insecure-skip-verify=false` 开启校验，`tls-ca-file=<CA路径>` 指定信任根，`tls-domain=<校验名>` 指定 ServerName。
 
 ## 项目结构
 
@@ -224,9 +225,9 @@ HTTP Keep-Alive、规则快照和技术栈规则索引可复用。静态指纹�
 复核命令：
 
 ```bash
-GOTOOLCHAIN=go1.25.0 go test -race ./...
-GOTOOLCHAIN=go1.25.0 go test -tags embed ./sdk ./pkg/cel ./pkg/runner ./pkg/wappalyzer
-GOTOOLCHAIN=go1.25.0 go test ./sdk -run '^$' -bench 'BenchmarkFullFingerprints|BenchmarkRuleConcurrency' -benchmem -benchtime=30x
+GOTOOLCHAIN=go1.26.10 go test -race ./...
+GOTOOLCHAIN=go1.26.10 go test -tags embed ./sdk ./pkg/cel ./pkg/runner ./pkg/wappalyzer
+GOTOOLCHAIN=go1.26.10 go test ./sdk -run '^$' -bench 'BenchmarkFullFingerprints|BenchmarkRuleConcurrency' -benchmem -benchtime=30x
 ```
 
 ### 响应处理与结果内存

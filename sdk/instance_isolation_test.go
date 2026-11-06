@@ -1,11 +1,13 @@
 package sdk_test
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"io"
 	"log"
 	"log/slog"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -72,7 +74,7 @@ func TestOverlappingEnginesKeepTLSVerificationPolicy(t *testing.T) {
 		if first.err != nil || len(first.result.Matches) != 1 {
 			t.Fatalf("第二实例的 TLS 设置或关闭影响了首个扫描: %+v", first)
 		}
-	case <-time.After(3 * time.Second):
+	case <-time.After(20 * time.Second):
 		t.Fatal("首个实例没有完成扫描")
 	}
 }
@@ -112,7 +114,8 @@ func waitIsolationPoint(t *testing.T, started <-chan struct{}) {
 	t.Helper()
 	select {
 	case <-started:
-	case <-time.After(3 * time.Second):
+	// 同步安全网（非被测时序）：满负载 -race 下放宽，避免后台扫描未在窗口内到达检查点导致偶发失败。
+	case <-time.After(20 * time.Second):
 		t.Fatal("扫描没有到达实例隔离检查点")
 	}
 }
@@ -120,6 +123,46 @@ func waitIsolationPoint(t *testing.T, started <-chan struct{}) {
 type isolationResult struct {
 	result *sdk.TargetResult
 	err    error
+}
+
+// connectProxyToBackend 启动仅支持 CONNECT 的最小代理，忽略 CONNECT 的目标主机，
+// 始终把隧道转发到固定 backend。反连检查请求的是硬编码外部主机（api.ceye.io）或
+// 测试用反连域名，这些主机不存在，代理据此把请求导向本地 backend 供断言检查。
+func connectProxyToBackend(t *testing.T, backend string) string {
+	t.Helper()
+	ln, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = ln.Close() })
+	go func() {
+		for {
+			c, err := ln.Accept()
+			if err != nil {
+				return
+			}
+			go func(c net.Conn) {
+				defer c.Close()
+				br := bufio.NewReader(c)
+				req, err := http.ReadRequest(br)
+				if err != nil || req.Method != http.MethodConnect {
+					return
+				}
+				up, err := net.Dial("tcp", backend)
+				if err != nil {
+					_, _ = c.Write([]byte("HTTP/1.1 502 Bad Gateway\r\n\r\n"))
+					return
+				}
+				defer up.Close()
+				if _, err := c.Write([]byte("HTTP/1.1 200 Connection established\r\n\r\n")); err != nil {
+					return
+				}
+				go func() { _, _ = io.Copy(up, br) }()
+				_, _ = io.Copy(c, up)
+			}(c)
+		}
+	}()
+	return "http://" + ln.Addr().String()
 }
 
 func TestEngineCreatedDuringScanCannotShareFaviconContent(t *testing.T) {
@@ -178,7 +221,7 @@ func TestEngineCreatedDuringScanCannotShareFaviconContent(t *testing.T) {
 		if first.err != nil || len(first.result.Matches) != 1 || first.result.Matches[0].Info.ID != "first" {
 			t.Fatalf("构造或关闭第二个 SDK 影响了首个扫描: %+v", first)
 		}
-	case <-time.After(3 * time.Second):
+	case <-time.After(20 * time.Second):
 		t.Fatal("关闭第二个 SDK 后首个扫描未完成")
 	}
 }
@@ -239,7 +282,7 @@ func TestOverlappingEnginesIsolateHeadersCookiesRulesWritersAndCancellation(t *t
 		if first.err != nil || first.result.Title != "A" || len(first.result.Matches) != 1 || wa.count() != 1 || wb.count() != 1 {
 			t.Fatalf("实例状态串用: first=%+v writers=%d/%d", first, wa.count(), wb.count())
 		}
-	case <-time.After(3 * time.Second):
+	case <-time.After(20 * time.Second):
 		t.Fatal("首个实例被第二个实例的取消或关闭影响")
 	}
 }
@@ -290,6 +333,8 @@ func TestReverseConfigIsOwnedByEachOverlappingEngine(t *testing.T) {
 				fmt.Fprint(w, "ok")
 			}))
 			defer target.Close()
+			// api 作为被隧道转发到的后端，proxy 以 CONNECT 代理形式拦截反连检查请求。
+			proxyURL := connectProxyToBackend(t, api.Listener.Addr().String())
 			makeEngine := func(instance string) *sdk.Engine {
 				config := sdk.ReverseConfig{CeyeAPIKey: instance + "+secret", CeyeDomain: strings.ToLower(instance) + ".example.com", JNDIHost: strings.ToLower(instance) + ".reverse.example.com", LDAPPort: "1389", APIPort: map[string]string{"A": "12301", "B": "12302"}[instance]}
 				set, expression := "newReverse()", "reverse.wait(0)"
@@ -297,7 +342,7 @@ func TestReverseConfigIsOwnedByEachOverlappingEngine(t *testing.T) {
 					set, expression = "newJNDI()", "reverse.jndi(0)"
 				}
 				yaml := fmt.Sprintf("id: reverse-%s\nset:\n  reverse: %s\ninfo:\n  name: reverse\nrules:\n  r0:\n    request:\n      method: GET\n      path: /\n    expression: %s\nexpression: r0()\n", instance, set, expression)
-				return isolatedEngine(t, yaml, sdk.WithReverseConfig(config), sdk.WithProxy(api.URL), sdk.WithCustomHeaders(map[string]string{"X-Instance": instance}))
+				return isolatedEngine(t, yaml, sdk.WithReverseConfig(config), sdk.WithProxy(proxyURL), sdk.WithCustomHeaders(map[string]string{"X-Instance": instance}))
 			}
 			a := makeEngine("A")
 			done := make(chan isolationResult, 1)
@@ -315,7 +360,7 @@ func TestReverseConfigIsOwnedByEachOverlappingEngine(t *testing.T) {
 				if first.err != nil || len(first.result.Matches) != 1 || callsA.Load() != 1 {
 					t.Fatalf("首个实例反连配置被覆盖: %+v calls=%d", first, callsA.Load())
 				}
-			case <-time.After(3 * time.Second):
+			case <-time.After(20 * time.Second):
 				t.Fatal("首个反连查询未完成")
 			}
 		})

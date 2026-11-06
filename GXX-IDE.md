@@ -164,7 +164,7 @@ http://127.0.0.1:9527/swagger/index.html
 
 ## 五、运行 / 构建
 
-> 环境依赖：Go 1.25.0+、Node.js 20.19+ 或 22.12+、npm 9+、Wails CLI v2.10+
+> 环境依赖：Go 1.26.0+、Node.js 20.19+ 或 22.12+、npm 9+、Wails CLI v2.13+
 
 > **PATH 说明**：`go install` 安装的 `wails` / `swag` 位于 `$(go env GOPATH)/bin`（默认 `~/go/bin`）。
 > `make dev-gui` / `ide-dev.sh wails` 会自动检测并加入 PATH；若手动运行，请执行：

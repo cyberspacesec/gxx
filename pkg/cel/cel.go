@@ -260,17 +260,6 @@ func (c *CustomLib) EvaluateContext(ctx context.Context, expression string, vari
 	return out, err
 }
 
-func evalContext(ctx context.Context, env *cel.Env, expression string, params any, compact bool) (ref.Val, error) {
-	p, err := compileProgram(env, expression, compact)
-	if err != nil {
-		return nil, err
-	}
-	out, _, err := p.ContextEval(ctx, params)
-	if ctx.Err() != nil {
-		return nil, ctx.Err()
-	}
-	return out, err
-}
 func (c *CustomLib) WriteRuleFunctionsROptions(name string, value bool) {
 	if c.ruleResults == nil {
 		c.ruleResults = make(map[string]bool, 4)

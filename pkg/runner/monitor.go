@@ -215,7 +215,8 @@ func (pm *PerformanceMonitor) handlePressure(stats *MemoryStats) {
 
 // readRuntimeMetrics 采集整个 Go 进程的内存与调度统计。
 func readRuntimeMetrics() MemoryStats {
-	samples := metricSamplesPool.Get().([]metrics.Sample)
+	samplesPtr := metricSamplesPool.Get().(*[]metrics.Sample)
+	samples := *samplesPtr
 	metrics.Read(samples)
 
 	stats := MemoryStats{}
@@ -258,7 +259,7 @@ func readRuntimeMetrics() MemoryStats {
 		stats.NumGoroutine = runtime.NumGoroutine()
 	}
 
-	metricSamplesPool.Put(samples)
+	metricSamplesPool.Put(samplesPtr)
 	return stats
 }
 
@@ -285,9 +286,10 @@ func histogramP99(h *metrics.Float64Histogram) float64 {
 }
 
 // metricSamplesPool 复用 metrics.Sample 切片，避免每 tick 分配。
+// 池中存放切片指针：直接存放切片值时，每次 Put 都要为切片头分配内存。
 var metricSamplesPool = sync.Pool{
 	New: func() interface{} {
-		return []metrics.Sample{
+		samples := []metrics.Sample{
 			{Name: "/memory/classes/heap/objects:bytes"},
 			{Name: "/memory/classes/heap/free:bytes"},
 			{Name: "/memory/classes/total:bytes"},
@@ -295,5 +297,6 @@ var metricSamplesPool = sync.Pool{
 			{Name: "/sched/goroutines:goroutines"},
 			{Name: "/sched/latencies:seconds"},
 		}
+		return &samples
 	},
 }

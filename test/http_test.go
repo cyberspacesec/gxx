@@ -8,10 +8,10 @@
 package main
 
 import (
+	"context"
 	"crypto/tls"
 	"fmt"
 	"github.com/cyberspacesec/gxx/pkg/network"
-	"golang.org/x/net/context"
 	"io"
 	"net/http"
 	"os"

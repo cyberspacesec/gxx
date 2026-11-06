@@ -308,7 +308,9 @@ func TestIconCandidateLimitsAndQueryDeduplication(t *testing.T) {
 	defer s.Close()
 	c := network.NewHTTPClient()
 	defer c.Close()
-	if got := GetPageIconHash(context.Background(), c, s.URL, []byte(body), network.OptionsRequest{Timeout: time.Second}); got != "0" || calls.Load() != maxIconAttempts+1 {
+	// 本例验证尝试次数上限（maxIconAttempts+1 次请求），而非时间预算；给足共享预算，
+	// 避免 -race 高负载下 9 次串行请求超过 1s 导致提前中断、计数不足。
+	if got := GetPageIconHash(context.Background(), c, s.URL, []byte(body), network.OptionsRequest{Timeout: 60 * time.Second}); got != "0" || calls.Load() != maxIconAttempts+1 {
 		t.Fatalf("抓取没有上限: hash=%s calls=%d", got, calls.Load())
 	}
 }
