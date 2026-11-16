@@ -48,6 +48,7 @@ type engineConfig struct {
 	enableRateLimit bool
 	rateLimitQPS    float64
 	rateLimitBurst  int
+	rateLimitByPort bool
 	globalRate      float64
 	globalRateBurst int
 
@@ -321,6 +322,7 @@ func WithGlobalRatePerMinute(perMinute int) Option {
 //   - burst: 令牌桶容量（瞬时突发上限）
 //
 // 主机按主机名或 IP 区分，不区分端口：同一台主机上的多个资产共用一个令牌桶。
+// 需要每个端口各自限速时配合 WithRateLimitPerPort(true)。
 func WithRateLimit(qps float64, burst int) Option {
 	return func(c *engineConfig) error {
 		if qps <= 0 || burst <= 0 {
@@ -329,6 +331,18 @@ func WithRateLimit(qps float64, burst int) Option {
 		c.enableRateLimit = true
 		c.rateLimitQPS = qps
 		c.rateLimitBurst = burst
+		return nil
+	}
+}
+
+// WithRateLimitPerPort 设置每主机限速的粒度，需与 WithRateLimit 一起使用。
+//
+// 默认 false：按主机名或 IP 限速，同一主机的 80、443、8080 共用一个令牌桶，
+// 限制的是这台主机承受的总速率。true：按“主机:端口”限速，每个端口各有一个
+// 令牌桶，适合同一主机上各端口是互不相干的服务的场景。
+func WithRateLimitPerPort(enable bool) Option {
+	return func(c *engineConfig) error {
+		c.rateLimitByPort = enable
 		return nil
 	}
 }

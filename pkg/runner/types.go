@@ -141,6 +141,8 @@ type ScanConfig struct {
 
 	RateLimitQPS   float64
 	RateLimitBurst int
+	// RateLimitPerPort 为 true 时每主机限速按“主机:端口”区分，默认按主机合并。
+	RateLimitPerPort bool
 	// GlobalRateLimit 是实例全部请求的总速率上限（次/秒），0 表示不限制。
 	GlobalRateLimit      float64
 	GlobalRateLimitBurst int

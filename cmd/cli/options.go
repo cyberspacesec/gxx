@@ -20,22 +20,23 @@ import (
 
 // Options 命令行选项。
 type Options struct {
-	Targets     []string // -u：扫描目标
-	TargetsFile string   // -f：目标文件，每行一个
-	Threads     int      // -t：目标并发数
-	RuleThreads int      // -rt：指纹规则并发数
-	Output      string   // -o：输出文件
-	JSONOutput  bool     // -json：强制 JSON Lines 输出
-	SockOutput  string   // -sock：Unix socket 输出
-	Proxy       string   // -proxy：代理地址
-	RuleFile    string   // -p：单个规则文件
-	RuleDir     string   // -pf：规则目录
-	Timeout     int      // -timeout：请求超时（秒）
-	Rate        int      // -rate：全部请求的总速率上限（次/秒），0 不限制
-	RateMinute  int      // -rpm：全部请求的总速率上限（次/分钟），0 不限制
-	HostRate    int      // -host-rate：单台主机的速率上限（次/秒），0 不限制
-	Debug       bool     // -debug
-	NoFileLog   bool     // -no-file-log
+	Targets         []string // -u：扫描目标
+	TargetsFile     string   // -f：目标文件，每行一个
+	Threads         int      // -t：目标并发数
+	RuleThreads     int      // -rt：指纹规则并发数
+	Output          string   // -o：输出文件
+	JSONOutput      bool     // -json：强制 JSON Lines 输出
+	SockOutput      string   // -sock：Unix socket 输出
+	Proxy           string   // -proxy：代理地址
+	RuleFile        string   // -p：单个规则文件
+	RuleDir         string   // -pf：规则目录
+	Timeout         int      // -timeout：请求超时（秒）
+	Rate            int      // -rate：全部请求的总速率上限（次/秒），0 不限制
+	RateMinute      int      // -rpm：全部请求的总速率上限（次/分钟），0 不限制
+	HostRate        int      // -host-rate：单台主机的速率上限（次/秒），0 不限制
+	HostRatePerPort bool     // -host-rate-per-port：每主机限速按端口分别计算
+	Debug           bool     // -debug
+	NoFileLog       bool     // -no-file-log
 }
 
 const (
@@ -113,6 +114,7 @@ func ParseCmdOptions(args []string, out io.Writer) (*Options, error) {
 	flagSet.IntVar(&options.Rate, "rate", 0, "")
 	flagSet.IntVar(&options.RateMinute, "rpm", 0, "")
 	flagSet.IntVar(&options.HostRate, "host-rate", 0, "")
+	flagSet.BoolVar(&options.HostRatePerPort, "host-rate-per-port", false, "")
 	flagSet.BoolVar(&options.Debug, "debug", false, "")
 	flagSet.BoolVar(&options.NoFileLog, "no-file-log", false, "")
 
@@ -132,6 +134,7 @@ func ParseCmdOptions(args []string, out io.Writer) (*Options, error) {
 			{"-rate int", "全部请求的总速率上限（次/秒，默认不限制）"},
 			{"-rpm int", "全部请求的总速率上限（次/分钟，与 -rate 二选一）"},
 			{"-host-rate int", "单台主机的速率上限（次/秒，默认不限制；同一主机的不同端口合并计算）"},
+			{"-host-rate-per-port", "-host-rate 改为按“主机:端口”分别计算"},
 		}},
 		{"调试", []flagUsage{
 			{"-proxy string", "代理地址（单个），支持 http/https/socks5/socks5h，如 socks5://127.0.0.1:1080"},
@@ -214,6 +217,9 @@ func verifyOptions(opt *Options, out io.Writer) error {
 
 	if opt.Rate < 0 || opt.RateMinute < 0 || opt.HostRate < 0 {
 		return fmt.Errorf("限速参数不能为负数")
+	}
+	if opt.HostRatePerPort && opt.HostRate == 0 {
+		return fmt.Errorf("-host-rate-per-port 需要与 -host-rate 一起使用")
 	}
 	if opt.Rate > 0 && opt.RateMinute > 0 {
 		return fmt.Errorf("-rate 与 -rpm 只能设置一个")

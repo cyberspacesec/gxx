@@ -816,9 +816,6 @@ const docTemplate = `{
         "model.RunFingerprintInput": {
             "type": "object",
             "properties": {
-                "followRedirects": {
-                    "type": "boolean"
-                },
                 "proxy": {
                     "type": "string"
                 },
@@ -827,9 +824,6 @@ const docTemplate = `{
                 },
                 "timeoutSeconds": {
                     "type": "integer"
-                },
-                "useTls": {
-                    "type": "boolean"
                 },
                 "verifyTls": {
                     "type": "boolean"

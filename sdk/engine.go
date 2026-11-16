@@ -103,6 +103,7 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		EnableProactive:      cfg.enableProactive,
 		RateLimitQPS:         cfg.rateLimitQPS,
 		RateLimitBurst:       cfg.rateLimitBurst,
+		RateLimitPerPort:     cfg.rateLimitByPort,
 		GlobalRateLimit:      cfg.globalRate,
 		GlobalRateLimitBurst: cfg.globalRateBurst,
 		DisableKeepAlives:    cfg.disableKeepAlives,

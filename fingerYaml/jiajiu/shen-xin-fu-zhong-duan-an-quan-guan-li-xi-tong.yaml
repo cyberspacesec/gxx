@@ -10,5 +10,5 @@ rules:
     request:
       method: GET
       path: /
-    expression: 'response.body.ibcontains(b"location.href = \"./ui/\";") && response.body.ibcontains(b"<title>Loading...</title>") && response.raw_header.ibcontains(b"Etag: *")'
+    expression: 'response.body.ibcontains(b"location.href = \"./ui/\";") && response.body.ibcontains(b"<title>Loading...</title>") && response.raw_header.ibcontains(b"Etag:")'
 expression: r0()

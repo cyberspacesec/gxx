@@ -13,6 +13,8 @@ import (
 	"github.com/cyberspacesec/gxx/pkg/wappalyzer"
 	"github.com/cyberspacesec/gxx/types"
 	"github.com/cyberspacesec/gxx/utils/common"
+	"github.com/cyberspacesec/gxx/utils/logger"
+	"github.com/cyberspacesec/gxx/utils/proto"
 )
 
 // maxNavigationHops 是入口在资产内最多跟随的跳数（HTTP 30x 与客户端跳转合计）。
@@ -31,10 +33,42 @@ func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Du
 	// 每一跳是一次独立请求，各自受 timeout 约束；整条链另设总预算。
 	navCtx, cancel := context.WithTimeout(ctx, 2*timeout)
 	defer cancel()
-	hopOptions := r.buildHTTPOptions(timeout, false)
+	resourceOptions := r.buildHTTPOptions(timeout, true)
+	base, err := walkEntry(ctx, navCtx, r.httpClient, r.log, target, resourceOptions)
+	if err != nil || base.pages == nil {
+		return base, err
+	}
+
+	// 最后一页是识别结果所描述的页面。
+	last := base.pages[len(base.pages)-1]
+	final := pageResponse(last)
+	base.FinalURL = last.url
+	base.StatusCode = last.status
+	base.BodyBytes = last.body
+	base.Title = finger.GetTitleFromBody(navCtx, last.url, final, last.body, r.httpClient, resourceOptions)
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	base.Certs = finger.GetCertInfos(base.Response)
+	base.Server = finger.GetServerInfoFromResponse(final)
+	base.ICP = finger.ExtractICPRecordFromBody(last.body)
+	if wapp, err := wappalyzer.NewWappalyzer(); err == nil {
+		if data, err := wapp.GetWappalyzer(last.header, last.body); err == nil {
+			base.Wappalyzer = data
+		}
+	}
+	return base, nil
+}
+
+// walkEntry 请求入口并在资产内逐跳跟随，返回链上各页及其规则可见的响应。
+// navCtx 约束整条链的耗时，ctx 是调用方的生命周期。options 是资源请求（图标）
+// 使用的选项，各跳请求在此基础上关闭自动跟随。
+func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logger.Sink, target string, options network.OptionsRequest) (*BaseInfoResponse, error) {
+	hopOptions := options
+	hopOptions.FollowRedirects = false
 	hopOptions.Probe = true
 
-	entry, first, err := r.requestEntry(navCtx, target, hopOptions)
+	entry, first, err := requestEntry(navCtx, client, target, hopOptions)
 	if err != nil {
 		return &BaseInfoResponse{Url: target, Server: types.EmptyServerInfo()}, fmt.Errorf("发送请求失败: %w", err)
 	}
@@ -74,10 +108,10 @@ func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Du
 			break
 		}
 		visited[key] = struct{}{}
-		following, err := r.httpClient.SendRequestHttp(navCtx, http.MethodGet, hop.To, "", hopOptions)
+		following, err := client.SendRequestHttp(navCtx, http.MethodGet, hop.To, "", hopOptions)
 		if err != nil {
 			// 后续页面不可达时保留已取得的页面，仍可识别入口。
-			r.log.Debug("目标 %s 跟随跳转 %s 失败: %v", entry, hop.To, err)
+			log.Debug("目标 %s 跟随跳转 %s 失败: %v", entry, hop.To, err)
 			break
 		}
 		hop.Followed = true
@@ -88,34 +122,51 @@ func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Du
 		return nil, err
 	}
 
-	// 中间页只参与规则匹配；最后一页是识别结果所描述的页面。
-	resourceOptions := r.buildHTTPOptions(timeout, true)
+	// 中间页只参与规则匹配，图标只为最后一页提取。
 	last := base.pages[len(base.pages)-1]
 	for _, page := range base.pages {
-		page.response = finger.BuildPageResponseOwned(ctx, pageResponse(page), page.body, r.httpClient, resourceOptions, page.url, page == last)
-	}
-	final := pageResponse(last)
-	base.FinalURL = last.url
-	base.StatusCode = last.status
-	base.BodyBytes = last.body
-	base.Title = finger.GetTitleFromBody(navCtx, last.url, final, last.body, r.httpClient, resourceOptions)
-	if err := ctx.Err(); err != nil {
-		return nil, err
-	}
-	base.Certs = finger.GetCertInfos(base.Response)
-	base.Server = finger.GetServerInfoFromResponse(final)
-	base.ICP = finger.ExtractICPRecordFromBody(last.body)
-	if wapp, err := wappalyzer.NewWappalyzer(); err == nil {
-		if data, err := wapp.GetWappalyzer(last.header, last.body); err == nil {
-			base.Wappalyzer = data
-		}
+		page.response = finger.BuildPageResponseOwned(ctx, pageResponse(page), page.body, client, options, page.url, page == last)
 	}
 	return base, nil
 }
 
+// EntryPage 是入口跳转链上的一页，以及规则在这一页上看到的请求与响应。
+type EntryPage struct {
+	URL      string
+	Request  *proto.Request
+	Response *proto.Response
+}
+
+// EntryChain 按扫描时的方式请求入口并在资产内跟随跳转，返回链上各页（入口在前，
+// 最后一页在后）与每一跳的记录。调试工具用它逐页评估规则，结果与扫描一致。
+func EntryChain(ctx context.Context, client *network.HTTPClient, target string, options network.OptionsRequest) ([]EntryPage, []Redirect, error) {
+	if options.Timeout <= 0 {
+		options.Timeout = 5 * time.Second
+	}
+	options.FollowRedirects = true
+	navCtx, cancel := context.WithTimeout(ctx, 2*options.Timeout)
+	defer cancel()
+	base, err := walkEntry(ctx, navCtx, client, logger.Current(), target, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	pages := make([]EntryPage, len(base.pages))
+	for i, page := range base.pages {
+		pages[i] = EntryPage{URL: page.url, Request: page.request, Response: page.response}
+	}
+	return pages, base.Redirects, nil
+}
+
+// IsEntryPageRule 判断规则匹配的是否就是入口页：对根路径的、跟随跳转的普通 GET。
+// 这类规则依次在入口跳转链的每一页上评估。
+func IsEntryPageRule(req finger.RuleRequest) bool {
+	path := strings.TrimSpace(req.Path)
+	return (path == "" || path == "/") && isPageRule(req)
+}
+
 // requestEntry 请求入口地址。目标未带协议时先 https 后 http；两者连接同一端口且
 // TCP 连接失败时不再换协议，不可达的目标只等待一次超时。
-func (r *Runner) requestEntry(ctx context.Context, target string, options network.OptionsRequest) (string, *http.Response, error) {
+func requestEntry(ctx context.Context, client *network.HTTPClient, target string, options network.OptionsRequest) (string, *http.Response, error) {
 	if i := strings.IndexByte(target, '#'); i >= 0 {
 		target = target[:i]
 	}
@@ -126,7 +177,7 @@ func (r *Runner) requestEntry(ctx context.Context, target string, options networ
 			return candidate, nil, fmt.Errorf("无效的目标地址 %q（只支持 http 与 https）", target)
 		}
 		probeCtx, connected := network.WithConnectProbe(ctx)
-		resp, err := r.httpClient.SendRequestHttp(probeCtx, http.MethodGet, candidate, "", options)
+		resp, err := client.SendRequestHttp(probeCtx, http.MethodGet, candidate, "", options)
 		if err == nil {
 			return candidate, resp, nil
 		}
@@ -201,7 +252,7 @@ func (r *Runner) ResolveTarget(ctx context.Context, target string) (string, erro
 	defer done()
 	options := r.buildHTTPOptions(r.requestTimeout(), false)
 	options.Probe = true
-	entry, resp, err := r.requestEntry(network.WithCookieJar(ctx), target, options)
+	entry, resp, err := requestEntry(network.WithCookieJar(ctx), r.httpClient, target, options)
 	if err != nil {
 		return "", err
 	}

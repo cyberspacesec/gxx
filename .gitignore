@@ -41,3 +41,8 @@ cmd/gxx-ide/frontend/dist/*.css
 # swag 自动生成的部分
 cmd/gxx-ide/docs/swagger.json
 cmd/gxx-ide/docs/swagger.yaml
+
+# 本机的编辑器与助手配置
+.claude/
+.cursor/hooks/
+.cursor/rules/xcursor.mdc

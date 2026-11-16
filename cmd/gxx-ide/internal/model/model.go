@@ -128,13 +128,11 @@ type ValidateYAMLOutput struct {
 
 // RunFingerprintInput 是 /api/v1/finger/run 的入参。
 type RunFingerprintInput struct {
-	YAML            string `json:"yaml"`
-	Target          string `json:"target"`
-	Proxy           string `json:"proxy,omitempty"`
-	TimeoutSeconds  int    `json:"timeoutSeconds"`
-	UseTLS          bool   `json:"useTls"`
-	VerifyTLS       bool   `json:"verifyTls"`
-	FollowRedirects bool   `json:"followRedirects"`
+	YAML           string `json:"yaml"`
+	Target         string `json:"target"`
+	Proxy          string `json:"proxy,omitempty"`
+	TimeoutSeconds int    `json:"timeoutSeconds"`
+	VerifyTLS      bool   `json:"verifyTls"`
 }
 
 // RuleRun 单条 rule 的执行记录。

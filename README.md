@@ -56,7 +56,7 @@ gxx -u https://example.com -rt 500
 在调用方的 Go 模块内安装 SDK：
 
 ```bash
-go get github.com/cyberspacesec/gxx/sdk@v1.6.0
+go get github.com/cyberspacesec/gxx/sdk@v1.6.1
 ```
 
 发布包见 [GitHub Releases](https://github.com/cyberspacesec/gxx/releases)，自动测试与发布流程见 [构建与发布](docs/构建与发布.md)。
@@ -135,6 +135,7 @@ GXX 以资产为单位识别，一个资产由**协议、主机、端口**共同
 | `--rate` | 全部请求的总速率上限（次/秒，默认不限制） |
 | `--rpm` | 全部请求的总速率上限（次/分钟，与 `--rate` 二选一） |
 | `--host-rate` | 单台主机的速率上限（次/秒，默认不限制；同一主机的不同端口合并计算） |
+| `--host-rate-per-port` | `--host-rate` 改为按“主机:端口”分别计算 |
 
 ```bash
 # 整体每分钟最多 6000 个请求，单台主机每秒最多 20 个

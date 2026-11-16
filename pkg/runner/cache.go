@@ -3,7 +3,7 @@ Package runner 请求 / 响应缓存。
 
 底层基于 otter.Cache（W-TinyLFU 自适应淘汰算法）：
 TTL 由 ExpiryWriting 自动维护，条目权重同时限制响应字节和数量。
-目标归属保存在条目内，失效时无需维护独立索引。
+每次扫描的作用域记录自己写入的键，扫描结束时只删除这些键。
 
 CacheManager 完全实例化，调用方持有独立缓存。
 */
@@ -16,6 +16,7 @@ import (
 	"github.com/cyberspacesec/gxx/utils/proto"
 	"net/url"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -45,6 +46,7 @@ type CacheManager struct {
 	cache     *otter.Cache[requestCacheKey, *CacheRequest]
 	scope     uint64
 	nextScope *atomic.Uint64
+	owned     *scopeKeys
 	maxSize   int
 	ttl       time.Duration
 	createdAt time.Time
@@ -101,19 +103,33 @@ func newCacheManager(maxSize int, ttl time.Duration, maxBytes uint64, log logger
 	return cm
 }
 
+// scopeKeys 记录一次扫描写入的缓存键。规则并发执行，写入需要加锁。
+type scopeKeys struct {
+	mu   sync.Mutex
+	keys []requestCacheKey
+}
+
 // newScope 隔离同一目标的并发扫描，共用实例缓存容量和后台维护。
 // 作用域只复制不可变配置，不创建独立缓存或维护协程。
 func (cm *CacheManager) newScope() *CacheManager {
 	scoped := *cm
 	scoped.scope = cm.nextScope.Add(1)
+	scoped.owned = &scopeKeys{}
 	return &scoped
 }
 
+// clearScope 删除本次扫描写入的条目，开销只与本次扫描的写入次数有关，
+// 与缓存里其他扫描的条目数量无关。
 func (cm *CacheManager) clearScope() {
-	for key := range cm.cache.All() {
-		if key.scope == cm.scope {
-			cm.cache.Invalidate(key)
-		}
+	if cm.owned == nil {
+		return
+	}
+	cm.owned.mu.Lock()
+	keys := cm.owned.keys
+	cm.owned.keys = nil
+	cm.owned.mu.Unlock()
+	for _, key := range keys {
+		cm.cache.Invalidate(key)
 	}
 }
 
@@ -143,6 +159,11 @@ func (cm *CacheManager) set(targetKey string, cacheKey requestCacheKey, entry *C
 	owned := *entry
 	owned.targetKey = targetKey
 	cm.cache.Set(cacheKey, &owned)
+	if cm.owned != nil {
+		cm.owned.mu.Lock()
+		cm.owned.keys = append(cm.owned.keys, cacheKey)
+		cm.owned.mu.Unlock()
+	}
 }
 
 func (cm *CacheManager) requestKey(target, method string, redirects bool) requestCacheKey {

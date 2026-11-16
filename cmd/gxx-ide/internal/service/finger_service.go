@@ -12,6 +12,7 @@ import (
 	celpkg "github.com/cyberspacesec/gxx/pkg/cel"
 	fingerpkg "github.com/cyberspacesec/gxx/pkg/finger"
 	"github.com/cyberspacesec/gxx/pkg/network"
+	runnerpkg "github.com/cyberspacesec/gxx/pkg/runner"
 	"github.com/cyberspacesec/gxx/utils/proto"
 
 	"github.com/cyberspacesec/gxx/cmd/gxx-ide/internal/model"
@@ -48,6 +49,51 @@ func (s *FingerService) Run(ctx context.Context, in *model.RunFingerprintInput) 
 
 	// 一次调试是一个 Cookie 会话，前一条规则登录得到的 Cookie 对后续规则可见。
 	ctx = network.WithCookieJar(ctx)
+	client := network.NewHTTPClient()
+	defer client.Close()
+	client.SetInsecureSkipVerify(!in.VerifyTLS)
+	// 是否跟随重定向由每条规则的 follow_redirects 决定，与扫描一致。
+	options := network.OptionsRequest{Proxy: in.Proxy, Timeout: timeout, InsecureSkipVerify: !in.VerifyTLS, FollowRedirects: true}
+
+	// 与扫描一致：匹配入口页的规则依次在入口跳转链的每一页上评估，先看最后一页，
+	// 再看更早的各页（入口的 30x 响应、跳转壳），任一页使指纹成立即命中。
+	var pages []runnerpkg.EntryPage
+	if matchesEntryPage(&fg) {
+		// 入口不可达时退回逐条规则请求，由各条规则报告自己的请求错误。
+		pages, _, _ = runnerpkg.EntryChain(ctx, client, in.Target, options)
+	}
+	var out *model.RunFingerprintOutput
+	for i := len(pages) - 1; i >= 0; i-- {
+		run := s.runOnPage(ctx, client, in, &fg, options, &pages[i])
+		if out == nil || run.FinalResult {
+			out = run
+		}
+		if run.FinalResult {
+			break
+		}
+	}
+	if out == nil {
+		out = s.runOnPage(ctx, client, in, &fg, options, nil)
+	}
+	if outline := BuildOutlineFromYAML(in.YAML); outline != nil {
+		out.FingerOutline = outline
+	}
+	return out, nil
+}
+
+// matchesEntryPage 判断指纹是否含有匹配入口页的规则。
+func matchesEntryPage(fg *fingerpkg.Finger) bool {
+	for _, rule := range fg.Rules {
+		if runnerpkg.IsEntryPageRule(rule.Value.Request) {
+			return true
+		}
+	}
+	return false
+}
+
+// runOnPage 逐条执行规则并求最终表达式。page 非 nil 时，匹配入口页的规则使用
+// 该页的请求与响应，其余规则照常发出请求。
+func (s *FingerService) runOnPage(ctx context.Context, client *network.HTTPClient, in *model.RunFingerprintInput, fg *fingerpkg.Finger, options network.OptionsRequest, page *runnerpkg.EntryPage) *model.RunFingerprintOutput {
 	customLib := celpkg.NewCustomLib()
 	customLib.SetContext(ctx)
 	// set 块在任何请求发出之前求值，先放入由目标地址合成的请求，
@@ -67,18 +113,11 @@ func (s *FingerService) Run(ctx context.Context, in *model.RunFingerprintInput) 
 		}
 	}
 	customLib.PreRegisterRuleFunctions(ruleKeys)
-
-	client := network.NewHTTPClient()
-	defer client.Close()
-	client.SetInsecureSkipVerify(!in.VerifyTLS)
-	customLib.SetRequestOptions(client, network.OptionsRequest{Proxy: in.Proxy, Timeout: timeout, InsecureSkipVerify: !in.VerifyTLS, FollowRedirects: in.FollowRedirects})
+	customLib.SetRequestOptions(client, options)
 
 	out := &model.RunFingerprintOutput{
 		FinalExpression: fg.Expression,
 		Rules:           make([]model.RuleRun, 0, len(fg.Rules)),
-	}
-	if outline := BuildOutlineFromYAML(in.YAML); outline != nil {
-		out.FingerOutline = outline
 	}
 
 	for _, rule := range fg.Rules {
@@ -102,20 +141,20 @@ func (s *FingerService) Run(ctx context.Context, in *model.RunFingerprintInput) 
 			URLEvaluated: buildEvaluatedURL(in.Target, reqCopy.Path),
 		}
 
-		nextVarMap, err := fingerpkg.SendRequest(ctx, client, in.Target, reqCopy, ruleCopy.Value, varMap, network.OptionsRequest{
-			Proxy:              in.Proxy,
-			Timeout:            timeout,
-			FollowRedirects:    in.FollowRedirects,
-			InsecureSkipVerify: !in.VerifyTLS,
-		})
-		if err != nil {
-			record.HTTPError = err.Error()
-			customLib.WriteRuleFunctionsROptions(ruleCopy.Key, false)
-			out.Rules = append(out.Rules, record)
-			continue
-		}
-		if len(nextVarMap) > 0 {
-			varMap = nextVarMap
+		if page != nil && runnerpkg.IsEntryPageRule(reqCopy) {
+			record.URLEvaluated = page.URL
+			varMap["request"], varMap["response"] = page.Request, page.Response
+		} else {
+			nextVarMap, err := fingerpkg.SendRequest(ctx, client, in.Target, reqCopy, ruleCopy.Value, varMap, options)
+			if err != nil {
+				record.HTTPError = err.Error()
+				customLib.WriteRuleFunctionsROptions(ruleCopy.Key, false)
+				out.Rules = append(out.Rules, record)
+				continue
+			}
+			if len(nextVarMap) > 0 {
+				varMap = nextVarMap
+			}
 		}
 
 		if req, ok := varMap["request"].(*proto.Request); ok {
@@ -166,7 +205,7 @@ func (s *FingerService) Run(ctx context.Context, in *model.RunFingerprintInput) 
 		}
 	}
 	out.Variables = debugVarEntries(varMap)
-	return out, nil
+	return out
 }
 
 func (s *FingerService) EvaluateCELContext(ctx context.Context, in *model.EvaluateCELInput) (*model.EvaluateCELOutput, error) {

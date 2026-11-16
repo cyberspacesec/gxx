@@ -139,27 +139,32 @@ watch(
   { deep: true, immediate: true },
 )
 
-watch(generatedYaml, () => {
-  if (validateTimer) clearTimeout(validateTimer)
-  validateController?.abort()
-  validateTimer = setTimeout(async () => {
-    const controller = new AbortController()
-    validateController = controller
-    try {
-      const out = await validateYAML(generatedYaml.value, { signal: controller.signal })
-      if (validateController === controller) {
-        validation.value = out
+// immediate：表单初始内容也要校验一次，否则打开页面后一直停在“校验中…”。
+watch(
+  generatedYaml,
+  () => {
+    if (validateTimer) clearTimeout(validateTimer)
+    validateController?.abort()
+    validateTimer = setTimeout(async () => {
+      const controller = new AbortController()
+      validateController = controller
+      try {
+        const out = await validateYAML(generatedYaml.value, { signal: controller.signal })
+        if (validateController === controller) {
+          validation.value = out
+        }
+      } catch (err) {
+        if (isCanceledError(err) || validateController !== controller) return
+        validation.value = {
+          valid: false,
+          errors: [{ line: 0, column: 0, message: (err as Error).message }],
+          outline: null,
+        }
       }
-    } catch (err) {
-      if (isCanceledError(err) || validateController !== controller) return
-      validation.value = {
-        valid: false,
-        errors: [{ line: 0, column: 0, message: (err as Error).message }],
-        outline: null,
-      }
-    }
-  }, 400)
-})
+    }, 400)
+  },
+  { immediate: true },
+)
 
 let runController: AbortController | null = null
 

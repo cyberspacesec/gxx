@@ -341,7 +341,7 @@ func isPageRule(req finger.RuleRequest) bool {
 // matchesEntryPage 判断指纹是否含有匹配入口页的规则；没有时换页重评结果不变。
 func matchesEntryPage(fg *finger.Finger) bool {
 	for _, rule := range fg.Rules {
-		if path := strings.TrimSpace(rule.Value.Request.Path); (path == "" || path == "/") && isPageRule(rule.Value.Request) {
+		if IsEntryPageRule(rule.Value.Request) {
 			return true
 		}
 	}

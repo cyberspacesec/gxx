@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"github.com/cyberspacesec/gxx/utils/proto"
+	"strconv"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -138,5 +139,25 @@ func TestRulePoolRespectsSmallCapacity(t *testing.T) {
 	p.Release(context.Background())
 	if peak.Load() != 1 {
 		t.Fatalf("peak=%d", peak.Load())
+	}
+}
+
+// 清理一次扫描的条目时，开销不随缓存里其他扫描的条目数量增长。
+func BenchmarkClearScopeWithFullCache(b *testing.B) {
+	c := newCacheManager(2048, time.Minute, 64<<20, nil)
+	defer c.Close()
+	entry := &CacheRequest{Request: &proto.Request{}, Response: &proto.Response{Body: []byte("x")}}
+	other := c.newScope()
+	for i := 0; i < 2000; i++ {
+		other.Set("host", strconv.Itoa(i), entry)
+	}
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		s := c.newScope()
+		for j := 0; j < 4; j++ {
+			s.Set("host", strconv.Itoa(j), entry)
+		}
+		s.clearScope()
 	}
 }

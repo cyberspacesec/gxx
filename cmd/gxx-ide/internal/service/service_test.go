@@ -179,3 +179,56 @@ func TestRunResolvesTargetVariablesInSet(t *testing.T) {
 		t.Fatalf("TCP 规则未命中: %+v", out.Rules)
 	}
 }
+
+// 调试结果与扫描一致：匹配入口页的规则依次在入口跳转链的每一页上评估。
+func TestRunEvaluatesEveryEntryPage(t *testing.T) {
+	var rootHits atomic.Int64
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/" {
+			rootHits.Add(1)
+			w.Header().Set("Server", "Microsoft-IIS/10.0")
+			http.Redirect(w, r, "/owa/", http.StatusFound)
+			return
+		}
+		fmt.Fprint(w, "<html><head><title>Outlook</title></head></html>")
+	}))
+	defer server.Close()
+	rule := func(expression string) string {
+		return "id: demo\ninfo:\n  name: demo\nrules:\n  r0:\n    request:\n      method: GET\n      path: /\n    expression: '" + expression + "'\nexpression: r0()\n"
+	}
+	run := func(yaml string) *model.RunFingerprintOutput {
+		t.Helper()
+		out, err := NewFingerService().Run(context.Background(), &model.RunFingerprintInput{YAML: yaml, Target: server.URL, TimeoutSeconds: 3})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return out
+	}
+
+	// 入口的 302 响应本身命中，状态码与地址指向 302 那一页。
+	out := run(rule(`response.status == 302 && response.raw_header.ibcontains(b"Location: /owa/")`))
+	if !out.FinalResult || out.Rules[0].StatusCode != 302 || out.Rules[0].URLEvaluated != server.URL {
+		t.Fatalf("入口 302 未参与匹配: %+v", out.Rules[0])
+	}
+	// 最后一页同样可以命中，且优先于更早的页面。
+	out = run(rule(`response.body.bcontains(b"Outlook")`))
+	if !out.FinalResult || out.Rules[0].StatusCode != 200 || !strings.HasSuffix(out.Rules[0].URLEvaluated, "/owa/") {
+		t.Fatalf("最后一页未命中: %+v", out.Rules[0])
+	}
+	// 都不满足时展示最后一页的结果。
+	out = run(rule(`response.status == 500`))
+	if out.FinalResult || out.Rules[0].StatusCode != 200 {
+		t.Fatalf("未命中时应展示最后一页: %+v", out.Rules[0])
+	}
+	// 入口页规则复用跳转链上的响应，不再另发请求。
+	rootHits.Store(0)
+	run(rule(`response.status == 302`))
+	if n := rootHits.Load(); n != 1 {
+		t.Fatalf("入口被请求了 %d 次", n)
+	}
+	// 规则声明不跟随时只看第一个响应。
+	out = run(strings.Replace(rule(`response.status == 302`), "      path: /\n", "      path: /\n      follow_redirects: false\n", 1))
+	if !out.FinalResult || out.Rules[0].StatusCode != 302 {
+		t.Fatalf("关闭跟随后应匹配 302: %+v", out.Rules[0])
+	}
+}

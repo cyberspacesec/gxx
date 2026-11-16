@@ -99,3 +99,13 @@ func TestRateLimitOptionsValidate(t *testing.T) {
 		}
 	}
 }
+
+// 打开按端口限速后，同一台主机的每个端口各有一个令牌桶，互不等待。
+func TestHostRateLimitPerPort(t *testing.T) {
+	e := multiPathEngine(t, 9, sdk.WithRateLimit(20, 1), sdk.WithRateLimitPerPort(true), sdk.WithURLConcurrency(3))
+	// 三个端口各 10 个请求：每个端口约 0.45 秒，并发进行；合并计算时需要约 1.45 秒。
+	requests, elapsed := scanRate(t, e, 3)
+	if requests != 30 || elapsed < 400*time.Millisecond || elapsed > 1400*time.Millisecond {
+		t.Fatalf("按端口限速时 3 个端口应并行、各自不超过 20 次/秒: requests=%d elapsed=%v", requests, elapsed)
+	}
+}

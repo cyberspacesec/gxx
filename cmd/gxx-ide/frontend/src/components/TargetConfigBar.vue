@@ -51,9 +51,7 @@ watch(
       <span class="label">目标</span>
       <input v-model="form.target" class="field-input" placeholder="https://example.com" />
     </label>
-    <label class="check"><input v-model="form.useTls" type="checkbox" /> SSL</label>
     <label class="check"><input v-model="form.verifyTls" type="checkbox" /> 验证证书</label>
-    <label class="check"><input v-model="form.followRedirects" type="checkbox" /> 跟随重定向</label>
     <label class="field timeout-field">
       <span class="label">超时</span>
       <input v-model.number="form.timeoutSeconds" type="number" min="1" class="field-input tiny" />

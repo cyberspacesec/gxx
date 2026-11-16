@@ -1,7 +1,7 @@
 /*
 Package network per-host rate limiter。
 
-每个目标 host 独立持有一个 *rate.Limiter（令牌桶），
+每个目标主机（可选按端口细分）独立持有一个 *rate.Limiter（令牌桶），
 使用 phuslu/lru 作为 LRU 容器（容量 hostLimiterCacheSize），
 过期 host 自动 evict；Limiter 在 host 首次访问时才创建。
 
@@ -12,6 +12,7 @@ package network
 
 import (
 	"context"
+	"net"
 	"net/url"
 	"strings"
 	"sync"
@@ -38,6 +39,7 @@ type HostRateLimiter struct {
 	burst   int
 	cache   *lru.LRUCache[string, *rate.Limiter]
 	enabled atomic.Bool
+	perPort atomic.Bool
 	mu      sync.Mutex
 }
 
@@ -64,13 +66,22 @@ func (h *HostRateLimiter) SetEnabled(on bool) {
 	h.enabled.Store(on)
 }
 
+// SetPerPort 切换限速粒度：false（默认）按主机名或 IP，同一主机的所有端口共用
+// 一个令牌桶；true 按“主机:端口”，每个端口各有一个令牌桶。
+func (h *HostRateLimiter) SetPerPort(on bool) {
+	if h == nil {
+		return
+	}
+	h.perPort.Store(on)
+}
+
 // Wait 阻塞等待 host 的令牌可用，或 ctx 超时 / 取消。
 // 当 limiter 为 nil 或被禁用时立即返回 nil（fast path）。
 func (h *HostRateLimiter) Wait(ctx context.Context, target string) error {
 	if h == nil || !h.enabled.Load() {
 		return nil
 	}
-	host := extractHost(target)
+	host := limiterKey(target, h.perPort.Load())
 	if host == "" {
 		return nil
 	}
@@ -82,7 +93,7 @@ func (h *HostRateLimiter) Allow(target string) bool {
 	if h == nil || !h.enabled.Load() {
 		return true
 	}
-	host := extractHost(target)
+	host := limiterKey(target, h.perPort.Load())
 	if host == "" {
 		return true
 	}
@@ -112,19 +123,32 @@ func (h *HostRateLimiter) getOrCreate(host string) *rate.Limiter {
 	return limiter
 }
 
-// extractHost 提取目标的主机名或 IP（小写、不含端口）作为限流 key。
-// 同一台主机的所有端口共用一个令牌桶：限制的是这台主机承受的总速率。
-func extractHost(target string) string {
+// limiterKey 返回目标的限流 key。perPort 为 false 时是主机名或 IP（小写、不含
+// 端口），同一台主机的所有端口共用一个令牌桶；为 true 时是“主机:端口”，URL
+// 未写端口时按协议补默认端口，使 https://a.com 与 https://a.com:443 是同一个 key。
+func limiterKey(target string, perPort bool) string {
 	if target == "" {
 		return ""
 	}
-	if u, err := url.Parse(target); err == nil && u.Hostname() != "" {
-		return strings.ToLower(u.Hostname())
+	u, err := url.Parse(target)
+	if err != nil || u.Hostname() == "" {
+		u, err = url.Parse("http://" + target)
 	}
-	if u, err := url.Parse("http://" + target); err == nil && u.Hostname() != "" {
-		return strings.ToLower(u.Hostname())
+	if err != nil || u.Hostname() == "" {
+		return strings.ToLower(target)
 	}
-	return strings.ToLower(target)
+	host := strings.ToLower(u.Hostname())
+	if !perPort {
+		return host
+	}
+	port := u.Port()
+	if port == "" {
+		port = "80"
+		if u.Scheme == "https" {
+			port = "443"
+		}
+	}
+	return net.JoinHostPort(host, port)
 }
 
 // NewGlobalRateLimiter 创建引擎级的总速率限制：实例发出的全部请求（入口、规则、

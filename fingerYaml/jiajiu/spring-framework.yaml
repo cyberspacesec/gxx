@@ -28,7 +28,7 @@ rules:
     request:
       method: GET
       path: /
-    expression: 'response.raw_header.ibcontains(b"X-Application-Context: *")'
+    expression: 'response.raw_header.ibcontains(b"X-Application-Context:")'
   r4:
     request:
       method: GET

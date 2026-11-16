@@ -136,6 +136,7 @@ func NewRunner(cfg ScanConfig, pocOptions types.YamlFingerType) (*Runner, error)
 	r.httpClient.SetGlobalRateLimiter(network.NewGlobalRateLimiter(cfg.GlobalRateLimit, cfg.GlobalRateLimitBurst))
 	if cfg.RateLimitQPS > 0 && cfg.RateLimitBurst > 0 {
 		r.limiter = network.NewHostRateLimiter(cfg.RateLimitQPS, cfg.RateLimitBurst)
+		r.limiter.SetPerPort(cfg.RateLimitPerPort)
 		r.httpClient.SetRateLimiter(r.limiter)
 	}
 

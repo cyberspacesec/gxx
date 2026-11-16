@@ -100,9 +100,7 @@ export interface RunRequest {
   target: string
   proxy?: string
   timeoutSeconds: number
-  useTls: boolean
   verifyTls: boolean
-  followRedirects: boolean
 }
 
 export interface RuleRun {

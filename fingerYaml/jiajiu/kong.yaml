@@ -20,5 +20,5 @@ rules:
     request:
       method: GET
       path: /
-    expression: 'response.raw_header.ibcontains(b"X-Kong-Response-Latency: *")'
+    expression: 'response.raw_header.ibcontains(b"X-Kong-Response-Latency:")'
 expression: r0() || r1() || r2()

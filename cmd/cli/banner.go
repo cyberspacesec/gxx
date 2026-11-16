@@ -13,7 +13,7 @@ import (
 )
 
 // 默认版本信息 - 使用 var 使其可以通过 ldflags 修改
-var defaultVersion = "1.6.0"
+var defaultVersion = "1.6.1"
 var defaultAuthor = "zhizhuo"
 var defaultBuildDate = "BUILD_TIME"
 

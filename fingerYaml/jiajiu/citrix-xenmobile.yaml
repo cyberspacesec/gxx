@@ -10,7 +10,7 @@ rules:
     request:
       method: GET
       path: /
-    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Citrix-TransactionId: *") && response.raw_header.ibcontains(b"Set-Cookie: xmscookie")'
+    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Citrix-TransactionId:") && response.raw_header.ibcontains(b"Set-Cookie: xmscookie")'
   r1:
     request:
       method: GET

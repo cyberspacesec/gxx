@@ -53,7 +53,7 @@ func Run(ctx context.Context, options *Options) error {
 		limits = append(limits, sdk.WithGlobalRatePerMinute(options.RateMinute))
 	}
 	if options.HostRate > 0 {
-		limits = append(limits, sdk.WithRateLimit(float64(options.HostRate), options.HostRate))
+		limits = append(limits, sdk.WithRateLimit(float64(options.HostRate), options.HostRate), sdk.WithRateLimitPerPort(options.HostRatePerPort))
 	}
 	engine, err := sdk.NewEngine(ctx, append(limits,
 		sdk.WithFingerOptions(sdk.FingerOptions{PocFile: options.RuleDir, PocYaml: options.RuleFile}),

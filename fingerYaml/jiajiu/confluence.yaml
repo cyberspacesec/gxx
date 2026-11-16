@@ -10,7 +10,7 @@ rules:
     request:
       method: GET
       path: /
-    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Location: /login.action?os_destination=") && response.raw_header.ibcontains(b"X-Confluence-Request-Time: *")'
+    expression: 'response.status == 302 && response.raw_header.ibcontains(b"Location: /login.action?os_destination=") && response.raw_header.ibcontains(b"X-Confluence-Request-Time:")'
   r1:
     request:
       method: GET

@@ -13,5 +13,5 @@ rules:
     request:
       method: GET
       path: /
-    expression: 'response.raw_header.ibcontains(b"X-Cocoon-Version: *")'
+    expression: 'response.raw_header.ibcontains(b"X-Cocoon-Version:")'
 expression: r0()
