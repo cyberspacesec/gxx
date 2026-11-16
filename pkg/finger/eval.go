@@ -13,8 +13,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/google/cel-go/cel"
-	"gopkg.in/yaml.v2"
+	"cel.dev/cel-go/cel"
+	"go.yaml.in/yaml/v2"
 
 	celPkg "github.com/cyberspacesec/gxx/pkg/cel"
 	"github.com/cyberspacesec/gxx/types"

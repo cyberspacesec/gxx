@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -11,8 +12,8 @@ import (
 	"time"
 
 	"github.com/mgutz/ansi"
-	"github.com/natefinch/lumberjack"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 type CustomFormatter struct {
@@ -58,16 +59,19 @@ type PlainFormatter struct {
 	CustomFormatter
 }
 
+// ansiSequence 匹配终端颜色控制序列；只编译一次，供文件日志剥离颜色。
+var ansiSequence = regexp.MustCompile(`\x1b\[[0-9;]*m`)
+
 func (f *PlainFormatter) Format(entry *logrus.Entry) ([]byte, error) {
-	coloredMessage, err := f.CustomFormatter.Format(entry)
+	message, err := f.CustomFormatter.Format(entry)
 	if err != nil {
 		return nil, err
 	}
-
-	re := regexp.MustCompile(`\x1b\[[0-9;]*m`)
-	plainMessage := re.ReplaceAll(coloredMessage, []byte(""))
-
-	return plainMessage, nil
+	// 绝大多数日志行不含控制序列，先做一次字节查找即可跳过正则。
+	if bytes.IndexByte(message, 0x1b) < 0 {
+		return message, nil
+	}
+	return ansiSequence.ReplaceAll(message, nil), nil
 }
 
 type Logger struct {
@@ -114,9 +118,9 @@ func NewLogger(logDir string, maxFiles int, logLevel int, noFileLog ...bool) *Lo
 	terminalLogger.SetFormatter(terminalFormatter)
 	terminalLogger.SetOutput(os.Stdout)
 
+	// 文件日志不着色：级别标签直接输出纯文本，消息自带的控制序列由 PlainFormatter 剥离。
 	fileLogger := logrus.New()
-	plainFormatter := &PlainFormatter{CustomFormatter: *terminalFormatter}
-	fileLogger.SetFormatter(plainFormatter)
+	fileLogger.SetFormatter(&PlainFormatter{})
 
 	disableFileLog := false
 	if len(noFileLog) > 0 && noFileLog[0] {

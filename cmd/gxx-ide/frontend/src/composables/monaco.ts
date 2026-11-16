@@ -12,11 +12,12 @@
  * 支持 body 内嵌 JSON/XML/HTML 子语言高亮。
  */
 
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import 'monaco-editor/esm/vs/basic-languages/yaml/yaml.contribution'
-import 'monaco-editor/esm/vs/language/json/monaco.contribution'
-import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
-import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+// monaco-editor 0.57 起通过 package exports 暴露子路径（映射到 esm/vs/ 下）。
+import * as monaco from 'monaco-editor/editor/editor.api'
+import 'monaco-editor/languages/definitions/yaml/register'
+import 'monaco-editor/languages/features/json/register'
+import jsonWorker from 'monaco-editor/languages/features/json/json.worker?worker'
+import editorWorker from 'monaco-editor/editor/editor.worker?worker'
 
 let initialization: Promise<void> | undefined
 

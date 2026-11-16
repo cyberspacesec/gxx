@@ -7,7 +7,7 @@
  * 让 method/header/status 等 token 拿到独立配色。
  */
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import * as monaco from 'monaco-editor/editor/editor.api'
 import { setupMonaco } from '@/composables/monaco'
 import { isDark } from '@/composables/useTheme'
 

@@ -10,7 +10,7 @@ package cel
 import (
 	"github.com/cyberspacesec/gxx/utils/proto"
 
-	"github.com/google/cel-go/cel"
+	"cel.dev/cel-go/cel"
 )
 
 // newEnvOptions 描述只读的 CEL 类型与变量声明，不保存执行者的扫描状态。

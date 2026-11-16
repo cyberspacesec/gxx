@@ -1,6 +1,6 @@
 package cel
 
-import "github.com/google/cel-go/cel"
+import "cel.dev/cel-go/cel"
 
 type preparedExpression struct {
 	expression string

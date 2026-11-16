@@ -11,6 +11,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/textproto"
 	"net/url"
@@ -203,14 +204,17 @@ func normalizeCRLF(raw string) string {
 	return raw
 }
 
+// ensurePort 补全缺省端口。IPv6 字面量自带冒号，必须按 SplitHostPort 判断
+// 是否真的带端口，否则 "[::1]" 会被当成已带端口而拨号失败。
 func ensurePort(host string, tls bool) string {
-	if strings.Contains(host, ":") {
+	if _, _, err := net.SplitHostPort(host); err == nil {
 		return host
 	}
+	port := "80"
 	if tls {
-		return host + ":443"
+		port = "443"
 	}
-	return host + ":80"
+	return net.JoinHostPort(strings.Trim(host, "[]"), port)
 }
 
 func normalizeRawTargetHost(target string) string {
@@ -224,11 +228,14 @@ func normalizeRawTargetHost(target string) string {
 	return strings.TrimPrefix(strings.TrimPrefix(target, "https://"), "http://")
 }
 
+// hostOnly 取出用于 TLS ServerName 的主机部分。
+// 按字符串找最后一个冒号会把 "[::1]" 截成 "[:"，IPv6 必须走 SplitHostPort，
+// 并去掉字面量方括号（ServerName 不接受 "[...]" 形式）。
 func hostOnly(host string) string {
-	if idx := strings.LastIndex(host, ":"); idx > 0 {
-		return host[:idx]
+	if h, _, err := net.SplitHostPort(host); err == nil {
+		return strings.Trim(h, "[]")
 	}
-	return host
+	return strings.Trim(host, "[]")
 }
 
 func buildURLFromRaw(info *rawHTTPInfo, tls bool) string {

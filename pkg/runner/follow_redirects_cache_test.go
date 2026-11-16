@@ -6,7 +6,7 @@ import (
 
 	"github.com/cyberspacesec/gxx/pkg/finger"
 	"github.com/cyberspacesec/gxx/utils/proto"
-	"gopkg.in/yaml.v2"
+	"go.yaml.in/yaml/v2"
 )
 
 func ruleFromYAML(t *testing.T, requestFields string) finger.RuleMap {

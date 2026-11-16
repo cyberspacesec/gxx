@@ -17,7 +17,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"gopkg.in/yaml.v2"
+	"go.yaml.in/yaml/v2"
 )
 
 // FingerFile 配置poc文件目录
@@ -26,9 +26,22 @@ const (
 	HttpType = "http"
 	TcpType  = "tcp"
 	UdpType  = "udp"
-	SslType  = "ssl"
-	GoType   = "go"
 )
+
+// normalizeRuleType 归一化并校验规则传输类型，只接受实际实现的 http、tcp、udp。
+//
+// 归一化消除 `type: HTTP` 这类大小写不一致，使探活判断与执行分支使用同一取值。
+// 未实现的类型在加载期报错：留到执行期只会在调试日志里出现一行，规则表现为
+// 永不命中，还会为每个目标占用一次限流名额。TLS 不是独立类型，由 host 的
+// ssl:// / tls:// / https:// 前缀或 443 端口决定。
+func normalizeRuleType(raw string) (string, error) {
+	normalized := strings.ToLower(strings.TrimSpace(raw))
+	switch normalized {
+	case "", HttpType, TcpType, UdpType:
+		return normalized, nil
+	}
+	return "", fmt.Errorf("不支持的请求类型 %q（支持 http、tcp、udp；TLS 由 host 的 ssl:// 前缀或 443 端口决定）", raw)
+}
 
 type Finger struct {
 	Id         string        `yaml:"id"`        //  脚本名称
@@ -38,7 +51,6 @@ type Finger struct {
 	Rules      RuleMapSlice  `yaml:"rules"`
 	Expression string        `yaml:"expression"`
 	Info       Info          `yaml:"info"`
-	Gopoc      string        `yaml:"gopoc"` // Gopoc 脚本名称
 	Source     Source        `yaml:"-"`
 }
 
@@ -68,12 +80,13 @@ type Rule struct {
 	Output     yaml.MapSlice `yaml:"output"`
 }
 type RuleRequest struct {
-	Type            string            `yaml:"type"`         // 传输方式，默认 http，可选：tcp,udp,ssl,go 等任意扩展
-	Host            string            `yaml:"host"`         // tcp/udp 请求的主机名
+	Type            string            `yaml:"type"`         // 传输方式，默认 http，可选 http/tcp/udp；其余值在加载时报错
+	Host            string            `yaml:"host"`         // tcp/udp 连接地址，格式见 network.ParseEndpoint；为空时使用扫描目标
 	Data            string            `yaml:"data"`         // tcp/udp 发送的内容
 	DataType        string            `yaml:"data-type"`    // tcp/udp 发送的数据类型，默认字符串
 	ReadSize        int               `yaml:"read-size"`    // tcp/udp 读取内容的长度
-	ReadTimeout     int               `yaml:"read-timeout"` // tcp/udp专用
+	ReadTimeout     int               `yaml:"read-timeout"` // tcp/udp 单次接收的总时长上限（秒）
+	ReadIdle        int               `yaml:"read-idle"`    // tcp 收到数据后等待后续分段的空闲时间（毫秒）；未设置时自适应
 	Raw             string            `yaml:"raw"`          // raw 专用
 	Method          string            `yaml:"method"`
 	Path            string            `yaml:"path"`
@@ -222,11 +235,12 @@ func Read(fileName string) (*Finger, error) {
 	return p, nil
 }
 
-// IsHTTPType 判断是否是http请求
+// IsHTTPType 报告指纹是否包含 HTTP 规则。YAML 加载时类型已归一化为小写；
+// 比较时仍忽略大小写与空白，使不经 YAML 直接构造的规则得到相同结论。
 func (finger *Finger) IsHTTPType() bool {
 	for _, rule := range finger.Rules {
-		reqType := rule.Value.Request.Type
-		if len(reqType) == 0 || reqType == HttpType {
+		reqType := strings.TrimSpace(rule.Value.Request.Type)
+		if len(reqType) == 0 || strings.EqualFold(reqType, HttpType) {
 			return true
 		}
 	}
@@ -255,9 +269,18 @@ func (m *RuleMapSlice) UnmarshalYAML(unmarshal func(any) error) error {
 	result := make(RuleMapSlice, 0, len(rules))
 	for i, item := range ordered {
 		key := item.Key.(string)
-		if last[key] == i {
-			result = append(result, RuleMap{Key: key, Value: rules[key]})
+		if last[key] != i {
+			continue
 		}
+		rule := rules[key]
+		// 在加载期归一化并校验传输类型：后续 IsHTTPType / 执行分支都按小写比较，
+		// 未知类型在这里就报错，不留到扫描期静默不命中。
+		normalized, err := normalizeRuleType(rule.Request.Type)
+		if err != nil {
+			return fmt.Errorf("规则 %s: %w", key, err)
+		}
+		rule.Request.Type = normalized
+		result = append(result, RuleMap{Key: key, Value: rule})
 	}
 	*m = result
 	return nil

@@ -90,8 +90,9 @@ func NewRunner(cfg ScanConfig, pocOptions types.YamlFingerType) (*Runner, error)
 	}
 	r.log.Info("加载指纹数量：%v 个", r.store.Count())
 
-	r.cache = NewCacheManagerWithBudget(cfg.CacheMaxSize, cfg.CacheTTL, cfg.CacheMaxBytes)
-	r.cache.log = r.log
+	// Sink 在构造期传入：otter 初始化失败的降级日志发生在构造函数内部，
+	// 事后赋值 r.cache.log 来不及接管它。
+	r.cache = newCacheManager(cfg.CacheMaxSize, cfg.CacheTTL, cfg.CacheMaxBytes, r.log)
 
 	pool, err := NewRulePool(cfg.FingerWorkerCount, r.processRuleTask, r.log)
 	if err != nil {
@@ -274,11 +275,15 @@ func (r *Runner) Run(ctx context.Context, options *types.CmdOptions) error {
 	}
 	r.log.Info("准备扫描 %d 个目标", len(targets))
 
+	// 文件与 socket 输出由本次 Run 独占打开；任一打开后都在返回前统一关闭，
+	// 关闭时先排空异步写入队列。
+	if r.cfg.OutputFile != "" || r.cfg.SockOutputFile != "" {
+		defer func() { _ = output.Close() }()
+	}
 	if r.cfg.OutputFile != "" {
 		if err := output.InitOutput(r.cfg.OutputFile, r.cfg.OutputFormat); err != nil {
 			return fmt.Errorf("初始化输出文件失败: %w", err)
 		}
-		defer func() { _ = output.Close() }()
 	}
 	if r.cfg.SockOutputFile != "" {
 		if err := output.InitSockOutput(r.cfg.SockOutputFile); err != nil {

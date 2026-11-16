@@ -15,9 +15,9 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/axgle/mahonia"
 	"github.com/cyberspacesec/gxx/utils/proto"
 	"github.com/spaolacci/murmur3"
+	"golang.org/x/text/encoding/simplifiedchinese"
 	"math/big"
 	"math/rand"
 	"net"
@@ -28,21 +28,10 @@ import (
 	"unicode/utf8"
 )
 
-// AddressInfo 封装解析结果的结构体
-type AddressInfo struct {
-	Host     string
-	Port     string
-	Scheme   string
-	Hostname string
-	IsLts    bool
-}
-
 const (
 	HttpType = "http"
 	TcpType  = "tcp"
 	UdpType  = "udp"
-	SslType  = "ssl"
-	GoType   = "go"
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyz"
@@ -209,7 +198,10 @@ func Str2UTF8(str string) string {
 		return ""
 	}
 	if !ValidUTF8TruncatedString(str) {
-		return mahonia.NewDecoder("gb18030").ConvertString(str)
+		// 解码器把无法识别的字节替换为 U+FFFD，不返回错误；出错时保留原文。
+		if decoded, err := simplifiedchinese.GB18030.NewDecoder().String(str); err == nil {
+			return decoded
+		}
 	}
 	return str
 }
@@ -376,58 +368,6 @@ func ParseUrl(u *url.URL) *proto.UrlType {
 	nu.Query = u.RawQuery
 	nu.Fragment = u.Fragment
 	return nu
-}
-
-// ParseAddress 解析地址并返回 AddressInfo
-func ParseAddress(address string) (AddressInfo, error) {
-	var info AddressInfo
-
-	// 检查是否以 https 或 http 开头
-	if strings.HasPrefix(address, "https://") {
-		info.Scheme = "https"
-		info.IsLts = true // 如果是 https 开头，直接设置 LTS 为 true
-	} else if strings.HasPrefix(address, "http://") {
-		info.Scheme = "http"
-	} else {
-		// 如果没有指定协议，默认使用 https
-		info.Scheme = "https"
-	}
-
-	// 如果地址没有协议部分，补全协议以便解析
-	fullURL := address
-	if !strings.HasPrefix(address, "http://") && !strings.HasPrefix(address, "https://") {
-		fullURL = fmt.Sprintf("%s://%s", info.Scheme, address)
-	}
-
-	// 使用 url.Parse 解析地址
-	parsedURL, err := url.Parse(fullURL)
-	if err != nil {
-		return info, err
-	}
-
-	// 提取主机和端口
-	host, port, err := net.SplitHostPort(parsedURL.Host)
-	if err != nil {
-		// 如果没有显式的端口，使用默认端口
-		host = parsedURL.Host
-		if info.Scheme == "https" {
-			port = "443"
-			info.IsLts = true // https 默认端口 443，设置 LTS 为 true
-		} else if info.Scheme == "http" {
-			port = "80"
-		}
-	} else {
-		// 如果显式指定了端口，检查是否是默认的 TLS 端口
-		if info.Scheme == "https" && port == "443" {
-			info.IsLts = true
-		}
-	}
-
-	info.Host = host
-	info.Port = port
-	info.Hostname = parsedURL.Hostname()
-
-	return info, nil
 }
 
 // GetRandomIP 获取随机ip地址

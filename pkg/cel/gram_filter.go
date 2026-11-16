@@ -1,8 +1,9 @@
 package cel
 
 import (
-	"bytes"
 	"math/bits"
+
+	"github.com/cyberspacesec/gxx/internal/casefold"
 )
 
 const gramFilterBytes = 8 << 10
@@ -38,7 +39,7 @@ func newGramFilter(data []byte) *gramFilter {
 
 func (f *gramFilter) mayContain(needle []byte, fold bool) bool {
 	if fold {
-		needle = bytes.ToLower(needle)
+		needle = casefold.Lower(needle)
 	}
 	var word uint32
 	for i, c := range needle {

@@ -83,6 +83,7 @@ type BaseInfo struct {
 	Title      string
 	Server     *types.ServerInfo
 	StatusCode int32
+	request    *proto.Request
 	response   *proto.Response
 	requests   singleflight.Group
 	cache      *CacheManager

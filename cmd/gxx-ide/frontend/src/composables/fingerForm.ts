@@ -36,9 +36,11 @@ export interface PayloadsFormModel {
   groups: PayloadGroupFormItem[]
 }
 
+export type RequestType = 'http' | 'tcp' | 'udp'
+
 export interface RuleFormItem {
   key: string
-  requestType: 'http' | 'tcp' | 'udp' | 'ssl'
+  requestType: RequestType
   method: string
   path: string
   body: string
@@ -50,6 +52,10 @@ export interface RuleFormItem {
   matchers: MatcherFormItem[]
   matcherLogic: 'and' | 'or'
   expression: string
+  // 表单没有对应控件的字段（raw、data-type、read-size、output 等）原样保留，
+  // 在表单与 YAML 之间往返时不丢失。
+  requestExtra: Record<string, unknown>
+  ruleExtra: Record<string, unknown>
 }
 
 export type FinalLogic = 'and' | 'or' | 'custom'
@@ -65,6 +71,8 @@ export interface FingerFormModel {
     tags: string
     created: string
     severity: string
+    // 表单未展示的元信息字段（classification、affected、solutions 等）。
+    extra: Record<string, unknown>
   }
   setVars: SetVarFormItem[]
   payloads: PayloadsFormModel
@@ -97,6 +105,8 @@ export function defaultRule(key = 'r0'): RuleFormItem {
     matchers: [{ type: 'status_eq', part: 'status', headerName: '', value: '200' }],
     matcherLogic: 'and',
     expression: 'response.status == 200',
+    requestExtra: {},
+    ruleExtra: {},
   }
 }
 
@@ -128,6 +138,7 @@ export function defaultFingerForm(): FingerFormModel {
       tags: '',
       created: todayString(),
       severity: 'info',
+      extra: {},
     },
     setVars: [],
     payloads: { enabled: false, continue: true, groups: [] },
@@ -302,6 +313,34 @@ function tryParseMatchersFromExpression(expr: string): {
   return { matchers: [defaultMatcher()], logic: 'and', mode: 'advanced' }
 }
 
+const INFO_FIELDS = ['name', 'author', 'verified', 'description', 'reference', 'tags', 'created', 'severity']
+const RULE_FIELDS = ['request', 'expression']
+const REQUEST_FIELDS = ['type', 'method', 'path', 'body', 'headers', 'follow_redirects', 'host', 'data']
+
+/** 返回 record 中表单没有对应控件的字段。 */
+function extraFields(record: Record<string, unknown>, known: string[]): Record<string, unknown> {
+  const extra: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(record)) {
+    if (!known.includes(key)) extra[key] = value
+  }
+  return extra
+}
+
+/**
+ * 归一化请求类型。引擎只实现 http / tcp / udp，TLS 由 host 的协议前缀决定；
+ * 旧写法 `type: ssl` / `type: tls` 等价于 TCP 加 `ssl://` 前缀，其余未知类型
+ * 按 TCP 展示，保存后由引擎在加载时校验。
+ */
+export function normalizeRequestType(rawType: string, host: string): { type: RequestType; host: string } {
+  const type = rawType.trim().toLowerCase()
+  if (type === '' || type === 'http') return { type: 'http', host }
+  if (type === 'udp') return { type: 'udp', host }
+  if ((type === 'ssl' || type === 'tls') && host && !host.includes('://')) {
+    return { type: 'tcp', host: `ssl://${host}` }
+  }
+  return { type: 'tcp', host }
+}
+
 function parseRules(rulesRaw: unknown): RuleFormItem[] {
   const rules: RuleFormItem[] = []
   const pushRule = (key: string, val: unknown) => {
@@ -309,13 +348,14 @@ function parseRules(rulesRaw: unknown): RuleFormItem[] {
     const req = asRecord(rule.request) ?? {}
     const expr = asString(rule.expression, 'true')
     const parsed = tryParseMatchersFromExpression(expr)
+    const transport = normalizeRequestType(asString(req.type), asString(req.host))
     rules.push({
       key,
-      requestType: (asString(req.type, 'http') as RuleFormItem['requestType']) || 'http',
+      requestType: transport.type,
       method: asString(req.method, 'GET').toUpperCase(),
       path: asString(req.path, '/'),
       body: asString(req.body),
-      host: asString(req.host),
+      host: transport.host,
       data: asString(req.data),
       headers: parseHeaders(req.headers),
       followRedirects: req.follow_redirects !== false,
@@ -323,6 +363,8 @@ function parseRules(rulesRaw: unknown): RuleFormItem[] {
       matchers: parsed.matchers,
       matcherLogic: parsed.logic,
       expression: expr,
+      requestExtra: extraFields(req, REQUEST_FIELDS),
+      ruleExtra: extraFields(rule, RULE_FIELDS),
     })
   }
 
@@ -370,6 +412,7 @@ export function yamlToForm(content: string): FingerFormModel {
       tags: asString(info.tags),
       created: asString(info.created, todayString()),
       severity: asString(info.severity, 'info'),
+      extra: extraFields(info, INFO_FIELDS),
     },
     setVars: parseMapSlice(root.set),
     payloads: parsePayloads(root.payloads),
@@ -399,7 +442,7 @@ function buildRequest(rule: RuleFormItem): Record<string, unknown> {
     if (rule.host) req.host = rule.host
     if (rule.data) req.data = rule.data
   }
-  return req
+  return { ...req, ...rule.requestExtra }
 }
 
 function buildInfoBlock(form: FingerFormModel, refs: string[]): Record<string, unknown> {
@@ -413,7 +456,7 @@ function buildInfoBlock(form: FingerFormModel, refs: string[]): Record<string, u
   if (form.info.tags.trim()) info.tags = form.info.tags.trim()
   if (form.info.created.trim()) info.created = form.info.created.trim()
   if (form.info.severity && form.info.severity !== 'info') info.severity = form.info.severity
-  return info
+  return { ...info, ...form.info.extra }
 }
 
 export function formToYaml(form: FingerFormModel): string {
@@ -456,6 +499,7 @@ export function formToYaml(form: FingerFormModel): string {
     rulesObj[key] = {
       request: buildRequest(rule),
       expression: ruleExpression(rule),
+      ...rule.ruleExtra,
     }
   }
   doc.rules = rulesObj

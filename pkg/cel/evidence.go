@@ -9,14 +9,15 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"cel.dev/cel-go/cel"
+	"cel.dev/cel-go/common/ast"
+	"cel.dev/cel-go/common/operators"
+	"cel.dev/cel-go/common/types"
+	"cel.dev/cel-go/common/types/ref"
+	"cel.dev/cel-go/interpreter"
+	"cel.dev/cel-go/parser"
+	"github.com/cyberspacesec/gxx/internal/casefold"
 	"github.com/cyberspacesec/gxx/utils/proto"
-	"github.com/google/cel-go/cel"
-	"github.com/google/cel-go/common/ast"
-	"github.com/google/cel-go/common/operators"
-	"github.com/google/cel-go/common/types"
-	"github.com/google/cel-go/common/types/ref"
-	"github.com/google/cel-go/interpreter"
-	"github.com/google/cel-go/parser"
 )
 
 const (
@@ -308,9 +309,10 @@ func (c *CustomLib) Evidence(variables map[string]any) ([]Evidence, bool) {
 						end = start + len(literal)
 					}
 				case "icontains", "ibcontains", "__gxx_ibcontains":
-					start = bytes.Index(lowerResponse(c.requests.ctx, data), bytes.ToLower(literal))
+					lowered := casefold.Lower(literal)
+					start = bytes.Index(lowerResponse(c.requests.ctx, data), lowered)
 					if start >= 0 {
-						start, end = originalFoldRange(data, start, start+len(bytes.ToLower(literal)))
+						start, end = originalFoldRange(data, start, start+len(lowered))
 					}
 				case "matches":
 					if node.regex != nil {

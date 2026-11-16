@@ -5,10 +5,10 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"cel.dev/cel-go/cel"
+	"cel.dev/cel-go/common/types"
 	gcel "github.com/cyberspacesec/gxx/pkg/cel"
-	"github.com/google/cel-go/cel"
-	"github.com/google/cel-go/common/types"
-	"gopkg.in/yaml.v2"
+	"go.yaml.in/yaml/v2"
 )
 
 // EvaluateOutput 仅保存成功求值的输出。失败的提取表达式不作为产品版本或证据回传。

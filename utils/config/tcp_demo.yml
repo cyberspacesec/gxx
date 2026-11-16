@@ -14,7 +14,7 @@ info:
 
 set:
   hostname: request.url.host
-  host: request.url.domain
+  domain: request.url.domain
 rules:
   r0:
     request:
@@ -25,7 +25,7 @@ rules:
   r1:
     request:
       type: tcp
-      host: "{{host}}:80"
+      host: "[{{domain}}]:80"
       data: "\n"
     expression: response.raw.bcontains(b'HTTP')
 expression: r0() || r1() 

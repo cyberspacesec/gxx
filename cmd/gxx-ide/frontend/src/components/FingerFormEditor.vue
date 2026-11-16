@@ -413,7 +413,6 @@ onBeforeUnmount(() => {
               <option value="http">HTTP</option>
               <option value="tcp">TCP</option>
               <option value="udp">UDP</option>
-              <option value="ssl">SSL</option>
             </select>
           </label>
         </div>
@@ -454,7 +453,14 @@ onBeforeUnmount(() => {
         </template>
 
         <template v-else>
-          <label class="field"><span>Host</span><input v-model="rule.host" class="field-input" placeholder="{{ '{{hostname}}' }}:80" /></label>
+          <label class="field">
+            <span>Host</span>
+            <input v-model="rule.host" class="field-input" placeholder="[{{ '{{domain}}' }}]:22" />
+            <small class="field-hint">
+              在变量中定义 domain = request.url.domain（不带端口），主机用方括号包裹以兼容 IPv6；
+              TLS 连接写成 ssl://[主机]:端口。不带协议前缀时，未写端口或端口为 443 默认握手。
+            </small>
+          </label>
           <label class="field"><span>Data</span><textarea v-model="rule.data" class="field-input textarea mono" rows="2"></textarea></label>
         </template>
 

@@ -20,10 +20,11 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     target: 'es2020',
-    rollupOptions: {
+    // Vite 8 由 Rolldown 打包：Monaco 体积最大，单独成块以便与业务代码分开缓存。
+    rolldownOptions: {
       output: {
-        manualChunks: {
-          monaco: ['monaco-editor/esm/vs/editor/editor.api'],
+        codeSplitting: {
+          groups: [{ name: 'monaco', test: /node_modules[\\/]monaco-editor[\\/]/ }],
         },
       },
     },

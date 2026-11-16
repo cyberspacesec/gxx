@@ -64,7 +64,7 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 	}
 
 	// 判断请求方式
-	reqType := strings.ToLower(rule.Request.Type)
+	reqType := strings.ToLower(strings.TrimSpace(rule.Request.Type))
 	if len(reqType) > 0 && reqType != common.HttpType {
 		if err := client.WaitRequest(reqCtx, target); err != nil {
 			return nil, err
@@ -75,15 +75,16 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 			if host == "" {
 				host = target
 			}
-			info, err := common.ParseAddress(host)
-			if err != nil {
-				return nil, fmt.Errorf("解析连接地址失败: %w", err)
-			}
+			// 主机、端口、是否握手与 ServerName 全部由 network.ParseEndpoint 一处决定。
 			nc, err := network.NewClientContext(reqCtx, host, network.TcpOrUdpConfig{
-				Network: reqType, ReadTimeout: time.Duration(rule.Request.ReadTimeout) * time.Second,
-				DialTimeout: options.Timeout, ReadSize: rule.Request.ReadSize,
-				MaxRetries: 1, ProxyURL: options.Proxy, IsLts: info.IsLts, ServerName: info.Host,
-				VerifyTLS: !options.InsecureSkipVerify,
+				Network:     reqType,
+				ReadTimeout: time.Duration(rule.Request.ReadTimeout) * time.Second,
+				ReadIdle:    time.Duration(rule.Request.ReadIdle) * time.Millisecond,
+				DialTimeout: options.Timeout,
+				ReadSize:    rule.Request.ReadSize,
+				MaxRetries:  1,
+				ProxyURL:    options.Proxy,
+				VerifyTLS:   !options.InsecureSkipVerify,
 			})
 			if err != nil {
 				return nil, err
@@ -104,9 +105,10 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 				return nil, err
 			}
 			return variableMap, nil
-		case common.GoType:
-			logger.FromContext(reqCtx).Debug("规则类型 go 尚未实现，跳过请求")
-			return nil, fmt.Errorf("rule type %q is not implemented", common.GoType)
+		default:
+			// YAML 加载时已拒绝未实现的类型；不经 YAML 构造的规则在这里报错，
+			// 不能落到 HTTP 路径当作明文请求执行。
+			return nil, fmt.Errorf("unsupported rule type %q (supported: http, tcp, udp)", reqType)
 		}
 	} else {
 		if len(rule.Request.Raw) > 0 {

@@ -53,15 +53,27 @@ func normalizeProxyURL(raw string) (*url.URL, error) {
 	}
 	switch strings.ToLower(u.Scheme) {
 	case schemeSOCKS5h:
-		// 克隆后改写，避免影响调用方持有的原始 URL。
-		clone := *u
-		clone.Scheme = schemeSOCKS5
-		return &clone, nil
+		u.Scheme = schemeSOCKS5
 	case schemeHTTP, schemeHTTPS, schemeSOCKS5, schemeSOCKS4, schemeSOCKS4a, "socks", "socks5+tls":
-		return u, nil
 	default:
 		return nil, fmt.Errorf("不支持的代理协议: %q（支持 http/https/socks5/socks5h/socks4/socks4a）", u.Scheme)
 	}
+	// 拨号直接使用 Host，省略端口时按协议补默认端口，否则会报 "missing port in address"。
+	if u.Port() == "" {
+		u.Host = net.JoinHostPort(u.Hostname(), defaultProxyPort(u))
+	}
+	return u, nil
+}
+
+// defaultProxyPort 返回代理协议的默认端口：HTTP 80、HTTPS 443、SOCKS 1080。
+func defaultProxyPort(u *url.URL) string {
+	switch strings.ToLower(u.Scheme) {
+	case schemeHTTP:
+		return "80"
+	case schemeHTTPS:
+		return "443"
+	}
+	return "1080"
 }
 
 // ValidateProxyURL 校验代理地址是否受支持，返回归一化后的 URL。空字符串视为直连（返回 nil, nil）。

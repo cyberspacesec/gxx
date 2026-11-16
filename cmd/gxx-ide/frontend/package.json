@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "vue-tsc --build && vite build",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "preview": "vite preview",
@@ -15,31 +15,34 @@
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
-    "@shikijs/monaco": "^4.1.0",
-    "axios": "^1.7.2",
-    "monaco-editor": "^0.50.0",
-    "pinia": "^2.1.7",
-    "shiki": "^4.1.0",
-    "vue": "^3.4.21",
-    "vue-router": "^4.3.0",
-    "yaml": "^2.6.1"
+    "@shikijs/monaco": "^4.6.0",
+    "axios": "^1.21.1",
+    "monaco-editor": "^0.57.0",
+    "pinia": "^4.1.0",
+    "shiki": "^4.6.0",
+    "vue": "^3.5.45",
+    "vue-router": "^5.5.0",
+    "yaml": "^2.9.1"
   },
   "devDependencies": {
-    "@tsconfig/node22": "^22.0.0",
-    "@types/node": "^22.10.0",
-    "@vitejs/plugin-vue": "^5.2.4",
-    "@vue/eslint-config-typescript": "^14.7.0",
-    "@vue/tsconfig": "^0.7.0",
-    "eslint": "^9.39.0",
+    "@tsconfig/node24": "^24.0.6",
+    "@types/node": "^24.19.2",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/eslint-config-typescript": "^14.9.0",
+    "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-vue": "^9.32.0",
-    "npm-run-all2": "^7.0.2",
-    "prettier": "^3.4.2",
-    "typescript": "^5.4.5",
-    "vite": "^6.4.5",
-    "vue-tsc": "^2.0.13"
+    "eslint-plugin-vue": "^10.12.1",
+    "prettier": "^3.10.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.8",
+    "vue-tsc": "^3.3.14"
   },
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": "^20.19.0 || ^22.13.0 || >=24.0.0"
+  },
+  "overrides": {
+    "dompurify": "^3.4.17",
+    "minimatch": "^11.0.8"
   }
 }

@@ -5,6 +5,7 @@ import (
 	"regexp/syntax"
 	"slices"
 	"strings"
+	"unicode/utf8"
 )
 
 // requiredLiterals 提取一组 ASCII 字面量，成功匹配至少需要包含其中之一。
@@ -52,16 +53,7 @@ func requiredLiteralGroups(source string) [][]string {
 // parseUpstreamPattern 按 wappalyzergo 的展开规则得到上游实际编译的正则语法树。
 func parseUpstreamPattern(source string) *syntax.Regexp {
 	pattern, _, _ := strings.Cut(source, `\;`)
-	// 与 wappalyzergo v0.2.44 的 ParsePattern 展开规则保持一致。
-	pattern = strings.ReplaceAll(pattern, `(\d+(?:\.\d+)+)`, "__verCap1__")
-	pattern = strings.ReplaceAll(pattern, `((?:\d+\.)+\d+)`, "__verCap2__")
-	pattern = strings.ReplaceAll(pattern, `\+`, "__escapedPlus__")
-	pattern = strings.ReplaceAll(pattern, "+", "{1,250}")
-	pattern = strings.ReplaceAll(pattern, "*", "{0,250}")
-	pattern = strings.ReplaceAll(pattern, "__escapedPlus__", `\+`)
-	pattern = strings.ReplaceAll(pattern, "__verCap1__", `(\d{1,20}(?:\.\d{1,20}){1,20})`)
-	pattern = strings.ReplaceAll(pattern, "__verCap2__", `((?:\d{1,20}\.){1,20}\d{1,20})`)
-	tree, err := syntax.Parse("(?i)"+pattern, syntax.Perl)
+	tree, err := syntax.Parse("(?i)"+expandUpstreamPattern(pattern), syntax.Perl)
 	if err != nil {
 		return nil
 	}
@@ -71,13 +63,20 @@ func parseUpstreamPattern(source string) *syntax.Regexp {
 func literalsFromTree(re *syntax.Regexp) []string {
 	switch re.Op {
 	case syntax.OpLiteral:
-		for _, r := range re.Rune {
+		// 字面量含非 ASCII 字符时取其中最长的 ASCII 片段：整段字面量出现时，
+		// 该片段必然随之出现，仍是必要条件。
+		start, end, run := 0, 0, 0
+		for i, r := range re.Rune {
 			if r > 127 {
-				return nil
+				run = i + 1
+				continue
+			}
+			if i+1-run > end-start {
+				start, end = run, i+1
 			}
 		}
-		if len(re.Rune) > 0 {
-			return []string{strings.ToLower(string(re.Rune))}
+		if end > start {
+			return []string{strings.ToLower(string(re.Rune[start:end]))}
 		}
 	case syntax.OpCapture, syntax.OpPlus:
 		return literalsFromTree(re.Sub[0])
@@ -118,6 +117,72 @@ func literalsFromTree(re *syntax.Regexp) []string {
 		return slices.Compact(words)
 	}
 	return nil
+}
+
+// maxWindowSpan 是可按窗口求值的模式的单次匹配字节数上限。上游把未转义的
+// + 与 * 改写为最多 250 次重复，常见模式的匹配长度在 1–2 KiB 以内；
+// 嵌套重复会放大到数十 KiB，那类模式继续整段求值。
+const maxWindowSpan = 4 << 10
+
+// matchSpan 返回模式单次匹配的最大字节数；0 表示不能按窗口求值。
+//
+// 只有长度有界、且不含行首行尾或词边界断言的模式才有确定的跨度：断言会读取
+// 匹配区间之外的字符，截取窗口后结论可能改变。每个字符按 UTF-8 最长编码计。
+func matchSpan(source string) int {
+	tree := parseUpstreamPattern(source)
+	if tree == nil {
+		return 0
+	}
+	runes, ok := maxMatchRunes(tree)
+	if !ok || runes == 0 || runes > maxWindowSpan/utf8.UTFMax {
+		return 0
+	}
+	return runes * utf8.UTFMax
+}
+
+func maxMatchRunes(re *syntax.Regexp) (int, bool) {
+	const limit = 1 << 20
+	switch re.Op {
+	case syntax.OpNoMatch, syntax.OpEmptyMatch:
+		return 0, true
+	case syntax.OpLiteral:
+		return len(re.Rune), true
+	case syntax.OpCharClass, syntax.OpAnyCharNotNL, syntax.OpAnyChar:
+		return 1, true
+	case syntax.OpCapture, syntax.OpQuest:
+		return maxMatchRunes(re.Sub[0])
+	case syntax.OpRepeat:
+		if re.Max < 0 {
+			return 0, false
+		}
+		runes, ok := maxMatchRunes(re.Sub[0])
+		if !ok || runes*re.Max > limit {
+			return 0, false
+		}
+		return runes * re.Max, true
+	case syntax.OpConcat:
+		total := 0
+		for _, sub := range re.Sub {
+			runes, ok := maxMatchRunes(sub)
+			if !ok || total+runes > limit {
+				return 0, false
+			}
+			total += runes
+		}
+		return total, true
+	case syntax.OpAlternate:
+		longest := 0
+		for _, sub := range re.Sub {
+			runes, ok := maxMatchRunes(sub)
+			if !ok {
+				return 0, false
+			}
+			longest = max(longest, runes)
+		}
+		return longest, true
+	}
+	// 无界重复（* +）与各类位置断言。
+	return 0, false
 }
 
 type literalIndex struct{ *literal.Index }

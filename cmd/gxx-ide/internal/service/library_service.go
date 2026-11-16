@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"gopkg.in/yaml.v2"
+	"go.yaml.in/yaml/v2"
 
 	fingerpkg "github.com/cyberspacesec/gxx/pkg/finger"
 

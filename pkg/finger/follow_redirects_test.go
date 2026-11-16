@@ -10,7 +10,7 @@ import (
 
 	"github.com/cyberspacesec/gxx/pkg/network"
 	"github.com/cyberspacesec/gxx/utils/proto"
-	"gopkg.in/yaml.v2"
+	"go.yaml.in/yaml/v2"
 )
 
 // follow_redirects: true 表示跟随重定向，false 表示不跟随，未声明时默认跟随。

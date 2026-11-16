@@ -112,3 +112,36 @@ func TestFingerprintOutputsRequireSuccessfulRuleAndExtraction(t *testing.T) {
 		}
 	}
 }
+
+// TestEnsurePortAndHostOnlyHandleIPv6 锁定 raw 请求的地址拆分对 IPv6 正确。
+// 回归点：ensurePort 用 strings.Contains(":") 判断端口，裸 IPv6（含括号）
+// 必然含冒号，导致不补端口直接拨号；hostOnly 用 LastIndex(":") 切分，
+// 把 "[::1]" 截成 "[:" 当作 TLS ServerName。
+func TestEnsurePortAndHostOnlyHandleIPv6(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		host     string
+		tls      bool
+		wantAddr string
+		wantSNI  string
+	}{
+		{name: "裸IPv6带括号补80", host: "[::1]", wantAddr: "[::1]:80", wantSNI: "::1"},
+		{name: "裸IPv6带括号补443", host: "[::1]", tls: true, wantAddr: "[::1]:443", wantSNI: "::1"},
+		{name: "裸IPv6无括号补齐", host: "::1", wantAddr: "[::1]:80", wantSNI: "::1"},
+		{name: "IPv6显式端口保留", host: "[::1]:8080", wantAddr: "[::1]:8080", wantSNI: "::1"},
+		{name: "IPv6带zone", host: "[fe80::1%25eth0]", wantAddr: "[fe80::1%25eth0]:80", wantSNI: "fe80::1%25eth0"},
+		{name: "域名补80", host: "example.com", wantAddr: "example.com:80", wantSNI: "example.com"},
+		{name: "域名补443", host: "example.com", tls: true, wantAddr: "example.com:443", wantSNI: "example.com"},
+		{name: "域名显式端口保留", host: "example.com:8443", wantAddr: "example.com:8443", wantSNI: "example.com"},
+		{name: "IPv4补80", host: "127.0.0.1", wantAddr: "127.0.0.1:80", wantSNI: "127.0.0.1"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if addr := ensurePort(tc.host, tc.tls); addr != tc.wantAddr {
+				t.Errorf("ensurePort(%q, %v) = %q，期望 %q", tc.host, tc.tls, addr, tc.wantAddr)
+			}
+			if sni := hostOnly(tc.host); sni != tc.wantSNI {
+				t.Errorf("hostOnly(%q) = %q，期望 %q", tc.host, sni, tc.wantSNI)
+			}
+		})
+	}
+}

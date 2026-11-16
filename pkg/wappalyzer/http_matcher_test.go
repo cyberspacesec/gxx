@@ -8,11 +8,13 @@ import (
 	"path/filepath"
 	"reflect"
 	"regexp/syntax"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
 	"testing"
 	"unicode"
+	"unicode/utf8"
 
 	upstream "github.com/projectdiscovery/wappalyzergo"
 )
@@ -230,10 +232,10 @@ func TestMayMatchBitsAndContainsAgree(t *testing.T) {
 	}
 	rng := rand.New(rand.NewSource(7))
 	var all []*httpPattern
-	for _, g := range m.body {
+	for _, g := range m.body.groups {
 		all = append(all, g.patterns...)
 	}
-	for _, g := range m.scripts {
+	for _, g := range m.scripts.groups {
 		all = append(all, g.patterns...)
 	}
 	words := []string{"wp-content", "jquery", "react", "<link", " href=", "stylesheet", "/wp-includes/", "bootstrap", "angular", "vue", "tilda", "pure", ".css", ".js", "generator"}
@@ -353,7 +355,6 @@ func TestHTTPMatcherUpstreamParity(t *testing.T) {
 		{nil, `<html ng-app="app"><script src="/angular.min.js"></script><meta name="generator" content="Ghost 5.0"></html>`},
 		{nil, `<script type="application/json">{"x":"<meta name='generator' content='Drupal'>"}</script><script>window.test=1</script>`},
 		{nil, `<meta name="generator" content="WordPre&#x53;s 6.8"><script src="/JQUERY&#x2e;JS"></script>`},
-		{nil, `<meta name="generator" content="Wordpreſs 6.8">`},
 		{nil, string([]byte{0xff, '<', 'b', '>', 0xc0, 0xaf})},
 	}
 	for i, tc := range cases {
@@ -364,6 +365,13 @@ func TestHTTPMatcherUpstreamParity(t *testing.T) {
 				t.Fatalf("got=%+v\nwant=%+v", got, want)
 			}
 		})
+	}
+	// 模式按 (?i) 编译，长 s（ſ）与 s 属于同一大小写等价类，必须得到与 ASCII 写法
+	// 相同的识别结果。上游 v0.3.9 的字面量检查不折叠长 s，会漏掉这一例。
+	folded := m.FingerprintWithInfo(nil, []byte(`<meta name="generator" content="Wordpreſs 6.8">`))
+	ascii := m.FingerprintWithInfo(nil, []byte(`<meta name="generator" content="Wordpress 6.8">`))
+	if len(ascii) == 0 || !reflect.DeepEqual(keys(folded), keys(ascii)) {
+		t.Fatalf("长 s 写法的识别结果不一致: folded=%v ascii=%v", keys(folded), keys(ascii))
 	}
 	var wg sync.WaitGroup
 	for i := 0; i < 8; i++ {
@@ -392,10 +400,296 @@ func TestHTTPMatcherConfidenceAndImplications(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, body := range []string{"a", "ab", `<meta name="generator" content="&#x43;ase">`, `<meta name="generator" content="case"/>`, `<script src="&#x53;CRIPT.js"></script>`, `<script src="ſcript.js"></script>`} {
+	for _, body := range []string{"a", "ab", `<meta name="generator" content="&#x43;ase">`, `<meta name="generator" content="case"/>`, `<script src="script.js"></script>`} {
 		got, want := m.FingerprintWithInfo(nil, []byte(body)), reference.FingerprintWithInfo(nil, []byte(body))
 		if !reflect.DeepEqual(got, want) {
 			t.Fatalf("body=%q got=%+v want=%+v", body, got, want)
+		}
+	}
+	// 实体解码会在已小写化的正文里重新产生大写字母（&#x53; → S），长 s（ſ）与 s
+	// 属于同一大小写等价类。模式按 (?i) 编译，这两种写法都必须命中；上游 v0.3.9
+	// 的脚本索引与字面量检查直接使用未折叠的文本，会漏掉它们。预筛选在归一化
+	// 副本上进行，结果以正则语义为准。
+	plain := m.FingerprintWithInfo(nil, []byte(`<script src="script.js"></script>`))
+	for _, body := range []string{`<script src="&#x53;CRIPT.js"></script>`, `<script src="ſcript.js"></script>`} {
+		if got := m.FingerprintWithInfo(nil, []byte(body)); len(plain) == 0 || !reflect.DeepEqual(got, plain) {
+			t.Fatalf("等价写法的识别结果不一致: body=%q got=%+v plain=%+v", body, got, plain)
+		}
+	}
+}
+
+// 自有的模式编译与版本提取必须与上游解析器逐条一致：能否编译、置信度、
+// 是否跳过正则，以及每个正例和反例的命中结论与版本。
+func TestCompiledPatternMatchesUpstreamParser(t *testing.T) {
+	var data upstream.Fingerprints
+	if err := json.Unmarshal([]byte(upstream.GetRawFingerprints()), &data); err != nil {
+		t.Fatal(err)
+	}
+	sources := map[string]struct{}{
+		// 版本模板的三元表达式与无效写法。
+		`a(b)?\;version:\1?yes:no`:      {},
+		`a(b)?\;version:\1?:no`:         {},
+		`a(b)?\;version:\1?yes:`:        {},
+		`ab\;version:x?y?z`:             {},
+		`ab\;version:x?y:z:w`:           {},
+		`a(\d)b\;version: \1 `:          {},
+		`ab\;confidence:abc\;version:1`: {},
+		`ab\;confidence:30\;unknown`:    {},
+		`\;confidence:50`:               {},
+		`a\+b\*c+`:                      {},
+		`(`:                             {},
+	}
+	for _, f := range data.Apps {
+		for _, source := range f.Headers {
+			sources[source] = struct{}{}
+		}
+		for _, source := range f.Cookies {
+			sources[source] = struct{}{}
+		}
+		for _, list := range [][]string{f.HTML, f.ScriptSrc} {
+			for _, source := range list {
+				sources[source] = struct{}{}
+			}
+		}
+		for _, patterns := range f.Meta {
+			for _, source := range patterns {
+				sources[source] = struct{}{}
+			}
+		}
+	}
+	compared, versions := 0, 0
+	for source := range sources {
+		reference, referenceErr := upstream.ParsePattern(source)
+		compiled, err := compilePattern(source)
+		if (err == nil) != (referenceErr == nil) {
+			t.Fatalf("能否编译不一致: pattern=%q 自有=%v 上游=%v", source, err, referenceErr)
+		}
+		if err != nil {
+			continue
+		}
+		if compiled.confidence != reference.Confidence || compiled.skipRegex != reference.SkipRegex || compiled.version != reference.Version {
+			t.Fatalf("元数据不一致: pattern=%q 自有=%+v 上游=%+v", source, compiled, reference)
+		}
+		texts := []string{"", "ab", "abc", "a+b*ccc", "a5b", "no match here"}
+		expression, _, _ := strings.Cut(source, `\;`)
+		if tree, err := syntax.Parse("(?i)"+expression, syntax.Perl); err == nil {
+			for variant := 0; variant < 8; variant++ {
+				witness := patternWitness(tree, variant)
+				if len(witness) <= 1<<16 {
+					texts = append(texts, witness, strings.ToLower(witness), strings.ToUpper(witness), "prefix "+witness+" suffix")
+				}
+			}
+		}
+		for _, text := range texts {
+			wantMatched, wantVersion := reference.Evaluate(text)
+			gotMatched, gotVersion := compiled.evaluate(text)
+			if gotMatched != wantMatched || gotVersion != wantVersion {
+				t.Fatalf("判定不一致: pattern=%q text=%q 自有=(%t,%q) 上游=(%t,%q)", source, text, gotMatched, gotVersion, wantMatched, wantVersion)
+			}
+			compared++
+			if wantVersion != "" {
+				versions++
+			}
+		}
+	}
+	t.Logf("模式=%d 对照判定=%d 其中提取到版本=%d", len(sources), compared, versions)
+	if compared < 100000 || versions < 1000 {
+		t.Fatalf("覆盖不足: 判定=%d 版本=%d", compared, versions)
+	}
+}
+
+func TestMatchSpan(t *testing.T) {
+	for _, tc := range []struct {
+		source   string
+		windowed bool
+	}{
+		{`<link[^>]+wp-content`, true},
+		{`jquery[.-]([\d.]*\d)[^/]*\.js\;version:\1`, true},
+		{`powered by <a[^>]+>discuz`, true},
+		// 位置断言会读取匹配区间之外的字符。
+		{`^wordpress`, false},
+		{`wordpress$`, false},
+		{`\bwordpress\b`, false},
+		// 显式的无界重复没有长度上限。
+		{`wordpress{2,}`, false},
+		// 嵌套重复的跨度超过窗口上限。
+		{`(?:wordpress[^>]*)*`, false},
+	} {
+		if got := matchSpan(tc.source) > 0; got != tc.windowed {
+			t.Errorf("matchSpan(%q) 可按窗口求值=%t，期望 %t", tc.source, got, tc.windowed)
+		}
+	}
+}
+
+func TestLiteralWindowsCoverEveryOccurrence(t *testing.T) {
+	rng := rand.New(rand.NewSource(11))
+	words := []string{"wp-content", "jquery", "中文"}
+	for i := 0; i < 500; i++ {
+		var b strings.Builder
+		for b.Len() < 20000 {
+			switch rng.Intn(40) {
+			case 0:
+				b.WriteString(words[rng.Intn(len(words))])
+			case 1:
+				b.WriteString("页面")
+			default:
+				b.WriteString("filler ")
+			}
+		}
+		data := b.String()
+		span := 16 + rng.Intn(400)
+		chosen := words[:1+rng.Intn(len(words))]
+		var buffer [maxWindows]textWindow
+		windows, ok := literalWindows(buffer[:0], data, chosen, span)
+		if !ok {
+			continue
+		}
+		for index, window := range windows {
+			if window.start >= window.end || !utf8.RuneStart(data[window.start]) || window.end < len(data) && !utf8.RuneStart(data[window.end]) {
+				t.Fatalf("窗口未对齐字符边界: %+v", window)
+			}
+			if index > 0 && window.start <= windows[index-1].end {
+				t.Fatalf("窗口未按起点升序且互不相交: %+v", windows)
+			}
+		}
+		for _, word := range chosen {
+			for offset := 0; ; {
+				found := strings.Index(data[offset:], word)
+				if found < 0 {
+					break
+				}
+				position := offset + found
+				offset = position + 1
+				covered := slices.ContainsFunc(windows, func(window textWindow) bool {
+					return window.start <= max(position+len(word)-span, 0) && window.end >= min(position+span, len(data))
+				})
+				if !covered {
+					t.Fatalf("字面量 %q 在 %d 处的出现未被窗口覆盖: %+v", word, position, windows)
+				}
+			}
+		}
+	}
+}
+
+// 窗口求值必须与整段求值给出相同的命中结论和版本。正例由模式语法树生成并经
+// 上游确认，嵌入含多字节字符的长文本；文本中另放入只含定位字面量的干扰片段，
+// 以及第二个正例，验证最左匹配的选择不受窗口划分影响。
+func TestWindowedEvaluationMatchesFullEvaluation(t *testing.T) {
+	m, err := newHTTPMatcher(upstream.GetRawFingerprints())
+	if err != nil {
+		t.Fatal(err)
+	}
+	unique := make(map[string]*httpPattern)
+	total := make(map[string]struct{})
+	collect := func(groups []patternGroup) {
+		for _, g := range groups {
+			for _, p := range g.patterns {
+				total[p.source] = struct{}{}
+				if p.span > 0 {
+					unique[p.source] = p
+				}
+			}
+		}
+	}
+	collect(m.body.groups)
+	collect(m.scripts.groups)
+	for _, index := range []map[string][]patternGroup{m.headers, m.cookies, m.meta} {
+		for _, groups := range index {
+			collect(groups)
+		}
+	}
+	sources := make([]string, 0, len(unique))
+	for source := range unique {
+		sources = append(sources, source)
+	}
+	sort.Strings(sources)
+	step := 1
+	if raceEnabled || testing.Short() {
+		step = 16
+	}
+	filler := strings.Repeat("<p>页面 filler 0123</p>\n", 600)
+	// fill 返回约 n 字节的填充文本，截断位置对齐到字符起点。
+	fill := func(n int) string {
+		for n < len(filler) && !utf8.RuneStart(filler[n]) {
+			n++
+		}
+		return filler[:n]
+	}
+	verified, windowable := 0, 0
+	for index := 0; index < len(sources); index += step {
+		source := sources[index]
+		p := unique[source]
+		reference, err := upstream.ParsePattern(source)
+		if err != nil {
+			continue
+		}
+		compiled, err := compilePattern(source)
+		if err != nil {
+			t.Fatalf("上游可解析的模式编译失败: %q: %v", source, err)
+		}
+		expression, _, _ := strings.Cut(source, `\;`)
+		tree, err := syntax.Parse("(?i)"+expression, syntax.Perl)
+		if err != nil {
+			continue
+		}
+		windowable++
+		decoy := " " + p.literalGroups[p.anchor][0] + " "
+		var witnesses []string
+		for variant := 0; variant < 4; variant++ {
+			witness := strings.ToLower(patternWitness(tree, variant))
+			if witness == "" || len(witness) > 1<<12 || !utf8.ValidString(witness) || strings.Contains(witness, "ſ") {
+				continue
+			}
+			if matched, _ := reference.Evaluate(witness); matched && !slices.Contains(witnesses, witness) {
+				witnesses = append(witnesses, witness)
+			}
+		}
+		for i, witness := range witnesses {
+			texts := []string{
+				filler + witness + filler,
+				fill(7000) + decoy + fill(5000) + witness + fill(3000) + decoy + filler,
+				witness + filler + decoy,
+				filler + decoy + witness,
+			}
+			if other := witnesses[(i+1)%len(witnesses)]; other != witness {
+				texts = append(texts, fill(9000)+other+fill(4000)+witness+filler)
+			}
+			for _, text := range texts {
+				if normalizeForFilter(text) != text {
+					t.Fatalf("测试文本未归一化: pattern=%q", source)
+				}
+				wantMatched, wantVersion := reference.Evaluate(text)
+				gotMatched, gotVersion := m.evaluate(p, compiled, text, true)
+				if gotMatched != wantMatched || gotVersion != wantVersion {
+					t.Fatalf("窗口求值与整段求值不一致: pattern=%q span=%d anchor=%q\nwitness=%q\n窗口=(%t,%q) 整段=(%t,%q)",
+						source, p.span, p.literalGroups[p.anchor], witness, gotMatched, gotVersion, wantMatched, wantVersion)
+				}
+				if wantMatched {
+					verified++
+				}
+			}
+		}
+	}
+	t.Logf("可按窗口求值的模式=%d/%d 本次对照模式=%d 正例=%d", len(unique), len(total), windowable, verified)
+	if windowable < 200 || step == 1 && verified < 1000 {
+		t.Fatalf("覆盖不足: 模式=%d 正例=%d", windowable, verified)
+	}
+}
+
+func TestMoreSpecificVersion(t *testing.T) {
+	for _, tc := range []struct{ current, candidate, want string }{
+		{"", "", ""},
+		{"", "3", "3"},
+		{"3", "", "3"},
+		{"3", "3.6.0", "3.6.0"},
+		{"3.6.0", "3", "3.6.0"},
+		{"3.6.0", "3.7.1", "3.7.1"},
+		{"3.7.1", "3.6.0", "3.7.1"},
+		{"1.10", "1.9", "1.10"},
+		{"2.0", "2.0", "2.0"},
+	} {
+		if got := moreSpecificVersion(tc.current, tc.candidate); got != tc.want {
+			t.Errorf("moreSpecificVersion(%q, %q) = %q，期望 %q", tc.current, tc.candidate, got, tc.want)
 		}
 	}
 }

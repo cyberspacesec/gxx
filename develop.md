@@ -24,21 +24,21 @@ GXX 是一款用 Go 编写的网络资产指纹识别引擎，核心目标是「
 
 | 层级 | 关键依赖 | 用途 |
 |------|---------|------|
-| 语言 | Go 1.26 | 主体语言 |
-| 表达式引擎 | `github.com/google/cel-go` | CEL 规则编译与求值 |
+| 语言 | Go 1.27 | 主体语言 |
+| 表达式引擎 | `cel.dev/cel-go` | CEL 规则编译与求值 |
 | 并发池 | `github.com/panjf2000/ants/v2` | URL/规则两级协程池 |
 | HTTP 客户端 | `github.com/zan8in/retryablehttp` | 带重试的 HTTP 客户端 |
 | Raw HTTP | `github.com/projectdiscovery/rawhttp` | 原始 HTTP 报文请求 |
 | 技术识别 | `github.com/projectdiscovery/wappalyzergo` | Wappalyzer 技术栈匹配 |
-| 命令行 | `github.com/projectdiscovery/goflags` | 命令行参数解析 |
+| 命令行 | 标准库 `flag` | 命令行参数解析（`types` 包不再引入第三方命令行框架） |
 | 代理 | `github.com/chainreactors/proxyclient` | HTTP/SOCKS5 代理拨号 |
-| 日志 | `github.com/sirupsen/logrus` + `lumberjack` | 终端 + 滚动文件日志 |
+| 日志 | `github.com/sirupsen/logrus` + `gopkg.in/natefinch/lumberjack.v2` | 终端 + 滚动文件日志 |
 | 进度条 | `github.com/schollz/progressbar/v3` | 终端进度展示 |
 | 正则 | `github.com/dlclark/regexp2` | 兼容 .NET 风格的正则 |
 | 哈希 | `github.com/spaolacci/murmur3` | Favicon Mmh3 计算 |
 | 协议 | `google.golang.org/protobuf` | proto.Request/Response 序列化 |
-| 编码 | `github.com/axgle/mahonia` | GB18030 → UTF-8 |
-| YAML | `gopkg.in/yaml.v2` | 指纹规则解析 |
+| 编码 | `golang.org/x/text/encoding/simplifiedchinese` | GB18030 → UTF-8 |
+| YAML | `go.yaml.in/yaml/v2` | 指纹规则解析 |
 
 ---
 
@@ -47,11 +47,11 @@ GXX 是一款用 Go 编写的网络资产指纹识别引擎，核心目标是「
 ```
 gxx/
 ├── cmd/                              # ① 入口层
-│   ├── main.go                       # 程序入口，负责 Banner / Options / Logger / Output 初始化
+│   ├── main.go                       # 程序入口，负责 Banner / Options / Logger 初始化（输出由 Runner 打开与关闭）
 │   └── cli/
 │       ├── banner.go                 # 启动 Banner，版本/作者/构建时间通过 ldflags 注入
 │       ├── cmd.go                    # Run() 包装：启动监控 → 创建 Runner → 执行
-│       └── options.go                # CLI 参数定义与校验（基于 goflags）
+│       └── options.go                # CLI 参数定义与校验（基于标准库 flag）
 │
 ├── sdk/                              # ② SDK 对外层（v3 全实例化 API）
 │   ├── sdk.go                        # 对外类型 + NewFingerOptions
@@ -87,13 +87,23 @@ gxx/
 │   │
 │   ├── network/                      # 网络请求层
 │   │   ├── http.go                   # retryablehttp 客户端池化 + 重定向策略 + Transport 缓存
-│   │   ├── network.go                # TCP/UDP Client 实现（含 TLS / 代理 / 重试）
+│   │   ├── endpoint.go               # ParseEndpoint：TCP/UDP 连接地址唯一解析入口（主机/端口/TLS）
+│   │   ├── network.go                # TCP/UDP Client 实现（含 TLS / 代理 / 重试 / 分段接收）
+│   │   ├── proxy.go                  # HTTP CONNECT、SOCKS5 UDP ASSOCIATE 与代理 TLS 策略
 │   │   ├── raw_http.go               # rawhttp 原始 HTTP 请求
 │   │   ├── raw.go                    # 原始报文解析（用于 raw 规则）
 │   │   └── raw_parse.go              # TCP/UDP 响应封装为 proto.Request/Response
 │   │
 │   └── wappalyzer/
-│       └── wappalyzer.go             # Wappalyzer 全局单例 + 11 类技术分类格式化
+│       ├── wappalyzer.go             # Wappalyzer 全局单例 + 11 类技术分类格式化
+│       ├── http_matcher.go           # 必要字面量倒排索引 + 窗口求值的 HTTP 匹配器
+│       ├── pattern.go                # 上游模式展开、置信度与版本提取（与 wappalyzergo 对拍）
+│       └── literals.go               # 正则必要字面量提取与最大匹配跨度
+│
+├── internal/                         # 内部工具包
+│   ├── casefold/                     # 与 bytes.ToLower 逐字节一致的快速小写转换
+│   ├── literal/                      # Aho-Corasick 多字面量索引
+│   └── lifecycle/                    # 实例生命周期辅助
 │
 ├── types/                            # 公共类型
 │   ├── options.go                    # CmdOptions / YamlFingerType
@@ -101,7 +111,7 @@ gxx/
 │   └── cert.go                       # CertInfo / CertName
 │
 ├── utils/                            # 基础设施
-│   ├── common/                       # 通用工具：UA 池、编码、哈希、URL 处理、地址解析
+│   ├── common/                       # 通用工具：UA 池、编码、哈希、URL 处理
 │   ├── config/                       # 反连平台配置（Ceye/JNDI）
 │   ├── logger/                       # 双 logger 架构（终端彩色 + 文件 plain），延迟格式化
 │   ├── output/                       # 多格式输出：file.go / sock.go / console.go

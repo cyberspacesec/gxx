@@ -5,7 +5,7 @@
 ## 快速命令
 
 ```bash
-# 一次性安装依赖（需 wails CLI / Node 20.19+ 或 22.12+）
+# 一次性安装依赖（需 wails CLI / Node 20.19+、22.13+ 或 24+）
 go install github.com/wailsapp/wails/v2/cmd/wails@latest
 go install github.com/swaggo/swag/cmd/swag@latest
 make gui-deps      # 在主仓库根目录运行
@@ -21,7 +21,7 @@ make build-gui
 
 # 跨平台批量打包（产物写入仓库根 build/，与 gxx CLI 同目录）
 make package-gui
-# 例如 build/gxx-ide_mac_arm64_1.2.0.zip
+# 例如 build/gxx-ide_mac_arm64_1.4.0.zip
 ```
 
 ## 仅启动后端 API

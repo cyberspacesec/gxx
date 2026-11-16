@@ -7,13 +7,11 @@ import (
 
 	"github.com/cyberspacesec/gxx/pkg/runner"
 	"github.com/cyberspacesec/gxx/types"
-
-	"github.com/projectdiscovery/goflags"
 )
 
 func TestLoadTargetsFromArgs(t *testing.T) {
 	opts := &types.CmdOptions{
-		Target: goflags.StringSlice{"https://example.com", "https://example.com", "https://www.baidu.com"},
+		Target: []string{"https://example.com", "https://example.com", "https://www.baidu.com"},
 	}
 
 	targets := runner.LoadTargets(opts)

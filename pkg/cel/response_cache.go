@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"sync"
+
+	"github.com/cyberspacesec/gxx/internal/casefold"
 )
 
 type responseCacheKey struct{}
@@ -48,7 +50,8 @@ func containsResponse(ctx context.Context, value, needle []byte, fold bool) bool
 		}
 	}
 	if fold {
-		return bytes.Contains(lowerResponse(ctx, value), bytes.ToLower(needle))
+		// 规则字面量通常已是小写，casefold.Lower 此时不复制，免去每次调用的分配。
+		return bytes.Contains(lowerResponse(ctx, value), casefold.Lower(needle))
 	}
 	return bytes.Contains(value, needle)
 }
@@ -97,7 +100,7 @@ func (cache *responseCache) excludes(value, needle []byte, fold bool) bool {
 		if fold {
 			data = cache.lower[key.bodyKey]
 			if data == nil {
-				data = bytes.ToLower(value)
+				data = casefold.Lower(value)
 				cost += len(data)
 				if cache.bytes+cost > responseCacheBudget {
 					return false
@@ -112,10 +115,13 @@ func (cache *responseCache) excludes(value, needle []byte, fold bool) bool {
 	}
 	return entry.filter != nil && !entry.filter.mayContain(needle, fold)
 }
+
+// lowerResponse 返回 value 的小写形式，内容与 bytes.ToLower 一致。无需改写时
+// 直接返回 value 本身，调用方只能读取结果。
 func lowerResponse(ctx context.Context, value []byte) []byte {
 	cache, ok := ctx.Value(responseCacheKey{}).(*responseCache)
 	if !ok || len(value) < 64 {
-		return bytes.ToLower(value)
+		return casefold.Lower(value)
 	}
 	key := bodyKey{&value[0], len(value)}
 	cache.mu.RLock()
@@ -129,7 +135,7 @@ func lowerResponse(ctx context.Context, value []byte) []byte {
 	if lower, found = cache.lower[key]; found {
 		return lower
 	}
-	lower = bytes.ToLower(value)
+	lower = casefold.Lower(value)
 	// 不同表示的键引用同一输入，输入保留成本只计算一次。
 	cost := cache.inputCost(key) + len(lower)
 	if cache.bytes+cost <= responseCacheBudget {

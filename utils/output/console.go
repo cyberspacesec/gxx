@@ -24,20 +24,16 @@ func CreateProgressBar(total int) *progressbar.ProgressBar {
 	return progress.New(total, "指纹识别")
 }
 
-// GetOutputFormat 确定输出格式
+// GetOutputFormat 确定输出格式：jsonOutput 优先，其余按扩展名识别，默认 txt。
 func GetOutputFormat(jsonOutput bool, outputPath string) string {
-	// 优先判断是否启用JSON输出
 	if jsonOutput {
 		return "json"
 	}
-
-	if outputPath == "" {
-		return "txt" // 默认为txt格式
-	}
-
-	ext := strings.ToLower(filepath.Ext(outputPath))
-	if ext == ".csv" {
+	switch strings.ToLower(filepath.Ext(outputPath)) {
+	case ".csv":
 		return "csv"
+	case ".json", ".jsonl":
+		return "json"
 	}
 	return "txt"
 }

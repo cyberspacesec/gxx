@@ -359,6 +359,44 @@ func TestNormalizeProxyURL(t *testing.T) {
 	}
 }
 
+// 代理地址省略端口时按协议补默认端口：拨号直接使用 URL 的 Host，缺端口会报
+// "missing port in address"，CONNECT、SOCKS5 UDP 与 proxyclient 三条路径都受影响。
+func TestNormalizeProxyURLDefaultPort(t *testing.T) {
+	cases := map[string]string{
+		"http://127.0.0.1":            "127.0.0.1:80",
+		"https://proxy.example":       "proxy.example:443",
+		"socks5://127.0.0.1":          "127.0.0.1:1080",
+		"socks5h://user:pw@127.0.0.1": "127.0.0.1:1080",
+		"socks5+tls://proxy.example":  "proxy.example:1080",
+		"socks4://127.0.0.1":          "127.0.0.1:1080",
+		"http://[::1]":                "[::1]:80",
+		"http://127.0.0.1:8080":       "127.0.0.1:8080",
+		"socks5://[::1]:9050":         "[::1]:9050",
+	}
+	for raw, want := range cases {
+		u, err := normalizeProxyURL(raw)
+		if err != nil {
+			t.Fatalf("%q: %v", raw, err)
+		}
+		if u.Host != want {
+			t.Errorf("%q: host=%q, want %q", raw, u.Host, want)
+		}
+	}
+	if u, _ := normalizeProxyURL("socks5h://user:pw@127.0.0.1"); u.User.Username() != "user" {
+		t.Fatalf("补端口后丢失了认证信息: %v", u)
+	}
+}
+
+func TestDialThroughProxyWithoutPort(t *testing.T) {
+	// 代理监听 1080 需要该端口空闲；这里只验证地址补全后不再在拨号前报缺端口。
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	_, err := DialContext(ctx, "tcp", "127.0.0.1:9", "socks5://127.0.0.1", time.Second, false, "", true)
+	if err != nil && strings.Contains(err.Error(), "missing port") {
+		t.Fatalf("代理地址未补默认端口: %v", err)
+	}
+}
+
 func dialAndEcho(t *testing.T, network, target, proxy, payload string) (string, error) {
 	t.Helper()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

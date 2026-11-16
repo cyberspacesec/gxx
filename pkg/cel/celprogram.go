@@ -25,10 +25,10 @@ import (
 	"time"
 	"unicode"
 
+	"cel.dev/cel-go/cel"
+	"cel.dev/cel-go/common/types"
+	"cel.dev/cel-go/common/types/ref"
 	"github.com/dlclark/regexp2"
-	"github.com/google/cel-go/cel"
-	"github.com/google/cel-go/common/types"
-	"github.com/google/cel-go/common/types/ref"
 )
 
 // regexp2Cache 缓存按 (pattern, options) 编译的 regexp2.Regexp，避免热路径每次 MustCompile。

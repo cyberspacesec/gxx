@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	googlecel "github.com/google/cel-go/cel"
+	googlecel "cel.dev/cel-go/cel"
 )
 
 func TestPreparedLibraryIsolatesEvaluations(t *testing.T) {

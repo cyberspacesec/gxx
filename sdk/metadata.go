@@ -21,7 +21,7 @@ import (
 )
 
 // Version 是 SDK 源版本，不能作为被识别产品的版本。
-const Version = "1.3.0"
+const Version = "1.4.0"
 
 type RuleSource struct {
 	Path    string `json:"path"`
@@ -116,15 +116,17 @@ var catalogError error
 
 func loadCatalog() error {
 	catalogOnce.Do(func() {
-		catalogError = json.Unmarshal(catalogData, &builtinCatalog)
-		if catalogError == nil {
-			catalogError = validateProductDefinitions(builtinCatalog.Products)
+		// 目录错误经 productIndex 冒泡到 NewEngine，与同函数内的校验器保持
+		// 同一 sentinel，调用方用 errors.Is(err, ErrInvalidOption) 即可统一判定。
+		if err := json.Unmarshal(catalogData, &builtinCatalog); err != nil {
+			catalogError = fmt.Errorf("%w: 解析产品目录失败: %v", ErrInvalidOption, err)
+			return
 		}
-		if catalogError == nil {
+		if catalogError = validateProductDefinitions(builtinCatalog.Products); catalogError == nil {
 			assessments := make([]RuleAssessment, 0, len(builtinCatalog.Validations))
 			for id, assessment := range builtinCatalog.Validations {
 				if id != assessment.RuleID {
-					catalogError = fmt.Errorf("产品目录的测试记录 ID 不一致: %s", id)
+					catalogError = fmt.Errorf("%w: 产品目录的测试记录 ID 不一致: %s", ErrInvalidOption, id)
 					return
 				}
 				assessments = append(assessments, assessment)

@@ -16,12 +16,12 @@ import (
 	"testing"
 	"time"
 
+	celgo "cel.dev/cel-go/cel"
 	gcel "github.com/cyberspacesec/gxx/pkg/cel"
 	"github.com/cyberspacesec/gxx/pkg/finger"
 	"github.com/cyberspacesec/gxx/pkg/network"
 	"github.com/cyberspacesec/gxx/pkg/runner"
 	"github.com/cyberspacesec/gxx/sdk"
-	celgo "github.com/google/cel-go/cel"
 )
 
 func engine(t *testing.T, rules string, opts ...sdk.Option) *sdk.Engine {
@@ -634,5 +634,113 @@ func TestMixedLibraryStillRunsTCPAfterHTTPFailure(t *testing.T) {
 	}
 	if len(result.Matches) != 1 || result.Matches[0].Info.ID != "tcp" {
 		t.Fatalf("TCP 指纹未命中: %+v", result.Matches)
+	}
+}
+
+// TestRegressionSetBlockResolvesRequestURL 锁定 set 块中的 request.url.* 可求值。
+// 回归点：varMap 在 set 求值前缺少 request，导致 `request.url.host` 失败后被
+// 当成字面量写回，TCP/UDP 规则拼出的 host 变成 "request.url.host"。
+func TestRegressionSetBlockResolvesRequestURL(t *testing.T) {
+	var gotPath atomic.Value
+	gotPath.Store("")
+	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasPrefix(r.URL.Path, "/probe-") {
+			gotPath.Store(r.URL.Path)
+		}
+		fmt.Fprint(w, "ok")
+	}))
+	defer s.Close()
+
+	hostPort := strings.TrimPrefix(s.URL, "http://")
+	p := filepath.Join(t.TempDir(), "setvar.yaml")
+	data := "id: setvar\ninfo:\n  name: setvar\nset:\n  hostname: request.url.host\nrules:\n" +
+		"  r0:\n    request:\n      method: GET\n      path: /probe-{{hostname}}\n    expression: response.status == 200\n" +
+		"expression: r0()\n"
+	if err := os.WriteFile(p, []byte(data), 0600); err != nil {
+		t.Fatal(err)
+	}
+	e, err := sdk.NewEngine(context.Background(), sdk.WithFingerOptions(sdk.FingerOptions{PocYaml: p}), sdk.WithTimeout(2*time.Second))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer e.Close()
+	if _, err := e.Scan(context.Background(), s.URL); err != nil {
+		t.Fatal(err)
+	}
+	if want := "/probe-" + hostPort; gotPath.Load() != want {
+		t.Fatalf("set 块未求值 request.url.host：实际路径=%q 期望=%q", gotPath.Load(), want)
+	}
+}
+
+// TestRegressionTCPRuleUsesSetHostname 锁定纯 TCP 规则库（无 HTTP 探活）
+// 也能从 set 块拿到目标地址。
+func TestRegressionTCPRuleUsesSetHostname(t *testing.T) {
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer listener.Close()
+	go func() {
+		for {
+			conn, err := listener.Accept()
+			if err != nil {
+				return
+			}
+			go func() {
+				defer conn.Close()
+				conn.SetDeadline(time.Now().Add(2 * time.Second))
+				buffer := make([]byte, 64)
+				if _, err := conn.Read(buffer); err == nil {
+					conn.Write([]byte("SSH-2.0-OpenSSH_9.6"))
+				}
+			}()
+		}
+	}()
+
+	p := filepath.Join(t.TempDir(), "tcpset.yaml")
+	data := "id: tcpset\ninfo:\n  name: tcpset\nset:\n  hostname: request.url.host\nrules:\n" +
+		"  r0:\n    request:\n      type: tcp\n      host: \"{{hostname}}\"\n      data: \"\\n\"\n    expression: response.raw.bcontains(b\"SSH-\")\n" +
+		"expression: r0()\n"
+	if err := os.WriteFile(p, []byte(data), 0600); err != nil {
+		t.Fatal(err)
+	}
+	e, err := sdk.NewEngine(context.Background(), sdk.WithFingerOptions(sdk.FingerOptions{PocYaml: p}), sdk.WithTimeout(2*time.Second))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer e.Close()
+	result, err := e.Scan(context.Background(), listener.Addr().String())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(result.Matches) != 1 || result.Matches[0].Info.ID != "tcpset" {
+		t.Fatalf("TCP 规则未通过 set 的 hostname 命中: %+v", result.Matches)
+	}
+}
+
+// TestRegressionUnknownRuleTypeRejectedAtLoad 锁定未知传输类型在加载期被拒绝。
+//
+// 回归点：type 非 http/tcp/udp 时（如文档外的 ssl）曾落到 switch 之外，被静默
+// 当成明文 HTTP 发出并可能"命中"，掩盖规则书写错误。现在校验前移到 YAML 解析，
+// 坏规则在构造引擎时就报错，而不是每个目标白耗一个限流令牌再打一行 Debug。
+func TestRegressionUnknownRuleTypeRejectedAtLoad(t *testing.T) {
+	for _, badType := range []string{"ssl", "tls", "grpc"} {
+		t.Run(badType, func(t *testing.T) {
+			p := filepath.Join(t.TempDir(), "unknown.yaml")
+			data := "id: unknown\ninfo:\n  name: unknown\nrules:\n" +
+				"  r0:\n    request:\n      type: " + badType + "\n      method: GET\n      path: /\n    expression: response.status == 200\n" +
+				"expression: r0()\n"
+			if err := os.WriteFile(p, []byte(data), 0600); err != nil {
+				t.Fatal(err)
+			}
+			e, err := sdk.NewEngine(context.Background(), sdk.WithFingerOptions(sdk.FingerOptions{PocYaml: p}), sdk.WithTimeout(2*time.Second))
+			if err == nil {
+				_ = e.Close()
+				t.Fatalf("type: %s 未在加载期被拒绝，会静默降级成明文 HTTP", badType)
+			}
+			if !strings.Contains(err.Error(), badType) {
+				t.Fatalf("错误信息未指出问题类型 %q: %v", badType, err)
+			}
+		})
 	}
 }

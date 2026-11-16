@@ -58,6 +58,15 @@ func NewCacheManager(maxSize int, ttl time.Duration) *CacheManager {
 }
 
 func NewCacheManagerWithBudget(maxSize int, ttl time.Duration, maxBytes uint64) *CacheManager {
+	return newCacheManager(maxSize, ttl, maxBytes, logger.Current())
+}
+
+// newCacheManager 接受实例 Sink，使构造期的降级告警也落到调用方的日志器。
+// 导出构造函数在包外测试中使用，签名保持不变。
+func newCacheManager(maxSize int, ttl time.Duration, maxBytes uint64, log logger.Sink) *CacheManager {
+	if log == nil {
+		log = logger.Current()
+	}
 	if maxBytes == 0 {
 		maxBytes = 64 << 20
 	}
@@ -67,7 +76,7 @@ func NewCacheManagerWithBudget(maxSize int, ttl time.Duration, maxBytes uint64) 
 	if ttl <= 0 {
 		ttl = 10 * time.Minute
 	}
-	cm := &CacheManager{log: logger.Current(),
+	cm := &CacheManager{log: log,
 		maxSize:   maxSize,
 		maxBytes:  maxBytes,
 		ttl:       ttl,
@@ -93,7 +102,9 @@ func NewCacheManagerWithBudget(maxSize int, ttl time.Duration, maxBytes uint64) 
 	}
 	c, err := otter.New(opts)
 	if err != nil {
-		logger.Error("初始化 otter 缓存失败，降级到无 TTL 实现: %v", err)
+		// 用实例 Sink 而非全局 logger：SDK 调用方可能注入了独立日志器，
+		// 走全局会把 SDK 的内部降级信息写到 CLI 的日志目的地。
+		cm.log.Error("初始化 otter 缓存失败，降级到无 TTL 实现: %v", err)
 		c = otter.Must(&otter.Options[requestCacheKey, *CacheRequest]{MaximumSize: maxSize})
 	}
 	cm.cache = c

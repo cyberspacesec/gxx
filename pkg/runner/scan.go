@@ -97,6 +97,7 @@ func (r *Runner) ScanTarget(ctx context.Context, target string) (*TargetResult, 
 		Title:      result.Title,
 		Server:     result.Server,
 		StatusCode: result.StatusCode,
+		request:    baseProtoRequest(result.URL, result.LastRequest),
 		response:   &proto.Response{Status: result.StatusCode, Url: &proto.UrlType{}},
 		cache:      cache,
 	}
@@ -121,6 +122,26 @@ func (r *Runner) requestTimeout() time.Duration {
 		return r.cfg.Timeout
 	}
 	return 5 * time.Second
+}
+
+// baseProtoRequest 返回 set 块求值阶段可用的 request 变量。
+//
+// HTTP 探活成功时复用探活请求；探活失败或整库只有 TCP/UDP 规则时，用目标
+// 地址合成一个只含 Url 的请求，使 request.url.host 等规则变量可求值，
+// 而不是退化成字面量。
+func baseProtoRequest(target string, last *proto.Request) *proto.Request {
+	if last != nil {
+		return last
+	}
+	raw := target
+	if !strings.Contains(raw, "://") {
+		raw = "https://" + raw
+	}
+	u, err := url.Parse(raw)
+	if err != nil || u.Host == "" {
+		return &proto.Request{Url: &proto.UrlType{}}
+	}
+	return &proto.Request{Method: "GET", Url: network.Url2ProtoUrl(u)}
 }
 
 func newTargetResult(target string) *TargetResult {
@@ -419,7 +440,10 @@ func (r *Runner) evaluateFingerprint(ctx context.Context, fg *finger.Finger, tar
 
 	varMap["title"] = baseInfo.Title
 	varMap["server"] = baseInfo.Server
-	// 前置响应只读，规则请求会替换 map 中的引用，不修改共享消息。
+	// 前置请求 / 响应只读，规则请求会替换 map 中的引用，不修改共享消息。
+	// request 必须在 set 求值前就位，否则 `request.url.host` 这类变量会求值
+	// 失败并被 IsFuzzSet 当成字面量写回（TCP/UDP 规则的 host 由它拼装）。
+	varMap["request"] = baseInfo.request
 	varMap["response"] = baseInfo.response
 
 	if len(fg.Set) > 0 {
