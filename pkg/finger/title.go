@@ -10,7 +10,6 @@ package finger
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"github.com/cyberspacesec/gxx/pkg/network"
 	"github.com/cyberspacesec/gxx/utils/common"
 	"github.com/cyberspacesec/gxx/utils/logger"
@@ -50,10 +49,6 @@ func GetTitleFromBody(ctx context.Context, urlStr string, resp *http.Response, b
 		logger.FromContext(ctx).Debug("解析URL出错: %v", err)
 		return ""
 	}
-
-	// 获取基础URL
-	baseURL := fmt.Sprintf("%s://%s/", parsedURL.Scheme, parsedURL.Host)
-	basePath := parsedURL.Path
 
 	var title string
 	var titleURL string
@@ -113,11 +108,11 @@ func GetTitleFromBody(ctx context.Context, urlStr string, resp *http.Response, b
 		source := string(body[start+match[2] : start+match[3]])
 		start += match[1]
 		if strings.HasSuffix(source, ".js") && strings.Contains(source, "i18n") {
-			path := strings.TrimPrefix(source, "/")
-			if strings.HasPrefix(path, basePath) {
-				titleURL = baseURL + path
-			} else {
-				titleURL = baseURL + strings.TrimSuffix(basePath, "/") + "/" + path
+			// 按页面地址解析相对路径；只读取同一资产上的脚本。
+			if ref, err := url.Parse(strings.TrimSpace(source)); err == nil {
+				if resolved := parsedURL.ResolveReference(ref); network.SameOrigin(parsedURL, resolved) {
+					titleURL = resolved.String()
+				}
 			}
 			break
 		}
@@ -127,35 +122,20 @@ func GetTitleFromBody(ctx context.Context, urlStr string, resp *http.Response, b
 	if titleURL != "" {
 		logger.FromContext(ctx).Debug("识别到国际化，从i18n JS文件获取标题数据")
 
-		retries := 3
-		for i := 0; i < retries; i++ {
-			respTitle, err := client.SendRequestHttp(ctx, http.MethodGet, titleURL, "", options)
-			if err != nil {
-				logger.FromContext(ctx).Debug("获取i18n JS文件出错: %v", err)
-				continue
+		if respTitle, err := client.SendRequestHttp(ctx, http.MethodGet, titleURL, "", options); err != nil {
+			logger.FromContext(ctx).Debug("获取i18n JS文件出错: %v", err)
+		} else {
+			var script []byte
+			if respTitle.StatusCode == http.StatusOK {
+				script, err = network.ReadResponseBody(respTitle, network.MaxDefaultBody)
 			}
-
-			if respTitle.StatusCode != http.StatusOK {
-				_ = respTitle.Body.Close()
-				break
-			}
-			bodyBytes, err := network.ReadResponseBody(respTitle, network.MaxDefaultBody)
 			_ = respTitle.Body.Close()
 			if err != nil {
 				logger.FromContext(ctx).Debug("读取i18n JS响应出错: %v", err)
-				break
+			} else if matches := titlePattern6.FindSubmatch(decodeHTMLBody(script, respTitle.Header.Get("Content-Type"))); len(matches) > 1 {
+				title = string(matches[1])
+				logger.FromContext(ctx).Debug("从i18n JS文件获取标题: %s", title)
 			}
-
-			jsContent := decodeHTMLBody(bodyBytes, respTitle.Header.Get("Content-Type"))
-			titleRegex := titlePattern6
-			titleMatches := titleRegex.FindSubmatch(jsContent)
-			if len(titleMatches) > 1 {
-				jsTitle := string(titleMatches[1])
-				logger.FromContext(ctx).Debug("成功从i18n JS文件获取标题数据: %s", jsTitle)
-				title = jsTitle
-				logger.FromContext(ctx).Debug("找到新标题，替换原始标题: %s", title)
-			}
-			break
 		}
 	}
 

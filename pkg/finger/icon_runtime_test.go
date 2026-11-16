@@ -367,14 +367,16 @@ func TestIconAuthenticatedHeadersAndCookies(t *testing.T) {
 	if calls.Load() != 2 {
 		t.Fatalf("认证上下文缓存次数: %d", calls.Load())
 	}
+	// Cookie 会话属于 ctx：同一次扫描内的请求共用，并参与图标缓存的隔离。
+	scan := network.WithCookieJar(context.Background())
 	for _, session := range []string{"first", "second", "first"} {
-		resp, err := c.GetResource(context.Background(), s.URL+"/session?id="+session, network.OptionsRequest{Timeout: time.Second, FollowRedirects: true})
+		resp, err := c.GetResource(scan, s.URL+"/session?id="+session, network.OptionsRequest{Timeout: time.Second, FollowRedirects: true})
 		if err != nil {
 			t.Fatal(err)
 		}
 		network.ReadResponseBody(resp, 1024)
 		resp.Body.Close()
-		got := GetPageIconHash(context.Background(), c, s.URL, body, network.OptionsRequest{Timeout: time.Second})
+		got := GetPageIconHash(scan, c, s.URL, body, network.OptionsRequest{Timeout: time.Second})
 		if got != expectedIconHash([]byte(":"+session)) {
 			t.Fatalf("会话 Cookie 串用缓存: session=%s hash=%s", session, got)
 		}

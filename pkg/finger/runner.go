@@ -14,6 +14,7 @@ import (
 	"github.com/cyberspacesec/gxx/utils/common"
 	"github.com/cyberspacesec/gxx/utils/logger"
 	"io"
+	"net/http"
 	"net/url"
 	"strings"
 	"time"
@@ -121,20 +122,21 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 		}
 	}
 
-	// 处理协议，增加通信协议
-	NewUrlStr, err := client.CheckProtocol(reqCtx, urlStr, options.Proxy, options.Timeout)
-	if err != nil {
-		logger.FromContext(reqCtx).Debug("检查http通信协议出错，错误信息：%s", err)
-		if !strings.HasPrefix(urlStr, "http://") && !strings.HasPrefix(urlStr, "https://") {
-			NewUrlStr = "http://" + target
+	// 目标通常已带协议（扫描入口已确定资产）。未带协议时先 https 后 http；
+	// 两者连接同一端口且 TCP 连接失败时，换协议没有意义。
+	candidates, samePort := network.TargetCandidates(urlStr)
+	start := time.Now()
+	var resp *http.Response
+	var err error
+	NewUrlStr := urlStr
+	for _, candidate := range candidates {
+		probeCtx, connected := network.WithConnectProbe(reqCtx)
+		NewUrlStr = candidate
+		resp, err = client.SendRequestHttp(probeCtx, req.Method, candidate, rule.Request.Body, options)
+		if err == nil || reqCtx.Err() != nil || samePort && !connected() {
+			break
 		}
 	}
-
-	logger.FromContext(reqCtx).Debug("请求URL：%s", NewUrlStr)
-
-	// 发送请求
-	start := time.Now()
-	resp, err := client.SendRequestHttp(reqCtx, req.Method, NewUrlStr, rule.Request.Body, options)
 	if err != nil {
 		logger.FromContext(reqCtx).Debug("发送请求出错，错误信息：%s", err)
 		return variableMap, err

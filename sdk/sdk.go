@@ -79,8 +79,10 @@ type CertInfo struct {
 	DNSNames              []string `json:"dns_names,omitempty"`
 	IPAddresses           []string `json:"ip_addresses,omitempty"`
 	EmailAddresses        []string `json:"email_addresses,omitempty"`
+	URIs                  []string `json:"uris,omitempty"`
 	OCSPServer            []string `json:"ocsp_server,omitempty"`
 	CRLDistributionPoints []string `json:"crl_distribution_points,omitempty"`
+	IssuingCertificateURL []string `json:"issuing_certificate_url,omitempty"`
 }
 
 // TechStack 站点技术栈信息。命名字段覆盖高价值分类，其余识别结果归入 Other，不丢弃。
@@ -135,12 +137,29 @@ type FingerMatch struct {
 	MatchedRules     []SubRuleMatch `json:"matched_rules,omitempty"`
 }
 
+// Redirect 入口跳转链上的一跳。
+type Redirect struct {
+	Type     string `json:"type"`             // http（30x）/ refresh（Refresh 头或 meta）/ javascript
+	Status   int32  `json:"status,omitempty"` // 发出跳转的响应的状态码
+	From     string `json:"from"`
+	To       string `json:"to"`
+	Followed bool   `json:"followed"` // false：目标属于其他资产，没有访问
+}
+
 // TargetResult 单个目标的完整扫描结果。
+//
+// 一个目标就是一个资产（协议 + 主机 + 端口）。扫描只在资产内跟随跳转：FinalURL 是
+// 资产内最终页面的地址，StatusCode、Title、TechStack、ICP 描述该页面；跳转指向其他
+// 资产时不跟随，目标地址记入 RedirectTo，由调用方决定是否作为新的目标扫描。
 type TargetResult struct {
 	URL        string         `json:"url"`
+	FinalURL   string         `json:"final_url,omitempty"`
+	RedirectTo string         `json:"redirect_to,omitempty"`
+	Redirects  []Redirect     `json:"redirects,omitempty"`
 	StatusCode int32          `json:"status_code"`
 	Title      string         `json:"title"`
 	Server     *ServerInfo    `json:"server,omitempty"`
+	Headers    string         `json:"headers,omitempty"` // 最终页面的原始响应头
 	Matches    []FingerMatch  `json:"matches"`
 	TechStack  *TechStack     `json:"tech_stack,omitempty"`
 	ICP        string         `json:"icp,omitempty"`
@@ -148,9 +167,12 @@ type TargetResult struct {
 	Products   []ProductMatch `json:"products,omitempty"`
 }
 
-// BaseInfo 目标基础信息（不含指纹匹配）。
+// BaseInfo 目标基础信息（不含指纹匹配）。跳转字段的含义与 TargetResult 相同。
 type BaseInfo struct {
 	Target     string      `json:"target"`
+	FinalURL   string      `json:"final_url,omitempty"`
+	RedirectTo string      `json:"redirect_to,omitempty"`
+	Redirects  []Redirect  `json:"redirects,omitempty"`
 	Title      string      `json:"title"`
 	StatusCode int32       `json:"status_code"`
 	Server     *ServerInfo `json:"server,omitempty"`

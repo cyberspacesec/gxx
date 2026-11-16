@@ -16,8 +16,24 @@ import (
 	"strings"
 
 	"github.com/cyberspacesec/gxx/pkg/network"
-	"github.com/cyberspacesec/gxx/types"
 )
+
+// Options 命令行选项。
+type Options struct {
+	Targets     []string // -u：扫描目标
+	TargetsFile string   // -f：目标文件，每行一个
+	Threads     int      // -t：目标并发数
+	RuleThreads int      // -rt：指纹规则并发数
+	Output      string   // -o：输出文件
+	JSONOutput  bool     // -json：强制 JSON Lines 输出
+	SockOutput  string   // -sock：Unix socket 输出
+	Proxy       string   // -proxy：代理地址
+	RuleFile    string   // -p：单个规则文件
+	RuleDir     string   // -pf：规则目录
+	Timeout     int      // -timeout：请求超时（秒）
+	Debug       bool     // -debug
+	NoFileLog   bool     // -no-file-log
+}
 
 const (
 	defaultThreads     = 5
@@ -62,13 +78,13 @@ type flagGroup struct {
 }
 
 // NewCmdOptions 解析进程命令行参数。
-func NewCmdOptions() (*types.CmdOptions, error) {
+func NewCmdOptions() (*Options, error) {
 	return ParseCmdOptions(os.Args[1:], os.Stdout)
 }
 
 // ParseCmdOptions 解析给定参数；用法与提示写入 out。
-func ParseCmdOptions(args []string, out io.Writer) (*types.CmdOptions, error) {
-	options := &types.CmdOptions{}
+func ParseCmdOptions(args []string, out io.Writer) (*Options, error) {
+	options := &Options{}
 	var targets targetList
 	flagSet := flag.NewFlagSet("gxx", flag.ContinueOnError)
 	flagSet.SetOutput(io.Discard)
@@ -88,8 +104,8 @@ func ParseCmdOptions(args []string, out io.Writer) (*types.CmdOptions, error) {
 	flagSet.StringVar(&options.SockOutput, "sock", "", "")
 
 	flagSet.StringVar(&options.Proxy, "proxy", "", "")
-	flagSet.StringVar(&options.PocOptions.PocYaml, "p", "", "")
-	flagSet.StringVar(&options.PocOptions.PocFile, "pf", "", "")
+	flagSet.StringVar(&options.RuleFile, "p", "", "")
+	flagSet.StringVar(&options.RuleDir, "pf", "", "")
 	flagSet.IntVar(&options.Timeout, "timeout", defaultTimeout, "")
 	flagSet.BoolVar(&options.Debug, "debug", false, "")
 	flagSet.BoolVar(&options.NoFileLog, "no-file-log", false, "")
@@ -129,7 +145,7 @@ func ParseCmdOptions(args []string, out io.Writer) (*types.CmdOptions, error) {
 	if extra := flagSet.Args(); len(extra) > 0 {
 		return options, fmt.Errorf("无法识别的参数: %s", strings.Join(extra, " "))
 	}
-	options.Target = targets
+	options.Targets = targets
 
 	if err := verifyOptions(options, out); err != nil {
 		return options, err
@@ -160,8 +176,8 @@ func printUsage(out io.Writer, groups []flagGroup) {
 }
 
 // verifyOptions 校验命令行选项，无效的并发与超时回退到默认值。
-func verifyOptions(opt *types.CmdOptions, out io.Writer) error {
-	if len(opt.Target) == 0 && opt.TargetsFile == "" {
+func verifyOptions(opt *Options, out io.Writer) error {
+	if len(opt.Targets) == 0 && opt.TargetsFile == "" {
 		return fmt.Errorf("必须设置 `-url` 或 `-file` 参数指定扫描目标")
 	}
 

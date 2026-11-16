@@ -16,7 +16,7 @@ import (
 	"github.com/cyberspacesec/gxx/utils/common"
 	"github.com/cyberspacesec/gxx/utils/proto"
 	"github.com/phuslu/lru"
-	"math/rand"
+	"math/rand/v2"
 	"net"
 	"net/url"
 	"strconv"
@@ -59,21 +59,15 @@ func getCachedRegexp2(pattern string, opts regexp2.RegexOptions) (*regexp2.Regex
 
 // functionEnvOptions 将所有函数绑定迁移到 Env 期，避免已弃用 Program 期的 cel.Functions 与 interpreter/functions.Overload
 var functionEnvOptions = []cel.EnvOption{
-	// icontains: instance string method
+	// icontains：s.icontains(sub) 或 icontains(s, sub)，不区分大小写。
 	cel.Function("icontains",
 		cel.MemberOverload("string_icontains_string",
 			[]*cel.Type{cel.StringType, cel.StringType}, cel.BoolType,
-			cel.BinaryBinding(func(lhs ref.Val, rhs ref.Val) ref.Val {
-				v1, ok := lhs.(types.String)
-				if !ok {
-					return types.ValOrErr(lhs, "unexpected type '%v' passed to contains", lhs.Type())
-				}
-				v2, ok := rhs.(types.String)
-				if !ok {
-					return types.ValOrErr(rhs, "unexpected type '%v' passed to contains", rhs.Type())
-				}
-				return types.Bool(strings.Contains(strings.ToLower(string(v1)), strings.ToLower(string(v2))))
-			}),
+			cel.BinaryBinding(stringContainsFold),
+		),
+		cel.Overload("icontains_string_string",
+			[]*cel.Type{cel.StringType, cel.StringType}, cel.BoolType,
+			cel.BinaryBinding(stringContainsFold),
 		),
 	),
 	// substr(s, start, length)
@@ -95,7 +89,8 @@ var functionEnvOptions = []cel.EnvOption{
 						return types.NewErr("invalid length to 'substr'")
 					}
 					runes := []rune(str)
-					if start < 0 || length < 0 || int(start+length) > len(runes) {
+					// 分别比较，避免 start+length 溢出后绕过边界检查。
+					if start < 0 || length < 0 || start > types.Int(len(runes)) || length > types.Int(len(runes))-start {
 						return types.NewErr("invalid start or length to 'substr'")
 					}
 					return types.String(runes[start : start+length])
@@ -347,8 +342,12 @@ var functionEnvOptions = []cel.EnvOption{
 				if !ok {
 					return types.ValOrErr(rhs, "unexpected type '%v' passed to randomInt", rhs.Type())
 				}
-				minStr, maxStr := int(from), int(to)
-				return types.Int(rand.Intn(maxStr-minStr) + minStr)
+				// 区间为 [from, to)；空区间或跨度溢出时报错，不能让 rand.Int64N 因 n<=0 而 panic。
+				span := int64(to) - int64(from)
+				if to <= from || span <= 0 {
+					return types.NewErr("randomInt 需要 from < to，实际为 %d, %d", from, to)
+				}
+				return types.Int(rand.Int64N(span) + int64(from))
 			}),
 		),
 	),
@@ -364,35 +363,15 @@ var functionEnvOptions = []cel.EnvOption{
 			}),
 		),
 	),
-	// regex
+	// regex：成员写法 "正则".submatch(s) 与全局写法 submatch("正则", s) 等价。
 	cel.Function("submatch",
 		cel.MemberOverload("string_submatch_string",
 			[]*cel.Type{cel.StringType, cel.StringType}, cel.MapType(cel.StringType, cel.StringType),
-			cel.BinaryBinding(func(lhs ref.Val, rhs ref.Val) ref.Val {
-				resultMap := make(map[string]string)
-				v1, ok := lhs.(types.String)
-				if !ok {
-					return types.ValOrErr(lhs, "unexpected type '%v' passed to submatch", lhs.Type())
-				}
-				v2, ok := rhs.(types.String)
-				if !ok {
-					return types.ValOrErr(rhs, "unexpected type '%v' passed to submatch", rhs.Type())
-				}
-				re, err := getCachedRegexp2(string(v1), regexp2.RE2)
-				if err != nil {
-					return types.NewErr("正则表达式无效: %v", err)
-				}
-				if m, _ := re.FindStringMatch(string(v2)); m != nil {
-					gps := m.Groups()
-					for n, gp := range gps {
-						if n == 0 {
-							continue
-						}
-						resultMap[gp.Name] = gp.String()
-					}
-				}
-				return types.NewStringStringMap(types.DefaultTypeAdapter, resultMap)
-			}),
+			cel.BinaryBinding(stringSubmatch),
+		),
+		cel.Overload("submatch_string_string",
+			[]*cel.Type{cel.StringType, cel.StringType}, cel.MapType(cel.StringType, cel.StringType),
+			cel.BinaryBinding(stringSubmatch),
 		),
 	),
 	// year helpers (保持与旧签名一致：接受一个 int 参数)
@@ -441,6 +420,43 @@ var functionEnvOptions = []cel.EnvOption{
 			}),
 		),
 	),
+}
+
+func stringContainsFold(lhs, rhs ref.Val) ref.Val {
+	v1, ok := lhs.(types.String)
+	if !ok {
+		return types.ValOrErr(lhs, "unexpected type '%v' passed to icontains", lhs.Type())
+	}
+	v2, ok := rhs.(types.String)
+	if !ok {
+		return types.ValOrErr(rhs, "unexpected type '%v' passed to icontains", rhs.Type())
+	}
+	return types.Bool(strings.Contains(strings.ToLower(string(v1)), strings.ToLower(string(v2))))
+}
+
+// stringSubmatch 返回 pattern 在 value 中首个匹配的分组，键为分组名（未命名分组为序号）。
+func stringSubmatch(pattern, value ref.Val) ref.Val {
+	v1, ok := pattern.(types.String)
+	if !ok {
+		return types.ValOrErr(pattern, "unexpected type '%v' passed to submatch", pattern.Type())
+	}
+	v2, ok := value.(types.String)
+	if !ok {
+		return types.ValOrErr(value, "unexpected type '%v' passed to submatch", value.Type())
+	}
+	re, err := getCachedRegexp2(string(v1), regexp2.RE2)
+	if err != nil {
+		return types.NewErr("正则表达式无效: %v", err)
+	}
+	resultMap := make(map[string]string)
+	if m, _ := re.FindStringMatch(string(v2)); m != nil {
+		for n, gp := range m.Groups() {
+			if n != 0 {
+				resultMap[gp.Name] = gp.String()
+			}
+		}
+	}
+	return types.NewStringStringMap(types.DefaultTypeAdapter, resultMap)
 }
 
 // reverseCheck 检查反向连接

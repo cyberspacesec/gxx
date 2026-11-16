@@ -40,8 +40,8 @@ func TestTruncatedUTF8BodyIsNotReDecodedAsGB18030(t *testing.T) {
 		"BuildProtoResponseOwned": func(b []byte) []byte {
 			return BuildProtoResponseOwned(context.Background(), testResponse(), b, 0, network.NewHTTPClient(), network.OptionsRequest{}).Body
 		},
-		"BuildBaseProtoResponseOwned": func(b []byte) []byte {
-			return BuildBaseProtoResponseOwned(context.Background(), testResponse(), b, 0, network.NewHTTPClient(), network.OptionsRequest{}, "").Body
+		"BuildPageResponseOwned": func(b []byte) []byte {
+			return BuildPageResponseOwned(context.Background(), testResponse(), b, network.NewHTTPClient(), network.OptionsRequest{}, "", false).Body
 		},
 	} {
 		got := build(bytes.Clone(truncated))

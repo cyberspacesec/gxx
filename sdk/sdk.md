@@ -26,7 +26,7 @@ import "github.com/cyberspacesec/gxx/sdk/debug"
 在调用方的 Go 模块中执行：
 
 ```bash
-go get github.com/cyberspacesec/gxx/sdk@v1.4.0
+go get github.com/cyberspacesec/gxx/sdk@v1.5.0
 ```
 
 模块路径为 `github.com/cyberspacesec/gxx`，调用方无需配置本地 `replace`。使用 `@latest` 获取当前版本线的最新稳定版本，按当前字段适配调用代码；`FingerInfo.Tags` 为 `[]string`。
@@ -90,7 +90,7 @@ func main() {
 | `(*Engine).ScanIterator(ctx, targets iter.Seq[string], cb) error` | 按并发预算拉取目标，逐条回调结果 |
 | `(*Engine).GetBaseInfo(ctx, target) (*BaseInfo, error)` | 仅获取基础信息（不跑指纹） |
 | `(*Engine).WappalyzerScan(ctx, target) (*TechStack, error)` | 仅技术栈识别 |
-| `(*Engine).NormalizeURL(ctx, target) (string, error)` | 探测 http/https 协议并返回规范化 URL（遵守 ctx 与 WithTimeout） |
+| `(*Engine).NormalizeURL(ctx, target) (string, error)` | 确定目标所属的资产地址：已带协议时原样返回，否则请求一次入口确定 http/https |
 | `(*Engine).LoadFingerOptions(opts) error` | 运行期重新加载指纹规则 |
 | `(*Engine).FingerCount() int` | 当前加载的指纹数量 |
 | `(*Engine).RuleCatalog(ctx) ([]RuleMetadata, error)` | 全部规则来源、产品目录、检测条件与质量缺项 |
@@ -173,9 +173,13 @@ if errors.Is(err, sdk.ErrEmptyTarget) {
 ```go
 type TargetResult struct {
     URL        string        `json:"url"`
+    FinalURL   string        `json:"final_url,omitempty"`   // 资产内最后一页的地址
+    RedirectTo string        `json:"redirect_to,omitempty"` // 指向其他资产、未跟随的跳转
+    Redirects  []Redirect    `json:"redirects,omitempty"`   // 入口跳转链
     StatusCode int32         `json:"status_code"`
     Title      string        `json:"title"`
     Server     *ServerInfo   `json:"server,omitempty"`
+    Headers    string        `json:"headers,omitempty"`     // 最后一页的原始响应头
     Matches    []FingerMatch `json:"matches"`
     TechStack  *TechStack    `json:"tech_stack,omitempty"`
     ICP        string        `json:"icp,omitempty"`
@@ -183,6 +187,20 @@ type TargetResult struct {
     Products   []ProductMatch `json:"products,omitempty"`
 }
 ```
+
+### Redirect
+
+```go
+type Redirect struct {
+    Type     string `json:"type"`             // http / refresh / javascript
+    Status   int32  `json:"status,omitempty"` // 发出跳转的响应的状态码
+    From     string `json:"from"`
+    To       string `json:"to"`
+    Followed bool   `json:"followed"`         // false：目标属于其他资产，没有访问
+}
+```
+
+`StatusCode`、`Title`、`TechStack`、`ICP`、`Headers` 描述 `FinalURL` 对应的页面。`BaseInfo` 带有相同的 `FinalURL`、`RedirectTo`、`Redirects` 字段。
 
 ### FingerMatch
 
@@ -616,15 +634,15 @@ fmt.Printf("enabled=%v cached_hosts=%d qps=%.1f\n", rl.Enabled, rl.CachedHosts, 
 - 静态规则快照持有连续的不可变执行清单；仅依赖已缓存首页且没有动态声明、循环或等待的指纹可按最多 8 条合并调度，每条独立评估、计数和处理异常。其他指纹按单条任务执行，规则并发与在途指纹预算保持不变；求值状态归还时清除响应和其他扫描状态，循环、I/O 和等待函数保留取消约束
 - 引擎内部构造的响应按只读所有权共享；公共缓存写入复制调用方的完整消息，超过字节预算时跳过缓存，不生成被裁剪的缓存响应。实例请求头在构造时复制，规则覆盖头只作用于对应请求
 - 标题解析直接消费只读正文的字节视图；标题与 ICP 备案号独立持有返回字符串，长期保留结果不会通过这些字段引用整页 HTML 或脚本。无候选的合法 UTF-8 正文无需为备案号解析复制整页；结果数量增长仍会增加内存
-- favicon 哈希使用 1,824 字节原始块和 2,465 字节编码块读取到 EOF，不构造完整图片或 Base64 副本；入口页支持非根路径、重定向、多个候选与内联图片。成功哈希归当前实例持有，按请求头和 Cookie 会话隔离，候选回退共用时间预算；同一组图片字节的哈希编码约定不变。元数据识别范围与限制见 [网站元数据识别](../docs/网站元数据识别.md)
+- favicon 哈希使用 1,824 字节原始块和 2,465 字节编码块读取到 EOF，不构造完整图片或 Base64 副本；入口页支持非根路径、资产内跳转、多个候选与内联图片。成功哈希归当前实例持有，按请求头和 Cookie 会话隔离，候选回退共用时间预算；同一组图片字节的哈希编码约定不变。元数据识别范围与限制见 [网站元数据识别](../docs/网站元数据识别.md)
 - 未知长度响应使用 32 KiB 暂存块，暂存池最多保留 1 MiB，最终正文使用独立数组；已知长度响应采用有界容量提示，两条路径保持相同的正文上限和读取错误语义
 - 页面正文上限为 512 KiB；图标不受该资源大小限制，使用固定块读取到 EOF。内联图标声明仍需包含在已读取的页面正文中
 
 - 大响应的重复字节包含查询可使用按需构造的 8 KiB 片段位图。候选仍调用原始包含函数，位图饱和、响应太小或复用次数不足时使用直接匹配；相关响应数据共用单次扫描 8 MiB 的估算预算
 - 技术栈识别按响应字段建立索引，正文通过必要字面量索引筛选候选；全部 HTTP 规则保持可用，候选由上游解析器判定。编译正则按 512 条工作集共享缓存，淘汰后可重新编译，不裁剪规则；覆盖大量不同模式的负载可能增加编译开销
 - 响应正文按声明的字符集解码为 UTF-8：优先 Content-Type 头，其次正文前部的 `<meta charset>`，支持 UTF-8/GBK/GB18030/Big5/Shift_JIS/ISO-8859-1 等；无任何声明时合法 UTF-8 原样保留，否则按 GB18030 兜底（面向省略或错误标注字符集的中文站点）。CEL 规则中的 `response.body` / 标题 / ICP 均基于解码后的 UTF-8 字节
-- 跨源重定向会剥离自定义请求头（`WithCustomHeaders` 注入的头、以及 Go 自身处理的 Authorization/Cookie），仅保留 UA/Accept/Accept-Language/Referer，避免 Token 等敏感头泄漏给第三方；同源重定向保留全部头
-- CookieJar 属于 Engine 的 HTTP 客户端，在实例生命周期内按 host 持久：同一 Engine 对同一目标多次扫描会携带上一次写入的会话 Cookie。需要完全无状态、可复现的重复扫描时，为每次独立扫描使用新的 Engine
+- 一个目标是一个资产（协议 + 主机 + 端口）。入口请求与规则请求只在资产内跟随跳转，指向其他资产的 30x 不跟随、不访问，地址写入 `RedirectTo`；自定义请求头因此不会发往其他主机。跳转链上的每一页都参与根路径规则匹配。完整规则见 [资产与跳转](../docs/资产与跳转.md)
+- 每次扫描使用独立的 Cookie 会话，入口、规则与图标请求共用，扫描结束即释放。同一 Engine 对同一目标的多次扫描互不影响，引擎不随目标数量累积 Cookie
 - 自定义 `Writer.Write` 收到的 `*TargetResult` 与调用方拿到的是同一指针，必须视为只读、不得在返回后异步持有；需异步使用时自行深拷贝。内置 FileWriter 入队前已深拷贝，SockWriter 在调用内同步序列化
 - CLI 输出完成后只保留汇总计数，不保留全量结果；目标去重集合仍随唯一目标数增长
 - 不要用每目标强制 GC 控制内存；RSS 还包括 Go 运行时保留页、线程栈和原生组件，通常高于存活堆

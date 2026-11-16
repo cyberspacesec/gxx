@@ -91,6 +91,37 @@ func waitContext(ctx context.Context, seconds int64) error {
 		return nil
 	}
 }
+
+// responseMatches 用 regexp2（.NET 语法）判断 value 是否匹配 pattern；pattern 可为 string 或 bytes。
+func responseMatches(context, pattern, value ref.Val) ref.Val {
+	state, ok := context.Value().(*evaluationContext)
+	if !ok {
+		return types.NewErr("缺少执行上下文")
+	}
+	var expression string
+	switch pattern := pattern.(type) {
+	case types.String:
+		expression = string(pattern)
+	case types.Bytes:
+		expression = string(pattern)
+	default:
+		return types.NewErr("正则表达式必须为 string 或 bytes")
+	}
+	data, ok := value.(types.Bytes)
+	if !ok {
+		return types.NewErr("响应查找参数必须为 bytes")
+	}
+	re, err := getCachedRegexp2(expression, 0)
+	if err != nil {
+		return types.NewErr("正则表达式无效: %v", err)
+	}
+	matched, err := re.MatchRunes(regexResponseRunes(state.ctx, data))
+	if err != nil {
+		return types.NewErr("%v", err)
+	}
+	return types.Bool(matched)
+}
+
 func contextEnvOptions() []cel.EnvOption {
 	opts := []cel.EnvOption{cel.Variable(contextVariable, cel.DynType)}
 	for _, name := range []string{"bcontains", "ibcontains"} {
@@ -105,8 +136,11 @@ func contextEnvOptions() []cel.EnvOption {
 			return types.Bool(containsResponse(state.ctx, []byte(args[1].(types.Bytes)), []byte(args[2].(types.Bytes)), name == "ibcontains"))
 		}))))
 	}
+	// 正则函数同时支持成员写法 "正则".bsubmatch(b) 与全局写法 bsubmatch("正则", b)。
 	opts = append(opts, cel.Macros(cel.ReceiverMacro("bsubmatch", 1, func(eh cel.MacroExprFactory, target ast.Expr, args []ast.Expr) (ast.Expr, *cel.Error) {
 		return eh.NewCall("__gxx_bsubmatch", eh.NewIdent(contextVariable), target, args[0]), nil
+	}), cel.GlobalMacro("bsubmatch", 2, func(eh cel.MacroExprFactory, _ ast.Expr, args []ast.Expr) (ast.Expr, *cel.Error) {
+		return eh.NewCall("__gxx_bsubmatch", eh.NewIdent(contextVariable), args[0], args[1]), nil
 	})))
 	opts = append(opts, cel.Function("__gxx_bsubmatch", cel.Overload("gxx_bsubmatch_context_string_bytes", []*cel.Type{cel.DynType, cel.StringType, cel.BytesType}, cel.MapType(cel.StringType, cel.StringType), cel.FunctionBinding(func(args ...ref.Val) ref.Val {
 		state, ok := args[0].Value().(*evaluationContext)
@@ -136,32 +170,25 @@ func contextEnvOptions() []cel.EnvOption {
 		}
 		return types.NewStringStringMap(types.DefaultTypeAdapter, result)
 	}))))
+	// bmatches 支持三种写法："正则".bmatches(b)、bmatches("正则", b)，以及以响应为
+	// 接收者的 response.body.bmatches("正则") / response.body.bmatches(b"正则")。
+	// 参数类型互不重叠，按类型分派到同一实现。
 	opts = append(opts, cel.Macros(cel.ReceiverMacro("bmatches", 1, func(eh cel.MacroExprFactory, target ast.Expr, args []ast.Expr) (ast.Expr, *cel.Error) {
 		return eh.NewCall("__gxx_bmatches", eh.NewIdent(contextVariable), target, args[0]), nil
+	}), cel.GlobalMacro("bmatches", 2, func(eh cel.MacroExprFactory, _ ast.Expr, args []ast.Expr) (ast.Expr, *cel.Error) {
+		return eh.NewCall("__gxx_bmatches", eh.NewIdent(contextVariable), args[0], args[1]), nil
 	})))
-	opts = append(opts, cel.Function("__gxx_bmatches", cel.Overload("gxx_bmatches_context_string_bytes", []*cel.Type{cel.DynType, cel.StringType, cel.BytesType}, cel.BoolType, cel.FunctionBinding(func(args ...ref.Val) ref.Val {
-		state, ok := args[0].Value().(*evaluationContext)
-		if !ok {
-			return types.NewErr("缺少执行上下文")
-		}
-		pattern, ok := args[1].(types.String)
-		if !ok {
-			return types.NewErr("正则表达式必须为 string")
-		}
-		value, ok := args[2].(types.Bytes)
-		if !ok {
-			return types.NewErr("响应查找参数必须为 bytes")
-		}
-		re, err := getCachedRegexp2(string(pattern), 0)
-		if err != nil {
-			return types.NewErr("正则表达式无效: %v", err)
-		}
-		matched, err := re.MatchRunes(regexResponseRunes(state.ctx, value))
-		if err != nil {
-			return types.NewErr("%v", err)
-		}
-		return types.Bool(matched)
-	}))))
+	opts = append(opts, cel.Function("__gxx_bmatches",
+		cel.Overload("gxx_bmatches_context_string_bytes", []*cel.Type{cel.DynType, cel.StringType, cel.BytesType}, cel.BoolType, cel.FunctionBinding(func(args ...ref.Val) ref.Val {
+			return responseMatches(args[0], args[1], args[2])
+		})),
+		cel.Overload("gxx_bmatches_context_bytes_string", []*cel.Type{cel.DynType, cel.BytesType, cel.StringType}, cel.BoolType, cel.FunctionBinding(func(args ...ref.Val) ref.Val {
+			return responseMatches(args[0], args[2], args[1])
+		})),
+		cel.Overload("gxx_bmatches_context_bytes_bytes", []*cel.Type{cel.DynType, cel.BytesType, cel.BytesType}, cel.BoolType, cel.FunctionBinding(func(args ...ref.Val) ref.Val {
+			return responseMatches(args[0], args[2], args[1])
+		})),
+	))
 
 	opts = append(opts, cel.Macros(cel.GlobalMacro("sleep", 1, func(eh cel.MacroExprFactory, _ ast.Expr, args []ast.Expr) (ast.Expr, *cel.Error) {
 		return eh.NewCall("__gxx_sleep", eh.NewIdent(contextVariable), args[0]), nil

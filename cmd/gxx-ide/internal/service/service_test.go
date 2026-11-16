@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/cyberspacesec/gxx/cmd/gxx-ide/internal/model"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -143,5 +144,38 @@ func TestEnsurePortAndHostOnlyHandleIPv6(t *testing.T) {
 				t.Errorf("hostOnly(%q) = %q，期望 %q", tc.host, sni, tc.wantSNI)
 			}
 		})
+	}
+}
+
+// set 块在请求发出前求值：文档推荐的 TCP 写法依赖 request.url.domain，调试时必须可用。
+func TestRunResolvesTargetVariablesInSet(t *testing.T) {
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer listener.Close()
+	go func() {
+		for {
+			conn, err := listener.Accept()
+			if err != nil {
+				return
+			}
+			go func() {
+				defer conn.Close()
+				buffer := make([]byte, 16)
+				if _, err := conn.Read(buffer); err == nil {
+					_, _ = conn.Write([]byte("SSH-2.0-test"))
+				}
+			}()
+		}
+	}()
+	_, port, _ := net.SplitHostPort(listener.Addr().String())
+	yaml := "id: tcp\ninfo:\n  name: tcp\nset:\n  domain: request.url.domain\nrules:\n  r0:\n    request:\n      type: tcp\n      host: \"[{{domain}}]:" + port + "\"\n      data: \"\\n\"\n    expression: response.raw.bcontains(b\"SSH-\")\nexpression: r0()\n"
+	out, err := NewFingerService().Run(context.Background(), &model.RunFingerprintInput{YAML: yaml, Target: "http://127.0.0.1:1/x", TimeoutSeconds: 3})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !out.FinalResult {
+		t.Fatalf("TCP 规则未命中: %+v", out.Rules)
 	}
 }

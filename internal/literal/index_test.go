@@ -28,12 +28,8 @@ func TestIndexMatchesArbitraryBytes(t *testing.T) {
 			body = append(body, words[rng.Intn(len(words))]...)
 			body = append(body, byte(rng.Intn(256)))
 		}
-		for _, useBytes := range []bool{true, false} {
-			if useBytes {
-				index.MatchBytes(body, bits)
-			} else {
-				index.Match(string(body), bits)
-			}
+		{
+			index.Match(string(body), bits)
 			for id, word := range words {
 				if got, want := bits[id/64]&(1<<uint(id%64)) != 0, bytes.Contains(body, []byte(word)); got != want {
 					t.Fatalf("word=%q got=%t want=%t", word, got, want)

@@ -38,8 +38,11 @@ gxx -u https://example.com --proxy socks5h://user:pass@127.0.0.1:1080
 # 输出为 CSV（格式由扩展名自动识别）
 gxx -u https://example.com -o results.csv
 
-# JSON 输出
-gxx -u https://example.com -o results.json --json
+# JSON Lines 输出（扩展名为 .json / .jsonl 时自动识别，也可用 --json 强制）
+gxx -u https://example.com -o results.json
+
+# 目标文件：每行一个，# 开头为注释；http 与 https 是两个资产，需要分别列出
+gxx -f targets.txt -o results.csv
 
 # 调试模式
 gxx -u https://example.com --debug
@@ -53,7 +56,7 @@ gxx -u https://example.com -rt 500
 在调用方的 Go 模块内安装 SDK：
 
 ```bash
-go get github.com/cyberspacesec/gxx/sdk@v1.4.0
+go get github.com/cyberspacesec/gxx/sdk@v1.5.0
 ```
 
 发布包见 [GitHub Releases](https://github.com/cyberspacesec/gxx/releases)，自动测试与发布流程见 [构建与发布](docs/构建与发布.md)。
@@ -96,7 +99,18 @@ func main() {
 
 规则导入使用 `RuleCatalog`，识别结果分别返回作者、厂商、来源验证声明、样本记录、产品版本及可定位的命中证据；`Products` 按规范产品目录归并并保留命中规则。字段约定、数据覆盖范围和测试方法见[指纹数据与验证](docs/指纹数据与验证.md)。
 
-favicon 候选、重定向资源解析、内联图标哈希与 ICP 备案识别的范围和限制参见 [网站元数据识别](docs/网站元数据识别.md)。
+favicon 候选、内联图标哈希与 ICP 备案识别的范围和限制参见 [网站元数据识别](docs/网站元数据识别.md)。
+
+## 资产与跳转
+
+GXX 以资产为单位识别，一个资产由**协议、主机、端口**共同确定：`http://a.com` 与 `https://a.com` 是两个资产。
+
+- **请求不离开资产**。30x 指向其他资产时停在 30x 响应，不访问对方；对方地址写入结果的 `redirect_to`，由调用方决定是否作为新目标扫描。
+- **资产内的跳转会跟随**（30x、meta refresh、跳转壳里的脚本跳转，合计最多 5 跳），链上每一页都参与规则匹配：302 响应本身和最终页面的内容都能命中指纹。
+- **脚本跳转只做静态识别**，不执行 JavaScript，只认写法明确且目标唯一的跳转；识别到的地址属于其他资产时同样不访问。
+- 结果中的 `final_url` 是资产内最后一页的地址，`redirects` 记录每一跳。
+
+完整规则见 [资产与跳转](docs/资产与跳转.md)。
 
 ## 命令行参数
 
@@ -104,7 +118,7 @@ favicon 候选、重定向资源解析、内联图标哈希与 ICP 备案识别�
 | 参数 | 说明 |
 |------|------|
 | `-u, --url` | 目标 URL/主机（可指定多个） |
-| `-f, --file` | 目标列表文件（每行一个） |
+| `-f, --file` | 目标列表文件（每行一个，`#` 开头为注释；按输入顺序去重） |
 | `-t, --threads` | URL 并发线程数（默认 5） |
 | `-rt, --rulethreads` | 规则并发线程数（默认 200，最大 5000） |
 
@@ -112,7 +126,7 @@ favicon 候选、重定向资源解析、内联图标哈希与 ICP 备案识别�
 | 参数 | 说明 |
 |------|------|
 | `-o, --output` | 输出文件路径（txt/csv/json） |
-| `--json` | JSON 格式输出 |
+| `--json` | 强制 JSON Lines 输出（与 SDK 的结果结构相同） |
 | `--sock` | Unix Domain Socket 实时输出路径 |
 
 ### 调试选项

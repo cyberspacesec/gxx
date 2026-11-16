@@ -8,16 +8,6 @@ import (
 	"unicode/utf8"
 )
 
-// requiredLiterals 提取一组 ASCII 字面量，成功匹配至少需要包含其中之一。
-// 无法证明的分支不参与预筛选，最终判定仍使用上游的正则与版本提取器。
-func requiredLiterals(source string) []string {
-	tree := parseUpstreamPattern(source)
-	if tree == nil {
-		return nil
-	}
-	return literalsFromTree(tree)
-}
-
 // requiredLiteralGroups 提取多组必要字面量：成功匹配必须同时满足每一组（每组至少出现一个）。
 //
 // 正则顶层是串接 A·B·C 时，任何匹配子串都由 A、B、C 各自的匹配依次拼成，因此

@@ -126,24 +126,23 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 			body = http.NoBody
 		}
 		resp := &http.Response{StatusCode: response.Status.Code, Status: strconv.Itoa(response.Status.Code) + " " + response.Status.Reason, Proto: response.Version.String(), ProtoMajor: response.Version.Major, ProtoMinor: response.Version.Minor, Header: h, ContentLength: response.ContentLength(), Body: &rawResponseBody{Reader: body, ctx: ctx, conn: conn, stop: stop}, Request: &http.Request{Method: parsed.Method, URL: u, Header: make(http.Header)}}
-		if options.FollowRedirects && response.Status.IsRedirect() && h.Get("Location") != "" {
-			_ = resp.Body.Close()
-			if redirects >= 10 {
-				return nil, fmt.Errorf("Raw HTTP 重定向次数超过上限")
-			}
+		if options.FollowRedirects && response.Status.IsRedirect() && h.Get("Location") != "" && redirects < maxRedirects {
 			next, err := u.Parse(h.Get("Location"))
-			if err != nil {
-				return nil, err
-			}
-			if !strings.EqualFold(u.Host, next.Host) {
-				for key := range headers {
-					if strings.EqualFold(key, "Authorization") || strings.EqualFold(key, "Cookie") {
-						delete(headers, key)
+			// 只在同一资产内跟随；指向其他资产或无法解析时返回 30x 响应本身。
+			if err == nil && SameOrigin(u, next) {
+				_ = resp.Body.Close()
+				// 与浏览器一致：301/302/303 之后改用不带请求体的 GET，307/308 保持原请求。
+				if code := response.Status.Code; code != http.StatusTemporaryRedirect && code != http.StatusPermanentRedirect && parsed.Method != http.MethodGet && parsed.Method != http.MethodHead {
+					parsed.Method, parsed.Data = http.MethodGet, ""
+					for key := range headers {
+						if strings.EqualFold(key, "Content-Type") {
+							delete(headers, key)
+						}
 					}
 				}
+				u = next
+				continue
 			}
-			u = next
-			continue
 		}
 		return resp, nil
 	}

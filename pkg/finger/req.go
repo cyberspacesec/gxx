@@ -16,6 +16,7 @@ import (
 	"github.com/cyberspacesec/gxx/utils/logger"
 	"github.com/cyberspacesec/gxx/utils/proto"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -75,10 +76,10 @@ func buildProtoRequest(resp *http.Response, req RuleRequest) *proto.Request {
 }
 
 func buildProtoResponseBody(ctx context.Context, resp *http.Response, body []byte, latency int64, client *network.HTTPClient, options network.OptionsRequest) *proto.Response {
-	return buildProtoResponsePage(ctx, resp, body, latency, client, options, "")
+	return buildProtoResponsePage(ctx, resp, body, latency, client, options, "", true)
 }
 
-func buildProtoResponsePage(ctx context.Context, resp *http.Response, body []byte, latency int64, client *network.HTTPClient, options network.OptionsRequest, pageURL string) *proto.Response {
+func buildProtoResponsePage(ctx context.Context, resp *http.Response, body []byte, latency int64, client *network.HTTPClient, options network.OptionsRequest, pageURL string, icon bool) *proto.Response {
 	headers := make(map[string]string)
 	rawHeaderBuilder := strings.Builder{}
 	rawHeaderBuilder.WriteString(resp.Proto)
@@ -101,9 +102,10 @@ func buildProtoResponsePage(ctx context.Context, resp *http.Response, body []byt
 	}
 	// 入口页使用最终重定向地址解析资源；规则响应仅在根路径提取。
 	var iconHashStr = ""
-	if resp.Request != nil && resp.Request.URL != nil && resp.Request.Method == http.MethodGet {
+	if icon && resp.Request != nil && resp.Request.URL != nil && resp.Request.Method == http.MethodGet {
 		path := resp.Request.URL.Path
-		if (pageURL != "" || path == "" || path == "/") && isHTMLResponse(resp, body) {
+		// 30x 响应不是浏览器会渲染的页面，不为它下载图标。
+		if (pageURL != "" || path == "" || path == "/") && (resp.StatusCode < 300 || resp.StatusCode >= 400) && isHTMLResponse(resp, body) {
 			if pageURL == "" {
 				pageURL = resp.Request.URL.String()
 			}
@@ -165,9 +167,24 @@ func responseContentType(resp *http.Response) string {
 	return resp.Header.Get("Content-Type")
 }
 
-// BuildBaseProtoResponseOwned 构造扫描入口响应。pageURL 为最终页面地址，
-// 仅用于资源解析；规则缓存和 proto.Response.Url 继续使用目标地址。
-func BuildBaseProtoResponseOwned(ctx context.Context, resp *http.Response, body []byte, latency int64, client *network.HTTPClient, options network.OptionsRequest, pageURL string) *proto.Response {
+// BuildPageResponseOwned 构造入口跳转链上一页的响应，接管独占正文。
+// pageURL 是该页的实际地址，用于解析页面资源；icon 为 false 时不下载图标
+// （跳转链的中间页只参与规则匹配）。
+func BuildPageResponseOwned(ctx context.Context, resp *http.Response, body []byte, client *network.HTTPClient, options network.OptionsRequest, pageURL string, icon bool) *proto.Response {
 	body = decodeHTMLBody(body, responseContentType(resp))
-	return buildProtoResponsePage(ctx, resp, body, latency, client, options, pageURL)
+	return buildProtoResponsePage(ctx, resp, body, 0, client, options, pageURL, icon)
+}
+
+// TargetRequest 用目标地址合成只含 Url 的请求，使 set 块在发出任何请求之前
+// 就能求值 request.url.host、request.url.domain 等变量。未带协议时按 https 解析。
+func TargetRequest(target string) *proto.Request {
+	raw := strings.TrimSpace(target)
+	if !strings.Contains(raw, "://") {
+		raw = "https://" + raw
+	}
+	u, err := url.Parse(raw)
+	if err != nil || u.Host == "" {
+		return &proto.Request{Url: &proto.UrlType{}}
+	}
+	return &proto.Request{Method: http.MethodGet, Url: network.Url2ProtoUrl(u)}
 }

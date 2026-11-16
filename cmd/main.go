@@ -8,14 +8,15 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
 	"time"
 
 	"github.com/cyberspacesec/gxx/cmd/cli"
+	"github.com/cyberspacesec/gxx/sdk"
 	"github.com/cyberspacesec/gxx/utils/logger"
-	"github.com/cyberspacesec/gxx/utils/output"
 
 	"github.com/fatih/color"
 )
@@ -48,7 +49,7 @@ func main() {
 		options.Output = fmt.Sprintf("result_%d.txt", time.Now().Unix())
 	}
 	logger.Info("输出文件：%s", options.Output)
-	if output.GetOutputFormat(options.JSONOutput, options.Output) == "json" {
+	if cli.OutputFormat(options.JSONOutput, options.Output) == sdk.FormatJSON {
 		logger.Info("使用JSON格式输出结果")
 	}
 
@@ -58,7 +59,7 @@ func main() {
 	fmt.Println(color.CyanString(separator))
 
 	// 输出文件与 socket 由 Runner 在扫描期间统一打开和关闭。
-	if err := cli.Run(options); err != nil {
+	if err := cli.Run(context.Background(), options); err != nil {
 		logger.Error("%v", err)
 		os.Exit(1)
 	}

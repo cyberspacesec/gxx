@@ -9,7 +9,6 @@ package common
 
 import (
 	"bytes"
-	rand2 "crypto/rand"
 	"encoding/base64"
 	"encoding/binary"
 	"encoding/hex"
@@ -18,13 +17,11 @@ import (
 	"github.com/cyberspacesec/gxx/utils/proto"
 	"github.com/spaolacci/murmur3"
 	"golang.org/x/text/encoding/simplifiedchinese"
-	"math/big"
-	"math/rand"
+	"math/rand/v2"
 	"net"
 	"net/url"
 	"regexp"
 	"strings"
-	"time"
 	"unicode/utf8"
 )
 
@@ -35,11 +32,6 @@ const (
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyz"
-const (
-	letterIdxBits = 6                    // 6 bits to represent a letter index
-	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
-	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
-)
 
 // UA 生成器：使用真实版本号范围 + 正确的平台-浏览器搭配
 // Chrome 主版本每 4 周递增，这里取近 8 个稳定版本覆盖约半年窗口
@@ -59,7 +51,7 @@ var (
 // 保证平台-浏览器-版本号的搭配逻辑正确（如 Safari 只出现在 Apple 平台）
 func RandomUA() string {
 	// 按真实市场份额加权：Chrome ~65%, Firefox ~8%, Edge ~5%, Safari ~18%, Mobile ~4%
-	switch r := rand.Intn(100); {
+	switch r := rand.IntN(100); {
 	case r < 40:
 		return chromeDesktopUA()
 	case r < 52:
@@ -81,8 +73,8 @@ func RandomUA() string {
 	}
 }
 
-func randChromeVer() int { return chromeMajorVersions[rand.Intn(len(chromeMajorVersions))] }
-func randFFVer() int     { return firefoxMajorVersions[rand.Intn(len(firefoxMajorVersions))] }
+func randChromeVer() int { return chromeMajorVersions[rand.IntN(len(chromeMajorVersions))] }
+func randFFVer() int     { return firefoxMajorVersions[rand.IntN(len(firefoxMajorVersions))] }
 
 func chromeDesktopUA() string {
 	v := randChromeVer()
@@ -107,7 +99,7 @@ func firefoxDesktopUA() string {
 		"X11; Ubuntu; Linux x86_64",
 		"X11; Linux x86_64",
 	}
-	p := platforms[rand.Intn(len(platforms))]
+	p := platforms[rand.IntN(len(platforms))]
 	return fmt.Sprintf("Mozilla/5.0 (%s; rv:%d.0) Gecko/20100101 Firefox/%d.0", p, v, v)
 }
 
@@ -117,22 +109,22 @@ func edgeDesktopUA() string {
 }
 
 func safariDesktopUA() string {
-	sv := safariVersions[rand.Intn(len(safariVersions))]
+	sv := safariVersions[rand.IntN(len(safariVersions))]
 	return fmt.Sprintf("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/%s Safari/605.1.15", sv)
 }
 
 func chromeMobileAndroidUA() string {
 	v := randChromeVer()
-	av := androidVersions[rand.Intn(len(androidVersions))]
-	dev := androidDevices[rand.Intn(len(androidDevices))]
+	av := androidVersions[rand.IntN(len(androidVersions))]
+	dev := androidDevices[rand.IntN(len(androidDevices))]
 	return fmt.Sprintf("Mozilla/5.0 (Linux; Android %d; %s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%d.0.0.0 Mobile Safari/537.36", av, dev, v)
 }
 
 func safariMobileUA() string {
-	ios := iosVersionPairs[rand.Intn(len(iosVersionPairs))]
-	sv := safariVersions[rand.Intn(len(safariVersions))]
+	ios := iosVersionPairs[rand.IntN(len(iosVersionPairs))]
+	sv := safariVersions[rand.IntN(len(safariVersions))]
 	devices := [...]string{"iPhone", "iPad"}
-	dev := devices[rand.Intn(len(devices))]
+	dev := devices[rand.IntN(len(devices))]
 	if dev == "iPad" {
 		return fmt.Sprintf("Mozilla/5.0 (%s; CPU OS %d_%d like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/%s Mobile/15E148 Safari/604.1", dev, ios[0], ios[1], sv)
 	}
@@ -141,7 +133,7 @@ func safariMobileUA() string {
 
 func chromeMobileIOSUA() string {
 	v := randChromeVer()
-	ios := iosVersionPairs[rand.Intn(len(iosVersionPairs))]
+	ios := iosVersionPairs[rand.IntN(len(iosVersionPairs))]
 	return fmt.Sprintf("Mozilla/5.0 (iPhone; CPU iPhone OS %d_%d like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/%d.0.0.0 Mobile/15E148 Safari/604.1", ios[0], ios[1], v)
 }
 
@@ -236,77 +228,77 @@ func RandLetters(n int) string {
 	return RandFromChoices(n, letterBytes)
 }
 
-// RandFromChoices 从choices里面随机获取
+// RandFromChoices 从 choices 中随机取 n 个字节组成字符串；n<=0 或 choices 为空时返回空串。
+//
+// 使用 math/rand/v2 的全局生成器：并发安全、无需每次创建随机源。按纳秒时间
+// 重新播种的旧实现在同一纳秒内的并发调用会得到相同结果，且每次分配约 5 KiB。
 func RandFromChoices(n int, choices string) string {
-	b := make([]byte, n)
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	// A rand.Int63() generates 63 random bits, enough for letterIdxMax characters!
-	for i, cache, remain := n-1, r.Int63(), letterIdxMax; i >= 0; {
-		if remain == 0 {
-			cache, remain = r.Int63(), letterIdxMax
-		}
-		if idx := int(cache & letterIdxMask); idx < len(choices) {
-			b[i] = choices[idx]
-			i--
-		}
-		cache >>= letterIdxBits
-		remain--
+	if n <= 0 || choices == "" {
+		return ""
 	}
-
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = choices[rand.IntN(len(choices))]
+	}
 	return string(b)
 }
 
-// RandomString 生成随机字符串
-func RandomString(len int) string {
-	var container string
-	var str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
-	b := bytes.NewBufferString(str)
-	length := b.Len()
-	bigInt := big.NewInt(int64(length))
-	for i := 0; i < len; i++ {
-		randomInt, _ := rand2.Int(rand2.Reader, bigInt)
-		container += string(str[randomInt.Int64()])
-	}
-	return container
+const alphanumeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+
+// RandomString 生成由大小写字母与数字组成的随机字符串。
+func RandomString(n int) string {
+	return RandFromChoices(n, alphanumeric)
 }
 
-// DealMultipart 处理multipart的/n问题
+// multipartBoundary 匹配 Content-Type 中的 boundary 参数；媒体类型与参数名不区分大小写，
+// 值可带引号，后面可跟其他参数。
+var multipartBoundary = regexp.MustCompile(`(?i)multipart/form-data\s*;(?:.*;)?\s*boundary\s*=\s*(?:"([^"]+)"|([^;\s]+))`)
+
+// DealMultipart 把规则中以 \n 分行的 multipart 正文转换为 RFC 7578 要求的 \r\n 格式。
+// 每个分段以第一个空行分隔头部与内容，内容中的空行原样保留。
 func DealMultipart(contentType string, ruleBody string) (result string, err error) {
-	re := regexp.MustCompile(`(?m)multipart/form-Data; boundary=(.*)`)
-	match := re.FindStringSubmatch(contentType)
-	if len(match) != 2 {
+	match := multipartBoundary.FindStringSubmatch(contentType)
+	if match == nil {
 		return "", errors.New("no boundary in content-type")
 	}
-	boundary := "--" + match[1]
+	boundary := "--" + match[1] + match[2]
 
-	// 处理rule
-	multiPartContent := ""
-	multiFile := strings.Split(ruleBody, boundary)
-	if len(multiFile) == 0 {
-		return multiPartContent, errors.New("ruleBody.Body multi content format err")
-	}
-
-	for _, singleFile := range multiFile {
-		//	文件头和文件响应
-		SplitTmp := strings.Split(singleFile, "\n\n")
-		if len(SplitTmp) == 2 {
-			fileHeader := SplitTmp[0]
-			fileBody := SplitTmp[1]
-			fileHeader = strings.Replace(fileHeader, "\n", "\r\n", -1)
-			multiPartContent += boundary + fileHeader + "\r\n\r\n" + strings.TrimRight(fileBody, "\n") + "\r\n"
+	var builder strings.Builder
+	for _, part := range strings.Split(ruleBody, boundary) {
+		header, body, ok := strings.Cut(part, "\n\n")
+		if !ok {
+			continue
 		}
+		builder.WriteString(boundary)
+		builder.WriteString(strings.ReplaceAll(header, "\n", "\r\n"))
+		builder.WriteString("\r\n\r\n")
+		builder.WriteString(strings.TrimRight(body, "\n"))
+		builder.WriteString("\r\n")
 	}
-	multiPartContent += boundary + "--" + "\r\n"
-	return multiPartContent, nil
+	if builder.Len() == 0 {
+		return "", errors.New("ruleBody.Body multi content format err")
+	}
+	builder.WriteString(boundary + "--\r\n")
+	return builder.String(), nil
 }
 
 // ParseTarget 处理请求url地址
+//
+// 目标的路径是规则路径的前缀（http://a/app/ 加 /admin 得到 http://a/app/admin）。
+// 目标的查询串只属于目标页面本身：规则路径为空或 "/" 时保留，其余路径不携带；
+// 片段不会发往服务端，始终丢弃。
 func ParseTarget(target, path string) string {
-	target = strings.TrimRight(target, "/")
-	if path == "" {
-		return target
+	if i := strings.IndexByte(target, '#'); i >= 0 {
+		target = target[:i]
 	}
-	// 否则，直接将整个 path 附加到 target 后面
+	query := ""
+	if i := strings.IndexByte(target, '?'); i >= 0 {
+		target, query = target[:i], target[i:]
+	}
+	target = strings.TrimRight(target, "/")
+	if path == "" || path == "/" {
+		return target + "/" + query
+	}
 	return target + path
 }
 
@@ -375,30 +367,6 @@ func GetRandomIP() string {
 	ip := make(net.IP, 4)
 	binary.BigEndian.PutUint32(ip, rand.Uint32())
 	return ip.String()
-}
-
-// RemoveDuplicateURLs 去除重复的URL
-func RemoveDuplicateURLs(urls []string) []string {
-	// 使用map来判断URL是否重复
-	urlMap := make(map[string]bool)
-	var result []string
-
-	for _, u := range urls {
-		// 规范化URL，移除前后空格
-		u = strings.TrimSpace(u)
-		// 跳过空URL
-		if u == "" {
-			continue
-		}
-
-		// 如果URL不在map中，添加到结果中
-		if !urlMap[u] {
-			urlMap[u] = true
-			result = append(result, u)
-		}
-	}
-
-	return result
 }
 
 // RemoveTrailingSlash 删除URL中的最后一个/

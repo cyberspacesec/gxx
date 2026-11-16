@@ -159,7 +159,7 @@ func (p *evidencePlan) decorate(step interpreter.InterpretableV2) (interpreter.I
 			if !tracked {
 				index = -1
 			}
-			return &responseContainsStep{InterpretableCall: call, index: index, fold: name == "__gxx_ibcontains"}, nil
+			return &responseContainsStep{InterpretableCall: call, index: index, fold: name == "__gxx_ibcontains", field: responseBytesField(call.Args()[1])}, nil
 		}
 		if name == operators.LogicalAnd || name == operators.LogicalOr || name == operators.LogicalNot {
 			return step, nil
@@ -173,16 +173,82 @@ func (p *evidencePlan) decorate(step interpreter.InterpretableV2) (interpreter.I
 
 // 三参数的响应查找直接执行已完成类型检查的调用，避免每次构造 []ref.Val。
 // 参数按原顺序各求值一次，错误与 unknown 的传播遵循 CEL 严格函数语义。
+//
+// field 非空时第二个参数是 response.body / response.raw / response.raw_header：
+// 直接从激活中的 *proto.Response 读取字段，跳过 protobuf 反射与两次装箱。
+// 变量不是 *proto.Response（如被推导变量遮蔽）时按原路径求值，结论不变。
 type responseContainsStep struct {
 	interpreter.InterpretableCall
 	index int
 	fold  bool
+	field responseField
+}
+
+type responseField uint8
+
+const (
+	responseFieldNone responseField = iota
+	responseFieldBody
+	responseFieldRaw
+	responseFieldRawHeader
+)
+
+// responseBytesField 识别形如 response.body 的属性访问；其余表达式返回 responseFieldNone。
+func responseBytesField(argument interpreter.InterpretableV2) responseField {
+	attribute, ok := argument.(interpreter.InterpretableAttribute)
+	if !ok {
+		return responseFieldNone
+	}
+	namespaced, ok := attribute.Attr().(interpreter.NamespacedAttribute)
+	if !ok {
+		return responseFieldNone
+	}
+	names, qualifiers := namespaced.CandidateVariableNames(), namespaced.Qualifiers()
+	if len(names) != 1 || names[0] != "response" || len(qualifiers) != 1 {
+		return responseFieldNone
+	}
+	constant, ok := qualifiers[0].(interpreter.ConstantQualifier)
+	if !ok {
+		return responseFieldNone
+	}
+	switch constant.Value() {
+	case types.String("body"):
+		return responseFieldBody
+	case types.String("raw"):
+		return responseFieldRaw
+	case types.String("raw_header"):
+		return responseFieldRawHeader
+	}
+	return responseFieldNone
+}
+
+func (s *responseContainsStep) responseBytes(frame *interpreter.ExecutionFrame) ([]byte, bool) {
+	if s.field == responseFieldNone {
+		return nil, false
+	}
+	value, found := frame.ResolveName("response")
+	response, ok := value.(*proto.Response)
+	if !found || !ok || response == nil {
+		return nil, false
+	}
+	switch s.field {
+	case responseFieldBody:
+		return response.Body, true
+	case responseFieldRaw:
+		return response.Raw, true
+	default:
+		return response.RawHeader, true
+	}
 }
 
 func (s *responseContainsStep) Exec(frame *interpreter.ExecutionFrame) ref.Val {
 	var values [3]ref.Val
 	var unknown *types.Unknown
+	data, direct := s.responseBytes(frame)
 	for index, argument := range s.Args() {
+		if index == 1 && direct {
+			continue
+		}
 		values[index] = argument.Exec(frame)
 		if types.IsError(values[index]) {
 			return values[index]
@@ -196,7 +262,10 @@ func (s *responseContainsStep) Exec(frame *interpreter.ExecutionFrame) ref.Val {
 	if !ok {
 		return types.NewErrWithNodeID(s.ID(), "缺少执行上下文")
 	}
-	value, valueOK := values[1].(types.Bytes)
+	value, valueOK := types.Bytes(data), true
+	if !direct {
+		value, valueOK = values[1].(types.Bytes)
+	}
 	needle, needleOK := values[2].(types.Bytes)
 	if !valueOK || !needleOK {
 		return types.NewErrWithNodeID(s.ID(), "响应查找参数必须为 bytes")

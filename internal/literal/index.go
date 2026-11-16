@@ -136,5 +136,4 @@ func match[T ~string | ~[]byte](idx *Index, data T, bits []uint64) {
 
 // Match 返回各字面量是否出现；words 必须为去重后的非空字面量。
 // bits 由调用方独占，长度不得小于 (传入 New 的字面量数量+63)/64。
-func (idx *Index) Match(data string, bits []uint64)      { match(idx, data, bits) }
-func (idx *Index) MatchBytes(data []byte, bits []uint64) { match(idx, data, bits) }
+func (idx *Index) Match(data string, bits []uint64) { match(idx, data, bits) }

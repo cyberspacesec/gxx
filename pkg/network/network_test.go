@@ -241,7 +241,7 @@ func TestUDPNeverPerformsTLSHandshake(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer client.Close()
-	if client.Endpoint().TLS {
+	if client.endpoint.TLS {
 		t.Fatal("UDP 端点不应启用 TLS")
 	}
 	if err := client.Send([]byte("ping")); err != nil {

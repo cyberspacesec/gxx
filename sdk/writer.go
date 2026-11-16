@@ -26,6 +26,7 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -375,31 +376,31 @@ func (w *fileWriter) writeCSV(result *TargetResult) error {
 func (w *fileWriter) writeTXT(result *TargetResult) error {
 	var sb strings.Builder
 	sb.Grow(512)
-	sb.WriteString("URL: ")
-	sb.WriteString(result.URL)
-	sb.WriteString("\n状态码: ")
-	fmt.Fprintf(&sb, "%d", result.StatusCode)
-	sb.WriteString("\n标题: ")
-	sb.WriteString(result.Title)
-	if result.Server != nil {
-		sb.WriteString("\n服务器: ")
-		sb.WriteString(result.Server.ServerType)
-	}
-	if strings.TrimSpace(result.ICP) != "" {
-		sb.WriteString("\nICP备案号: ")
-		sb.WriteString(strings.TrimSpace(result.ICP))
-	}
-	if len(result.Matches) > 0 {
-		sb.WriteString("\n匹配指纹: ")
-		names := make([]string, 0, len(result.Matches))
-		for _, m := range result.Matches {
-			names = append(names, m.Info.Name)
+	line := func(label, value string) {
+		if value = strings.TrimSpace(value); value != "" {
+			sb.WriteString(label)
+			sb.WriteString(": ")
+			sb.WriteString(value)
+			sb.WriteByte('\n')
 		}
-		sb.WriteString(strings.Join(names, ", "))
 	}
-	sb.WriteString("\n")
+	line("URL", result.URL)
+	if result.FinalURL != result.URL {
+		line("最终URL", result.FinalURL)
+	}
+	line("跳转至其他资产", result.RedirectTo)
+	fmt.Fprintf(&sb, "状态码: %d\n", result.StatusCode)
+	line("标题", result.Title)
+	if result.Server != nil {
+		line("服务器", result.Server.OriginalServer)
+	}
+	line("技术栈", strings.Join(techStackSummary(result.TechStack), "; "))
+	line("ICP备案号", result.ICP)
+	line("产品", strings.Join(productSummary(result.Products), ", "))
+	line("匹配指纹", strings.Join(matchNames(result.Matches), ", "))
+	line("证书", strings.Join(certSummary(result.Certs), "; "))
 	sb.WriteString(strings.Repeat("-", 80))
-	sb.WriteString("\n")
+	sb.WriteByte('\n')
 	if _, err := io.WriteString(w.file, sb.String()); err != nil {
 		return fmt.Errorf("write txt: %w", err)
 	}
@@ -431,35 +432,87 @@ func (w *fileWriter) writeTXTHeader() error {
 
 // csvHeader 返回 CSV 表头字段，与 buildCSVRow 顺序保持一致。
 func csvHeader() []string {
-	return []string{"URL", "状态码", "标题", "服务器", "ICP备案号", "指纹ID", "指纹名称", "匹配结果"}
+	return []string{"URL", "最终URL", "跳转至其他资产", "状态码", "标题", "服务器", "技术栈", "产品", "指纹ID", "指纹名称", "匹配结果", "ICP备案号", "证书", "响应头"}
 }
 
 // buildCSVRow 把 TargetResult 序列化为 csvHeader 对应的字段顺序。
 func buildCSVRow(r *TargetResult) []string {
 	server := ""
 	if r.Server != nil {
-		server = r.Server.ServerType
+		server = r.Server.OriginalServer
 	}
 	ids := make([]string, 0, len(r.Matches))
-	names := make([]string, 0, len(r.Matches))
-	matched := false
 	for _, m := range r.Matches {
 		ids = append(ids, m.Info.ID)
-		names = append(names, m.Info.Name)
-		if m.Result {
-			matched = true
-		}
 	}
 	return []string{
 		r.URL,
-		fmt.Sprintf("%d", r.StatusCode),
+		r.FinalURL,
+		r.RedirectTo,
+		strconv.Itoa(int(r.StatusCode)),
 		r.Title,
 		server,
+		strings.Join(techStackSummary(r.TechStack), "; "),
+		strings.Join(productSummary(r.Products), ", "),
+		strings.Join(ids, ","),
+		strings.Join(matchNames(r.Matches), ","),
+		strconv.FormatBool(len(r.Matches) > 0),
 		strings.TrimSpace(r.ICP),
-		"[" + strings.Join(ids, ",") + "]",
-		"[" + strings.Join(names, ",") + "]",
-		fmt.Sprintf("%v", matched),
+		strings.Join(certSummary(r.Certs), "; "),
+		r.Headers,
 	}
+}
+
+func matchNames(matches []FingerMatch) []string {
+	names := make([]string, 0, len(matches))
+	for _, m := range matches {
+		names = append(names, m.Info.Name)
+	}
+	return names
+}
+
+// productSummary 返回"产品名 版本"列表。
+func productSummary(products []ProductMatch) []string {
+	items := make([]string, 0, len(products))
+	for _, p := range products {
+		item := p.Name
+		if p.Version != "" {
+			item += " " + p.Version
+		}
+		items = append(items, item)
+	}
+	return items
+}
+
+// techStackSummary 按分类列出技术栈，如 "Web服务器: nginx:1.25"。
+func techStackSummary(t *TechStack) []string {
+	if t == nil {
+		return nil
+	}
+	var items []string
+	for _, group := range []struct {
+		label  string
+		values []string
+	}{
+		{"Web服务器", t.WebServers}, {"反向代理", t.ReverseProxies}, {"编程语言", t.ProgrammingLanguages},
+		{"Web框架", t.WebFrameworks}, {"CMS", t.CMS}, {"数据库", t.Databases},
+		{"JS框架", t.JavaScriptFrameworks}, {"JS库", t.JavaScriptLibraries}, {"缓存", t.Caching},
+		{"安全", t.Security}, {"CDN", t.CDN}, {"操作系统", t.OperatingSystems}, {"其他", t.Other},
+	} {
+		if len(group.values) > 0 {
+			items = append(items, group.label+": "+strings.Join(group.values, ","))
+		}
+	}
+	return items
+}
+
+// certSummary 返回每张证书的"主体 / 颁发者 / 有效期"摘要。
+func certSummary(certs []CertInfo) []string {
+	items := make([]string, 0, len(certs))
+	for _, c := range certs {
+		items = append(items, fmt.Sprintf("CN=%s 颁发者=%s 有效期=%s~%s", c.Subject.CommonName, c.Issuer.CommonName, c.NotBefore, c.NotAfter))
+	}
+	return items
 }
 
 // sockWriter 通过 Unix domain socket 推送 JSON Lines。
@@ -709,6 +762,7 @@ func cloneTargetResult(r *TargetResult) *TargetResult {
 		v.Other = slices.Clone(v.Other)
 		c.TechStack = &v
 	}
+	c.Redirects = slices.Clone(r.Redirects)
 	c.Certs = slices.Clone(r.Certs)
 	for i := range c.Certs {
 		v := &c.Certs[i]
@@ -717,8 +771,10 @@ func cloneTargetResult(r *TargetResult) *TargetResult {
 		v.DNSNames = slices.Clone(v.DNSNames)
 		v.EmailAddresses = slices.Clone(v.EmailAddresses)
 		v.IPAddresses = slices.Clone(v.IPAddresses)
+		v.URIs = slices.Clone(v.URIs)
 		v.OCSPServer = slices.Clone(v.OCSPServer)
 		v.CRLDistributionPoints = slices.Clone(v.CRLDistributionPoints)
+		v.IssuingCertificateURL = slices.Clone(v.IssuingCertificateURL)
 	}
 	return &c
 }

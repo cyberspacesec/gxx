@@ -50,7 +50,9 @@ gxx/
 │   ├── main.go                       # 程序入口，负责 Banner / Options / Logger 初始化（输出由 Runner 打开与关闭）
 │   └── cli/
 │       ├── banner.go                 # 启动 Banner，版本/作者/构建时间通过 ldflags 注入
-│       ├── cmd.go                    # Run() 包装：启动监控 → 创建 Runner → 执行
+│       ├── cmd.go                    # Run()：创建 sdk.Engine 与 Writer，按目标并发扫描
+│       ├── targets.go                # 目标加载：保序去重、注释、按资产入口判重
+│       ├── console.go                # 终端结果行与进度条
 │       └── options.go                # CLI 参数定义与校验（基于标准库 flag）
 │
 ├── sdk/                              # ② SDK 对外层（v3 全实例化 API）
@@ -63,7 +65,8 @@ gxx/
 │
 ├── pkg/                              # ③ 引擎核心
 │   ├── runner/
-│   │   ├── runner.go / runner_cli.go # *Runner 实例 + CLI 批量扫描
+│   │   ├── runner.go                 # *Runner 实例
+│   │   ├── navigate.go               # 扫描入口逐跳导航：资产边界、跳转链、协议确定
 │   │   ├── scan.go                   # ScanTarget / 指纹匹配 / 结果收集
 │   │   ├── fingerprint.go / cache.go / pool.go / monitor.go
 │   │   ├── internal_pool.go          # sync.Pool 对象复用
@@ -75,6 +78,7 @@ gxx/
 │   │   ├── req.go                    # formatPath/formatBody + buildProtoRequest/Response
 │   │   ├── eval.go                   # IsFuzzSet（set 变量解析）+ SetVariableMap（{{var}} 替换）
 │   │   ├── title.go                  # 网页标题提取（含字符集探测 / i18n JS 兜底）
+│   │   ├── redirect.go               # meta refresh 与跳转壳脚本跳转的静态识别
 │   │   ├── server.go                 # 从 Server 头提取服务器类型与版本
 │   │   ├── cert.go                   # TLS 证书结构化提取
 │   │   ├── icp.go                    # HTML 内 ICP 备案号提取（多重正则 + 锚文本兜底）
@@ -86,7 +90,9 @@ gxx/
 │   │   └── celprogram.go             # 自定义函数库（icontains/bcontains/base64/md5/regex...）
 │   │
 │   ├── network/                      # 网络请求层
-│   │   ├── http.go                   # retryablehttp 客户端池化 + 重定向策略 + Transport 缓存
+│   │   ├── http.go                   # 请求选项、请求头与页面请求的重定向策略
+│   │   ├── origin.go                 # 资产（协议+主机+端口）判定与目标协议候选
+│   │   ├── cookies.go                # 按扫描隔离的 Cookie 会话
 │   │   ├── endpoint.go               # ParseEndpoint：TCP/UDP 连接地址唯一解析入口（主机/端口/TLS）
 │   │   ├── network.go                # TCP/UDP Client 实现（含 TLS / 代理 / 重试 / 分段接收）
 │   │   ├── proxy.go                  # HTTP CONNECT、SOCKS5 UDP ASSOCIATE 与代理 TLS 策略
@@ -106,15 +112,13 @@ gxx/
 │   └── lifecycle/                    # 实例生命周期辅助
 │
 ├── types/                            # 公共类型
-│   ├── options.go                    # CmdOptions / YamlFingerType
+│   ├── options.go                    # YamlFingerType
 │   ├── server.go                     # ServerInfo
 │   └── cert.go                       # CertInfo / CertName
 │
 ├── utils/                            # 基础设施
 │   ├── common/                       # 通用工具：UA 池、编码、哈希、URL 处理
-│   ├── config/                       # 反连平台配置（Ceye/JNDI）
 │   ├── logger/                       # 双 logger 架构（终端彩色 + 文件 plain），延迟格式化
-│   ├── output/                       # 多格式输出：file.go / sock.go / console.go
 │   └── proto/                        # http.proto + 编译后的 http.pb.go（CEL 的 request/response 模型）
 │
 ├── fingerYaml/                       # 内置指纹库（go:embed 嵌入）
@@ -131,7 +135,9 @@ gxx/
     ├── file_target_scan/             # 批量文件
     ├── proxy_scan/                   # 代理扫描
     ├── wappalyzer_scan/              # 技术栈识别
-    └── output_writer/                # Writer 输出（文件 + 自定义 Writer）
+    ├── output_writer/                # Writer 输出（文件 + 自定义 Writer）
+    ├── rules/                        # 规则示例：HTTP / TCP / UDP
+    └── sock_reader.py                # Unix Socket 输出的读取示例
 ```
 
 ---
@@ -142,22 +148,24 @@ gxx/
 
 ```
 main.go
-  └─ cli.Run(options)
-       └─ runner.NewRunner(scanCfg, pocOptions)   // 实例化 FingerStore/RulePool/Cache/Monitor/HTTPClient
-            └─ (*Runner).Run(ctx, options)
-                 ├─ LoadTargets / output.InitOutput
-                 └─ executeScan(ctx, targets, options)
-                      └─ URL 工作池（默认 5 并发）
-                           └─ (*Runner).ScanTarget(ctx, target)
-                                ├─ limiter.Wait（可选 per-host）
-                                ├─ getBaseInfo(ctx) → HTTPClient.CheckProtocol + SendRequestHttp
-                                ├─ warmUpRequestCache()
-                                └─ executeFingerprintMatching(ctx, ...)
-                                     └─ RulePool.Submit(RuleTask{Ctx: ctx, ...})
-                                          └─ processRuleTask → evaluateFingerprint(ctx, ...)
-                                               ├─ CacheManager.ShouldUseCache
-                                               ├─ finger.SendRequest(ctx, httpClient, ...)  // 继承 Scan 取消
-                                               └─ CEL Evaluate
+  └─ cli.Run(ctx, options)                         // 命令行只是 SDK 的前端
+       ├─ LoadTargets                              // 保序去重，按资产入口判断重复
+       ├─ sdk.NewEngine(...) + sdk.NewFileWriter / NewSockWriter
+       └─ 目标并发（默认 5）
+            └─ (*Engine).Scan(ctx, target) → writer.Write → 终端结果行
+                 └─ (*Runner).ScanTarget(ctx, target)
+                      ├─ network.WithCookieJar（一次扫描一个 Cookie 会话）
+                      ├─ getBaseInfo(ctx)          // 入口逐跳导航，只在资产内跟随
+                      │    ├─ requestEntry          // 未带协议时 https → http
+                      │    └─ nextHop               // 30x Location / Refresh / 跳转壳脚本
+                      ├─ warmUpRequestCache()       // 跳转链各页写入缓存
+                      └─ executeFingerprintMatching(ctx, ...)
+                           └─ RulePool.Submit(RuleTask{Ctx: ctx, ...})
+                                └─ processRuleTask → evaluateFingerprint(ctx, ...)
+                                     ├─ 根路径规则依次匹配跳转链各页
+                                     ├─ CacheManager.ShouldUseCache
+                                     ├─ finger.SendRequest(ctx, httpClient, ...)  // 继承 Scan 取消
+                                     └─ CEL Evaluate
 
 sdk.NewEngine → *runner.Runner（字段一一对应，无全局共享状态）
               → buildWriter(cfg)：装配 FileWriter / SockWriter / 自定义 Writer，合并为 MultiWriter
@@ -191,11 +199,13 @@ sdk.NewEngine → *runner.Runner（字段一一对应，无全局共享状态）
 
 ### 5.1 `cmd/` — 入口与命令行
 
-**职责**：解析参数、初始化日志/输出、调用 Runner。
+**职责**：解析参数、初始化日志、加载目标、显示进度与结果行。识别与文件/Socket 输出全部由 SDK 完成。
 
 - `main.go` 的 36~80 行：根据 `--debug` 决定日志级别（INFO=1 / DEBUG=4），根据扩展名或 `--json` 决定输出格式（txt/csv/json）
 - `cli/options.go` 的 `verifyOptions`：对 target/output/threads/timeout 做防御性校验，无效值回退默认
-- `cli/cmd.go` 的 `Run`：`NewRunner` + `defer Close` + `Run(ctx, options)`
+- `cli/cmd.go` 的 `Run`：`sdk.NewEngine` + `sdk.NewFileWriter` / `NewSockWriter`，按目标并发调用 `Engine.Scan`
+- `cli/targets.go` 的 `LoadTargets`：保持输入顺序去重，跳过空行与 `#` 注释
+- `cli/console.go`：结果行格式化与进度条
 
 **关键参数**：
 
@@ -327,12 +337,12 @@ CEL 编译结果 `cel.Program` 是 stateless / thread-safe / cacheable 的，所
 
 - **Transport 缓存**（`transportCache sync.Map`）：按 `proxyURL` 缓存 `*http.Transport`，每 5 分钟关闭空闲连接，超过 100 条时整体重置
 - **Client 缓存**（`clientCache sync.Map`）：按 `(proxy, timeout, followRedirects)` 三元组缓存 `*retryablehttp.Client`，避免每次请求新建
-- **CookieJar**：自动按域名路径管理 Cookie（基于 `golang.org/x/net/publicsuffix`）
+- **Cookie 会话**（`cookies.go`）：会话属于请求的 ctx 而不是客户端。`WithCookieJar` 为一次扫描建立独立会话，`requestTransport` 在每次往返时附加与回收 Cookie；扫描结束即释放，引擎不随目标数量累积 Cookie
 - **LoggingTransport**：DEBUG 模式下转储请求/响应头到日志（不含 body）
 - **TLS 套件**：取标准库实现的全部套件（`tls.CipherSuites()` + `tls.InsecureCipherSuites()`），最低 TLS 1.0。扫描需要尽可能握手成功，包含老旧设备依赖的 RSA 密钥交换、CBC-SHA256 等；不能手写清单（曾漏掉 ECDSA+AES-GCM），也不能用 Go 默认值（1.22 起已移除 RSA 密钥交换）
 - **代理与 Raw TCP 回退**：`retryablehttp` 遇到畸形 HTTP 响应时会用库内部的 `net.Dial` 直连重发，看不到注入在 Transport 上的代理。因此配置了代理时关闭该回退（避免泄漏真实出口）；无代理时保留，用于兼容返回非标准 HTTP 报文的设备
 - **重试收敛**：扫描用 `RetryMax=1`、退避 200–600ms，避免默认 `RetryMax=5 + 1s` 让不可达/拒绝连接的目标一直重试到整体超时；既容忍瞬时抖动又快速失败
-- **跨源头剥离**（`createRedirectPolicy`）：跨源重定向删除非白名单请求头（仅保留 UA/Accept/Accept-Language/Referer），避免 `WithCustomHeaders` 注入的 Token 等泄漏给第三方；同源保留
+- **资产边界**（`origin.go`）：`SameOrigin` 按协议 + 主机 + 端口判断两个地址是否属于同一资产；页面请求的重定向只在资产内跟随，不存在跨资产请求，自定义请求头不会泄漏
 
 #### 5.5.1b 代理与 TCP/UDP（`proxy.go`）
 
@@ -343,37 +353,26 @@ CEL 编译结果 `cel.Program` 是 stateless / thread-safe / cacheable 的，所
 - **代理证书默认不校验**：扫描器对目标证书默认 `InsecureSkipVerify`，代理证书保持一致——`https` 与 `socks5+tls` 的 TLS 代理默认跳过证书校验，TCP（`proxyclient`）与 UDP（自实现）走同一判定 `proxySkipVerify`，行为一致。`applyProxyTLSDefaults` 在构造 `proxyclient` 前注入默认值，UDP 路径由 `proxyTLSConfig` 直接应用
 - **代理校验可选开启**（查询参数，名称不区分大小写，与 `proxyclient` TCP 路径同名）：`tls-insecure-skip-verify=false` 显式开启校验；`tls-ca-file` 指定信任的 CA（显式提供即视为要求校验）；`tls-domain` 指定校验用的 ServerName。CA 文件无法读取或不含证书时直接报错
 
-#### 5.5.2 协议探测（`CheckProtocol`）
+#### 5.5.2 协议确定（`TargetCandidates`）
 
-- 签名：`CheckProtocol(ctx, host, proxy, timeout)`，遵守调用方 ctx 与 `ScanConfig.Timeout` / `WithTimeout`
-- 优先 HTTPS（基于「绝大多数现代站点支持 https」假设）→ 失败回退 HTTP
-- 80 端口强制 HTTP，443 端口强制 HTTPS，其他端口先探 HTTPS
+- 已带协议的目标只有它自身；端口 80 只尝试 http，端口 443 只尝试 https，其余先 https 后 http
+- 不单独发探测请求：入口 GET 本身就是探测。`WithConnectProbe` 记录 TCP 是否连上，`ip:端口` 形式连接失败时不再换协议
 
-#### 5.5.3 重定向策略（`createRedirectPolicy`）
+#### 5.5.3 重定向策略
 
-- 最多 5 次重定向
-- 关键处理：307/308 重定向必须保留原始 Method 和 Body，作者实现了完整的 `GetBody` 注入逻辑，保证 POST 请求重定向时 Body 可重读
+- 页面请求（`createRedirectPolicy`）：最多 5 跳，只在同一资产内跟随；指向其他资产或达到上限时返回 30x 响应本身。请求体由 net/http 处理：307/308 重放，301/302/303 改为不带请求体的 GET
+- 扫描入口不使用自动跟随，由 `pkg/runner/navigate.go` 逐跳请求并保留每一页，详见 [资产与跳转](docs/资产与跳转.md)
+- 图标请求（`GetResource`）：按浏览器的方式跟随，可以跨主机，最多 5 跳，离开原主机后不带自定义请求头
+- Raw 请求（`raw_context.go`）：同样只在资产内跟随
 
 ### 5.6 `pkg/wappalyzer/` — 技术栈识别
 
 - **单例**：通过 `sync.Once` 全局只创建一个 `wappalyzer.Wappalyze` 实例（启动时一次性加载所有指纹库）
 - **分类映射**：将 wappalyzergo 的原始分类映射到 11 个自定义维度（WebServers/JavaScriptFrameworks/Caching/Security 等）
 
-### 5.7 `utils/output/` — CLI 多格式输出
+### 5.7 输出
 
-| 格式 | 实现 | 特性 |
-|------|------|------|
-| TXT | `file.go` 字符串拼接 | 含分隔线和换行 |
-| CSV | `encoding/csv` + UTF-8 BOM | Excel 友好 |
-| JSON | `encoding/json.Marshal` | JSON Lines：每个目标一行，与 SDK `FileWriter`、Socket 输出一致 |
-| Socket | Unix Domain Socket + JSON | 实时推送，支持多客户端连接 |
-
-**线程安全**：所有写操作通过 `mu sync.Mutex` 串行化；Socket 连接集合通过 `sockConnMutex` 保护。
-异步写入器（`async_writer.go`）把格式化 + 落盘从 URL 工作池剥离，URL worker 仅做 O(1) 入队，
-队列满时调用方回退同步写以保证不丢数据。
-
-> CLI 入口（`cmd/main.go` → `runner.Run`）走该包；SDK 调用方应改用 `sdk.Writer`
-> 抽象（见 5.9），后者每个 Engine 持有独立实例，与 utils/output 包级状态完全解耦。
+命令行与 SDK 使用同一套输出实现（`sdk/writer.go`，见 5.9）和同一种结果结构：TXT、CSV（带 UTF-8 BOM）、JSON Lines 与 Unix Socket。命令行只负责终端上的结果行与进度条（`cmd/cli/console.go`）。
 
 ### 5.8 `utils/logger/` — 双 Logger 架构
 
@@ -417,7 +416,7 @@ CEL 编译结果 `cel.Program` 是 stateless / thread-safe / cacheable 的，所
 | 对象池（RuleTask/varMap/FingerMatch） | `pkg/runner/internal_pool.go` | 减少高频小对象分配 |
 | URL 池 + 规则管道 limiter 回压 | `pkg/runner/scan.go` | 防止内存爆炸，平滑调度 |
 | Favicon 按需抓取 | `pkg/finger/req.go` L99 | 仅首页 GET + HTML 时抓取，避免高并发下重复网络请求 |
-| 流式读取目标文件 | `pkg/runner/runner_cli.go` LoadTargets | 1 MB 行缓存，去重边读边做 |
+| 流式读取目标文件 | `cmd/cli/targets.go` LoadTargets | 1 MB 行缓存，保序去重 |
 
 **实测数据**（README 提供）：16 目标 × 2348 规则 → 总分配 11.8 GB / 峰值堆 539 MB / 最终残留 147 MB / GC CPU 3% / 耗时 20s，race detector 验证零 goroutine 泄漏。
 
@@ -570,8 +569,7 @@ cel.Function("myFunc",
 
 ### 9.3 添加新的输出格式
 
-- **CLI 入口**：修改 `utils/output/file.go` 的 `WriteFingerprints`，新增 `opts.Format == "your_format"` 分支即可。
-- **SDK 入口**：实现 `sdk.Writer` 接口（`Write` + `Close`），通过 `sdk.WithWriter(your)` 注入；
+- 实现 `sdk.Writer` 接口（`Write` + `Close`），通过 `sdk.WithWriter(your)` 注入；
   也可直接基于 `sdk.NewFileWriter` 扩展新的序列化分支。
 
 ### 9.4 自定义指纹库目录
@@ -614,11 +612,11 @@ goreleaser release --snapshot --clean
 2. favicon hash 使用当前 HTTP 客户端的有界 LRU，键包含 URL、代理、请求头和 Cookie 摘要；有效图标读取到 EOF，失败不保存前缀哈希；响应体在请求结束时关闭
 3. 基础响应保持只读所有权；缓存保留完整已读取字段，超过字节预算时不缓存。正文上限和缓存预算分别管理读取范围与复用容量
 4. `DisableKeepAlives` 默认 **false**（`sdk.WithDisableKeepAlives`）；遇 "Unsolicited response" 等兼容性问题时再显式关闭 Keep-Alive
-5. `utils/output/file.go` 的全局 `mu sync.Mutex` 仅服务于 CLI 路径；SDK 使用 `sdk.Writer`。同一自定义 Writer 或输出路径被多个实例显式传入时，调用方负责共享资源的生命周期
+5. 命令行与 SDK 共用 `sdk.Writer`，没有包级输出状态。同一自定义 Writer 或输出路径被多个实例显式传入时，调用方负责共享资源的生命周期
 6. CSV 输出未使用 `strings.Replace` 转义 quote 字符（依赖 `encoding/csv` 自动处理），但 Headers 字段做了 `\n → \\n` 的人工转义，建议统一策略
 7. YAML 规则解析使用调用内状态；并发加载、直接解码 `Rule` 和重复规则名称均有回归用例
-8. **CookieJar 为实例级持久状态**：同一 Engine 对同一目标多次扫描会携带上一次的会话 Cookie，图标哈希缓存也按 Cookie 摘要隔离。需要完全无状态、可复现的重复扫描时，为每次独立扫描新建 Engine。这是有意的实例作用域设计，非缺陷
-9. **技术栈只用最终响应头**：重定向中间跳（如 302 上的 `Set-Cookie` / `X-Powered-By`）不参与 Wappalyzer 识别，仅最终到达页面的响应头参与。改为跟踪全链路响应头需更大改动，当前按最终响应识别
+8. **Cookie 会话按扫描隔离**：每次扫描使用独立的会话，同一 Engine 对同一目标的多次扫描互不影响；图标哈希缓存按 Cookie 摘要隔离
+9. **技术栈只用跳转链最后一页**：中间跳的响应头不参与 Wappalyzer 识别，但参与指纹规则匹配（见 [资产与跳转](docs/资产与跳转.md)）
 10. **磁盘指纹库查找**：默认（非 embed）构建从工作目录逐级向上、以及二进制同级目录查找 `fingerYaml/`，但只接受"看起来像内置库"的目录（含 `fingerprints`/`fingers`/`fofa`/`jiajiu` 中至少两个子目录），避免无关同名目录被静默采用。自定义规则请用 `PocFile`/`PocYaml` 显式指定
 11. **字符集解码**：`decodeHTMLBody` 按显式声明解码，无声明时 UTF-8 保留、否则 GB18030 兜底。页面谎报字符集（如标 utf-8 实为 GBK）时以标注为准，由 GB18030 兜底覆盖常见中文误标
 

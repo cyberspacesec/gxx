@@ -46,8 +46,8 @@ func TestTargetsKeepCaseAndFragment(t *testing.T) {
 		t.Fatal(err)
 	}
 	want := []string{"https://Example.com/Admin#Top", "http://b.example/X", "https://c.example/Path"}
-	if !slices.Equal(options.Target, want) {
-		t.Fatalf("targets=%q, want %q", options.Target, want)
+	if !slices.Equal(options.Targets, want) {
+		t.Fatalf("targets=%q, want %q", options.Targets, want)
 	}
 }
 

@@ -196,7 +196,7 @@ func TestMatchDetailsPreservesFullCorpusResults(t *testing.T) {
 			match.MatchedRules = nil
 		}
 		slices.SortFunc(result.Matches, func(a, b sdk.FingerMatch) int { return strings.Compare(a.Info.ID, b.Info.ID) })
-		result.URL = ""
+		result.URL, result.FinalURL, result.Headers = "", "", ""
 		results = append(results, result)
 	}
 	a, _ := json.Marshal(results[0])

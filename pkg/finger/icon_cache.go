@@ -42,7 +42,7 @@ func getIconHashExactCached(ctx context.Context, client *network.HTTPClient, ico
 	if client == nil {
 		client = network.DefaultHTTPClient()
 	}
-	cookies := client.ResourceCookies(iconURL, network.OptionsRequest{Proxy: proxy, Timeout: timeout, FollowRedirects: true})
+	cookies := client.ResourceCookies(ctx, iconURL)
 	key := sha256.Sum256([]byte(normalizeIconURL(iconURL) + "\x1f" + proxy + "\x1f" + iconHeaderDigest(headers, cookies)))
 	if hash, ok := client.ResourceHash(key); ok {
 		return hash

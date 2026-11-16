@@ -284,9 +284,15 @@ func GetPageIconHash(ctx context.Context, client *network.HTTPClient, pageURL st
 			}
 		}
 	}
+	// 社交图片、<img> 与图片链接只是猜测的图标线索，可能指向任意主机；
+	// 只请求与页面同一资产的地址。明确声明的图标（rel=icon 等）不受此限制。
+	page, _ := url.Parse(pageURL)
 	for _, raw := range urls[declared:] {
 		if attempted == maxIconAttempts || iconContextExpired(ctx) {
 			break
+		}
+		if guess, err := url.Parse(raw); err != nil || !network.SameOrigin(page, guess) {
+			continue
 		}
 		attempted++
 		if hash := getIconHashExactCached(ctx, client, raw, proxy, timeout, pageIconHeaders(pageURL, raw, options.CustomHeaders)); hash != "" && hash != "0" {

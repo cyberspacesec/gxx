@@ -112,7 +112,10 @@ func TestAllHTTPPatternsConservativeFilter(t *testing.T) {
 	}
 	verified, filtered := 0, 0
 	for source := range sources {
-		literals := requiredLiterals(source)
+		var literals []string
+		if tree := parseUpstreamPattern(source); tree != nil {
+			literals = literalsFromTree(tree)
+		}
 		if len(literals) == 0 {
 			continue
 		}

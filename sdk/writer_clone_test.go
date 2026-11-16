@@ -18,7 +18,7 @@ func TestCloneTargetResultDeepCopiesNestedFields(t *testing.T) {
 		}},
 		Products:  []ProductMatch{{ProductInfo: ProductInfo{ID: "p", Tags: []string{"pt"}}, Versions: []string{"1.0"}, RuleIDs: []string{"a"}}},
 		TechStack: &TechStack{CMS: []string{"WordPress"}, Databases: []string{"MySQL"}},
-		Certs:     []CertInfo{{Subject: CertName{Organization: []string{"org"}}, DNSNames: []string{"a.com"}}},
+		Certs:     []CertInfo{{Subject: CertName{Organization: []string{"org"}}, DNSNames: []string{"a.com"}, URIs: []string{"spiffe://a"}, IssuingCertificateURL: []string{"http://ca"}}},
 	}
 	clone := cloneTargetResult(orig)
 
@@ -36,6 +36,8 @@ func TestCloneTargetResultDeepCopiesNestedFields(t *testing.T) {
 	orig.TechStack.Databases[0] = "changed"
 	orig.Certs[0].Subject.Organization[0] = "changed"
 	orig.Certs[0].DNSNames[0] = "changed"
+	orig.Certs[0].URIs[0] = "changed"
+	orig.Certs[0].IssuingCertificateURL[0] = "changed"
 
 	checks := []struct {
 		name string
@@ -53,6 +55,8 @@ func TestCloneTargetResultDeepCopiesNestedFields(t *testing.T) {
 		{"TechStack.Databases", clone.TechStack.Databases[0], "MySQL"},
 		{"Certs.Subject.Organization", clone.Certs[0].Subject.Organization[0], "org"},
 		{"Certs.DNSNames", clone.Certs[0].DNSNames[0], "a.com"},
+		{"Certs.URIs", clone.Certs[0].URIs[0], "spiffe://a"},
+		{"Certs.IssuingCertificateURL", clone.Certs[0].IssuingCertificateURL[0], "http://ca"},
 	}
 	for _, c := range checks {
 		if c.got != c.want {

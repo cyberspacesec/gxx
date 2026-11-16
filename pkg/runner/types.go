@@ -35,7 +35,30 @@ type BaseInfoResponse struct {
 	BodyBytes  []byte
 	ICP        string
 	Certs      []*types.CertInfo
-	pageURL    string
+	// FinalURL 是资产内最终页面的地址；RedirectTo 是指向其他资产、未跟随的跳转目标。
+	FinalURL   string
+	RedirectTo string
+	Redirects  []Redirect
+	pages      []*scanPage
+}
+
+// Redirect 入口跳转链上的一跳。Followed 为 false 表示目标属于其他资产，没有访问。
+type Redirect struct {
+	Type     string // http / refresh / javascript
+	Status   int32  // 发出跳转的响应的状态码
+	From     string
+	To       string
+	Followed bool
+}
+
+// scanPage 入口跳转链上的一页响应。链上每一页都参与根路径规则的匹配。
+type scanPage struct {
+	url      string
+	status   int32
+	header   http.Header
+	body     []byte
+	request  *proto.Request
+	response *proto.Response
 }
 
 // TargetResult 单个目标的扫描结果。
@@ -50,6 +73,9 @@ type TargetResult struct {
 	LastResponse *proto.Response
 	ICP          string
 	Certs        []*types.CertInfo
+	FinalURL     string
+	RedirectTo   string
+	Redirects    []Redirect
 }
 
 // FingerMatch 单条指纹匹配结果。
@@ -85,8 +111,14 @@ type BaseInfo struct {
 	StatusCode int32
 	request    *proto.Request
 	response   *proto.Response
-	requests   singleflight.Group
-	cache      *CacheManager
+	// rootTarget/rootURL 缓存本次扫描目标拼接根路径 "/" 的结果：内置规则几乎都请求
+	// 根路径，避免每条规则重复拼接字符串。
+	rootTarget string
+	rootURL    string
+	// earlier 是跳转链上最终页之前的各页（入口 30x、跳转壳），按从后到前排列。
+	earlier  []*scanPage
+	requests singleflight.Group
+	cache    *CacheManager
 }
 
 // ScanConfig 扫描配置参数。
@@ -97,9 +129,6 @@ type ScanConfig struct {
 	Timeout           time.Duration
 	URLWorkerCount    int
 	FingerWorkerCount int
-	OutputFormat      string
-	OutputFile        string
-	SockOutputFile    string
 
 	Logger           logger.Sink
 	CacheMaxBytes    uint64

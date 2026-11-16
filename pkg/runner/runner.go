@@ -23,7 +23,6 @@ import (
 	"github.com/cyberspacesec/gxx/pkg/network"
 	"github.com/cyberspacesec/gxx/types"
 	"github.com/cyberspacesec/gxx/utils/logger"
-	"github.com/cyberspacesec/gxx/utils/output"
 	"maps"
 	"sync/atomic"
 	"time"
@@ -41,8 +40,7 @@ type Runner struct {
 	httpClient *network.HTTPClient
 	log        logger.Sink
 
-	isRunning atomic.Bool
-	closed    atomic.Bool
+	closed atomic.Bool
 }
 
 // NewRunner 创建并初始化 Runner 实例。
@@ -257,49 +255,4 @@ func (r *Runner) Close() error {
 // HTTPClient 返回 Runner 持有的 HTTP 客户端。
 func (r *Runner) HTTPClient() *network.HTTPClient {
 	return r.httpClient
-}
-
-// Run 执行批量扫描任务（CLI 入口）。
-func (r *Runner) Run(ctx context.Context, options *types.CmdOptions) error {
-	if r.IsClosed() {
-		return fmt.Errorf("runner has been closed")
-	}
-	if !r.isRunning.CompareAndSwap(false, true) {
-		return fmt.Errorf("扫描器已在运行中")
-	}
-	defer r.isRunning.Store(false)
-
-	targets := LoadTargets(options)
-	if len(targets) == 0 {
-		return fmt.Errorf("未找到有效的目标URL")
-	}
-	r.log.Info("准备扫描 %d 个目标", len(targets))
-
-	// 文件与 socket 输出由本次 Run 独占打开；任一打开后都在返回前统一关闭，
-	// 关闭时先排空异步写入队列。
-	if r.cfg.OutputFile != "" || r.cfg.SockOutputFile != "" {
-		defer func() { _ = output.Close() }()
-	}
-	if r.cfg.OutputFile != "" {
-		if err := output.InitOutput(r.cfg.OutputFile, r.cfg.OutputFormat); err != nil {
-			return fmt.Errorf("初始化输出文件失败: %w", err)
-		}
-	}
-	if r.cfg.SockOutputFile != "" {
-		if err := output.InitSockOutput(r.cfg.SockOutputFile); err != nil {
-			return fmt.Errorf("初始化socket输出文件失败: %w", err)
-		}
-		r.log.Info("Socket输出文件：%s", r.cfg.SockOutputFile)
-	}
-
-	r.log.Info("开始扫描 %d 个目标，URL并发=%d 规则并发=%d ...",
-		len(targets), r.cfg.URLWorkerCount, r.cfg.FingerWorkerCount)
-
-	summary, err := r.executeScan(ctx, targets, options)
-	if err != nil {
-		return err
-	}
-
-	output.PrintSummaryCounts(len(targets), summary.matched, summary.unmatched)
-	return nil
 }

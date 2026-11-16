@@ -58,9 +58,6 @@ type Client struct {
 	conf     TcpOrUdpConfig
 }
 
-// Endpoint 返回连接地址解析后的端点。
-func (c *Client) Endpoint() Endpoint { return c.endpoint }
-
 // NewClientContext 将连接、TLS 握手和读写统一绑定到调用方的生命周期。
 func NewClientContext(ctx context.Context, address string, conf TcpOrUdpConfig) (*Client, error) {
 	if ctx == nil {

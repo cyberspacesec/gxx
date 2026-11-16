@@ -29,7 +29,6 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
-	"time"
 )
 
 // Scanner 是 Engine 实现的最小可用扫描接口（便于 mock 测试）。
@@ -511,6 +510,9 @@ func (e *Engine) GetBaseInfo(ctx context.Context, target string) (*BaseInfo, err
 		Title:      base.Title,
 		StatusCode: base.StatusCode,
 		ICP:        base.ICP,
+		FinalURL:   base.FinalURL,
+		RedirectTo: base.RedirectTo,
+		Redirects:  convertRedirects(base.Redirects),
 	}
 	if base.Server != nil {
 		info.Server = convertServerInfo(base.Server)
@@ -553,14 +555,7 @@ func (e *Engine) NormalizeURL(ctx context.Context, target string) (string, error
 	if err := ctx.Err(); err != nil {
 		return "", err
 	}
-	if e.runner.HTTPClient() == nil {
-		return "", fmt.Errorf("%w: http client not initialized", ErrEngineNotReady)
-	}
-	timeout := e.cfg.timeout
-	if timeout <= 0 {
-		timeout = 10 * time.Second
-	}
-	normalized, err := e.runner.HTTPClient().CheckProtocol(ctx, target, e.cfg.proxy, timeout)
+	normalized, err := e.runner.ResolveTarget(ctx, target)
 	if err != nil {
 		return "", fmt.Errorf("normalize url %q: %w", target, errors.Join(ErrScanFailed, err))
 	}
@@ -575,7 +570,13 @@ func (e *Engine) convertTargetResult(r *runner.TargetResult) *TargetResult {
 		StatusCode: r.StatusCode,
 		Title:      r.Title,
 		ICP:        r.ICP,
+		FinalURL:   r.FinalURL,
+		RedirectTo: r.RedirectTo,
+		Redirects:  convertRedirects(r.Redirects),
 		Matches:    make([]FingerMatch, 0),
+	}
+	if r.LastResponse != nil {
+		tr.Headers = string(r.LastResponse.RawHeader)
 	}
 	if r.Server != nil {
 		tr.Server = convertServerInfo(r.Server)
@@ -635,6 +636,17 @@ func convertTechStack(w *wappalyzer.TypeWappalyzer) *TechStack {
 	}
 }
 
+func convertRedirects(redirects []runner.Redirect) []Redirect {
+	if len(redirects) == 0 {
+		return nil
+	}
+	result := make([]Redirect, len(redirects))
+	for i, hop := range redirects {
+		result[i] = Redirect(hop)
+	}
+	return result
+}
+
 func convertCerts(certs []*types.CertInfo) []CertInfo {
 	result := make([]CertInfo, 0, len(certs))
 	for _, c := range certs {
@@ -655,8 +667,10 @@ func convertCerts(certs []*types.CertInfo) []CertInfo {
 			DNSNames:              c.DNSNames,
 			IPAddresses:           c.IPAddresses,
 			EmailAddresses:        c.EmailAddresses,
+			URIs:                  c.URIs,
 			OCSPServer:            c.OCSPServer,
 			CRLDistributionPoints: c.CRLDistributionPoints,
+			IssuingCertificateURL: c.IssuingCertificateURL,
 		})
 	}
 	return result

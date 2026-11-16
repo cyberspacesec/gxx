@@ -4,14 +4,10 @@ Package network 提供 HTTP 请求、协议探测与请求解析工具。
 package network
 
 import (
-	"bytes"
-	"fmt"
 	"github.com/cyberspacesec/gxx/utils/common"
 	"github.com/cyberspacesec/gxx/utils/proto"
-	"io"
 	"net/http"
 	"net/url"
-	"strings"
 	"sync"
 	"time"
 
@@ -49,6 +45,8 @@ type OptionsRequest struct {
 	FollowRedirects    bool
 	InsecureSkipVerify bool
 	CustomHeaders      map[string]string
+	// Probe 表示这是确定目标是否为 HTTP 服务的入口请求：失败就是失败，不做兼容性回退。
+	Probe bool
 }
 
 var (
@@ -97,89 +95,17 @@ func clientCacheKey(proxy string, timeout time.Duration, followRedirects bool) s
 	return proxy + "|" + timeout.String() + "|" + redir
 }
 
-// createRedirectPolicy 创建重定向策略。
+// createRedirectPolicy 创建页面请求的重定向策略：只在同一资产内跟随。
+//
+// 指向其他资产（协议、主机或端口不同）的 30x 不跟随，调用方得到 30x 响应本身；
+// 达到跳数上限时同样返回最后一个 30x 响应。请求体由 net/http 按状态码处理：
+// 307/308 重放原请求体，301/302/303 改为不带请求体的 GET。
 func createRedirectPolicy(followRedirects bool) func(*http.Request, []*http.Request) error {
 	return func(req *http.Request, via []*http.Request) error {
-		if !followRedirects {
+		if !followRedirects || len(via) >= maxRedirects || !SameOrigin(via[0].URL, req.URL) {
 			return http.ErrUseLastResponse
 		}
-		if len(via) >= maxRedirects {
-			return fmt.Errorf("达到最大重定向次数: %d", maxRedirects)
-		}
-		// 跨源重定向时剥离自定义请求头，避免把 API Token 等敏感头发往第三方。
-		// Go 自身只剥离 Authorization/Cookie 等固定敏感头，不处理任意自定义头。
-		if len(via) > 0 && !sameRedirectOrigin(via[0].URL, req.URL) {
-			stripCrossOriginHeaders(req)
-		}
-		if len(via) > 0 {
-			originalReq := via[len(via)-1]
-			if originalReq.Body != nil && originalReq.Body != http.NoBody {
-				if originalReq.GetBody == nil {
-					if bodyBytes, err := io.ReadAll(originalReq.Body); err == nil {
-						originalReq.GetBody = func() (io.ReadCloser, error) {
-							return io.NopCloser(bytes.NewReader(bodyBytes)), nil
-						}
-						originalReq.Body = io.NopCloser(bytes.NewReader(bodyBytes))
-					}
-				}
-				if req.Body == nil || req.Body == http.NoBody {
-					if originalReq.GetBody != nil {
-						if newBody, err := originalReq.GetBody(); err == nil {
-							req.Body = newBody
-							if req.GetBody == nil {
-								req.GetBody = originalReq.GetBody
-							}
-						}
-					}
-				} else if req.Body != nil && req.Body != http.NoBody {
-					if req.GetBody == nil {
-						if originalReq.GetBody != nil {
-							req.GetBody = originalReq.GetBody
-						} else {
-							if bodyBytes, err := io.ReadAll(req.Body); err == nil {
-								req.GetBody = func() (io.ReadCloser, error) {
-									return io.NopCloser(bytes.NewReader(bodyBytes)), nil
-								}
-								req.Body = io.NopCloser(bytes.NewReader(bodyBytes))
-							}
-						}
-					}
-				}
-			} else {
-				if req.GetBody == nil {
-					req.GetBody = func() (io.ReadCloser, error) {
-						return http.NoBody, nil
-					}
-				}
-			}
-		}
 		return nil
-	}
-}
-
-// redirectSafeHeaders 跨源重定向时允许保留的请求头（大小写规范化后比较）。
-var redirectSafeHeaders = map[string]struct{}{
-	"User-Agent":      {},
-	"Accept":          {},
-	"Accept-Language": {},
-	"Accept-Encoding": {},
-	"Referer":         {},
-}
-
-// sameRedirectOrigin 判断两个 URL 是否同源（scheme + host 相同）。
-func sameRedirectOrigin(a, b *url.URL) bool {
-	if a == nil || b == nil {
-		return false
-	}
-	return strings.EqualFold(a.Scheme, b.Scheme) && strings.EqualFold(a.Host, b.Host)
-}
-
-// stripCrossOriginHeaders 删除不在安全白名单内的请求头，防止自定义头跨源泄漏。
-func stripCrossOriginHeaders(req *http.Request) {
-	for key := range req.Header {
-		if _, ok := redirectSafeHeaders[http.CanonicalHeaderKey(key)]; !ok {
-			req.Header.Del(key)
-		}
 	}
 }
 
@@ -194,30 +120,4 @@ func Url2ProtoUrl(u *url.URL) *proto.UrlType {
 		Query:    u.RawQuery,
 		Fragment: u.Fragment,
 	}
-}
-
-// ParseRequest 解析 HTTP 请求为 proto.Request。
-func ParseRequest(oReq *http.Request) (*proto.Request, error) {
-	req := &proto.Request{
-		Method: oReq.Method,
-		Url:    common.Url2UrlType(oReq.URL),
-	}
-
-	header := make(map[string]string, len(oReq.Header))
-	for k := range oReq.Header {
-		header[k] = oReq.Header.Get(k)
-	}
-	req.Headers = header
-	req.ContentType = oReq.Header.Get("Content-Type")
-
-	if oReq.Body != nil && oReq.Body != http.NoBody {
-		data, err := io.ReadAll(oReq.Body)
-		if err != nil {
-			return nil, err
-		}
-		req.Body = data
-		oReq.Body = io.NopCloser(bytes.NewBuffer(data))
-	}
-
-	return req, nil
 }

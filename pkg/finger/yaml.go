@@ -280,6 +280,12 @@ func (m *RuleMapSlice) UnmarshalYAML(unmarshal func(any) error) error {
 			return fmt.Errorf("规则 %s: %w", key, err)
 		}
 		rule.Request.Type = normalized
+		// 方法统一为大写，HTTP 规则省略时按 GET；缓存与请求合并都按 GET 判断，
+		// 留空会让每条规则各发一次请求。
+		rule.Request.Method = strings.ToUpper(strings.TrimSpace(rule.Request.Method))
+		if rule.Request.Method == "" && (normalized == "" || normalized == HttpType) && rule.Request.Raw == "" {
+			rule.Request.Method = "GET"
+		}
 		result = append(result, RuleMap{Key: key, Value: rule})
 	}
 	*m = result

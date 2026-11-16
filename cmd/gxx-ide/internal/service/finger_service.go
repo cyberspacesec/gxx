@@ -46,9 +46,13 @@ func (s *FingerService) Run(ctx context.Context, in *model.RunFingerprintInput) 
 		return nil, response.NewBadRequest(err.Error())
 	}
 
+	// 一次调试是一个 Cookie 会话，前一条规则登录得到的 Cookie 对后续规则可见。
+	ctx = network.WithCookieJar(ctx)
 	customLib := celpkg.NewCustomLib()
 	customLib.SetContext(ctx)
-	varMap := map[string]any{}
+	// set 块在任何请求发出之前求值，先放入由目标地址合成的请求，
+	// 使 request.url.domain 等变量可用（TCP/UDP 规则的 host 依赖它）。
+	varMap := map[string]any{"request": fingerpkg.TargetRequest(in.Target)}
 	if len(fg.Set) > 0 {
 		fingerpkg.IsFuzzSet(fg.Set, varMap, customLib)
 	}

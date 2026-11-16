@@ -7,19 +7,15 @@ HostRateLimiter / HTTPClient）全部通过 Runner 字段访问，不依赖任�
 package runner
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"github.com/cyberspacesec/gxx/pkg/cel"
 	"github.com/cyberspacesec/gxx/pkg/finger"
 	"github.com/cyberspacesec/gxx/pkg/network"
-	"github.com/cyberspacesec/gxx/pkg/wappalyzer"
 	"github.com/cyberspacesec/gxx/types"
 	"github.com/cyberspacesec/gxx/utils/common"
 	"github.com/cyberspacesec/gxx/utils/logger"
 	"github.com/cyberspacesec/gxx/utils/proto"
-	"io"
-	"net/url"
 	"slices"
 	"strconv"
 	"strings"
@@ -56,6 +52,9 @@ func (r *Runner) ScanTarget(ctx context.Context, target string) (*TargetResult, 
 	defer cache.clearScope()
 	snap := r.store.executionSnapshot()
 	ctx = cel.WithResponseCache(ctx)
+	// 一次扫描一个 Cookie 会话：入口、规则请求与页面资源共用，扫描结束即释放。
+	ctx = network.WithCookieJar(ctx)
+	var earlier []*scanPage
 	hasHTTP := false
 	for _, entry := range snap {
 		if entry.finger.IsHTTPType() {
@@ -83,9 +82,7 @@ func (r *Runner) ScanTarget(ctx context.Context, target string) (*TargetResult, 
 			r.log.Debug("目标 %s HTTP 探测失败，继续执行独立传输协议规则: %v", target, err)
 		} else {
 			r.applyBaseInfo(result, base)
-			if !r.warmUpRequestCache(ctx, result, base, cache) {
-				return nil, fmt.Errorf("无法初始化响应缓存")
-			}
+			earlier = r.warmUpRequestCache(result, base, cache)
 		}
 	}
 
@@ -97,9 +94,16 @@ func (r *Runner) ScanTarget(ctx context.Context, target string) (*TargetResult, 
 		Title:      result.Title,
 		Server:     result.Server,
 		StatusCode: result.StatusCode,
-		request:    baseProtoRequest(result.URL, result.LastRequest),
+		request:    result.LastRequest,
 		response:   &proto.Response{Status: result.StatusCode, Url: &proto.UrlType{}},
 		cache:      cache,
+		rootTarget: result.URL,
+		rootURL:    common.ParseTarget(result.URL, "/"),
+		earlier:    earlier,
+	}
+	if baseInfo.request == nil {
+		// HTTP 探测失败或整库只有 TCP/UDP 规则：合成只含地址的请求供 set 块求值。
+		baseInfo.request = finger.TargetRequest(result.URL)
 	}
 	result.Matches = r.executeFingerprintMatching(ctx, result.URL, baseInfo, timeout, snap)
 	return result, ctx.Err()
@@ -124,26 +128,6 @@ func (r *Runner) requestTimeout() time.Duration {
 	return 5 * time.Second
 }
 
-// baseProtoRequest 返回 set 块求值阶段可用的 request 变量。
-//
-// HTTP 探活成功时复用探活请求；探活失败或整库只有 TCP/UDP 规则时，用目标
-// 地址合成一个只含 Url 的请求，使 request.url.host 等规则变量可求值，
-// 而不是退化成字面量。
-func baseProtoRequest(target string, last *proto.Request) *proto.Request {
-	if last != nil {
-		return last
-	}
-	raw := target
-	if !strings.Contains(raw, "://") {
-		raw = "https://" + raw
-	}
-	u, err := url.Parse(raw)
-	if err != nil || u.Host == "" {
-		return &proto.Request{Url: &proto.UrlType{}}
-	}
-	return &proto.Request{Method: "GET", Url: network.Url2ProtoUrl(u)}
-}
-
 func newTargetResult(target string) *TargetResult {
 	return &TargetResult{
 		URL:        target,
@@ -163,101 +147,9 @@ func (r *Runner) applyBaseInfo(result *TargetResult, base *BaseInfoResponse) {
 	result.URL = base.Url
 	result.ICP = base.ICP
 	result.Certs = base.Certs
-}
-
-func (r *Runner) warmUpRequestCache(ctx context.Context, result *TargetResult, base *BaseInfoResponse, cache *CacheManager) bool {
-	varMap := make(map[string]any, 4)
-	resp, req := r.initializeCache(ctx, base)
-	if resp == nil {
-		return false
-	}
-	varMap["request"] = req
-	varMap["response"] = resp
-	result.LastRequest = req
-	result.LastResponse = resp
-
-	// warmup 阶段的基线请求来自 GetBaseInfo，其 FollowRedirects=true，
-	// 缓存键必须与实际行为一致，否则规则查 cache 永远 miss。
-	cache.updateOwnedTargetCache(varMap, result.URL, true)
-	return true
-}
-
-func (r *Runner) initializeCache(ctx context.Context, base *BaseInfoResponse) (*proto.Response, *proto.Request) {
-	if base == nil || base.Response == nil {
-		return nil, nil
-	}
-	httpResp := base.Response
-	respBody := base.BodyBytes
-	if respBody == nil {
-		data, err := io.ReadAll(httpResp.Body)
-		_ = httpResp.Body.Close()
-		if err != nil {
-			r.log.Debug("读取响应体出错: %v", err)
-			data = []byte{}
-		}
-		respBody = data
-	}
-	httpResp.Body = io.NopCloser(bytes.NewReader(respBody))
-	resp := finger.BuildBaseProtoResponseOwned(ctx, httpResp, respBody, 0, r.httpClient, r.buildHTTPOptions(r.requestTimeout(), true), base.pageURL)
-	req := finger.BuildProtoRequest(httpResp, "GET", "", "/")
-	return resp, req
-}
-
-// getBaseInfo 内部实现：使用 r.httpClient 取目标基础信息。
-func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Duration) (*BaseInfoResponse, error) {
-	if checked, err := r.httpClient.CheckProtocol(ctx, target, r.cfg.Proxy, timeout); err == nil && checked != "" {
-		target = checked
-	} else if !strings.HasPrefix(target, "http://") && !strings.HasPrefix(target, "https://") {
-		target = "https://" + target
-	}
-	if timeout <= 0 {
-		timeout = 5 * time.Second
-	}
-
-	opts := r.buildHTTPOptions(timeout, true)
-	reqCtx, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-
-	resp, err := r.httpClient.SendRequestHttp(reqCtx, "GET", target, "", opts)
-	if err != nil {
-		return &BaseInfoResponse{
-			Url: target, Server: types.EmptyServerInfo(), Response: resp,
-		}, fmt.Errorf("发送请求失败: %w", err)
-	}
-
-	statusCode := int32(resp.StatusCode)
-	data, err := network.ReadResponseBody(resp, network.MaxDefaultBody)
-	_ = resp.Body.Close()
-	if err != nil {
-		return nil, err
-	}
-	resp.Body = io.NopCloser(bytes.NewReader(data))
-	pageURL := target
-	if resp.Request != nil && resp.Request.URL != nil {
-		pageURL = resp.Request.URL.String()
-	}
-	title := finger.GetTitleFromBody(reqCtx, pageURL, resp, data, r.httpClient, opts)
-	if err := reqCtx.Err(); err != nil {
-		return nil, err
-	}
-	certs := finger.GetCertInfos(resp)
-	serverInfo := finger.GetServerInfoFromResponse(resp)
-	if u, err := url.Parse(target); err == nil && resp.Request != nil {
-		resp.Request.URL = u
-	}
-
-	base := &BaseInfoResponse{Url: target, Title: title, Server: serverInfo, StatusCode: statusCode, Response: resp, BodyBytes: data, ICP: finger.ExtractICPRecordFromBody(data), Certs: certs, pageURL: pageURL}
-	wapp, err := wappalyzer.NewWappalyzer()
-	if err != nil {
-		return base, nil
-	}
-
-	wappData, err := wapp.GetWappalyzer(resp.Header, data)
-	if err != nil {
-		return base, nil
-	}
-	base.Wappalyzer = wappData
-	return base, nil
+	result.FinalURL = base.FinalURL
+	result.RedirectTo = base.RedirectTo
+	result.Redirects = base.Redirects
 }
 
 // executeFingerprintMatching 并发评估当前指纹库的所有规则。
@@ -292,7 +184,7 @@ func (r *Runner) executeFingerprintMatching(ctx context.Context, target string, 
 	limiter := make(chan struct{}, pipelineLimit)
 	doneHook := func() { <-limiter }
 	batchSize := min(ruleBatchSize, pipelineLimit)
-	root, cachedRoot := baseInfo.cache.cache.GetIfPresent(baseInfo.cache.requestKey(common.RemoveTrailingSlash(target), "GET", true))
+	root, cachedRoot := baseInfo.cache.cache.GetIfPresent(baseInfo.cache.requestKey(common.RemoveTrailingSlash(baseInfo.rootURL), "GET", true))
 	cachedRoot = cachedRoot && root != nil && root.Request != nil && root.Response != nil
 	var batch *ruleBatch
 
@@ -423,8 +315,42 @@ func (r *Runner) processRuleTask(task *RuleTask) {
 	}
 }
 
-// evaluateFingerprint 单指纹评估：CEL 求值 + 缓存命中 / 写入。
+// evaluateFingerprint 评估单条指纹。
+//
+// 根路径规则默认匹配入口跳转链的最后一页。未命中且链上还有更早的页面（入口的
+// 30x 响应、跳转壳）时，依次把它们当作根路径响应重新评估，任一页满足即命中：
+// 跳转链上的每个响应都是该资产的指纹素材。
 func (r *Runner) evaluateFingerprint(ctx context.Context, fg *finger.Finger, target string, baseInfo *BaseInfo, proxy string, timeout time.Duration, plan *cel.PreparedLibrary) (*FingerMatch, error) {
+	match, err := r.evaluateFingerprintOn(ctx, fg, target, baseInfo, timeout, plan, nil)
+	if match != nil || err != nil || len(baseInfo.earlier) == 0 || !matchesEntryPage(fg) {
+		return match, err
+	}
+	for _, page := range baseInfo.earlier {
+		if match, err = r.evaluateFingerprintOn(ctx, fg, target, baseInfo, timeout, plan, page); match != nil || err != nil {
+			break
+		}
+	}
+	return match, err
+}
+
+// isPageRule 判断规则请求是否就是"跟随跳转地请求某个地址"，即入口页所代表的请求。
+func isPageRule(req finger.RuleRequest) bool {
+	return req.Method == "GET" && (req.Type == "" || req.Type == common.HttpType) && len(req.Headers) == 0 && req.Body == "" && req.Raw == "" && req.ShouldFollowRedirects()
+}
+
+// matchesEntryPage 判断指纹是否含有匹配入口页的规则；没有时换页重评结果不变。
+func matchesEntryPage(fg *finger.Finger) bool {
+	for _, rule := range fg.Rules {
+		if path := strings.TrimSpace(rule.Value.Request.Path); (path == "" || path == "/") && isPageRule(rule.Value.Request) {
+			return true
+		}
+	}
+	return false
+}
+
+// evaluateFingerprintOn 评估单条指纹：CEL 求值 + 缓存命中 / 写入。
+// page 非 nil 时，匹配入口页的规则改用该页的响应。
+func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, target string, baseInfo *BaseInfo, timeout time.Duration, plan *cel.PreparedLibrary, page *scanPage) (*FingerMatch, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
@@ -472,12 +398,22 @@ func (r *Runner) evaluateFingerprint(ctx context.Context, fg *finger.Finger, tar
 	for _, rule := range fg.Rules {
 		reqCopy := rule.Value.Request
 		reqCopy.Path = finger.SetVariableMap(strings.TrimSpace(reqCopy.Path), varMap)
-		urlStr := common.ParseTarget(target, reqCopy.Path)
+		urlStr := baseInfo.rootURL
+		if reqCopy.Path != "/" || baseInfo.rootTarget != target {
+			urlStr = common.ParseTarget(target, reqCopy.Path)
+		}
 
 		ruleCopy := rule
 		ruleCopy.Value.Request = reqCopy
 
-		hit, cachedReq, cachedResp := cache.ShouldUseCache(ruleCopy, urlStr)
+		var hit bool
+		var cachedReq *proto.Request
+		var cachedResp *proto.Response
+		if page != nil && urlStr == baseInfo.rootURL && isPageRule(reqCopy) {
+			hit, cachedReq, cachedResp, urlStr = true, page.request, page.response, page.url
+		} else {
+			hit, cachedReq, cachedResp = cache.ShouldUseCache(ruleCopy, urlStr)
+		}
 		if logger.IsDebugEnabled(r.log) {
 			r.log.Debug("%s 规则 %s 是否使用缓存：%t", target, ruleCopy.Key, hit)
 		}

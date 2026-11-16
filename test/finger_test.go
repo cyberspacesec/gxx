@@ -84,15 +84,7 @@ func TestFingerGe(t *testing.T) {
 		t.Fatalf("读取 poc yaml 出错: %v", err)
 	}
 
-	tempReq, err := http.NewRequest(http.MethodGet, target, nil)
-	if err != nil {
-		t.Fatalf("创建临时请求失败: %v", err)
-	}
-	tempReqData, err := network.ParseRequest(tempReq)
-	if err != nil {
-		t.Fatalf("解析请求失败: %v", err)
-	}
-	variableMap["request"] = tempReqData
+	variableMap["request"] = finger.TargetRequest(target)
 
 	if len(fg.Set) > 0 {
 		finger.IsFuzzSet(fg.Set, variableMap, customLib)

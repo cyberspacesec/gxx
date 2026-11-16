@@ -11,14 +11,11 @@ import (
 	"container/list"
 	"context"
 	"crypto/tls"
-	"errors"
 	"fmt"
-	"github.com/cyberspacesec/gxx/utils/common"
 	"github.com/cyberspacesec/gxx/utils/logger"
 	"io"
 	"net"
 	"net/http"
-	"net/http/cookiejar"
 	"net/http/httputil"
 	"net/url"
 	"strings"
@@ -28,7 +25,6 @@ import (
 
 	"github.com/chainreactors/proxyclient"
 	"github.com/zan8in/retryablehttp"
-	"golang.org/x/net/publicsuffix"
 )
 
 // HTTPClient 实例化 HTTP 客户端，持有按 (proxy, timeout, followRedirects) 键缓存的子客户端。
@@ -141,6 +137,8 @@ func (c *HTTPClient) SendRequestHttp(ctx context.Context, method, urlStr, body s
 	if options.Proxy != "" {
 		logger.FromContext(ctx).Debug("使用代理：%s", options.Proxy)
 	}
+	// 没有会话的独立调用使用一次性会话，覆盖本次请求的重定向链。
+	ctx = WithCookieJar(ctx)
 	req, err := retryablehttp.NewRequestWithContext(ctx, method, urlStr, body)
 	if err != nil {
 		return nil, err
@@ -161,7 +159,9 @@ func (c *HTTPClient) SendRequestHttp(ctx context.Context, method, urlStr, body s
 		return nil, err
 	}
 
-	if options.FollowRedirects && method == "GET" {
+	// 跟随重定向的 GET 与入口探测直接走标准客户端：不重试，也不启用畸形响应的
+	// Raw TCP 回退，非 HTTP 服务不会被回退路径伪装成一次成功的响应。
+	if method == "GET" && (options.FollowRedirects || options.Probe) {
 		httpReq := req.Request
 		if httpReq.GetBody == nil {
 			httpReq.GetBody = func() (io.ReadCloser, error) {
@@ -173,13 +173,14 @@ func (c *HTTPClient) SendRequestHttp(ctx context.Context, method, urlStr, body s
 	return client.Do(req)
 }
 
-// GetResource 使用原始 URL 获取页面资源，保留签名查询串的顺序和编码。
-// HTTP 客户端、CookieJar、连接池、代理与限速仍由当前实例管理。
+// GetResource 使用原始 URL 获取页面资源（图标），保留签名查询串的顺序和编码。
+// HTTP 客户端、连接池、代理与限速由当前实例管理，Cookie 会话来自 ctx。
+//
+// 资源请求按浏览器的方式跟随重定向，可以跨主机（图标常托管在 CDN），最多
+// maxRedirects 跳；离开请求的源之后不再携带自定义请求头。
 func (c *HTTPClient) GetResource(ctx context.Context, rawURL string, options OptionsRequest) (*http.Response, error) {
 	setDefaults(&options)
-	if ctx == nil {
-		ctx = context.Background()
-	}
+	ctx = WithCookieJar(ctx)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
 	if err != nil {
 		return nil, err
@@ -191,10 +192,10 @@ func (c *HTTPClient) GetResource(ctx context.Context, rawURL string, options Opt
 	}
 	resourceClient := *client.HTTPClient
 	resourceClient.CheckRedirect = func(next *http.Request, via []*http.Request) error {
-		if err := client.HTTPClient.CheckRedirect(next, via); err != nil {
-			return err
+		if len(via) >= maxRedirects {
+			return http.ErrUseLastResponse
 		}
-		if !sameResourceOrigin(req.URL, next.URL) {
+		if !SameOrigin(req.URL, next.URL) {
 			for key := range options.CustomHeaders {
 				switch http.CanonicalHeaderKey(key) {
 				case "User-Agent", "Accept", "Accept-Language":
@@ -212,54 +213,14 @@ func (c *HTTPClient) GetResource(ctx context.Context, rawURL string, options Opt
 	return resourceClient.Do(req)
 }
 
-func sameResourceOrigin(a, b *url.URL) bool {
-	return strings.EqualFold(a.Scheme, b.Scheme) && strings.EqualFold(a.Host, b.Host)
-}
-
-// ResourceCookies 返回资源请求所使用会话的 Cookie 快照，供内容缓存隔离。
-func (c *HTTPClient) ResourceCookies(rawURL string, options OptionsRequest) []*http.Cookie {
-	setDefaults(&options)
+// ResourceCookies 返回 ctx 会话中将发往 rawURL 的 Cookie 快照，供内容缓存隔离。
+func (c *HTTPClient) ResourceCookies(ctx context.Context, rawURL string) []*http.Cookie {
 	u, err := url.Parse(rawURL)
-	if err != nil {
+	jar := cookieJarFrom(ctx)
+	if err != nil || jar == nil {
 		return nil
 	}
-	client, err := c.configureClient(options)
-	if err != nil || client.HTTPClient.Jar == nil {
-		return nil
-	}
-	return client.HTTPClient.Jar.Cookies(u)
-}
-
-// CheckProtocol 探测目标应使用的 http/https 前缀。
-// ctx 取消或 timeout 到期会中断探测；timeout <= 0 时使用 DefaultTimeout。
-func (c *HTTPClient) CheckProtocol(ctx context.Context, host, proxy string, timeout time.Duration) (string, error) {
-	if ctx == nil {
-		ctx = context.Background()
-	}
-	if len(strings.TrimSpace(host)) == 0 {
-		return "", fmt.Errorf("host %q is empty", host)
-	}
-
-	if strings.HasPrefix(host, HttpPrefix) || strings.HasPrefix(host, HttpsPrefix) {
-		return host, nil
-	}
-
-	u, err := url.Parse(HttpPrefix + host)
-	if err != nil {
-		return "", err
-	}
-
-	switch u.Port() {
-	case "80":
-		return c.checkAndReturnProtocol(ctx, HttpPrefix+host, proxy, timeout)
-	case "443":
-		return c.checkAndReturnProtocol(ctx, HttpsPrefix+host, proxy, timeout)
-	default:
-		if result, err := c.checkAndReturnProtocol(ctx, HttpsPrefix+host, proxy, timeout); err == nil {
-			return result, nil
-		}
-		return c.checkAndReturnProtocol(ctx, HttpPrefix+host, proxy, timeout)
-	}
+	return jar.Cookies(u)
 }
 
 func (c *HTTPClient) configureClient(options OptionsRequest) (*retryablehttp.Client, error) {
@@ -296,14 +257,6 @@ func (c *HTTPClient) configureClient(options OptionsRequest) (*retryablehttp.Cli
 	} else {
 		client.HTTPClient.Transport = &requestTransport{base: wrapTransport(transport, c.debugHTTP.Load()), owner: c}
 		client.HTTPClient2.Transport = &requestTransport{base: wrapTransport(transport, c.debugHTTP.Load()), owner: c}
-	}
-
-	jar, jerr := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
-	if jerr != nil {
-		return nil, fmt.Errorf("创建 CookieJar 失败: %w", jerr)
-	} else {
-		client.HTTPClient.Jar = jar
-		client.HTTPClient2.Jar = jar
 	}
 
 	client.HTTPClient.Timeout = options.Timeout
@@ -366,73 +319,6 @@ func (c *HTTPClient) createTransport(proxyURL string) (*http.Transport, error) {
 	return transport, nil
 }
 
-func (c *HTTPClient) prepareSimpleClient(proxy string, timeout time.Duration) (*retryablehttp.Client, error) {
-	if timeout <= 0 {
-		timeout = DefaultTimeout
-	}
-	return c.configureClient(OptionsRequest{
-		Proxy:           proxy,
-		Timeout:         timeout,
-		FollowRedirects: false,
-	})
-}
-
-func (c *HTTPClient) checkProtocolGet(ctx context.Context, target, proxy string, timeout time.Duration) (string, error) {
-	if timeout <= 0 {
-		timeout = DefaultTimeout
-	}
-	client, err := c.prepareSimpleClient(proxy, timeout)
-	if err != nil {
-		return "", err
-	}
-
-	reqCtx, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-
-	req, err := retryablehttp.NewRequestWithContext(reqCtx, http.MethodHead, target, nil)
-	if err != nil {
-		return "", nil
-	}
-	req.Header.Set("User-Agent", common.RandomUA())
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer func() { _ = resp.Body.Close() }()
-
-	if resp.TLS != nil {
-		return "https", nil
-	}
-	return "http", nil
-}
-
-func (c *HTTPClient) checkAndReturnProtocol(ctx context.Context, urlStr, proxy string, timeout time.Duration) (string, error) {
-	if urlStr == "" {
-		return "", errors.New("URL不能为空")
-	}
-
-	res, err := c.checkProtocolGet(ctx, urlStr, proxy, timeout)
-	if err != nil {
-		return "", fmt.Errorf("检查协议失败: %w", err)
-	}
-
-	if res == "https" {
-		if strings.HasPrefix(urlStr, HttpsPrefix) {
-			return urlStr, nil
-		}
-		if strings.HasPrefix(urlStr, HttpPrefix) {
-			return HttpsPrefix + urlStr[len(HttpPrefix):], nil
-		}
-		return HttpsPrefix + urlStr, nil
-	}
-
-	if strings.HasPrefix(urlStr, HttpPrefix) || strings.HasPrefix(urlStr, HttpsPrefix) {
-		return urlStr, nil
-	}
-	return HttpPrefix + urlStr, nil
-}
-
 // loggingTransport 包装底层 RoundTripper，输出成对的请求/响应原始数据。
 type loggingTransport struct {
 	base http.RoundTripper
@@ -477,5 +363,22 @@ func (t *requestTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 	if err := t.owner.WaitRequest(req.Context(), req.URL.String()); err != nil {
 		return nil, err
 	}
-	return t.base.RoundTrip(req)
+	// Cookie 会话来自请求的 ctx（见 WithCookieJar）。重定向的每一跳都经过这里，
+	// 上一跳设置的 Cookie 会带到下一跳。附加 Cookie 时复制请求，不修改调用方的请求。
+	jar := cookieJarFrom(req.Context())
+	if jar != nil {
+		if cookies := jar.Cookies(req.URL); len(cookies) > 0 {
+			req = req.Clone(req.Context())
+			for _, cookie := range cookies {
+				req.AddCookie(cookie)
+			}
+		}
+	}
+	resp, err := t.base.RoundTrip(req)
+	if err == nil && jar != nil {
+		if cookies := resp.Cookies(); len(cookies) > 0 {
+			jar.SetCookies(req.URL, cookies)
+		}
+	}
+	return resp, err
 }
