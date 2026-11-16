@@ -103,16 +103,6 @@ func (pm *PerformanceMonitor) SetReliefCallback(onRelief func(*MemoryStats), str
 	}
 }
 
-// SetThresholds 动态调整内存阈值。
-func (pm *PerformanceMonitor) SetThresholds(highBytes, criticalBytes uint64) {
-	if highBytes > 0 {
-		pm.highMemThreshold.Store(highBytes)
-	}
-	if criticalBytes > 0 {
-		pm.criticalMemThreshold.Store(criticalBytes)
-	}
-}
-
 // EnableProactiveGC 控制压力时是否主动 runtime.GC()。
 func (pm *PerformanceMonitor) EnableProactiveGC(on bool) {
 	pm.proactiveGC.Store(on)
@@ -139,9 +129,6 @@ func (pm *PerformanceMonitor) Stop() {
 	close(pm.stopCh)
 	<-pm.loopDone
 }
-
-// Snapshot 实时取一次内存快照（不依赖监控器是否启动）。
-func (pm *PerformanceMonitor) Snapshot() MemoryStats { return readRuntimeMetrics() }
 
 func (pm *PerformanceMonitor) loop(stop <-chan struct{}, done chan<- struct{}) {
 	defer close(done)

@@ -1,6 +1,6 @@
 # output_writer — SDK Writer 抽象示例
 
-演示如何在 SDK 中使用 v3 新增的 `Writer` 能力：
+演示如何在 SDK 中使用 `Writer` 能力：
 
 - `sdk.WithOutputFile` 把结果以 JSON Lines 形式写入本地文件
 - `sdk.WithWriter` 注入自定义 `Writer`（这里实现一个简易计数器）
@@ -40,4 +40,4 @@ defer engine.Close()
 | `sdk.NewSockWriter(path)` | 监听 Unix domain socket，向所有连接广播 JSON Lines |
 | `sdk.NewMultiWriter(writers...)` | 串联多个 Writer，错误用 `errors.Join` 收集 |
 
-`WithOutputFile` / `WithSockOutputFile` / `WithWriter` 多次调用会被自动合并到 `MultiWriter`。
+`WithOutputFile` / `WithWriter` 多次调用会被自动合并到 `MultiWriter`。

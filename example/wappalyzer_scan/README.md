@@ -1,4 +1,4 @@
-# 技术栈识别示例（v3.0 Engine API）
+# 技术栈识别示例
 
 本示例演示 `(*Engine).WappalyzerScan` 与 `(*Engine).GetBaseInfo` 的复用。
 

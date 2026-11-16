@@ -4,30 +4,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/base64"
-	"io"
-	"net/http"
 	"strconv"
 
-	"github.com/cyberspacesec/gxx/pkg/network"
 	"github.com/spaolacci/murmur3"
 )
 
 // 测试辅助：把常见的调用形式包装到生产函数上，测试覆盖的是扫描实际执行的代码。
-
-// GetTitle 读取响应正文并提取标题。
-func GetTitle(urlStr string, resp *http.Response) string {
-	body, err := network.ReadResponseBody(resp, network.MaxDefaultBody)
-	_ = resp.Body.Close()
-	if err != nil {
-		return ""
-	}
-	resp.Body = io.NopCloser(bytes.NewReader(body))
-	ctx := context.Background()
-	if resp.Request != nil {
-		ctx = resp.Request.Context()
-	}
-	return GetTitleFromBody(ctx, urlStr, resp, body, network.DefaultHTTPClient(), network.OptionsRequest{Timeout: network.DefaultTimeout, FollowRedirects: true})
-}
 
 // GetIconURL 返回优先级最高的图标地址，没有候选时为默认的 /favicon.ico。
 func GetIconURL(pageURL, body string) string { return GetIconURLFromBody(pageURL, []byte(body)) }

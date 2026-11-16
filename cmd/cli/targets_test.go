@@ -1,9 +1,12 @@
 package cli
 
 import (
+	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"slices"
+	"strings"
 	"testing"
 
 	"github.com/cyberspacesec/gxx/sdk"
@@ -41,5 +44,13 @@ func TestOutputFormat(t *testing.T) {
 	}
 	if OutputFormat(true, "a.txt") != sdk.FormatJSON {
 		t.Error("-json 应优先于扩展名")
+	}
+}
+
+func TestFailureReasonIsOneLine(t *testing.T) {
+	err := fmt.Errorf("scan target %q: %w", "https://a.com", errors.Join(sdk.ErrScanFailed, errors.New(`发送请求失败: Get "https://a.com": context deadline exceeded`)))
+	got := failureReason(err)
+	if strings.ContainsAny(got, "\n") || strings.Contains(got, "sdk: scan failed") || !strings.HasSuffix(got, "context deadline exceeded") {
+		t.Fatalf("失败原因应为一行且保留具体原因: %q", got)
 	}
 }

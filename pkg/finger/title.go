@@ -13,6 +13,7 @@ import (
 	"github.com/cyberspacesec/gxx/pkg/network"
 	"github.com/cyberspacesec/gxx/utils/common"
 	"github.com/cyberspacesec/gxx/utils/logger"
+	"html"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -129,8 +130,8 @@ func GetTitleFromBody(ctx context.Context, urlStr string, resp *http.Response, b
 
 // cleanTitle 移除空白字符并清理标题字符串
 func cleanTitle(title string) string {
-	// 先确保标题是UTF-8编码
-	title = common.Str2UTF8(title)
+	// 先确保标题是UTF-8编码，再把 &amp; 这类 HTML 实体还原成浏览器显示的字符
+	title = html.UnescapeString(common.Str2UTF8(title))
 
 	// 移除制表符、换行符和回车符
 	title = strings.Map(func(r rune) rune {

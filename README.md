@@ -11,7 +11,7 @@ GXX 是一款高性能指纹识别工具，基于 YAML 配置的 CEL 表达式�
 - **字符集识别** - 按 Content-Type / `<meta charset>` 解码 UTF-8/GBK/GB18030/Big5/Shift_JIS/ISO-8859-1，未声明时回退 GB18030
 - **技术栈识别** - 内置 Wappalyzer 引擎识别网站技术组件，分类覆盖 Web 服务器、CMS、数据库、电商、CDN、统计分析等，未归类项保留在 Other
 - **多格式输出** - TXT / CSV / JSON，支持 Unix Domain Socket 实时推送
-- **SDK 接口** - 独立 SDK 包，所有对外类型自包含，支持 `context.Context`；自带实例化 Writer 抽象（`WithOutputFile` / `WithSockOutputFile` / `WithWriter`），多 Engine 互不影响
+- **SDK 接口** - 独立 SDK 包，所有对外类型自包含，支持 `context.Context`；自带实例化 Writer 抽象（`WithOutputFile` / `WithWriter`），多 Engine 互不影响
 - **内存优化** - 有界 CEL / 正则缓存 + 响应复用 + 请求缓存字节预算
 - **GXX IDE** - 可视化指纹规则编辑器（Wails + Gin + Vue 3 + Monaco），
   内置 HTTP / CEL 自定义语法高亮、请求测试、逐 rule 调试、Swagger API，
@@ -69,6 +69,7 @@ import (
     "fmt"
     "github.com/cyberspacesec/gxx/sdk"
     "log"
+    "time"
 )
 
 func main() {
@@ -76,7 +77,7 @@ func main() {
 
     engine, err := sdk.NewEngine(ctx,
         sdk.WithFingerOptions(sdk.FingerOptions{}),
-        sdk.WithTimeoutSeconds(10),
+        sdk.WithTimeout(10*time.Second),
     )
     if err != nil {
         log.Fatal(err)

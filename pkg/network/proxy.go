@@ -155,6 +155,59 @@ func (c *prefixConn) Read(p []byte) (int, error) {
 	return c.Conn.Read(p)
 }
 
+// ProxyError 表示代理本身不可用（连不上、不是代理、要求认证），与目标无关：
+// 换任何目标都会失败，调用方应当停止而不是逐个目标重试。
+type ProxyError struct {
+	Proxy string
+	Err   error
+}
+
+func (e *ProxyError) Error() string { return e.Err.Error() }
+func (e *ProxyError) Unwrap() error { return e.Err }
+
+// connectRejected 把代理对 CONNECT 的非 200 响应转成错误。网关类状态（403、502、
+// 503、504 等）说明代理在工作、只是到不了这个目标；400、404、405、501 说明对方
+// 不认识 CONNECT，即该地址不是 HTTP 代理；407 是代理要求认证。后两类与目标无关。
+func connectRejected(proxy string, resp *http.Response) error {
+	switch resp.StatusCode {
+	case http.StatusProxyAuthRequired:
+		return &ProxyError{Proxy: proxy, Err: fmt.Errorf("HTTP 代理 %s 要求认证（407），请在代理地址中提供用户名和密码", proxy)}
+	case http.StatusBadRequest, http.StatusNotFound, http.StatusMethodNotAllowed, http.StatusNotImplemented:
+		return &ProxyError{Proxy: proxy, Err: fmt.Errorf("%s 不是可用的 HTTP 代理：它对 CONNECT 请求返回 %s，该端口上运行的可能是普通 Web 服务", proxy, resp.Status)}
+	}
+	return fmt.Errorf("HTTP 代理拒绝 CONNECT（状态 %s）", resp.Status)
+}
+
+// CheckProxy 经代理向 address（host:port）建立一次连接，只在代理本身不可用时返回
+// 错误；目标不可达不算。用于在批量扫描开始前发现配置错误的代理。
+func CheckProxy(ctx context.Context, proxyURL, address string, timeout time.Duration) error {
+	proxy, err := normalizeProxyURL(proxyURL)
+	if err != nil || proxy == nil {
+		return err
+	}
+	if timeout <= 0 {
+		timeout = DefaultDialTimeout
+	}
+	ctx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+	// 先确认代理端口本身可以连接：SOCKS 的拨号错误不区分代理与目标。
+	probe, err := (&net.Dialer{Timeout: timeout}).DialContext(ctx, "tcp", proxy.Host)
+	if err != nil {
+		return &ProxyError{Proxy: proxy.Host, Err: fmt.Errorf("连接代理 %s 失败: %w", proxy.Host, err)}
+	}
+	_ = probe.Close()
+	conn, err := dialThroughProxy(ctx, "tcp", address, proxy, timeout)
+	if err == nil {
+		_ = conn.Close()
+		return nil
+	}
+	var proxyErr *ProxyError
+	if errors.As(err, &proxyErr) {
+		return proxyErr
+	}
+	return nil
+}
+
 // dialHTTPConnect 经 HTTP(S) 代理用 CONNECT 建立到目标的 TCP 隧道。
 // 与 proxyclient v1.0.2 不同：拨号与 CONNECT 交互都受 ctx/超时约束，取消时立即中断；
 // 代理返回非 2xx 时返回明确错误而非已关闭的连接；并保留响应后属于隧道的缓冲字节。
@@ -169,7 +222,7 @@ func dialHTTPConnect(ctx context.Context, network, address string, proxy *url.UR
 	}
 	conn, err := (&net.Dialer{Timeout: timeout}).DialContext(ctx, "tcp", proxy.Host)
 	if err != nil {
-		return nil, fmt.Errorf("连接 HTTP 代理失败: %w", err)
+		return nil, &ProxyError{Proxy: proxy.Host, Err: fmt.Errorf("连接 HTTP 代理失败: %w", err)}
 	}
 	// ctx 取消时关闭连接，让阻塞的握手读写立即返回。
 	stop := context.AfterFunc(ctx, func() { _ = conn.Close() })
@@ -192,7 +245,7 @@ func dialHTTPConnect(ctx context.Context, network, address string, proxy *url.UR
 		}
 		tlsConn := tls.Client(conn, tlsConf)
 		if err = tlsConn.HandshakeContext(ctx); err != nil {
-			return fail(fmt.Errorf("HTTP 代理 TLS 握手失败: %w", err))
+			return fail(&ProxyError{Proxy: proxy.Host, Err: fmt.Errorf("HTTP 代理 TLS 握手失败: %w", err)})
 		}
 		conn = tlsConn
 	}
@@ -217,7 +270,7 @@ func dialHTTPConnect(ctx context.Context, network, address string, proxy *url.UR
 	}
 	_ = resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return fail(fmt.Errorf("HTTP 代理拒绝 CONNECT（状态 %s）", resp.Status))
+		return fail(connectRejected(proxy.Host, resp))
 	}
 	if !stop() { // ctx 已在握手期间取消，连接可能已被关闭
 		_ = conn.Close()

@@ -13,12 +13,6 @@ GXX SDK 是 GXX 指纹识别引擎的 Go 库接口。所有对外类型均在 `s
 import "github.com/cyberspacesec/gxx/sdk"
 ```
 
-运维 / 调试接口在独立子包：
-
-```go
-import "github.com/cyberspacesec/gxx/sdk/debug"
-```
-
 ---
 
 ## 二、快速开始
@@ -96,11 +90,6 @@ func main() {
 | `(*Engine).RuleCatalog(ctx) ([]RuleMetadata, error)` | 全部规则来源、产品目录、检测条件与质量缺项 |
 | `ProductCatalog() ([]ProductDefinition, error)` | 内置产品目录的独立副本 |
 | `(*Engine).PoolStats() PoolStats` | 规则池统计快照 |
-| `(*Engine).ResetPoolStats()` | 重置统计计数 |
-| `(*Engine).CacheStats() map[string]any` | 缓存统计快照（含 hit ratio） |
-| `(*Engine).MemoryStats() sdk.MemoryStats` | 即时内存快照 |
-| `(*Engine).SetMemoryThresholds(high, critical uint64)` | 动态调整内存阈值 |
-| `(*Engine).EnableMemoryMonitor(on bool)` | 运行期开关监控 |
 | `(*Engine).IsClosed() bool` | 引擎是否已 Close |
 | `(*Engine).Close() error` | 释放所有资源（线程安全，可重复调用） |
 
@@ -115,7 +104,6 @@ func main() {
 | `WithRuleSourceVersion(version string)` | 空 | 外部规则包的来源版本 |
 | `WithProxy(addr string)` | `""` | 单个代理地址：http/https/socks5/socks5h（socks4/socks4a 仅 TCP）。UDP 规则仅 socks5/socks5h。证书默认不校验（含 TLS 代理）；TLS 代理可用 `?tls-insecure-skip-verify=false` 开启校验，`tls-ca-file`/`tls-domain` 指定信任根与校验名 |
 | `WithTimeout(d time.Duration)` | `10s` | 请求超时（支持亚秒，如 `500*time.Millisecond`） |
-| `WithTimeoutSeconds(seconds int)` | — | 请求超时（整秒） |
 | `WithInsecureSkipVerify(skip bool)` | `true` | 是否跳过**目标**证书校验（默认跳过）；代理证书校验由代理地址的查询参数单独控制 |
 | `WithDisableKeepAlives(disable bool)` | `false` | 禁用 HTTP Keep-Alive |
 | `WithCustomHeaders(map[string]string)` | nil | 当前实例的请求头，构造时复制 |
@@ -123,7 +111,6 @@ func main() {
 | `WithURLConcurrency(n int)` | `5` | 当前实例所有并行扫描共享的 URL 并发上限 |
 | `WithRuleConcurrency(n int)` | `200` | 规则并发数 |
 | `WithCacheSize(n int)` | `2048` | 请求/响应缓存的目标条目容量 |
-| `WithCacheBytes(n int64)` | `64 MiB` | 请求/响应缓存的估算字节预算，超大条目不进入缓存 |
 | `WithCacheTTL(d time.Duration)` | `10min` | 缓存 TTL |
 | `WithMemoryMonitor(enable bool)` | `false` | 启动内存监控 |
 | `WithMemoryThresholds(high, critical uint64)` | 2GB / 4GB | 内存告警阈值 |
@@ -135,7 +122,6 @@ func main() {
 | `WithDebug(enable bool)` | `false` | 当前实例的调试日志，不修改全局日志级别 |
 | `WithLogger(log *slog.Logger)` | 静默 | 注入实例日志；未注入且开启 Debug 时使用 stderr |
 | `WithOutputFile(path string, format OutputFormat)` | 关闭 | 把结果写入本地文件（txt/csv/json，自带异步队列） |
-| `WithSockOutputFile(path string)` | 关闭 | 通过 Unix domain socket 实时推送 JSON Lines |
 | `WithWriter(w Writer)` | nil | 注入自定义 Writer（可多次调用累加） |
 
 ### 3.4 Sentinel Errors
@@ -354,7 +340,7 @@ const (
 
 每个 Engine 持有独立 Writer（默认 `NopWriter()`），SDK 自带四种实现：
 `NopWriter` / `NewFileWriter(path, format)` / `NewSockWriter(path)` / `NewMultiWriter(writers...)`。
-通过 `WithOutputFile` / `WithSockOutputFile` / `WithWriter` 注入；Engine 在每个目标
+通过 `WithOutputFile` / `WithWriter` 注入；Engine 在每个目标
 扫描完成后自动派发到 Writer，`Close` 时取消并等待在途扫描，再释放 Runner 并刷新、关闭 Writer。
 
 ---
@@ -454,25 +440,21 @@ engine, _ := sdk.NewEngine(ctx,
     sdk.WithMemoryThresholds(2<<30, 4<<30), // 2GB / 4GB
     sdk.WithProactiveGC(false),             // 仅告警，不触发 STW
 )
-
-// 任意时间点取快照
-stats := engine.MemoryStats()
-fmt.Printf("HeapAlloc=%d GoSchedLatency=%.3fms\n",
-    stats.HeapAlloc, stats.GoSchedLatency*1000)
 ```
 
-监控结合 `runtime/metrics` 和 `runtime.ReadMemStats`，提供堆、GC 和调度延迟统计。数据属于整个 Go 进程，包括其他 Engine 和共享缓存，并非单个 Engine 的独占内存；阈值是调节并发的依据，不是 RSS 硬上限。
+监控结合 `runtime/metrics` 和 `runtime.ReadMemStats` 读取堆、GC 和调度延迟，内存压力高时自动降低规则并发，压力缓解后逐步恢复。数据属于整个 Go 进程，包括其他 Engine 和共享缓存，并非单个 Engine 的独占内存；阈值是调节并发的依据，不是 RSS 硬上限。
 
 ### 5.8 输出到文件 / Socket / 自定义 Writer
 
 SDK 自带实例化 `Writer` 抽象，每个 Engine 管理自己的写入器。调用方若为不同 Engine 传入同一个自定义 Writer、Logger，或相同输出文件与 Socket 路径，外部资源会被共享，需要由调用方管理其并发和生命周期。
 
 ```go
+sockWriter, _ := sdk.NewSockWriter("/tmp/gxx.sock")
 engine, _ := sdk.NewEngine(ctx,
     // 写入 JSON Lines（每行一条结果）
     sdk.WithOutputFile("results.json", sdk.FormatJSON),
     // 同时广播到 Unix socket
-    sdk.WithSockOutputFile("/tmp/gxx.sock"),
+    sdk.WithWriter(sockWriter),
     // 还可以叠加自定义 Writer（Kafka、Webhook 等）
     sdk.WithWriter(myKafkaWriter),
 )
@@ -571,32 +553,7 @@ if err == nil {
 
 ---
 
-## 七、调试 / 运维 API（`gxx/sdk/debug`）
-
-```go
-import (
-    "github.com/cyberspacesec/gxx/sdk"
-    "github.com/cyberspacesec/gxx/sdk/debug"
-)
-
-engine, _ := sdk.NewEngine(ctx, sdk.WithMemoryMonitor(true))
-defer engine.Close()
-
-stats := debug.MemoryStatsOf(engine)
-fmt.Printf("HeapAlloc=%dMB NumGC=%d\n", stats.HeapAlloc>>20, stats.NumGC)
-
-debug.ForceGC()
-
-rl := debug.HostRateLimiterStatsOf(engine)
-fmt.Printf("enabled=%v cached_hosts=%d qps=%.1f\n", rl.Enabled, rl.CachedHosts, rl.QPS)
-```
-
-> v3 移除了 `StartMemoryMonitor` / `StopMemoryMonitor` / `SetMemoryThresholds` 等包级函数。
-> 这些功能改由 `sdk.NewEngine(...)` 时通过 `sdk.WithMemoryMonitor(true)` / `sdk.WithMemoryThresholds(...)` 注入，并由 `(*Engine).Close()` 自动清理。
-
----
-
-## 八、示例项目
+## 七、示例项目
 
 完整示例位于 `example/` 目录：
 
@@ -611,30 +568,7 @@ fmt.Printf("enabled=%v cached_hosts=%d qps=%.1f\n", rl.Enabled, rl.CachedHosts, 
 
 ---
 
-## 九、迁移指南（v2 → v3）
-
-| v2 包级 API | v3 替代 |
-|-------------|---------|
-| `sdk.InitFingerRules(opts)` | `sdk.NewEngine(ctx, sdk.WithFingerOptions(opts))` |
-| `sdk.EnsureFingerRulesLoaded()`（已移除） | `NewEngine` 在指纹路径为空时自动加载嵌入式库 |
-| `sdk.FingerScan(ctx, target, proxy, timeout)` | `(*Engine).Scan(ctx, target)`（proxy/timeout 走 Option）|
-| `sdk.GetBaseInfo(ctx, target, proxy, timeout)` | `(*Engine).GetBaseInfo(ctx, target)` |
-| `sdk.WappalyzerScan(ctx, target, proxy, timeout)` | `(*Engine).WappalyzerScan(ctx, target)` |
-| `sdk.NormalizeURL(target, proxy)` | `(*Engine).NormalizeURL(ctx, target)`（proxy/timeout 走 Option） |
-| `sdk.GetPoolStats()` | `(*Engine).PoolStats()` |
-| `sdk.ResetPoolStats()` | `(*Engine).ResetPoolStats()` |
-| `sdk.GetCacheStats()` | `(*Engine).CacheStats()` |
-| `sdk.GetDefaults()` | 已删除（不再暴露内部默认值，需要时直接读 Option 注释） |
-| `debug.StartMemoryMonitor()` / `StopMemoryMonitor()` | `sdk.WithMemoryMonitor(true)` 在 NewEngine 启用 |
-| `debug.SetMemoryThresholds(...)` | `sdk.WithMemoryThresholds(...)` 在 NewEngine 启用 |
-| `debug.EnableProactiveGC(...)` | `sdk.WithProactiveGC(...)` 在 NewEngine 启用 |
-| `debug.SetDisableKeepAlives(...)` | `sdk.WithDisableKeepAlives(...)` 在 NewEngine 启用 |
-
-> v3 完全移除上述老 API，编译期会报 undefined。请按表格直接迁移。
-
----
-
-## 十、注意事项
+## 八、注意事项
 
 - 所有扫描 API 第一个参数是 `context.Context`，支持超时与取消（透传给底层 HTTP 客户端 + per-host 限流 Wait）
 - SDK 内部已实现请求缓存、对象池、并发控制、限流、监控，调用方无需额外管理

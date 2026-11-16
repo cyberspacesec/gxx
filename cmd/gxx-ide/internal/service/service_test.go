@@ -232,3 +232,21 @@ func TestRunEvaluatesEveryEntryPage(t *testing.T) {
 		t.Fatalf("关闭跟随后应匹配 302: %+v", out.Rules[0])
 	}
 }
+
+// 校验不仅检查 YAML 结构，也编译每条表达式并指出所在行。
+func TestValidateReportsExpressionErrors(t *testing.T) {
+	yaml := "id: demo\ninfo:\n  name: demo\nrules:\n  r0:\n    request:\n      method: GET\n      path: /\n    expression: 'response.status == '\n  r1:\n    request:\n      method: GET\n      path: /\n    expression: response.status == 200\nexpression: r0() || r2()\n"
+	out := NewYamlService().Validate(yaml)
+	if out.Valid || len(out.Errors) != 2 || out.Outline == nil {
+		t.Fatalf("应报告 r0 与总表达式: %+v", out.Errors)
+	}
+	if out.Errors[0].Line != 9 || !strings.Contains(out.Errors[0].Message, "规则 r0") || strings.Contains(out.Errors[0].Message, "<input>") {
+		t.Fatalf("r0 的错误位置或说明不对: %+v", out.Errors[0])
+	}
+	if out.Errors[1].Line != 15 || !strings.Contains(out.Errors[1].Message, "总表达式") {
+		t.Fatalf("总表达式的错误位置或说明不对: %+v", out.Errors[1])
+	}
+	if out = NewYamlService().Validate(strings.Replace(strings.Replace(yaml, "'response.status == '", "response.status == 302", 1), "r2()", "r1()", 1)); !out.Valid {
+		t.Fatalf("合法的指纹被报错: %+v", out.Errors)
+	}
+}

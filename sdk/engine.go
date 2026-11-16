@@ -31,17 +31,6 @@ import (
 	"sync/atomic"
 )
 
-// Scanner 是 Engine 实现的最小可用扫描接口（便于 mock 测试）。
-type Scanner interface {
-	Scan(ctx context.Context, target string) (*TargetResult, error)
-	GetBaseInfo(ctx context.Context, target string) (*BaseInfo, error)
-	WappalyzerScan(ctx context.Context, target string) (*TechStack, error)
-	Close() error
-}
-
-// 编译期断言：*Engine 必须实现 Scanner 接口。
-var _ Scanner = (*Engine)(nil)
-
 // TargetCallback 流式回调签名。
 // 每完成一个目标立即触发 cb；返回 false 时取消尚未开始或进行中的后续扫描。
 type TargetCallback func(result *TargetResult) bool
@@ -90,7 +79,6 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		CaptureEvidence:      cfg.matchDetails,
 		Reverse:              cfg.reverse,
 		Logger:               logger.FromSlog(cfg.logger),
-		CacheMaxBytes:        uint64(cfg.cacheMaxBytes),
 		Proxy:                cfg.proxy,
 		Timeout:              cfg.timeout,
 		URLWorkerCount:       cfg.urlConcurrency,
@@ -165,14 +153,6 @@ func buildWriter(cfg engineConfig) (Writer, error) {
 		}
 		writers = append(writers, fw)
 	}
-	if strings.TrimSpace(cfg.sockOutputFile) != "" {
-		sw, err := NewSockWriter(cfg.sockOutputFile)
-		if err != nil {
-			closeWriters(writers)
-			return nil, fmt.Errorf("init sock writer: %w", err)
-		}
-		writers = append(writers, sw)
-	}
 	writers = append(writers, cfg.customWriters...)
 
 	switch len(writers) {
@@ -182,15 +162,6 @@ func buildWriter(cfg engineConfig) (Writer, error) {
 		return writers[0], nil
 	default:
 		return NewMultiWriter(writers...), nil
-	}
-}
-
-// closeWriters 在构造失败时回滚已创建的 Writer，避免文件句柄 / 监听器泄漏。
-func closeWriters(writers []Writer) {
-	for _, w := range writers {
-		if w != nil {
-			_ = w.Close()
-		}
 	}
 }
 
@@ -229,51 +200,6 @@ func (e *Engine) PoolStats() PoolStats {
 	}
 	s := e.runner.PoolStats()
 	return PoolStats{TotalTasks: s.TotalTasks, CompletedTasks: s.CompletedTasks, FailedTasks: s.FailedTasks}
-}
-
-// ResetPoolStats 重置规则池统计计数。
-func (e *Engine) ResetPoolStats() {
-	if e.runner != nil {
-		e.runner.ResetPoolStats()
-	}
-}
-
-// CacheStats 缓存统计快照。
-func (e *Engine) CacheStats() map[string]interface{} {
-	if e.runner == nil {
-		return map[string]interface{}{}
-	}
-	return e.runner.CacheStats()
-}
-
-// MemoryStats 实时内存快照。
-func (e *Engine) MemoryStats() MemoryStats {
-	if e.runner == nil {
-		return MemoryStats{}
-	}
-	return e.runner.MemoryStats()
-}
-
-// SetMemoryThresholds 动态调整内存阈值。
-func (e *Engine) SetMemoryThresholds(highBytes, criticalBytes uint64) {
-	if e.runner != nil {
-		e.runner.SetMemoryThresholds(highBytes, criticalBytes)
-	}
-}
-
-// EnableMemoryMonitor 运行期开关内存监控。
-func (e *Engine) EnableMemoryMonitor(on bool) {
-	if e.runner != nil {
-		e.runner.EnableMemoryMonitor(on)
-	}
-}
-
-// HostRateLimiter 返回当前 Engine 持有的限流器（可能为 nil）。
-func (e *Engine) HostRateLimiter() *HostRateLimiter {
-	if e.runner == nil {
-		return nil
-	}
-	return e.runner.HostRateLimiter()
 }
 
 // LoadFingerOptions 运行期重新加载指纹规则。

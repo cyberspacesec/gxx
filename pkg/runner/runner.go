@@ -147,9 +147,6 @@ func NewRunner(cfg ScanConfig, pocOptions types.YamlFingerType) (*Runner, error)
 	return r, nil
 }
 
-// IsClosed Runner 是否已释放。
-func (r *Runner) IsClosed() bool { return r.closed.Load() }
-
 // FingerCount 当前加载的指纹数量。
 func (r *Runner) FingerCount() int {
 	if r.store == nil {
@@ -169,54 +166,6 @@ func (r *Runner) PoolStats() RulePoolStats {
 	return r.pool.Stats()
 }
 
-// ResetPoolStats 把规则池统计计数清零。
-func (r *Runner) ResetPoolStats() {
-	if r.pool != nil {
-		r.pool.ResetStats()
-	}
-}
-
-// CacheStats 缓存统计快照。
-func (r *Runner) CacheStats() map[string]interface{} {
-	if r.cache == nil {
-		return map[string]interface{}{}
-	}
-	return r.cache.Stats()
-}
-
-// MemoryStats 实时内存快照。
-func (r *Runner) MemoryStats() MemoryStats {
-	if r.monitor == nil {
-		return readRuntimeMetrics()
-	}
-	return r.monitor.Snapshot()
-}
-
-// SetMemoryThresholds 动态调整内存阈值。
-func (r *Runner) SetMemoryThresholds(high, critical uint64) {
-	if r.monitor != nil {
-		r.monitor.SetThresholds(high, critical)
-	}
-}
-
-// EnableMemoryMonitor 运行期开关监控器。
-func (r *Runner) EnableMemoryMonitor(on bool) {
-	ctx, done, err := r.life.Begin(context.Background())
-	_ = ctx
-	if err != nil {
-		return
-	}
-	defer done()
-	if r.monitor == nil {
-		return
-	}
-	if on {
-		r.monitor.Start()
-	} else {
-		r.monitor.Stop()
-	}
-}
-
 // LoadFingerOptions 重新加载指纹规则。
 func (r *Runner) LoadFingerOptions(opts types.YamlFingerType) error {
 	_, done, err := r.life.Begin(context.Background())
@@ -229,9 +178,6 @@ func (r *Runner) LoadFingerOptions(opts types.YamlFingerType) error {
 	}
 	return r.store.Load(opts)
 }
-
-// HostRateLimiter 返回当前 Runner 持有的限流器（可能为 nil）。
-func (r *Runner) HostRateLimiter() *network.HostRateLimiter { return r.limiter }
 
 // Close 释放 Runner 持有的所有资源（线程安全，可重复调用）。
 func (r *Runner) Close() error {

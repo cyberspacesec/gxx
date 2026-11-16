@@ -5,10 +5,10 @@ import (
 	"context"
 	"encoding/binary"
 	"errors"
-	"fmt"
 	"io"
 	"net"
 	"net/http"
+	"net/http/httptest"
 	"strconv"
 	"strings"
 	"sync"
@@ -525,8 +525,40 @@ func TestProxyErrorMessagesAreClear(t *testing.T) {
 	if err == nil || !strings.Contains(err.Error(), "不支持的代理协议") {
 		t.Fatalf("非法代理协议应明确报错: %v", err)
 	}
-	_, err = DialContext(context.Background(), "udp", "127.0.0.1:53", fmt.Sprintf("socks4://127.0.0.1:1080"), time.Second, false, "", true)
+	_, err = DialContext(context.Background(), "udp", "127.0.0.1:53", "socks4://127.0.0.1:1080", time.Second, false, "", true)
 	if err == nil || !strings.Contains(err.Error(), "UDP") {
 		t.Fatalf("SOCKS4 + UDP 应明确报错: %v", err)
+	}
+}
+
+// 代理检查只报告代理本身的问题：端口不通、对方不是代理、要求认证。
+func TestCheckProxy(t *testing.T) {
+	answer := func(status int) string {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(status) }))
+		t.Cleanup(srv.Close)
+		return srv.URL
+	}
+	closed := httptest.NewServer(http.NotFoundHandler())
+	closedURL := closed.URL
+	closed.Close()
+
+	for _, c := range []struct {
+		name, proxy string
+		broken      bool
+		contains    string
+	}{
+		{"普通 Web 服务", answer(http.StatusNotFound), true, "不是可用的 HTTP 代理"},
+		{"不支持 CONNECT", answer(http.StatusMethodNotAllowed), true, "不是可用的 HTTP 代理"},
+		{"要求认证", answer(http.StatusProxyAuthRequired), true, "要求认证"},
+		{"端口未监听", closedURL, true, "连接代理"},
+		{"SOCKS 端口未监听", "socks5://" + strings.TrimPrefix(closedURL, "http://"), true, "连接代理"},
+		{"代理正常但目标不可达", answer(http.StatusBadGateway), false, ""},
+		{"未配置代理", "", false, ""},
+	} {
+		err := CheckProxy(context.Background(), c.proxy, "example.com:443", 2*time.Second)
+		var proxyErr *ProxyError
+		if c.broken != errors.As(err, &proxyErr) || c.broken && !strings.Contains(err.Error(), c.contains) {
+			t.Errorf("%s: err=%v", c.name, err)
+		}
 	}
 }

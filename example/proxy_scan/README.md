@@ -1,4 +1,4 @@
-# 代理扫描示例（v3.0 Engine API + per-host 限流）
+# 代理扫描示例（每主机限速）
 
 本示例演示通过 HTTP/SOCKS5 代理扫描 + per-host 速率限制。
 
@@ -29,13 +29,3 @@ defer engine.Close()
 - 桶按 `qps` 速率匀速产生令牌
 - 每次 Scan 阻塞直到 host 桶有可用令牌
 - 不同 host 互不影响，避免高并发把单个目标打挂
-
-## 调试
-
-```go
-import "github.com/cyberspacesec/gxx/sdk/debug"
-
-stats := debug.HostRateLimiterStatsOf(engine)
-fmt.Printf("enabled=%v cached=%d qps=%.1f burst=%d\n",
-    stats.Enabled, stats.CachedHosts, stats.QPS, stats.Burst)
-```

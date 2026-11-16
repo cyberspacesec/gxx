@@ -34,9 +34,8 @@ type engineConfig struct {
 	ruleConcurrency int
 
 	// 缓存
-	cacheMaxBytes int64
-	cacheMaxSize  int
-	cacheTTL      time.Duration
+	cacheMaxSize int
+	cacheTTL     time.Duration
 
 	// 监控
 	enableMonitor    bool
@@ -57,10 +56,9 @@ type engineConfig struct {
 	logger *slog.Logger
 
 	// 输出
-	outputFile     string
-	outputFormat   OutputFormat
-	sockOutputFile string
-	customWriters  []Writer
+	outputFile    string
+	outputFormat  OutputFormat
+	customWriters []Writer
 }
 
 // WithRuleAssessments 提供带规则摘要的样本测试记录或校准置信度。
@@ -166,17 +164,6 @@ func WithTimeout(d time.Duration) Option {
 			return fmt.Errorf("%w: timeout must be > 0, got %v", ErrInvalidOption, d)
 		}
 		c.timeout = d
-		return nil
-	}
-}
-
-// WithTimeoutSeconds 设置请求超时时间，单位为秒。
-func WithTimeoutSeconds(seconds int) Option {
-	return func(c *engineConfig) error {
-		if seconds <= 0 {
-			return fmt.Errorf("%w: timeout seconds must be > 0, got %d", ErrInvalidOption, seconds)
-		}
-		c.timeout = time.Duration(seconds) * time.Second
 		return nil
 	}
 }
@@ -370,35 +357,14 @@ func WithOutputFile(path string, format OutputFormat) Option {
 	}
 }
 
-// WithSockOutputFile 通过 Unix domain socket 推送 JSON Lines 结果。
-//
-// path 为空时不启用；socket 文件已存在时会被删除后重新创建。
-func WithSockOutputFile(path string) Option {
-	return func(c *engineConfig) error {
-		c.sockOutputFile = path
-		return nil
-	}
-}
-
 // WithWriter 注入自定义 Writer（可调用多次累加），
-// 与 WithOutputFile / WithSockOutputFile 同时使用时会被合并到 MultiWriter。
+// 与 WithOutputFile 同时使用时会被合并到 MultiWriter。
 func WithWriter(w Writer) Option {
 	return func(c *engineConfig) error {
 		if w == nil {
 			return fmt.Errorf("%w: writer must not be nil", ErrInvalidOption)
 		}
 		c.customWriters = append(c.customWriters, w)
-		return nil
-	}
-}
-
-// WithCacheBytes 设置请求缓存的估算字节预算（默认 64 MiB），与条目上限同时生效。
-func WithCacheBytes(size int64) Option {
-	return func(c *engineConfig) error {
-		if size <= 0 {
-			return fmt.Errorf("%w: cache byte budget must be > 0", ErrInvalidOption)
-		}
-		c.cacheMaxBytes = size
 		return nil
 	}
 }

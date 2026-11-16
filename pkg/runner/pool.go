@@ -215,16 +215,6 @@ func (rp *RulePool) Stats() RulePoolStats {
 	}
 }
 
-// ResetStats 把统计计数清零。
-func (rp *RulePool) ResetStats() {
-	if rp == nil {
-		return
-	}
-	atomic.StoreInt64(&rp.stats.TotalTasks, 0)
-	atomic.StoreInt64(&rp.stats.CompletedTasks, 0)
-	atomic.StoreInt64(&rp.stats.FailedTasks, 0)
-}
-
 // CurrentWorkers 当前规则池总 worker 容量。
 func (rp *RulePool) CurrentWorkers() int {
 	if rp == nil {

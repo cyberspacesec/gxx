@@ -374,7 +374,7 @@ func TestEngine_NormalizeURLNoSchemeTimeout(t *testing.T) {
 // TestEngine_OptionFunctional 验证 functional options 链式工作。
 func TestEngine_OptionFunctional(t *testing.T) {
 	engine, err := sdk.NewEngine(context.Background(),
-		sdk.WithTimeoutSeconds(8),
+		sdk.WithTimeout(8*time.Second),
 		sdk.WithProxy(""),
 		sdk.WithRuleConcurrency(100),
 		sdk.WithURLConcurrency(3),

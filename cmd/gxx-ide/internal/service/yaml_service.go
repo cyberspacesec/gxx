@@ -32,9 +32,61 @@ func (s *YamlService) Validate(content string) *model.ValidateYAMLOutput {
 		out.Errors = []model.YAMLValidationError{parseYAMLError(err.Error())}
 		return out
 	}
-	out.Valid = true
 	out.Outline = BuildOutline(&f)
+	// YAML 结构正确后再编译每条表达式：语法残缺、未定义的函数与变量在这里报出，
+	// 不必等到运行指纹。
+	for _, failed := range fingerpkg.CheckExpressions(&f) {
+		where := "总表达式"
+		if failed.Rule != "" {
+			where = "规则 " + failed.Rule + " 的表达式"
+		}
+		out.Errors = append(out.Errors, model.YAMLValidationError{
+			Line:    expressionLine(content, failed.Rule),
+			Message: where + "：" + celErrorSummary(failed.Err),
+		})
+	}
+	out.Valid = len(out.Errors) == 0
 	return out
+}
+
+// expressionLine 返回规则（rule 为空时是指纹本身）的 expression 所在行，找不到时为 0。
+func expressionLine(content, rule string) int {
+	lines := strings.Split(content, "\n")
+	if rule == "" {
+		for i := len(lines) - 1; i >= 0; i-- {
+			if strings.HasPrefix(lines[i], "expression:") {
+				return i + 1
+			}
+		}
+		return 0
+	}
+	inRule := false
+	for i, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		if indent := len(line) - len(strings.TrimLeft(line, " ")); indent > 0 && indent <= 4 && (trimmed == rule+":" || strings.HasPrefix(trimmed, rule+": ")) {
+			inRule = true
+			continue
+		}
+		if inRule && strings.HasPrefix(trimmed, "expression:") {
+			return i + 1
+		}
+	}
+	return 0
+}
+
+// celErrorSummary 取 CEL 编译错误的第一条说明，去掉源码定位与指示符行。
+func celErrorSummary(err error) string {
+	message := err.Error()
+	if i := strings.IndexByte(message, '\n'); i >= 0 {
+		message = message[:i]
+	}
+	if i := strings.Index(message, "ERROR: <input>:"); i >= 0 {
+		rest := message[i+len("ERROR: <input>:"):]
+		if j := strings.Index(rest, ": "); j >= 0 {
+			return strings.TrimSpace(rest[j+2:])
+		}
+	}
+	return strings.TrimSpace(message)
 }
 
 // parseYAMLError 从 yaml.v2 错误中尽力提取行号 / 列号。

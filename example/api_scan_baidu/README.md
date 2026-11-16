@@ -1,4 +1,4 @@
-# API 扫描示例（v3.0 Engine API）
+# API 扫描示例
 
 本示例演示 `(*Engine).GetBaseInfo` 与 `(*Engine).Scan` 的组合使用 + sentinel error 处理。
 

@@ -10,11 +10,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
+	"net/url"
 	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/cyberspacesec/gxx/pkg/network"
 	"github.com/cyberspacesec/gxx/sdk"
 	"github.com/cyberspacesec/gxx/utils/logger"
 	"github.com/fatih/color"
@@ -44,6 +47,13 @@ func Run(ctx context.Context, options *Options) error {
 		return errors.New("未找到有效的目标URL")
 	}
 	logger.Info("原始目标数量：%d个，重复目标数量：%d个，去重后目标数量：%d个", total, total-len(targets), len(targets))
+
+	// 代理配置错误时每个目标都会以同样的原因失败，开始前检查一次。
+	if options.Proxy != "" {
+		if err := network.CheckProxy(ctx, options.Proxy, targetAddress(targets[0]), time.Duration(options.Timeout)*time.Second); err != nil {
+			return fmt.Errorf("代理不可用：%w", err)
+		}
+	}
 
 	var limits []sdk.Option
 	switch {
@@ -113,8 +123,9 @@ dispatch:
 					return
 				}
 				// 不可达的目标同样写入结果，便于和输入逐条对照。
-				logger.Error("处理目标 %s 失败: %v", target, err)
-				result = &sdk.TargetResult{URL: target, Matches: []sdk.FingerMatch{}}
+				reason := failureReason(err)
+				logger.Error("处理目标 %s 失败: %s", target, reason)
+				result = &sdk.TargetResult{URL: target, Matches: []sdk.FingerMatch{}, Error: reason}
 			}
 			if err := writer.Write(ctx, result); err != nil {
 				logger.Error("写入目标 %s 的结果失败: %v", target, err)
@@ -141,3 +152,40 @@ dispatch:
 }
 
 const separator = "─────────────────────────────────────────────────────"
+
+// failureReason 把扫描错误整理成一行：去掉每个错误都带的通用前缀，只留具体原因。
+func failureReason(err error) string {
+	var parts []string
+	for _, line := range strings.Split(err.Error(), "\n") {
+		line = strings.TrimSpace(line)
+		if i := strings.Index(line, sdk.ErrScanFailed.Error()); i >= 0 {
+			line = strings.TrimSpace(line[i+len(sdk.ErrScanFailed.Error()):])
+		}
+		if line != "" {
+			parts = append(parts, line)
+		}
+	}
+	if len(parts) == 0 {
+		return err.Error()
+	}
+	return strings.Join(parts, ": ")
+}
+
+// targetAddress 返回目标的 host:port，未写端口时按协议取 443 或 80。
+func targetAddress(target string) string {
+	if !strings.Contains(target, "://") {
+		target = "https://" + target
+	}
+	u, err := url.Parse(target)
+	if err != nil || u.Hostname() == "" {
+		return target
+	}
+	port := u.Port()
+	if port == "" {
+		port = "443"
+		if u.Scheme == "http" {
+			port = "80"
+		}
+	}
+	return net.JoinHostPort(u.Hostname(), port)
+}

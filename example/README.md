@@ -1,6 +1,6 @@
-# GXX 指纹识别工具使用示例（v3.0 Engine API）
+# GXX 指纹识别工具使用示例
 
-> v3.0 (2026-05-22) 全实例化重构：所有示例统一使用 `*sdk.Engine` 实例化 API，  
+> 所有示例统一使用 `*sdk.Engine` 实例化 API，  
 > 旧的 `gxx.FingerScan / gxx.InitFingerRules / gxx.GetBaseInfo` 等包级函数已移除。
 
 ---
@@ -23,7 +23,6 @@
 **演示要点**：
 - `sdk.WithProxy("http://...")` / `socks5://`
 - `sdk.WithRateLimit(qps, burst)` per-host 令牌桶
-- `debug.HostRateLimiterStatsOf(engine)` 限流器状态查询
 
 ### 3. [文件批量扫描](file_target_scan/)
 
@@ -52,7 +51,7 @@
 
 ### 6. [Writer 输出](output_writer/)
 
-通过 v3 新增的 `Writer` 抽象把结果写入文件 / 注入自定义收集器。
+通过 `Writer` 抽象把结果写入文件 / 注入自定义收集器。
 
 **演示要点**：
 - `sdk.WithOutputFile(path, sdk.FormatJSON)` 内置 JSON Lines 文件写入
@@ -72,7 +71,7 @@ go run main.go
 
 ---
 
-## v3.0 SDK API 速览
+## SDK API 速览
 
 ### 创建 Engine
 
@@ -124,8 +123,6 @@ engine.LoadFingerOptions(sdk.FingerOptions{PocYaml: "single.yaml"})
 ```go
 engine.FingerCount()      // int
 engine.PoolStats()        // PoolStats{TotalTasks, CompletedTasks, FailedTasks}
-engine.CacheStats()       // map[string]any（含 hit_ratio / evictions / hits / misses）
-engine.MemoryStats()      // runner.MemoryStats（含 GoSchedLatency p99）
 ```
 
 ---
@@ -172,18 +169,6 @@ result, err := engine.Scan(ctx, target)
 if errors.Is(err, sdk.ErrEngineClosed) {
     // 处理引擎已关闭
 }
-```
-
----
-
-## 调试 / 运维 API（`gxx/sdk/debug`）
-
-```go
-import "github.com/cyberspacesec/gxx/sdk/debug"
-
-stats := debug.MemoryStatsOf(engine)            // 实时内存快照
-debug.ForceGC()                                 // 强制 GC（仅诊断）
-rl := debug.HostRateLimiterStatsOf(engine)      // 限流器状态
 ```
 
 ---

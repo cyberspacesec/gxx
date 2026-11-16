@@ -1,4 +1,4 @@
-# 文件批量扫描示例（v3.0 Engine API + ScanCallback）
+# 文件批量扫描示例（ScanCallback）
 
 本示例演示 `(*Engine).ScanCallback` 流式回调批量扫描。
 

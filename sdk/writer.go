@@ -8,7 +8,7 @@ Writer 是 SDK 自有的输出抽象，对每个完成扫描的 *TargetResult �
 可通过以下 Option 启用：
 
 	sdk.WithOutputFile("results.json", "json")
-	sdk.WithSockOutputFile("/tmp/gxx.sock")
+	sdk.WithWriter(sockWriter)     // sockWriter 由 sdk.NewSockWriter("/tmp/gxx.sock") 创建
 	sdk.WithWriter(myCustomWriter) // 自行实现 Writer 接口
 
 多个 Option 会被 MultiWriter 自动合并，写入失败只记录日志，不影响扫描主流程。

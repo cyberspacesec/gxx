@@ -55,13 +55,11 @@ gxx/
 │       ├── console.go                # 终端结果行与进度条
 │       └── options.go                # CLI 参数定义与校验（基于标准库 flag）
 │
-├── sdk/                              # ② SDK 对外层（v3 全实例化 API）
+├── sdk/                              # ② SDK 对外层（全实例化 API）
 │   ├── sdk.go                        # 对外类型 + NewFingerOptions
 │   ├── engine.go / options.go / errors.go
 │   ├── writer.go / writer_test.go    # 实例化 Writer 抽象（File/Sock/Multi/Nop）
-│   ├── sdk.md                        # SDK 使用文档
-│   └── debug/
-│       └── debug.go                  # MemoryStatsOf(engine) / HostRateLimiterStatsOf(engine) / ForceGC
+│   └── sdk.md                        # SDK 使用文档
 │
 ├── pkg/                              # ③ 引擎核心
 │   ├── runner/
@@ -388,11 +386,10 @@ CEL 编译结果 `cel.Program` 是 stateless / thread-safe / cacheable 的，所
 2. 所有扫描 API 首参数为 `context.Context`，支持超时与取消
 3. 通过 `convertTargetResult` / `convertServerInfo` / `convertTechStack` / `convertCerts` 在内部类型与 SDK 类型之间转换，保持内外解耦
 4. `NewEngine` 在 `PocFile` / `PocYaml` 为空时自动加载嵌入式指纹库
-5. `sdk/debug` 子包独立暴露运维接口，与业务 API 分离
-6. **`sdk/writer.go`** 提供实例化 `Writer` 抽象：每个 Engine 持有独立 Writer，
+5. **`sdk/writer.go`** 提供实例化 `Writer` 抽象：每个 Engine 持有独立 Writer，
    不依赖任何包级全局状态。内置 `NopWriter` / `FileWriter`（txt/csv/json，自带 1024 容量
    异步队列）/ `SockWriter`（Unix domain socket 广播）/ `MultiWriter`；
-   通过 `WithOutputFile` / `WithSockOutputFile` / `WithWriter` 注入，
+   通过 `WithOutputFile` / `WithWriter` 注入，
    Engine 在 `Scan` / `ScanCallback` 完成单目标后自动派发到 Writer，
    写入失败仅 stderr 提示不影响业务返回值，`Close` 时先 flush Writer 再释放 Runner。
 

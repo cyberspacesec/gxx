@@ -5,12 +5,9 @@ package main
 
 import (
 	"context"
-	"io/fs"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 	"time"
 
@@ -18,45 +15,6 @@ import (
 	"github.com/cyberspacesec/gxx/pkg/finger"
 	"github.com/cyberspacesec/gxx/pkg/network"
 )
-
-const embeddedScheme = "embedded://"
-
-func materializeFingerDir(t *testing.T, fingerDir string) string {
-	t.Helper()
-
-	if !strings.HasPrefix(fingerDir, embeddedScheme) {
-		return fingerDir
-	}
-
-	src := filepath.Join("..", "fingerYaml")
-	tmpDir := t.TempDir()
-	err := filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		rel, err := filepath.Rel(src, path)
-		if err != nil {
-			return err
-		}
-		dst := filepath.Join(tmpDir, rel)
-		if d.IsDir() {
-			return os.MkdirAll(dst, 0o755)
-		}
-		data, readErr := os.ReadFile(path)
-		if readErr != nil {
-			return readErr
-		}
-		if err := os.MkdirAll(filepath.Dir(dst), 0o755); err != nil {
-			return err
-		}
-		return os.WriteFile(dst, data, 0o600)
-	})
-	if err != nil {
-		t.Fatalf("无法展开内置指纹库: %v", err)
-	}
-
-	return tmpDir
-}
 
 func TestFingerGe(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {

@@ -30,19 +30,11 @@ package sdk
 
 import (
 	"fmt"
-	"github.com/cyberspacesec/gxx/pkg/network"
-	"github.com/cyberspacesec/gxx/pkg/runner"
 	"github.com/cyberspacesec/gxx/types"
 	"os"
 )
 
 // ─────────────── 对外类型 ───────────────
-
-// MemoryStats 是进程级运行时内存与调度统计，不代表单个 Engine 的独占内存。
-type MemoryStats = runner.MemoryStats
-
-// HostRateLimiter 是按目标主机划分的请求限流器。
-type HostRateLimiter = network.HostRateLimiter
 
 // ServerInfo 服务器信息。
 type ServerInfo struct {
@@ -165,6 +157,9 @@ type TargetResult struct {
 	ICP        string         `json:"icp,omitempty"`
 	Certs      []CertInfo     `json:"certs,omitempty"`
 	Products   []ProductMatch `json:"products,omitempty"`
+	// Error 由调用方在目标扫描失败时填写，用于把失败原因随结果一起输出；
+	// Scan 成功返回的结果中始终为空。
+	Error string `json:"error,omitempty"`
 }
 
 // BaseInfo 目标基础信息（不含指纹匹配）。跳转字段的含义与 TargetResult 相同。
