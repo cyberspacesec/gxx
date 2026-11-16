@@ -162,8 +162,8 @@ if errors.Is(err, sdk.ErrEmptyTarget) {
 ```go
 type TargetResult struct {
     URL        string        `json:"url"`
-    FinalURL   string        `json:"final_url,omitempty"`   // 资产内最后一页的地址
-    RedirectTo string        `json:"redirect_to,omitempty"` // 指向其他资产、未跟随的跳转
+    FinalURL   string        `json:"final_url,omitempty"`   // 跳转链最后一页的地址
+    RedirectTo string        `json:"redirect_to,omitempty"` // 页面里识别出的、未跟随的跨资产跳转
     Redirects  []Redirect    `json:"redirects,omitempty"`   // 入口跳转链
     StatusCode int32         `json:"status_code"`
     Title      string        `json:"title"`
@@ -185,7 +185,7 @@ type Redirect struct {
     Status   int32  `json:"status,omitempty"` // 发出跳转的响应的状态码
     From     string `json:"from"`
     To       string `json:"to"`
-    Followed bool   `json:"followed"`         // false：目标属于其他资产，没有访问
+    Followed bool   `json:"followed"`         // false：页面里识别出的跳转指向其他资产，没有访问
 }
 ```
 
@@ -578,7 +578,7 @@ if err == nil {
 - 静态规则快照持有连续的不可变执行清单；仅依赖已缓存首页且没有动态声明、循环或等待的指纹可按最多 8 条合并调度，每条独立评估、计数和处理异常。其他指纹按单条任务执行，规则并发与在途指纹预算保持不变；求值状态归还时清除响应和其他扫描状态，循环、I/O 和等待函数保留取消约束
 - 引擎内部构造的响应按只读所有权共享；公共缓存写入复制调用方的完整消息，超过字节预算时跳过缓存，不生成被裁剪的缓存响应。实例请求头在构造时复制，规则覆盖头只作用于对应请求
 - 标题解析直接消费只读正文的字节视图；标题与 ICP 备案号独立持有返回字符串，长期保留结果不会通过这些字段引用整页 HTML 或脚本。无候选的合法 UTF-8 正文无需为备案号解析复制整页；结果数量增长仍会增加内存
-- favicon 哈希使用 1,824 字节原始块和 2,465 字节编码块读取到 EOF，不构造完整图片或 Base64 副本；入口页支持非根路径、资产内跳转、多个候选与内联图片。成功哈希归当前实例持有，按请求头和 Cookie 会话隔离，候选回退共用时间预算；同一组图片字节的哈希编码约定不变。元数据识别范围与限制见 [网站元数据识别](../docs/网站元数据识别.md)
+- favicon 哈希使用 1,824 字节原始块和 2,465 字节编码块读取到 EOF，不构造完整图片或 Base64 副本；入口页支持非根路径、跳转、多个候选与内联图片。成功哈希归当前实例持有，按请求头和 Cookie 会话隔离，候选回退共用时间预算；同一组图片字节的哈希编码约定不变。元数据识别范围与限制见 [网站元数据识别](../docs/网站元数据识别.md)
 - 未知长度响应使用 32 KiB 暂存块，暂存池最多保留 1 MiB，最终正文使用独立数组；已知长度响应采用有界容量提示，两条路径保持相同的正文上限和读取错误语义
 - 页面正文上限为 512 KiB；图标不受该资源大小限制，使用固定块读取到 EOF。内联图标声明仍需包含在已读取的页面正文中
 

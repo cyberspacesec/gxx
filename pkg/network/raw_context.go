@@ -128,9 +128,19 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 		resp := &http.Response{StatusCode: response.Status.Code, Status: strconv.Itoa(response.Status.Code) + " " + response.Status.Reason, Proto: response.Version.String(), ProtoMajor: response.Version.Major, ProtoMinor: response.Version.Minor, Header: h, ContentLength: response.ContentLength(), Body: &rawResponseBody{Reader: body, ctx: ctx, conn: conn, stop: stop}, Request: &http.Request{Method: parsed.Method, URL: u, Header: make(http.Header)}}
 		if options.FollowRedirects && response.Status.IsRedirect() && h.Get("Location") != "" && redirects < maxRedirects {
 			next, err := u.Parse(h.Get("Location"))
-			// 只在同一资产内跟随；指向其他资产或无法解析时返回 30x 响应本身。
-			if err == nil && SameOrigin(u, next) {
+			// Location 无法解析时返回 30x 响应本身。
+			if err == nil && next.Host != "" && (next.Scheme == "http" || next.Scheme == "https") {
 				_ = resp.Body.Close()
+				// 离开原来的源之后只带通用请求头，规则里手写的请求头不发给其他主机。
+				if !SameOrigin(u, next) {
+					for key := range headers {
+						switch http.CanonicalHeaderKey(key) {
+						case "User-Agent", "Accept", "Accept-Language":
+						default:
+							delete(headers, key)
+						}
+					}
+				}
 				// 与浏览器一致：301/302/303 之后改用不带请求体的 GET，307/308 保持原请求。
 				if code := response.Status.Code; code != http.StatusTemporaryRedirect && code != http.StatusPermanentRedirect && parsed.Method != http.MethodGet && parsed.Method != http.MethodHead {
 					parsed.Method, parsed.Data = http.MethodGet, ""

@@ -25,7 +25,7 @@ func resultLine(result *sdk.TargetResult) string {
 		b.WriteString(result.FinalURL)
 	}
 	if result.RedirectTo != "" {
-		b.WriteString("  跳转至其他资产：")
+		b.WriteString("  页面跳转（未跟随）：")
 		b.WriteString(result.RedirectTo)
 	}
 	b.WriteString("  标题：")

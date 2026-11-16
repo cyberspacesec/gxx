@@ -388,7 +388,8 @@ func (w *fileWriter) writeTXT(result *TargetResult) error {
 	if result.FinalURL != result.URL {
 		line("最终URL", result.FinalURL)
 	}
-	line("跳转至其他资产", result.RedirectTo)
+	line("未跟随的页面跳转", result.RedirectTo)
+	line("错误", result.Error)
 	fmt.Fprintf(&sb, "状态码: %d\n", result.StatusCode)
 	line("标题", result.Title)
 	if result.Server != nil {
@@ -432,7 +433,7 @@ func (w *fileWriter) writeTXTHeader() error {
 
 // csvHeader 返回 CSV 表头字段，与 buildCSVRow 顺序保持一致。
 func csvHeader() []string {
-	return []string{"URL", "最终URL", "跳转至其他资产", "状态码", "标题", "服务器", "技术栈", "产品", "指纹ID", "指纹名称", "匹配结果", "ICP备案号", "证书", "响应头"}
+	return []string{"URL", "最终URL", "未跟随的页面跳转", "状态码", "标题", "服务器", "技术栈", "产品", "指纹ID", "指纹名称", "匹配结果", "ICP备案号", "证书", "响应头", "错误"}
 }
 
 // buildCSVRow 把 TargetResult 序列化为 csvHeader 对应的字段顺序。
@@ -460,6 +461,7 @@ func buildCSVRow(r *TargetResult) []string {
 		strings.TrimSpace(r.ICP),
 		strings.Join(certSummary(r.Certs), "; "),
 		r.Headers,
+		r.Error,
 	}
 }
 

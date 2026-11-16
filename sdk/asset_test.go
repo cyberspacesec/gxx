@@ -10,6 +10,7 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -80,48 +81,76 @@ func (l *requestLog) all() []string {
 	return slices.Clone(l.seen)
 }
 
-// 资产 = 协议 + 主机 + 端口。30x 指向其他资产时停在 30x：不请求对方，
-// 结果描述的是 30x 响应本身，对方页面的标题、Server 与指纹不会记到本资产名下。
-func TestScanStopsAtCrossAssetRedirect(t *testing.T) {
+// HTTP 30x 默认跟随，可以指向其他主机、协议或端口（www 与裸域名、http 与 https
+// 之间的跳转都是这种情况）。结果描述最后一页，链上每一页都参与根路径规则；
+// 自定义请求头只发给扫描目标自身，不随跳转带给其他主机。
+func TestScanFollowsRedirectToOtherHost(t *testing.T) {
 	var foreignLog requestLog
+	var leaked atomic.Bool
 	foreign := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		foreignLog.add(r)
+		if r.Header.Get("X-Api-Token") != "" {
+			leaked.Store(true)
+		}
 		w.Header().Set("Server", "asset-B")
 		fmt.Fprint(w, "<html><head><title>B 的登录页</title></head><body>marker-b</body></html>")
 	}))
 	defer foreign.Close()
+	var originToken atomic.Value
 	origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		originToken.Store(r.Header.Get("X-Api-Token"))
 		w.Header().Set("Server", "asset-A")
 		http.Redirect(w, r, foreign.URL+"/portal", http.StatusFound)
 	}))
 	defer origin.Close()
 
-	e := ruleLibrary(t, map[string]string{
-		"foreign-body": rootRule(`response.body.bcontains(b"marker-b")`),
-		"redirector":   rootRule(`response.status == 302 && response.raw_header.ibcontains(b"Location: ` + foreign.URL + `/portal")`),
-	})
+	dir := t.TempDir()
+	for id, expression := range map[string]string{
+		"foreign-body": `response.body.bcontains(b"marker-b")`,
+		"redirector":   `response.status == 302 && response.raw_header.ibcontains(b"Location: ` + foreign.URL + `/portal")`,
+		"first-only":   "",
+	} {
+		data := "id: " + id + "\ninfo:\n  name: " + id + "\nrules:\n" + rootRule(expression) + "expression: r0()\n"
+		if id == "first-only" {
+			data = "id: first-only\ninfo:\n  name: first-only\nrules:\n  r0:\n    request:\n      method: GET\n      path: /\n      follow_redirects: false\n    expression: response.status == 302\nexpression: r0()\n"
+		}
+		if err := os.WriteFile(filepath.Join(dir, id+".yaml"), []byte(data), 0o600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	e, err := sdk.NewEngine(context.Background(), sdk.WithFingerOptions(sdk.FingerOptions{PocFile: dir}), sdk.WithTimeout(2*time.Second), sdk.WithCustomHeaders(map[string]string{"X-Api-Token": "secret"}))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer e.Close()
+
 	result, err := e.Scan(context.Background(), origin.URL)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got := foreignLog.all(); len(got) != 0 {
-		t.Fatalf("向其他资产发出了请求: %v", got)
+	if result.StatusCode != http.StatusOK || result.Title != "B 的登录页" || result.Server.OriginalServer != "asset-B" {
+		t.Fatalf("结果应描述跳转后的页面: status=%d title=%q server=%+v", result.StatusCode, result.Title, result.Server)
 	}
-	if result.StatusCode != http.StatusFound || strings.Contains(result.Title, "B") || result.Server.OriginalServer != "asset-A" {
-		t.Fatalf("结果混入了其他资产: status=%d title=%q server=%+v", result.StatusCode, result.Title, result.Server)
+	if result.FinalURL != foreign.URL+"/portal" || result.RedirectTo != "" || result.URL != origin.URL {
+		t.Fatalf("url=%q final_url=%q redirect_to=%q", result.URL, result.FinalURL, result.RedirectTo)
 	}
-	if result.RedirectTo != foreign.URL+"/portal" || result.FinalURL != origin.URL {
-		t.Fatalf("redirect_to=%q final_url=%q", result.RedirectTo, result.FinalURL)
-	}
-	want := []sdk.Redirect{{Type: "http", Status: 302, From: origin.URL, To: foreign.URL + "/portal", Followed: false}}
+	want := []sdk.Redirect{{Type: "http", Status: 302, From: origin.URL, To: foreign.URL + "/portal", Followed: true}}
 	if !slices.Equal(result.Redirects, want) {
 		t.Fatalf("redirects=%+v", result.Redirects)
 	}
-	if got := matchedIDs(result); !slices.Equal(got, []string{"redirector"}) {
+	// 302 响应本身、跳转后的页面、声明不跟随的规则都能命中。
+	if got := matchedIDs(result); !slices.Equal(got, []string{"first-only", "foreign-body", "redirector"}) {
 		t.Fatalf("matches=%v", got)
 	}
+	if originToken.Load() != "secret" || leaked.Load() {
+		t.Fatalf("自定义请求头应只发给扫描目标: origin=%v leaked=%v", originToken.Load(), leaked.Load())
+	}
+	// 入口链已经取得跳转后的页面，根路径规则不再另发请求。
+	if n := foreignLog.count("GET /portal"); n != 1 {
+		t.Fatalf("跳转后的页面被请求了 %d 次: %v", n, foreignLog.all())
+	}
 	info, err := e.GetBaseInfo(context.Background(), origin.URL)
-	if err != nil || info.RedirectTo != foreign.URL+"/portal" || info.StatusCode != http.StatusFound {
+	if err != nil || info.RedirectTo != "" || info.StatusCode != http.StatusOK {
 		t.Fatalf("GetBaseInfo: %+v err=%v", info, err)
 	}
 }

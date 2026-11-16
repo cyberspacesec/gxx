@@ -14,6 +14,7 @@ import (
 	"github.com/cyberspacesec/gxx/utils/logger"
 	"github.com/cyberspacesec/gxx/utils/proto"
 	"net/http"
+	"net/url"
 )
 
 // 全局并发常量。
@@ -35,14 +36,15 @@ type BaseInfoResponse struct {
 	BodyBytes  []byte
 	ICP        string
 	Certs      []*types.CertInfo
-	// FinalURL 是资产内最终页面的地址；RedirectTo 是指向其他资产、未跟随的跳转目标。
+	// FinalURL 是跳转链最后一页的地址；RedirectTo 是页面里识别出的、指向其他资产而未跟随的跳转目标。
 	FinalURL   string
 	RedirectTo string
 	Redirects  []Redirect
 	pages      []*scanPage
+	origin     *url.URL // 入口所在的资产
 }
 
-// Redirect 入口跳转链上的一跳。Followed 为 false 表示目标属于其他资产，没有访问。
+// Redirect 入口跳转链上的一跳。Followed 为 false 表示页面里识别出的跳转指向其他资产，没有访问。
 type Redirect struct {
 	Type     string // http / refresh / javascript
 	Status   int32  // 发出跳转的响应的状态码

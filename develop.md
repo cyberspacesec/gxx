@@ -153,7 +153,7 @@ main.go
             └─ (*Engine).Scan(ctx, target) → writer.Write → 终端结果行
                  └─ (*Runner).ScanTarget(ctx, target)
                       ├─ network.WithCookieJar（一次扫描一个 Cookie 会话）
-                      ├─ getBaseInfo(ctx)          // 入口逐跳导航，只在资产内跟随
+                      ├─ getBaseInfo(ctx)          // 入口逐跳导航：30x 总是跟随，页面内跳转只在资产内跟随
                       │    ├─ requestEntry          // 未带协议时 https → http
                       │    └─ nextHop               // 30x Location / Refresh / 跳转壳脚本
                       ├─ warmUpRequestCache()       // 跳转链各页写入缓存
@@ -340,7 +340,7 @@ CEL 编译结果 `cel.Program` 是 stateless / thread-safe / cacheable 的，所
 - **TLS 套件**：取标准库实现的全部套件（`tls.CipherSuites()` + `tls.InsecureCipherSuites()`），最低 TLS 1.0。扫描需要尽可能握手成功，包含老旧设备依赖的 RSA 密钥交换、CBC-SHA256 等；不能手写清单（曾漏掉 ECDSA+AES-GCM），也不能用 Go 默认值（1.22 起已移除 RSA 密钥交换）
 - **代理与 Raw TCP 回退**：`retryablehttp` 遇到畸形 HTTP 响应时会用库内部的 `net.Dial` 直连重发，看不到注入在 Transport 上的代理。因此配置了代理时关闭该回退（避免泄漏真实出口）；无代理时保留，用于兼容返回非标准 HTTP 报文的设备
 - **重试收敛**：扫描用 `RetryMax=1`、退避 200–600ms，避免默认 `RetryMax=5 + 1s` 让不可达/拒绝连接的目标一直重试到整体超时；既容忍瞬时抖动又快速失败
-- **资产边界**（`origin.go`）：`SameOrigin` 按协议 + 主机 + 端口判断两个地址是否属于同一资产；页面请求的重定向只在资产内跟随，不存在跨资产请求，自定义请求头不会泄漏
+- **资产边界**（`origin.go`）：`SameOrigin` 按协议 + 主机 + 端口判断两个地址是否属于同一资产；30x 离开发起请求的源之后只保留通用请求头，自定义请求头不会发给其他主机；页面里识别出的跳转只在资产内跟随
 
 #### 5.5.1b 代理与 TCP/UDP（`proxy.go`）
 
@@ -358,10 +358,10 @@ CEL 编译结果 `cel.Program` 是 stateless / thread-safe / cacheable 的，所
 
 #### 5.5.3 重定向策略
 
-- 页面请求（`createRedirectPolicy`）：最多 5 跳，只在同一资产内跟随；指向其他资产或达到上限时返回 30x 响应本身。请求体由 net/http 处理：307/308 重放，301/302/303 改为不带请求体的 GET
+- 页面请求（`createRedirectPolicy`）：跟随 30x，最多 5 跳，可以指向其他主机；达到上限时返回 30x 响应本身。请求体由 net/http 处理：307/308 重放，301/302/303 改为不带请求体的 GET
 - 扫描入口不使用自动跟随，由 `pkg/runner/navigate.go` 逐跳请求并保留每一页，详见 [资产与跳转](docs/资产与跳转.md)
 - 图标请求（`GetResource`）：按浏览器的方式跟随，可以跨主机，最多 5 跳，离开原主机后不带自定义请求头
-- Raw 请求（`raw_context.go`）：同样只在资产内跟随
+- Raw 请求（`raw_context.go`）：同样跟随 30x，离开原来的源后只带通用请求头
 
 ### 5.6 `pkg/wappalyzer/` — 技术栈识别
 

@@ -135,14 +135,15 @@ type Redirect struct {
 	Status   int32  `json:"status,omitempty"` // 发出跳转的响应的状态码
 	From     string `json:"from"`
 	To       string `json:"to"`
-	Followed bool   `json:"followed"` // false：目标属于其他资产，没有访问
+	Followed bool   `json:"followed"` // false：页面里识别出的跳转指向其他资产，没有访问
 }
 
 // TargetResult 单个目标的完整扫描结果。
 //
-// 一个目标就是一个资产（协议 + 主机 + 端口）。扫描只在资产内跟随跳转：FinalURL 是
-// 资产内最终页面的地址，StatusCode、Title、TechStack、ICP 描述该页面；跳转指向其他
-// 资产时不跟随，目标地址记入 RedirectTo，由调用方决定是否作为新的目标扫描。
+// 一个目标由协议、主机、端口确定。入口的 HTTP 30x 总是跟随（可以指向其他主机），
+// FinalURL 是跳转链最后一页的地址，StatusCode、Title、TechStack、ICP 描述该页面。
+// 页面里识别出的跳转（meta refresh、脚本）只在当前页所在的资产内跟随，指向其他
+// 资产时不访问，地址记入 RedirectTo。
 type TargetResult struct {
 	URL        string         `json:"url"`
 	FinalURL   string         `json:"final_url,omitempty"`

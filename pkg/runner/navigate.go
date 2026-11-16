@@ -17,14 +17,14 @@ import (
 	"github.com/cyberspacesec/gxx/utils/proto"
 )
 
-// maxNavigationHops 是入口在资产内最多跟随的跳数（HTTP 30x 与客户端跳转合计）。
+// maxNavigationHops 是入口最多跟随的跳数（HTTP 30x 与客户端跳转合计）。
 const maxNavigationHops = 5
 
-// getBaseInfo 请求扫描入口并在资产内跟随跳转，返回链上各页与基础信息。
+// getBaseInfo 请求扫描入口并跟随跳转，返回链上各页与基础信息。
 //
-// 一个资产由协议、主机和端口确定。入口的每一跳都单独请求并保留响应：
-// 30x 的 Location、Refresh、meta refresh 与跳转壳里的脚本跳转指向同一资产时继续，
-// 指向其他资产时停止并记为 RedirectTo，由调用方决定是否把它当作新的目标。
+// 入口的每一跳都单独请求并保留响应。30x 的 Location 总是跟随，可以指向其他主机；
+// Refresh、meta refresh 与跳转壳里的脚本跳转是静态识别出来的，只在当前页所在的
+// 资产（协议、主机、端口）内跟随，指向其他资产时停止并记为 RedirectTo。
 // 标题、技术栈、备案与图标取自链上最后一页。
 func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Duration) (*BaseInfoResponse, error) {
 	if timeout <= 0 {
@@ -45,7 +45,7 @@ func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Du
 	base.FinalURL = last.url
 	base.StatusCode = last.status
 	base.BodyBytes = last.body
-	base.Title = finger.GetTitleFromBody(navCtx, last.url, final, last.body, r.httpClient, resourceOptions)
+	base.Title = finger.GetTitleFromBody(navCtx, last.url, final, last.body, r.httpClient, optionsFor(base.origin, final.Request.URL, resourceOptions))
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Du
 	return base, nil
 }
 
-// walkEntry 请求入口并在资产内逐跳跟随，返回链上各页及其规则可见的响应。
+// walkEntry 请求入口并逐跳跟随，返回链上各页及其规则可见的响应。
 // navCtx 约束整条链的耗时，ctx 是调用方的生命周期。options 是资源请求（图标）
 // 使用的选项，各跳请求在此基础上关闭自动跟随。
 func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logger.Sink, target string, options network.OptionsRequest) (*BaseInfoResponse, error) {
@@ -77,7 +77,7 @@ func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logg
 		return nil, err
 	}
 
-	base := &BaseInfoResponse{Url: entry}
+	base := &BaseInfoResponse{Url: entry, origin: origin}
 	visited := map[string]struct{}{navigationKey(origin): {}}
 	current, resp := entry, first
 	for {
@@ -98,7 +98,10 @@ func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logg
 			break
 		}
 		hop := Redirect{Type: kind, Status: int32(resp.StatusCode), From: current, To: next.String()}
-		if !network.SameOrigin(origin, next) {
+		// 页面里识别出的跳转（Refresh、meta、脚本）只在当前页所在的资产内跟随：
+		// 静态识别可能认错地址，不能据此访问其他主机。HTTP 30x 是服务端明确给出的，
+		// 指向其他主机、协议或端口时同样跟随。
+		if kind != finger.RedirectHTTP && !network.SameOrigin(pageURL, next) {
 			base.RedirectTo = hop.To
 			base.Redirects = append(base.Redirects, hop)
 			break
@@ -108,7 +111,7 @@ func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logg
 			break
 		}
 		visited[key] = struct{}{}
-		following, err := client.SendRequestHttp(navCtx, http.MethodGet, hop.To, "", hopOptions)
+		following, err := client.SendRequestHttp(navCtx, http.MethodGet, hop.To, "", optionsFor(origin, next, hopOptions))
 		if err != nil {
 			// 后续页面不可达时保留已取得的页面，仍可识别入口。
 			log.Debug("目标 %s 跟随跳转 %s 失败: %v", entry, hop.To, err)
@@ -125,9 +128,19 @@ func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logg
 	// 中间页只参与规则匹配，图标只为最后一页提取。
 	last := base.pages[len(base.pages)-1]
 	for _, page := range base.pages {
-		page.response = finger.BuildPageResponseOwned(ctx, pageResponse(page), page.body, client, options, page.url, page == last)
+		pageURL, _ := url.Parse(page.url)
+		page.response = finger.BuildPageResponseOwned(ctx, pageResponse(page), page.body, client, optionsFor(origin, pageURL, options), page.url, page == last)
 	}
 	return base, nil
+}
+
+// optionsFor 返回请求 page 时使用的选项：page 不属于入口所在的资产时去掉自定义
+// 请求头，令牌等信息只发给扫描目标自身。
+func optionsFor(origin, page *url.URL, options network.OptionsRequest) network.OptionsRequest {
+	if page == nil || !network.SameOrigin(origin, page) {
+		options.CustomHeaders = nil
+	}
+	return options
 }
 
 // EntryPage 是入口跳转链上的一页，以及规则在这一页上看到的请求与响应。
@@ -137,7 +150,7 @@ type EntryPage struct {
 	Response *proto.Response
 }
 
-// EntryChain 按扫描时的方式请求入口并在资产内跟随跳转，返回链上各页（入口在前，
+// EntryChain 按扫描时的方式请求入口并跟随跳转，返回链上各页（入口在前，
 // 最后一页在后）与每一跳的记录。调试工具用它逐页评估规则，结果与扫描一致。
 func EntryChain(ctx context.Context, client *network.HTTPClient, target string, options network.OptionsRequest) ([]EntryPage, []Redirect, error) {
 	if options.Timeout <= 0 {

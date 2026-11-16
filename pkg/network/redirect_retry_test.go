@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -13,10 +14,12 @@ import (
 
 // 重定向只在同一资产（协议 + 主机 + 端口）内跟随：指向其他资产时返回 30x 响应本身，
 // 不向对方发出任何请求，自定义请求头也就不可能泄漏。
-func TestRedirectsStayWithinAsset(t *testing.T) {
+func TestRedirectsFollowAcrossHosts(t *testing.T) {
 	var foreignHits atomic.Int64
+	var foreignToken atomic.Value
 	foreign := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		foreignHits.Add(1)
+		foreignToken.Store(r.Header.Get("X-Api-Token") + "|" + r.Header.Get("User-Agent"))
 		_, _ = io.WriteString(w, "foreign")
 	}))
 	defer foreign.Close()
@@ -55,11 +58,12 @@ func TestRedirectsStayWithinAsset(t *testing.T) {
 	}
 
 	resp := send(http.MethodGet, "/cross", "")
-	if resp.StatusCode != http.StatusFound || resp.Header.Get("Location") != foreign.URL+"/landing" {
-		t.Fatalf("跨资产跳转应停在 30x: status=%d location=%q", resp.StatusCode, resp.Header.Get("Location"))
+	if resp.StatusCode != http.StatusOK || resp.Request.URL.String() != foreign.URL+"/landing" || foreignHits.Load() != 1 {
+		t.Fatalf("指向其他主机的 30x 应跟随: status=%d url=%s hits=%d", resp.StatusCode, resp.Request.URL, foreignHits.Load())
 	}
-	if foreignHits.Load() != 0 {
-		t.Fatalf("向其他资产发出了 %d 次请求", foreignHits.Load())
+	// 离开原来的源之后不带自定义请求头，通用请求头保留。
+	if got := foreignToken.Load().(string); strings.HasPrefix(got, "secret") || strings.HasSuffix(got, "|") {
+		t.Fatalf("发往其他主机的请求头: %q", got)
 	}
 
 	if resp = send(http.MethodGet, "/same", ""); resp.StatusCode != http.StatusOK {
@@ -148,5 +152,33 @@ func TestClosedPortFailsFasterThanTimeout(t *testing.T) {
 		if elapsed > 2*time.Second {
 			t.Errorf("%s 关闭端口耗时 %v，疑似重试到超时", method, elapsed)
 		}
+	}
+}
+
+// Raw 请求同样跟随指向其他主机的 30x，规则里手写的请求头不发给对方。
+func TestRawRedirectFollowsAcrossHosts(t *testing.T) {
+	seen := make(chan string, 1)
+	foreign := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		seen <- r.Method + " " + r.URL.Path + " token=" + r.Header.Get("X-Api-Token") + " host=" + r.Host
+		_, _ = io.WriteString(w, "foreign")
+	}))
+	defer foreign.Close()
+	origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, foreign.URL+"/landing", http.StatusFound)
+	}))
+	defer origin.Close()
+
+	client := NewHTTPClient()
+	defer client.Close()
+	raw := "POST /login HTTP/1.1\r\nHost: {{Hostname}}\r\nX-Api-Token: secret\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\na=1"
+	resp, err := client.SendRawRequest(context.Background(), raw, origin.URL, OptionsRequest{Timeout: 3 * time.Second, FollowRedirects: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	body, _ := io.ReadAll(resp.Body)
+	want := "GET /landing token= host=" + strings.TrimPrefix(foreign.URL, "http://")
+	if got := <-seen; resp.StatusCode != http.StatusOK || string(body) != "foreign" || got != want {
+		t.Fatalf("status=%d body=%q 对方收到: %q", resp.StatusCode, body, got)
 	}
 }
