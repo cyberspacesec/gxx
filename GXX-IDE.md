@@ -262,21 +262,21 @@ cd cmd/gxx-ide && go run ./scripts/packager --platforms=darwin/arm64,windows/amd
 `scripts/packager` 关键行为：
 
 - **默认输出到仓库根 `build/`**，与主项目 `build.sh` 的 `gxx_*.zip` 同目录；
-- **zip 命名与 CLI 一致**：`gxx-ide_mac_arm64_1.6.1.zip`、`gxx-ide_win_x64_1.6.1.zip` 等；
+- **zip 命名与 CLI 一致**：`gxx-ide_mac_arm64_1.7.0.zip`、`gxx-ide_win_x64_1.7.0.zip` 等；
 - **版本号**默认读取 `wails.json` 的 `info.productVersion`；
 - **`--clean` 只删 `build/gxx-ide_*.zip`**，不会误删 `gxx_*.zip`；
 - **每个平台构建前清空 `cmd/gxx-ide/build/bin/`**，避免 `.app` bundle 污染下一平台；
 - **跨编译时默认 `CGO_ENABLED=0`**（除非用户显式覆盖）。
 
-打包产物示例（与 `gxx_mac_arm64_1.6.1.zip` 并列）：
+打包产物示例（与 `gxx_mac_arm64_1.7.0.zip` 并列）：
 
 ```
 build/
-├── gxx_mac_arm64_1.6.1.zip          # CLI
-├── gxx_mac_x64_1.6.1.zip
-├── gxx-ide_mac_arm64_1.6.1.zip      # IDE（内含 gxx-ide.app）
-├── gxx-ide_mac_x64_1.6.1.zip
-└── gxx-ide_win_x64_1.6.1.zip        # IDE（内含 gxx-ide.exe）
+├── gxx_mac_arm64_1.7.0.zip          # CLI
+├── gxx_mac_x64_1.7.0.zip
+├── gxx-ide_mac_arm64_1.7.0.zip      # IDE（内含 gxx-ide.app）
+├── gxx-ide_mac_x64_1.7.0.zip
+└── gxx-ide_win_x64_1.7.0.zip        # IDE（内含 gxx-ide.exe）
 ```
 
 ---
