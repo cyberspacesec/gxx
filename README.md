@@ -56,7 +56,7 @@ gxx -u https://example.com -rt 500
 在调用方的 Go 模块内安装 SDK：
 
 ```bash
-go get github.com/cyberspacesec/gxx/sdk@v1.5.0
+go get github.com/cyberspacesec/gxx/sdk@v1.6.0
 ```
 
 发布包见 [GitHub Releases](https://github.com/cyberspacesec/gxx/releases)，自动测试与发布流程见 [构建与发布](docs/构建与发布.md)。
@@ -128,6 +128,18 @@ GXX 以资产为单位识别，一个资产由**协议、主机、端口**共同
 | `-o, --output` | 输出文件路径（txt/csv/json） |
 | `--json` | 强制 JSON Lines 输出（与 SDK 的结果结构相同） |
 | `--sock` | Unix Domain Socket 实时输出路径 |
+
+### 限速选项
+| 参数 | 说明 |
+|------|------|
+| `--rate` | 全部请求的总速率上限（次/秒，默认不限制） |
+| `--rpm` | 全部请求的总速率上限（次/分钟，与 `--rate` 二选一） |
+| `--host-rate` | 单台主机的速率上限（次/秒，默认不限制；同一主机的不同端口合并计算） |
+
+```bash
+# 整体每分钟最多 6000 个请求，单台主机每秒最多 20 个
+gxx -f targets.txt --rpm 6000 --host-rate 20
+```
 
 ### 调试选项
 | 参数 | 说明 |

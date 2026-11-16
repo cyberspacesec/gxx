@@ -133,6 +133,7 @@ func NewRunner(cfg ScanConfig, pocOptions types.YamlFingerType) (*Runner, error)
 	r.monitor.log = r.log
 	r.monitor.EnableProactiveGC(cfg.EnableProactive)
 
+	r.httpClient.SetGlobalRateLimiter(network.NewGlobalRateLimiter(cfg.GlobalRateLimit, cfg.GlobalRateLimitBurst))
 	if cfg.RateLimitQPS > 0 && cfg.RateLimitBurst > 0 {
 		r.limiter = network.NewHostRateLimiter(cfg.RateLimitQPS, cfg.RateLimitBurst)
 		r.httpClient.SetRateLimiter(r.limiter)

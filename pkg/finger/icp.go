@@ -21,17 +21,6 @@ func ExtractICPRecordFromBody(body []byte) string {
 	return extractICPText(body)
 }
 
-// ExtractICPRecord 支持 HTML 与纯文本；优先采用备案官网链接中的有效号码。
-func ExtractICPRecord(body string) string {
-	if !metadataMayContainICP(body) {
-		return ""
-	}
-	if !common.ValidUTF8TruncatedString(body) {
-		return extractICPText(common.Str2UTF8(body))
-	}
-	return extractICPText(body)
-}
-
 func metadataMayContainICP[S metadataSource](body S) bool {
 	// 覆盖实体、UTF-8 与 GB18030 全角字母；无这些线索的正文
 	// 不可能在编码转换后产生可识别的 ICP，因而无需校验整页 UTF-8。

@@ -2,7 +2,9 @@ package sdk_test
 
 import (
 	"bufio"
+	"bytes"
 	"context"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"log"
@@ -19,7 +21,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cyberspacesec/gxx/pkg/finger"
 	"github.com/cyberspacesec/gxx/sdk"
 	"github.com/cyberspacesec/gxx/utils/common"
 )
@@ -167,8 +168,8 @@ func connectProxyToBackend(t *testing.T, backend string) string {
 
 func TestEngineCreatedDuringScanCannotShareFaviconContent(t *testing.T) {
 	firstImage, secondImage := []byte("first SDK icon"), []byte("second SDK icon")
-	firstHash := strconv.FormatInt(int64(common.Mmh3Hash32(finger.StandBase64(firstImage))), 10)
-	secondHash := strconv.FormatInt(int64(common.Mmh3Hash32(finger.StandBase64(secondImage))), 10)
+	firstHash := strconv.FormatInt(int64(common.Mmh3Hash32(referenceIconBase64(firstImage))), 10)
+	secondHash := strconv.FormatInt(int64(common.Mmh3Hash32(referenceIconBase64(secondImage))), 10)
 	var phase, images atomic.Int64
 	started, release := make(chan struct{}), make(chan struct{})
 	var once sync.Once
@@ -365,4 +366,21 @@ func TestReverseConfigIsOwnedByEachOverlappingEngine(t *testing.T) {
 			}
 		})
 	}
+}
+
+// referenceIconBase64 是图标哈希约定的参考编码：每 76 个字符换行，结尾再加一个换行。
+func referenceIconBase64(raw []byte) []byte {
+	encoded := base64.StdEncoding.EncodeToString(raw)
+	var out bytes.Buffer
+	for len(encoded) > 76 {
+		out.WriteString(encoded[:76])
+		out.WriteByte('\n')
+		encoded = encoded[76:]
+	}
+	out.WriteString(encoded)
+	if len(encoded) == 76 {
+		out.WriteByte('\n')
+	}
+	out.WriteByte('\n')
+	return out.Bytes()
 }

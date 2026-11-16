@@ -5,7 +5,7 @@ go 1.27.0
 toolchain go1.27.4
 
 require (
-	github.com/cyberspacesec/gxx v1.5.0
+	github.com/cyberspacesec/gxx v1.6.0
 	github.com/gin-contrib/cors v1.7.11
 	github.com/gin-gonic/gin v1.12.0
 	github.com/swaggo/files v1.0.1

@@ -255,9 +255,6 @@ func TestIconExpiredDeadlineBeforeCancellationNotification(t *testing.T) {
 	if got := GetPageIconHash(ctx, c, s.URL, []byte(inline), options); got != "0" {
 		t.Fatalf("截止后仍计算内联图标：%s", got)
 	}
-	if got := NewGetIconHash("data:image/png;base64,YWJj", "").Run(ctx); got != "0" {
-		t.Fatalf("截止后独立图标仍返回结果：%s", got)
-	}
 }
 
 func TestIconKeepAlive(t *testing.T) {
@@ -545,4 +542,27 @@ func FuzzICPVisibleRecord(f *testing.F) {
 			t.Fatalf("字节备案号漏报: seed=%d mode=%d got=%q", seed, mode, got)
 		}
 	})
+}
+
+// 页面没有声明图标时，默认的 /favicon.ico 允许第二次尝试，容忍瞬时失败。
+func TestDefaultFaviconRetriedOnce(t *testing.T) {
+	for _, status := range []int{http.StatusNotFound, http.StatusServiceUnavailable} {
+		var calls atomic.Int64
+		icon := []byte("\x89PNG\r\n\x1a\nicon")
+		s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if calls.Add(1) == 1 {
+				w.WriteHeader(status)
+				return
+			}
+			w.Header().Set("Content-Type", "image/png")
+			_, _ = w.Write(icon)
+		}))
+		c := network.NewHTTPClient()
+		got := GetPageIconHash(context.Background(), c, s.URL, []byte("<html><body>no icon</body></html>"), network.OptionsRequest{Timeout: time.Second})
+		c.Close()
+		s.Close()
+		if got != expectedIconHash(icon) || calls.Load() != 2 {
+			t.Fatalf("status=%d hash=%s calls=%d", status, got, calls.Load())
+		}
+	}
 }

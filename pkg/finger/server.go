@@ -8,7 +8,6 @@
 package finger
 
 import (
-	"fmt"
 	"github.com/cyberspacesec/gxx/types"
 	"net/http"
 	"regexp"
@@ -88,30 +87,6 @@ func ExtractVersion(server string) string {
 	return ""
 }
 
-// FormatServerResult 格式化显示服务器信息结果
-func FormatServerResult(originalServer, cleanedServer, version string) string {
-	var result strings.Builder
-
-	// 原始服务器信息
-	result.WriteString(fmt.Sprintf("原始服务器信息: %s\n", originalServer))
-
-	// 清理后的服务器信息
-	if cleanedServer != "" {
-		result.WriteString(fmt.Sprintf("服务器类型: %s\n", cleanedServer))
-	} else {
-		result.WriteString("服务器类型: 未知\n")
-	}
-
-	// 版本信息
-	if version != "" {
-		result.WriteString(fmt.Sprintf("版本号: %s\n", version))
-	} else {
-		result.WriteString("版本号: 未知\n")
-	}
-
-	return result.String()
-}
-
 // GetServerInfoFromResponse 从HTTP响应中获取并格式化服务器信息
 // 返回ServerInfo结构体指针
 func GetServerInfoFromResponse(resp *http.Response) *types.ServerInfo {
@@ -130,17 +105,6 @@ func GetServerInfoFromResponse(resp *http.Response) *types.ServerInfo {
 
 	// 创建并返回ServerInfo对象
 	return types.NewServerInfo(originalServer, cleanedServer, version)
-}
-
-// GetServerInfoFromTCP 从TCP/UDP响应中获取并格式化服务器信息
-// 返回ServerInfo结构体指针
-func GetServerInfoFromTCP(address, hostType string) *types.ServerInfo {
-	// 创建并返回ServerInfo对象
-	return types.NewServerInfo(
-		fmt.Sprintf("%s %s", hostType, address),
-		hostType,
-		"未知",
-	)
 }
 
 var (

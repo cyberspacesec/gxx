@@ -13,28 +13,12 @@ import (
 	"github.com/cyberspacesec/gxx/pkg/network"
 	"github.com/cyberspacesec/gxx/utils/common"
 	"github.com/cyberspacesec/gxx/utils/logger"
-	"io"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strings"
 	"unicode"
 )
-
-// GetTitle 从网页中提取标题
-func GetTitle(urlStr string, resp *http.Response) string {
-	body, err := network.ReadResponseBody(resp, network.MaxDefaultBody)
-	_ = resp.Body.Close()
-	if err != nil {
-		return ""
-	}
-	resp.Body = io.NopCloser(bytes.NewReader(body))
-	ctx := context.Background()
-	if resp.Request != nil {
-		ctx = resp.Request.Context()
-	}
-	return GetTitleFromBody(ctx, urlStr, resp, body, network.DefaultHTTPClient(), network.OptionsRequest{Timeout: network.DefaultTimeout, FollowRedirects: true})
-}
 
 // GetTitleFromBody 消费已限长的正文，附加资源继承同一次扫描的请求策略。
 func GetTitleFromBody(ctx context.Context, urlStr string, resp *http.Response, bodyBytes []byte, client *network.HTTPClient, options network.OptionsRequest) string {

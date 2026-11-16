@@ -45,7 +45,17 @@ func Run(ctx context.Context, options *Options) error {
 	}
 	logger.Info("原始目标数量：%d个，重复目标数量：%d个，去重后目标数量：%d个", total, total-len(targets), len(targets))
 
-	engine, err := sdk.NewEngine(ctx,
+	var limits []sdk.Option
+	switch {
+	case options.Rate > 0:
+		limits = append(limits, sdk.WithGlobalRateLimit(float64(options.Rate), options.Rate))
+	case options.RateMinute > 0:
+		limits = append(limits, sdk.WithGlobalRatePerMinute(options.RateMinute))
+	}
+	if options.HostRate > 0 {
+		limits = append(limits, sdk.WithRateLimit(float64(options.HostRate), options.HostRate))
+	}
+	engine, err := sdk.NewEngine(ctx, append(limits,
 		sdk.WithFingerOptions(sdk.FingerOptions{PocFile: options.RuleDir, PocYaml: options.RuleFile}),
 		sdk.WithProxy(options.Proxy),
 		sdk.WithTimeout(time.Duration(options.Timeout)*time.Second),
@@ -53,7 +63,7 @@ func Run(ctx context.Context, options *Options) error {
 		sdk.WithRuleConcurrency(options.RuleThreads),
 		sdk.WithMemoryMonitor(true),
 		sdk.WithDebug(options.Debug),
-	)
+	)...)
 	if err != nil {
 		return fmt.Errorf("初始化运行时失败: %w", err)
 	}

@@ -26,7 +26,7 @@ import "github.com/cyberspacesec/gxx/sdk/debug"
 在调用方的 Go 模块中执行：
 
 ```bash
-go get github.com/cyberspacesec/gxx/sdk@v1.5.0
+go get github.com/cyberspacesec/gxx/sdk@v1.6.0
 ```
 
 模块路径为 `github.com/cyberspacesec/gxx`，调用方无需配置本地 `replace`。使用 `@latest` 获取当前版本线的最新稳定版本，按当前字段适配调用代码；`FingerInfo.Tags` 为 `[]string`。
@@ -128,7 +128,9 @@ func main() {
 | `WithMemoryMonitor(enable bool)` | `false` | 启动内存监控 |
 | `WithMemoryThresholds(high, critical uint64)` | 2GB / 4GB | 内存告警阈值 |
 | `WithProactiveGC(enable bool)` | `false` | 压力时主动 GC |
-| `WithRateLimit(qps float64, burst int)` | 关闭 | per-host 限流 |
+| `WithGlobalRateLimit(perSecond float64, burst int)` | 关闭 | 引擎全部请求的总速率上限（次/秒） |
+| `WithGlobalRatePerMinute(perMinute int)` | 关闭 | 同上，按每分钟请求数设置，匀速发出 |
+| `WithRateLimit(qps float64, burst int)` | 关闭 | 每主机限速；主机按主机名或 IP 区分，不区分端口 |
 | `WithDebug(enable bool)` | `false` | 当前实例的调试日志，不修改全局日志级别 |
 | `WithLogger(log *slog.Logger)` | 静默 | 注入实例日志；未注入且开启 Debug 时使用 stderr |
 | `WithOutputFile(path string, format OutputFormat)` | 关闭 | 把结果写入本地文件（txt/csv/json，自带异步队列） |
@@ -426,15 +428,21 @@ if err != nil { return err }
 defer engine.Close()
 ```
 
-### 5.6 per-host 限流
+### 5.6 发包速率限制
 
 ```go
 engine, _ := sdk.NewEngine(ctx,
-    sdk.WithRateLimit(50, 100), // 50 QPS，桶大小 100
+    sdk.WithGlobalRatePerMinute(6000), // 整个引擎每分钟最多 6000 个请求
+    sdk.WithRateLimit(20, 20),         // 单台主机每秒最多 20 个请求
 )
 ```
 
-每个目标 host 持有独立的令牌桶（基于 `golang.org/x/time/rate`），对实际 HTTP 请求计数，包括基础探测、规则请求、图标、重定向和重试。
+两种限制默认都关闭，可以单独使用，也可以同时使用：每个请求先等待总速率的名额，再等待目标主机的名额。
+
+- **总速率**（`WithGlobalRateLimit` / `WithGlobalRatePerMinute`）约束引擎发出的全部请求，不随并发目标数放大。按分钟设置时请求匀速发出（6000 次/分钟即每 10 毫秒一个）；按秒设置时 `burst` 决定允许的瞬时突发，传 1 为严格匀速。
+- **每主机速率**（`WithRateLimit`）按主机名或 IP 计，不区分端口：同一台主机上的 80、443、8080 共用一个令牌桶，限制的是这台主机承受的总速率。
+- 计入的请求包括入口的每一跳、规则请求、TCP/UDP 规则、Raw 请求和图标请求。
+- 内置规则库几乎都匹配入口页，每个目标只有几个请求；自定义规则库包含很多不同路径时，建议设置每主机速率。
 
 ### 5.7 内存监控
 
@@ -595,7 +603,7 @@ fmt.Printf("enabled=%v cached_hosts=%d qps=%.1f\n", rl.Enabled, rl.CachedHosts, 
 | `example/basic_scan/` | 基本单目标扫描 + functional options |
 | `example/api_scan_baidu/` | API 调用 + sentinel error 处理 |
 | `example/file_target_scan/` | 从文件批量扫描 + ScanCallback 流式回调 |
-| `example/proxy_scan/` | 通过代理扫描 + per-host 限流 |
+| `example/proxy_scan/` | 通过代理扫描 + 每主机限速 |
 | `example/wappalyzer_scan/` | 多目标技术栈识别（同 Engine 复用） |
 | `example/output_writer/` | `WithOutputFile` JSON Lines + 自定义 Writer（计数 / Kafka / Webhook） |
 

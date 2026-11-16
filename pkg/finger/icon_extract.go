@@ -17,24 +17,6 @@ type iconCandidate struct {
 	priority int
 }
 
-// GetIconURL 返回优先级最高的图标地址；同级候选保持文档顺序。
-func GetIconURL(pageURL, body string) string {
-	urls := extractIconURLs(pageURL, body)
-	if len(urls) > 0 {
-		return urls[0]
-	}
-	return defaultFaviconURL(pageURL)
-}
-
-// GetIconURLFromBody 直接读取只读正文，避免整页字符串副本。
-func GetIconURLFromBody(pageURL string, body []byte) string {
-	urls := extractIconURLs(pageURL, body)
-	if len(urls) > 0 {
-		return urls[0]
-	}
-	return defaultFaviconURL(pageURL)
-}
-
 func defaultFaviconURL(pageURL string) string {
 	u, err := url.Parse(pageURL)
 	if err != nil || u.Host == "" || (!strings.EqualFold(u.Scheme, "http") && !strings.EqualFold(u.Scheme, "https")) {
@@ -47,11 +29,6 @@ func defaultFaviconURL(pageURL string) string {
 	u.Fragment = ""
 	u.RawFragment = ""
 	return u.String()
-}
-
-func extractIconURLs[S metadataSource](pageURL string, body S) []string {
-	urls, _ := collectIconURLs(pageURL, body)
-	return urls
 }
 
 func collectIconURLs[S metadataSource](pageURL string, body S) ([]string, int) {

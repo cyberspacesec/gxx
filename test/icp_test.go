@@ -60,7 +60,7 @@ func TestExtractICPFromBaidu(t *testing.T) {
 		t.Fatalf("read body failed: %v", err)
 	}
 	fmt.Println(string(body))
-	icp := finger.ExtractICPRecord(string(body))
+	icp := finger.ExtractICPRecordFromBody(body)
 	if icp == "" {
 		t.Logf("No ICP record found on baidu homepage")
 	} else {

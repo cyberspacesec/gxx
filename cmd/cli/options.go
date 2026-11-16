@@ -31,6 +31,9 @@ type Options struct {
 	RuleFile    string   // -p：单个规则文件
 	RuleDir     string   // -pf：规则目录
 	Timeout     int      // -timeout：请求超时（秒）
+	Rate        int      // -rate：全部请求的总速率上限（次/秒），0 不限制
+	RateMinute  int      // -rpm：全部请求的总速率上限（次/分钟），0 不限制
+	HostRate    int      // -host-rate：单台主机的速率上限（次/秒），0 不限制
 	Debug       bool     // -debug
 	NoFileLog   bool     // -no-file-log
 }
@@ -107,6 +110,9 @@ func ParseCmdOptions(args []string, out io.Writer) (*Options, error) {
 	flagSet.StringVar(&options.RuleFile, "p", "", "")
 	flagSet.StringVar(&options.RuleDir, "pf", "", "")
 	flagSet.IntVar(&options.Timeout, "timeout", defaultTimeout, "")
+	flagSet.IntVar(&options.Rate, "rate", 0, "")
+	flagSet.IntVar(&options.RateMinute, "rpm", 0, "")
+	flagSet.IntVar(&options.HostRate, "host-rate", 0, "")
 	flagSet.BoolVar(&options.Debug, "debug", false, "")
 	flagSet.BoolVar(&options.NoFileLog, "no-file-log", false, "")
 
@@ -121,6 +127,11 @@ func ParseCmdOptions(args []string, out io.Writer) (*Options, error) {
 			{"-o, -output string", "输出文件路径，格式按扩展名识别（txt/csv/json）"},
 			{"-json", "强制使用JSON Lines格式输出结果到文件"},
 			{"-sock string", "socket文件输出路径，启用后以JSON格式输出到socket文件"},
+		}},
+		{"限速", []flagUsage{
+			{"-rate int", "全部请求的总速率上限（次/秒，默认不限制）"},
+			{"-rpm int", "全部请求的总速率上限（次/分钟，与 -rate 二选一）"},
+			{"-host-rate int", "单台主机的速率上限（次/秒，默认不限制；同一主机的不同端口合并计算）"},
 		}},
 		{"调试", []flagUsage{
 			{"-proxy string", "代理地址（单个），支持 http/https/socks5/socks5h，如 socks5://127.0.0.1:1080"},
@@ -199,6 +210,13 @@ func verifyOptions(opt *Options, out io.Writer) error {
 		if _, err := network.ValidateProxyURL(opt.Proxy); err != nil {
 			return err
 		}
+	}
+
+	if opt.Rate < 0 || opt.RateMinute < 0 || opt.HostRate < 0 {
+		return fmt.Errorf("限速参数不能为负数")
+	}
+	if opt.Rate > 0 && opt.RateMinute > 0 {
+		return fmt.Errorf("-rate 与 -rpm 只能设置一个")
 	}
 
 	if opt.Threads <= 0 {

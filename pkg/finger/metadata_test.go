@@ -11,7 +11,6 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
-	"sync/atomic"
 	"testing"
 
 	"github.com/cyberspacesec/gxx/pkg/network"
@@ -55,31 +54,6 @@ func TestIconEncodingAndHashParity(t *testing.T) {
 		if got := hashIconBytes(raw); got != common.Mmh3Hash32(want) {
 			t.Fatalf("图标哈希变化: size=%d hash=%d", size, got)
 		}
-	}
-}
-
-func TestIconFallbackPreservesTransientResponses(t *testing.T) {
-	data := []byte("fixed image bytes")
-	want := strconv.FormatInt(int64(common.Mmh3Hash32(legacyIconBase64(data))), 10)
-	for _, firstStatus := range []int{http.StatusNotFound, http.StatusServiceUnavailable} {
-		t.Run(strconv.Itoa(firstStatus), func(t *testing.T) {
-			var calls atomic.Int64
-			s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				if calls.Add(1) == 1 {
-					w.WriteHeader(firstStatus)
-					return
-				}
-				w.Header().Set("Content-Type", "image/png")
-				_, _ = w.Write(data)
-			}))
-			defer s.Close()
-			client := network.NewHTTPClient()
-			defer client.Close()
-			got := NewGetIconHash(s.URL+"/favicon.ico", "").WithHTTPClient(client).Run(context.Background())
-			if got != want || calls.Load() != 2 {
-				t.Fatalf("相同地址的后备请求行为变化: got=%s want=%s calls=%d", got, want, calls.Load())
-			}
-		})
 	}
 }
 

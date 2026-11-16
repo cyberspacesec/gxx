@@ -51,16 +51,6 @@ type CacheManager struct {
 	maxBytes  uint64
 }
 
-// NewCacheManager 创建缓存管理器实例。
-// maxSize <= 0 时回退到 2048；ttl <= 0 时回退到 10 分钟。
-func NewCacheManager(maxSize int, ttl time.Duration) *CacheManager {
-	return NewCacheManagerWithBudget(maxSize, ttl, 64<<20)
-}
-
-func NewCacheManagerWithBudget(maxSize int, ttl time.Duration, maxBytes uint64) *CacheManager {
-	return newCacheManager(maxSize, ttl, maxBytes, logger.Current())
-}
-
 // newCacheManager 接受实例 Sink，使构造期的降级告警也落到调用方的日志器。
 // 导出构造函数在包外测试中使用，签名保持不变。
 func newCacheManager(maxSize int, ttl time.Duration, maxBytes uint64, log logger.Sink) *CacheManager {

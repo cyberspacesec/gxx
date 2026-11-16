@@ -22,7 +22,7 @@ func ruleFromYAML(t *testing.T, requestFields string) finger.RuleMap {
 // 入口页以"跟随重定向"缓存。默认（未声明/true）的根路径规则必须命中它，
 // 显式 false 的规则实际不会跟随，不能误用跟随重定向得到的缓存。
 func TestRootRuleCacheLookupMatchesRedirectSemantics(t *testing.T) {
-	cm := NewCacheManagerWithBudget(16, time.Minute, 1<<20).newScope()
+	cm := newCacheManager(16, time.Minute, 1<<20, nil).newScope()
 	defer cm.Close()
 	cm.updateOwnedTargetCache(map[string]any{
 		"request":  &proto.Request{Method: "GET"},

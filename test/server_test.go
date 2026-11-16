@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/cyberspacesec/gxx/pkg/finger"
@@ -97,62 +96,6 @@ func TestExtractVersion(t *testing.T) {
 	}
 }
 
-func TestFormatServerResult(t *testing.T) {
-	tests := []struct {
-		name           string
-		originalServer string
-		cleanedServer  string
-		version        string
-		wantContains   []string
-	}{
-		{
-			name:           "完整信息",
-			originalServer: "Apache/2.4.41 (Ubuntu)",
-			cleanedServer:  "Apache/2.4.41",
-			version:        "2.4.41",
-			wantContains: []string{
-				"原始服务器信息: Apache/2.4.41 (Ubuntu)",
-				"服务器类型: Apache/2.4.41",
-				"版本号: 2.4.41",
-			},
-		},
-		{
-			name:           "无版本信息",
-			originalServer: "Apache (Ubuntu)",
-			cleanedServer:  "Apache",
-			version:        "",
-			wantContains: []string{
-				"原始服务器信息: Apache (Ubuntu)",
-				"服务器类型: Apache",
-				"版本号: 未知",
-			},
-		},
-		{
-			name:           "空服务器类型",
-			originalServer: "Unknown Server",
-			cleanedServer:  "",
-			version:        "",
-			wantContains: []string{
-				"原始服务器信息: Unknown Server",
-				"服务器类型: 未知",
-				"版本号: 未知",
-			},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := finger.FormatServerResult(tt.originalServer, tt.cleanedServer, tt.version)
-
-			for _, want := range tt.wantContains {
-				if !strings.Contains(result, want) {
-					t.Errorf("FormatServerResult() 结果中没有找到预期内容: %s", want)
-				}
-			}
-		})
-	}
-}
-
 // TestGetServerInfoFromResponse 测试从HTTP响应获取JSON格式的服务器信息
 func TestGetServerInfoFromResponse(t *testing.T) {
 	tests := []struct {
@@ -198,55 +141,6 @@ func TestGetServerInfoFromResponse(t *testing.T) {
 
 			// 获取服务器信息结构体
 			gotInfo := finger.GetServerInfoFromResponse(resp)
-
-			// 验证内容符合预期
-			if gotInfo.OriginalServer != tt.wantInfo.OriginalServer {
-				t.Errorf("OriginalServer = %v, 期望 %v", gotInfo.OriginalServer, tt.wantInfo.OriginalServer)
-			}
-			if gotInfo.ServerType != tt.wantInfo.ServerType {
-				t.Errorf("ServerType = %v, 期望 %v", gotInfo.ServerType, tt.wantInfo.ServerType)
-			}
-			if gotInfo.Version != tt.wantInfo.Version {
-				t.Errorf("Version = %v, 期望 %v", gotInfo.Version, tt.wantInfo.Version)
-			}
-		})
-	}
-}
-
-// TestGetServerInfoFromTCP 测试从TCP/UDP连接获取JSON格式的服务器信息
-func TestGetServerInfoFromTCP(t *testing.T) {
-	tests := []struct {
-		name     string
-		address  string
-		hostType string
-		wantInfo *types.ServerInfo
-	}{
-		{
-			name:     "TCP服务器",
-			address:  "example.com:80",
-			hostType: "TCP",
-			wantInfo: &types.ServerInfo{
-				OriginalServer: "TCP example.com:80",
-				ServerType:     "TCP",
-				Version:        "未知",
-			},
-		},
-		{
-			name:     "UDP服务器",
-			address:  "example.com:53",
-			hostType: "UDP",
-			wantInfo: &types.ServerInfo{
-				OriginalServer: "UDP example.com:53",
-				ServerType:     "UDP",
-				Version:        "未知",
-			},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			// 获取服务器信息结构体
-			gotInfo := finger.GetServerInfoFromTCP(tt.address, tt.hostType)
 
 			// 验证内容符合预期
 			if gotInfo.OriginalServer != tt.wantInfo.OriginalServer {
@@ -430,38 +324,6 @@ func TestServerInfoIntegration(t *testing.T) {
 	}
 	if parsedServerInfo.Version != "1.18.0" {
 		t.Errorf("Version = %v, 期望 1.18.0", parsedServerInfo.Version)
-	}
-
-	// 测试TCP服务器信息
-	tcpServerInfo := finger.GetServerInfoFromTCP("example.com:80", "TCP")
-	tcpJsonData, _ := json.Marshal(tcpServerInfo)
-	variableMap["server"] = string(tcpJsonData)
-
-	// 验证variableMap中的TCP server信息是否正确
-	tcpServerStr, ok := variableMap["server"].(string)
-	if !ok {
-		t.Errorf("variableMap[\"server\"] 不是字符串类型")
-		return
-	}
-
-	// 解析JSON
-	var parsedTcpServerInfo types.ServerInfo
-	err = json.Unmarshal([]byte(tcpServerStr), &parsedTcpServerInfo)
-	if err != nil {
-		t.Errorf("解析TCP server JSON失败: %v", err)
-		return
-	}
-
-	// 验证内容
-	expectedOriginalServer := "TCP example.com:80"
-	if parsedTcpServerInfo.OriginalServer != expectedOriginalServer {
-		t.Errorf("OriginalServer = %v, 期望 %v", parsedTcpServerInfo.OriginalServer, expectedOriginalServer)
-	}
-	if parsedTcpServerInfo.ServerType != "TCP" {
-		t.Errorf("ServerType = %v, 期望 TCP", parsedTcpServerInfo.ServerType)
-	}
-	if parsedTcpServerInfo.Version != "未知" {
-		t.Errorf("Version = %v, 期望 未知", parsedTcpServerInfo.Version)
 	}
 }
 

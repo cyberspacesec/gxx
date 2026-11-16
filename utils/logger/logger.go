@@ -107,11 +107,6 @@ func activeLogger() *Logger {
 	return defaultLogger
 }
 
-// ActiveLogLevel 返回当前全局 logger 的日志级别。
-func ActiveLogLevel() logrus.Level {
-	return activeLogger().terminalLogger.GetLevel()
-}
-
 func NewLogger(logDir string, maxFiles int, logLevel int, noFileLog ...bool) *Logger {
 	terminalLogger := logrus.New()
 	terminalFormatter := &CustomFormatter{IsColored: true}

@@ -141,6 +141,9 @@ type ScanConfig struct {
 
 	RateLimitQPS   float64
 	RateLimitBurst int
+	// GlobalRateLimit 是实例全部请求的总速率上限（次/秒），0 表示不限制。
+	GlobalRateLimit      float64
+	GlobalRateLimitBurst int
 
 	DisableKeepAlives  bool
 	InsecureSkipVerify bool

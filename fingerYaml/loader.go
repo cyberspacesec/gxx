@@ -71,14 +71,6 @@ func looksLikeBundledLibrary(dir string) bool {
 	return false
 }
 
-// GetFingerPath 返回磁盘指纹库目录。
-func GetFingerPath() string {
-	if dir, err := findFingerYamlDir(); err == nil {
-		return dir + string(os.PathSeparator)
-	}
-	return defaultFingerDir + string(os.PathSeparator)
-}
-
 // GetFingerYaml 从 fingerYaml/ 目录加载全部指纹规则。
 func GetFingerYaml() ([]*finger2.Finger, error) {
 	root, err := findFingerYamlDir()

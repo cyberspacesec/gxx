@@ -50,7 +50,7 @@ func TestEngine_NewEngineEmbedded(t *testing.T) {
 
 // TestEngine_WithDebug 调试实例不改变进程中的全局日志级别。
 func TestEngine_WithDebug(t *testing.T) {
-	prev := logger.ActiveLogLevel()
+	prev := logger.IsDebugEnabled(logger.Current())
 	engine, err := sdk.NewEngine(context.Background(),
 		sdk.WithTimeout(3*time.Second),
 		sdk.WithRuleConcurrency(20),
@@ -59,14 +59,14 @@ func TestEngine_WithDebug(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewEngine failed: %v", err)
 	}
-	if logger.ActiveLogLevel() != prev {
-		t.Fatalf("WithDebug changed the global log level: %v", logger.ActiveLogLevel())
+	if logger.IsDebugEnabled(logger.Current()) != prev {
+		t.Fatalf("WithDebug changed the global log level")
 	}
 	if err := engine.Close(); err != nil {
 		t.Fatalf("Close failed: %v", err)
 	}
-	if logger.ActiveLogLevel() != prev {
-		t.Fatalf("expected log level restored to %v after Close, got %v", prev, logger.ActiveLogLevel())
+	if logger.IsDebugEnabled(logger.Current()) != prev {
+		t.Fatalf("global log level changed after Close")
 	}
 }
 

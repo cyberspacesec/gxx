@@ -13,6 +13,7 @@ package network
 import (
 	"context"
 	"net/url"
+	"strings"
 	"sync"
 	"sync/atomic"
 
@@ -111,16 +112,27 @@ func (h *HostRateLimiter) getOrCreate(host string) *rate.Limiter {
 	return limiter
 }
 
-// extractHost 提取目标的 host:port 部分作为限流 key。
+// extractHost 提取目标的主机名或 IP（小写、不含端口）作为限流 key。
+// 同一台主机的所有端口共用一个令牌桶：限制的是这台主机承受的总速率。
 func extractHost(target string) string {
 	if target == "" {
 		return ""
 	}
-	if u, err := url.Parse(target); err == nil && u.Host != "" {
-		return u.Host
+	if u, err := url.Parse(target); err == nil && u.Hostname() != "" {
+		return strings.ToLower(u.Hostname())
 	}
-	if u, err := url.Parse("http://" + target); err == nil && u.Host != "" {
-		return u.Host
+	if u, err := url.Parse("http://" + target); err == nil && u.Hostname() != "" {
+		return strings.ToLower(u.Hostname())
 	}
-	return target
+	return strings.ToLower(target)
+}
+
+// NewGlobalRateLimiter 创建引擎级的总速率限制：实例发出的全部请求（入口、规则、
+// TCP/UDP、图标与重定向的每一跳）合计不超过 perSecond。burst 为瞬时突发上限，
+// 非正值时取 1，即严格按速率匀速发出。perSecond 非正时返回 nil（不限制）。
+func NewGlobalRateLimiter(perSecond float64, burst int) *rate.Limiter {
+	if perSecond <= 0 {
+		return nil
+	}
+	return rate.NewLimiter(rate.Limit(perSecond), max(burst, 1))
 }

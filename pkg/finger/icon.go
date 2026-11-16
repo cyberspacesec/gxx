@@ -15,11 +15,8 @@ import (
 	"github.com/cyberspacesec/gxx/utils/logger"
 	"io"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
-
-	"github.com/spaolacci/murmur3"
 )
 
 // GetIconHash 获取 icon hash。
@@ -155,18 +152,6 @@ func (g *GetIconHash) hashHTTPURL(parentCtx context.Context, iconURL string) int
 	return 0
 }
 
-// StandBase64 标准化Base64编码
-func StandBase64(raw []byte) []byte {
-	if len(raw) == 0 {
-		return []byte{}
-	}
-	encodedLen := base64.StdEncoding.EncodedLen(len(raw))
-	result := make([]byte, encodedLen+encodedLen/76+1)
-	n := encodeIconBase64(result, raw)
-	result[n] = '\n'
-	return result
-}
-
 // encodeIconBase64 每 57 个输入字节产生一行 76 字节的编码。
 // 满行末尾保留换行；调用方另写最终换行，保持项目哈希约定的双换行边界。
 func encodeIconBase64(dst, raw []byte) int {
@@ -188,42 +173,6 @@ func encodeIconBase64(dst, raw []byte) int {
 		}
 	}
 	return n
-}
-
-// hashIconBytes 用固定大小的暂存区逐块编码并计算哈希，避免保留完整编码副本。
-func hashIconBytes(raw []byte) int32 {
-	if len(raw) == 0 {
-		return 0
-	}
-	h := murmur3.New32()
-	var block [77*32 + 1]byte
-	for len(raw) >= 57*32 {
-		n := encodeIconBase64(block[:], raw[:57*32])
-		_, _ = h.Write(block[:n])
-		raw = raw[57*32:]
-	}
-	n := encodeIconBase64(block[:], raw)
-	block[n] = '\n'
-	_, _ = h.Write(block[:n+1])
-	return int32(h.Sum32())
-}
-
-// Run 运行获取 icon hash 的流程。
-func (g *GetIconHash) Run(ctx context.Context) string {
-	if iconContextExpired(ctx) {
-		return "0"
-	}
-	var hash int32
-	if g.iconURL != "" {
-		hash = g.getIconHash(ctx, g.iconURL)
-	}
-	if hash == 0 {
-		defaultURL := defaultFaviconURL(g.iconURL)
-		if defaultURL != "" {
-			hash = g.getIconHash(ctx, defaultURL)
-		}
-	}
-	return strconv.FormatInt(int64(hash), 10)
 }
 
 // context 的取消通知受调度影响，候选请求同时核对实际截止时间。

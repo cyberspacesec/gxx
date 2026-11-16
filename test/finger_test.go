@@ -14,7 +14,6 @@ import (
 	"testing"
 	"time"
 
-	finger2 "github.com/cyberspacesec/gxx/fingerYaml"
 	"github.com/cyberspacesec/gxx/pkg/cel"
 	"github.com/cyberspacesec/gxx/pkg/finger"
 	"github.com/cyberspacesec/gxx/pkg/network"
@@ -74,11 +73,7 @@ func TestFingerGe(t *testing.T) {
 	variableMap := map[string]any{}
 	customLib := cel.NewCustomLib()
 
-	fingerDir := materializeFingerDir(t, finger2.GetFingerPath())
-	fin, err := finger.Select(fingerDir, "0example")
-	if err != nil {
-		t.Fatalf("搜索 poc 文件出错: %v", err)
-	}
+	fin := filepath.Join("..", "fingerYaml", "jiajiu", "0example.yaml")
 	fg, err := finger.Read(fin)
 	if err != nil {
 		t.Fatalf("读取 poc yaml 出错: %v", err)

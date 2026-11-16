@@ -286,7 +286,8 @@ func TestRegressionTitleBodyLimit(t *testing.T) {
 	b := &countedBody{r: strings.NewReader("<title>audit</title>" + strings.Repeat(" ", 2<<20))}
 	req, _ := http.NewRequest("GET", "http://127.0.0.1/", nil)
 	resp := &http.Response{Body: b, Request: req, Header: http.Header{"Content-Type": []string{"text/html; charset=utf-8"}}}
-	finger.GetTitle(req.URL.String(), resp)
+	body, _ := network.ReadResponseBody(resp, network.MaxDefaultBody)
+	finger.GetTitleFromBody(context.Background(), req.URL.String(), resp, body, network.NewHTTPClient(), network.OptionsRequest{})
 	t.Logf("title body bytes read=%d; documented limit=%d", b.n, network.MaxDefaultBody)
 	if int64(b.n) > network.MaxDefaultBody {
 		t.Error("title reads body before size cap")

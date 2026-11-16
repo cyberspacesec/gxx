@@ -2,7 +2,9 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/pkg/network"
 	"io"
 	"net/http"
 	"net/url"
@@ -113,7 +115,7 @@ func TestGetTitle(t *testing.T) {
 			resp.Header.Set("Content-Type", "text/html; charset=utf-8")
 
 			// 调用GetTitle函数
-			got := finger.GetTitle(tt.url, resp)
+			got := getTitle(tt.url, resp)
 
 			// 打印获取的标题
 			t.Logf("获取的标题为：%s", got)
@@ -180,7 +182,7 @@ func TestGetTitleWithI18n(t *testing.T) {
 	resp.Header.Set("Content-Type", "text/html; charset=utf-8")
 
 	// 调用GetTitle函数
-	got := finger.GetTitle("https://example.com", resp)
+	got := getTitle("https://example.com", resp)
 
 	// 打印获取的标题
 	t.Logf("获取的标题为：%s", got)
@@ -217,4 +219,14 @@ func mustParseURL(rawURL string) *url.URL {
 		panic(err)
 	}
 	return u
+}
+
+// getTitle 读取响应正文后调用扫描实际使用的标题提取函数。
+func getTitle(urlStr string, resp *http.Response) string {
+	body, err := network.ReadResponseBody(resp, network.MaxDefaultBody)
+	_ = resp.Body.Close()
+	if err != nil {
+		return ""
+	}
+	return finger.GetTitleFromBody(context.Background(), urlStr, resp, body, network.DefaultHTTPClient(), network.OptionsRequest{Timeout: network.DefaultTimeout, FollowRedirects: true})
 }

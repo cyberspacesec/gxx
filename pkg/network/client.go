@@ -25,12 +25,14 @@ import (
 
 	"github.com/chainreactors/proxyclient"
 	"github.com/zan8in/retryablehttp"
+	"golang.org/x/time/rate"
 )
 
 // HTTPClient 实例化 HTTP 客户端，持有按 (proxy, timeout, followRedirects) 键缓存的子客户端。
 type HTTPClient struct {
 	mu                sync.Mutex
 	limiter           *HostRateLimiter
+	global            *rate.Limiter
 	tlsConfig         *tls.Config
 	transportCache    sync.Map
 	clientCache       sync.Map
@@ -120,13 +122,27 @@ func (c *HTTPClient) SetRateLimiter(limiter *HostRateLimiter) {
 	defer c.mu.Unlock()
 	c.limiter = limiter
 }
+
+// SetGlobalRateLimiter 设置实例发出的全部请求共用的总速率限制；nil 表示不限制。
+func (c *HTTPClient) SetGlobalRateLimiter(limiter *rate.Limiter) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.global = limiter
+}
+
+// WaitRequest 在每次实际发出请求前调用：先等待总速率的名额，再等待目标主机的名额。
 func (c *HTTPClient) WaitRequest(ctx context.Context, target string) error {
 	c.mu.Lock()
-	limiter := c.limiter
+	limiter, global := c.limiter, c.global
 	closed := c.closed.Load()
 	c.mu.Unlock()
 	if closed {
 		return fmt.Errorf("HTTP 客户端已经关闭")
+	}
+	if global != nil {
+		if err := global.Wait(ctx); err != nil {
+			return err
+		}
 	}
 	return limiter.Wait(ctx, target)
 }

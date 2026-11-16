@@ -11,7 +11,7 @@ import (
 )
 
 func TestCacheRejectsEntryOverByteBudget(t *testing.T) {
-	c := NewCacheManagerWithBudget(10, time.Minute, 1024)
+	c := newCacheManager(10, time.Minute, 1024, nil)
 	defer c.Close()
 	c.Set("host", "key", &CacheRequest{Request: &proto.Request{}, Response: &proto.Response{Body: make([]byte, 2048)}})
 	if _, ok := c.Get("key"); ok {
@@ -20,7 +20,7 @@ func TestCacheRejectsEntryOverByteBudget(t *testing.T) {
 }
 
 func TestPublicCacheWriteCopiesCallerData(t *testing.T) {
-	c := NewCacheManagerWithBudget(10, time.Minute, 4096)
+	c := newCacheManager(10, time.Minute, 4096, nil)
 	defer c.Close()
 	req := &proto.Request{Method: "GET", Headers: map[string]string{"key": "original"}}
 	resp := &proto.Response{Body: []byte("original"), Headers: map[string]string{"key": "original"}}
@@ -35,7 +35,7 @@ func TestPublicCacheWriteCopiesCallerData(t *testing.T) {
 }
 
 func TestOwnedCachePreservesCompleteResponse(t *testing.T) {
-	c := NewCacheManagerWithBudget(10, time.Minute, 8<<20).newScope()
+	c := newCacheManager(10, time.Minute, 8<<20, nil).newScope()
 	defer c.Close()
 	body := bytes.Repeat([]byte("x"), (2<<20)+17)
 	copy(body[len(body)-8:], "tailmark")
@@ -91,7 +91,7 @@ func TestRuleBatchContinuesAfterPanicAndCompletesStats(t *testing.T) {
 }
 
 func TestCacheScopesShareBudgetAndIsolateValues(t *testing.T) {
-	c := NewCacheManagerWithBudget(10, time.Minute, 4096)
+	c := newCacheManager(10, time.Minute, 4096, nil)
 	defer c.Close()
 	a, b := c.newScope(), c.newScope()
 	if a.cache != b.cache || a.scope == b.scope {

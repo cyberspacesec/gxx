@@ -11,8 +11,6 @@ import (
 	"crypto/sha256"
 	"embed"
 	"fmt"
-	"github.com/cyberspacesec/gxx/utils/common"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -140,46 +138,6 @@ type Classification struct {
 	CvssScore   float64 `yaml:"cvss-score"`
 	CveId       string  `yaml:"cve-id"`
 	CweId       string  `yaml:"cwe-id"`
-}
-
-// Select 获取指定名字的yaml文件位置
-func Select(pocPath string, pocName string) (string, error) {
-	// 检查路径是否存在
-	if pocPath == "" {
-		return "", fmt.Errorf("指纹库路径为空")
-	}
-
-	// 检查路径是否存在
-	if !common.Exists(pocPath) {
-		return "", fmt.Errorf("指纹库路径 '%s' 不存在", pocPath)
-	}
-
-	var result string
-	// 遍历目录中的所有文件和子目录
-	err := filepath.WalkDir(pocPath, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err // 如果遇到错误，立即返回
-		}
-
-		// 检查文件是否是 YAML 文件
-		if !d.IsDir() && (strings.HasSuffix(path, ".yaml") || strings.HasSuffix(path, ".yml")) {
-			if strings.Contains(d.Name(), pocName) {
-				result = path
-				return filepath.SkipDir // 找到文件后停止遍历
-			}
-		}
-		return nil
-	})
-
-	if err != nil {
-		return "", err
-	}
-
-	if result == "" {
-		return "", fmt.Errorf("未找到名为 '%s' 的指纹文件", pocName)
-	}
-
-	return result, nil
 }
 
 // Load 加载yaml文件

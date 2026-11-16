@@ -48,6 +48,8 @@ type engineConfig struct {
 	enableRateLimit bool
 	rateLimitQPS    float64
 	rateLimitBurst  int
+	globalRate      float64
+	globalRateBurst int
 
 	// 调试
 	debug  bool
@@ -285,13 +287,40 @@ func WithProactiveGC(enable bool) Option {
 	}
 }
 
-// WithRateLimit 启用 per-host 速率限制。
+// WithGlobalRateLimit 限制引擎发出的全部请求的总速率（次/秒），默认不限制。
+//
+// 入口请求、规则请求、TCP/UDP 请求、图标以及重定向的每一跳都计入。burst 是瞬时
+// 突发上限，传 1 表示严格匀速。可与 WithRateLimit 同时使用：请求先等待总速率的
+// 名额，再等待目标主机的名额。
+func WithGlobalRateLimit(perSecond float64, burst int) Option {
+	return func(c *engineConfig) error {
+		if perSecond <= 0 || burst <= 0 {
+			return fmt.Errorf("%w: global rate limit must be > 0", ErrInvalidOption)
+		}
+		c.globalRate, c.globalRateBurst = perSecond, burst
+		return nil
+	}
+}
+
+// WithGlobalRatePerMinute 按每分钟请求数限制引擎的总速率，请求匀速发出。
+// 等价于 WithGlobalRateLimit(perMinute/60, 1)。
+func WithGlobalRatePerMinute(perMinute int) Option {
+	return func(c *engineConfig) error {
+		if perMinute <= 0 {
+			return fmt.Errorf("%w: requests per minute must be > 0", ErrInvalidOption)
+		}
+		c.globalRate, c.globalRateBurst = float64(perMinute)/60, 1
+		return nil
+	}
+}
+
+// WithRateLimit 启用每主机速率限制，默认不限制。
 //
 // 参数：
-//   - qps: 每个 host 每秒允许的请求数（令牌产生速率）
+//   - qps: 每台主机每秒允许的请求数（令牌产生速率）
 //   - burst: 令牌桶容量（瞬时突发上限）
 //
-// 用于防止高并发扫描时单目标被限流误判，每个 host 独立持有令牌桶。
+// 主机按主机名或 IP 区分，不区分端口：同一台主机上的多个资产共用一个令牌桶。
 func WithRateLimit(qps float64, burst int) Option {
 	return func(c *engineConfig) error {
 		if qps <= 0 || burst <= 0 {

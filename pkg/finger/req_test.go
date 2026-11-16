@@ -38,7 +38,7 @@ func TestShortNonImageFaviconDoesNotPanic(t *testing.T) {
 			w.Write([]byte(strings.Repeat("x", size)))
 		}))
 		client := network.NewHTTPClient()
-		got := NewGetIconHash(s.URL, "").WithHTTPClient(client).Run(context.Background())
+		got := iconHashOf(NewGetIconHash(s.URL, "").WithHTTPClient(client))
 		client.Close()
 		s.Close()
 		if got != "0" {
