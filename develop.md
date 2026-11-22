@@ -27,7 +27,7 @@ GXX 是一款用 Go 编写的网络资产指纹识别引擎，核心目标是「
 | 语言 | Go 1.27 | 主体语言 |
 | 表达式引擎 | `cel.dev/cel-go` | CEL 规则编译与求值 |
 | 并发池 | `github.com/panjf2000/ants/v2` | URL/规则两级协程池 |
-| HTTP 客户端 | `github.com/zan8in/retryablehttp` | 带重试的 HTTP 客户端 |
+| HTTP 客户端 | 标准库 `net/http` | HTTP 请求；规则请求的有界重试与宽松回退由 `pkg/network` 自行实现 |
 | Raw HTTP | `github.com/projectdiscovery/rawhttp` | 原始 HTTP 报文请求 |
 | 技术识别 | `github.com/projectdiscovery/wappalyzergo` | Wappalyzer 技术栈匹配 |
 | 命令行 | 标准库 `flag` | 命令行参数解析（`types` 包不再引入第三方命令行框架） |
@@ -334,12 +334,12 @@ CEL 编译结果 `cel.Program` 是 stateless / thread-safe / cacheable 的，所
 #### 5.5.1 客户端复用（`http.go`）
 
 - **Transport 缓存**（`transportCache sync.Map`）：按 `proxyURL` 缓存 `*http.Transport`，每 5 分钟关闭空闲连接，超过 100 条时整体重置
-- **Client 缓存**（`clientCache sync.Map`）：按 `(proxy, timeout, followRedirects)` 三元组缓存 `*retryablehttp.Client`，避免每次请求新建
+- **Client 缓存**（`clientCache sync.Map`）：按 `(proxy, timeout, followRedirects)` 三元组缓存 `*http.Client`，避免每次请求新建
 - **Cookie 会话**（`cookies.go`）：会话属于请求的 ctx 而不是客户端。`WithCookieJar` 为一次扫描建立独立会话，`requestTransport` 在每次往返时附加与回收 Cookie；扫描结束即释放，引擎不随目标数量累积 Cookie
 - **LoggingTransport**：DEBUG 模式下转储请求/响应头到日志（不含 body）
 - **TLS 套件**：取标准库实现的全部套件（`tls.CipherSuites()` + `tls.InsecureCipherSuites()`），最低 TLS 1.0。扫描需要尽可能握手成功，包含老旧设备依赖的 RSA 密钥交换、CBC-SHA256 等；不能手写清单（曾漏掉 ECDSA+AES-GCM），也不能用 Go 默认值（1.22 起已移除 RSA 密钥交换）
-- **代理与 Raw TCP 回退**：`retryablehttp` 遇到畸形 HTTP 响应时会用库内部的 `net.Dial` 直连重发，看不到注入在 Transport 上的代理。因此配置了代理时关闭该回退（避免泄漏真实出口）；无代理时保留，用于兼容返回非标准 HTTP 报文的设备
-- **重试收敛**：扫描用 `RetryMax=1`、退避 200–600ms，避免默认 `RetryMax=5 + 1s` 让不可达/拒绝连接的目标一直重试到整体超时；既容忍瞬时抖动又快速失败
+- **宽松回退**（`retry.go`）：不跟随重定向的规则请求与非 GET 请求遇到畸形 HTTP 响应时，以原始报文重发一次并宽松解析，用于兼容返回非标准 HTTP 报文的设备。回退与 Transport 使用同一个拨号函数，同样计入限速；配置了代理时不回退
+- **重试收敛**（`retry.go`）：传输层失败只重试 1 次、退避 200–600ms，不可达/拒绝连接的目标不会一直重试到整体超时；既容忍瞬时抖动又快速失败。重定向超限、协议不支持与证书不受信任不重试
 - **资产边界**（`origin.go`）：`SameOrigin` 按协议 + 主机 + 端口判断两个地址是否属于同一资产；30x 离开发起请求的源之后只保留通用请求头，自定义请求头不会发给其他主机；页面里识别出的跳转只在资产内跟随
 
 #### 5.5.1b 代理与 TCP/UDP（`proxy.go`）

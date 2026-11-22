@@ -1,13 +1,12 @@
 /*
 Package network Client 提供实例化的 HTTP 客户端。
 
-每个 Client 持有独立的 TLS 配置、Transport 缓存与 retryablehttp.Client 缓存，
+每个 Client 持有独立的 TLS 配置、Transport 缓存与 http.Client 缓存，
 多个 Engine / Runner 可并发使用各自实例，互不干扰。
 */
 package network
 
 import (
-	"bytes"
 	"container/list"
 	"context"
 	"crypto/tls"
@@ -24,7 +23,6 @@ import (
 	"time"
 
 	"github.com/chainreactors/proxyclient"
-	"github.com/zan8in/retryablehttp"
 	"golang.org/x/time/rate"
 )
 
@@ -93,6 +91,13 @@ func (c *HTTPClient) SetInsecureSkipVerify(skip bool) {
 	}
 }
 
+// transportTLSConfig 返回扫描 TLS 配置的独立副本。
+func (c *HTTPClient) transportTLSConfig() *tls.Config {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.tlsConfig.Clone()
+}
+
 // Close 关闭所有缓存 Transport 的空闲连接并清空缓存。
 func (c *HTTPClient) Close() error {
 	c.mu.Lock()
@@ -155,20 +160,15 @@ func (c *HTTPClient) SendRequestHttp(ctx context.Context, method, urlStr, body s
 	}
 	// 没有会话的独立调用使用一次性会话，覆盖本次请求的重定向链。
 	ctx = WithCookieJar(ctx)
-	req, err := retryablehttp.NewRequestWithContext(ctx, method, urlStr, body)
+	var payload io.Reader
+	if body != "" {
+		payload = strings.NewReader(body)
+	}
+	req, err := http.NewRequestWithContext(ctx, method, urlStr, payload)
 	if err != nil {
 		return nil, err
 	}
 	configureHeaders(req, options)
-
-	if body != "" && req.Request.GetBody == nil {
-		bodyBytes := []byte(body)
-		req.Request.GetBody = func() (io.ReadCloser, error) {
-			return io.NopCloser(bytes.NewReader(bodyBytes)), nil
-		}
-		req.Request.Body = io.NopCloser(bytes.NewReader(bodyBytes))
-		req.Request.ContentLength = int64(len(bodyBytes))
-	}
 
 	client, err := c.configureClient(options)
 	if err != nil {
@@ -176,17 +176,11 @@ func (c *HTTPClient) SendRequestHttp(ctx context.Context, method, urlStr, body s
 	}
 
 	// 跟随重定向的 GET 与入口探测直接走标准客户端：不重试，也不启用畸形响应的
-	// Raw TCP 回退，非 HTTP 服务不会被回退路径伪装成一次成功的响应。
-	if method == "GET" && (options.FollowRedirects || options.Probe) {
-		httpReq := req.Request
-		if httpReq.GetBody == nil {
-			httpReq.GetBody = func() (io.ReadCloser, error) {
-				return http.NoBody, nil
-			}
-		}
-		return client.HTTPClient.Do(httpReq)
+	// 宽松回退，非 HTTP 服务不会被回退路径伪装成一次成功的响应。
+	if method == http.MethodGet && (options.FollowRedirects || options.Probe) {
+		return client.Do(req)
 	}
-	return client.Do(req)
+	return c.doWithRetry(client, req, options)
 }
 
 // GetResource 使用原始 URL 获取页面资源（图标），保留签名查询串的顺序和编码。
@@ -201,12 +195,12 @@ func (c *HTTPClient) GetResource(ctx context.Context, rawURL string, options Opt
 	if err != nil {
 		return nil, err
 	}
-	configureHeaders(&retryablehttp.Request{Request: req}, options)
+	configureHeaders(req, options)
 	client, err := c.configureClient(options)
 	if err != nil {
 		return nil, err
 	}
-	resourceClient := *client.HTTPClient
+	resourceClient := *client
 	resourceClient.CheckRedirect = func(next *http.Request, via []*http.Request) error {
 		if len(via) >= maxRedirects {
 			return http.ErrUseLastResponse
@@ -239,100 +233,87 @@ func (c *HTTPClient) ResourceCookies(ctx context.Context, rawURL string) []*http
 	return jar.Cookies(u)
 }
 
-func (c *HTTPClient) configureClient(options OptionsRequest) (*retryablehttp.Client, error) {
+// clientKey 区分子客户端：代理决定 Transport，超时与是否跟随重定向决定客户端本身。
+type clientKey struct {
+	proxy           string
+	timeout         time.Duration
+	followRedirects bool
+}
+
+func (c *HTTPClient) configureClient(options OptionsRequest) (*http.Client, error) {
+	key := clientKey{options.Proxy, options.Timeout, options.FollowRedirects}
+	if cached, ok := c.clientCache.Load(key); ok && !c.closed.Load() {
+		return cached.(*http.Client), nil
+	}
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if c.closed.Load() {
 		return nil, fmt.Errorf("HTTP 客户端已经关闭")
 	}
-	key := clientCacheKey(options.Proxy, options.Timeout, options.FollowRedirects)
 	if cached, ok := c.clientCache.Load(key); ok {
-		return cached.(*retryablehttp.Client), nil
+		return cached.(*http.Client), nil
 	}
-
-	opts := retryablehttp.DefaultOptionsSingle
-	opts.Timeout = options.Timeout
-	// 扫描场景下收敛重试：默认 RetryMax=5 + RetryWaitMin=1s 会让不可达/拒绝连接的目标
-	// 一直重试到整体超时（实测关闭端口要耗满 timeout）。扫描目标多为一次性探测，
-	// 过度重试只会拖慢吞吐，这里降到 1 次重试、更短退避，既容忍瞬时抖动又快速失败。
-	opts.RetryMax = 1
-	opts.RetryWaitMin = 200 * time.Millisecond
-	opts.RetryWaitMax = 600 * time.Millisecond
-	// retryablehttp 遇到畸形 HTTP 响应时会用库内部的 net.Dial 重发请求（Raw TCP 回退）。
-	// 代理是通过 Transport.DialContext 注入的，这条回退路径看不到它，会直连目标并泄漏真实出口。
-	// 配置了代理时必须关闭回退；未配置代理时保留，仍可兼容返回非标准 HTTP 报文的设备。
-	if options.Proxy != "" {
-		opts.RawTCPFallbackEnabled = false
-	}
-
-	client := retryablehttp.NewClient(opts)
-
 	transport, err := c.createTransport(options.Proxy)
 	if err != nil {
 		return nil, err
-	} else {
-		client.HTTPClient.Transport = &requestTransport{base: wrapTransport(transport, c.debugHTTP.Load()), owner: c}
-		client.HTTPClient2.Transport = &requestTransport{base: wrapTransport(transport, c.debugHTTP.Load()), owner: c}
 	}
-
-	client.HTTPClient.Timeout = options.Timeout
-	client.HTTPClient2.Timeout = options.Timeout
-
-	redirectPolicy := createRedirectPolicy(options.FollowRedirects)
-	client.HTTPClient.CheckRedirect = redirectPolicy
-	client.HTTPClient2.CheckRedirect = redirectPolicy
-
+	client := &http.Client{
+		Transport:     &requestTransport{base: wrapTransport(transport, c.debugHTTP.Load()), owner: c},
+		Timeout:       options.Timeout,
+		CheckRedirect: createRedirectPolicy(options.FollowRedirects),
+	}
 	c.clientCache.Store(key, client)
 	return client, nil
 }
 
+// createTransport 返回代理对应的 Transport，调用方持有 c.mu。
 func (c *HTTPClient) createTransport(proxyURL string) (*http.Transport, error) {
 	if cachedTransport, found := c.transportCache.Load(proxyURL); found {
 		return cachedTransport.(*http.Transport), nil
 	}
-
-	newBaseTransport := func() *http.Transport {
-		return &http.Transport{
-			TLSClientConfig:       c.tlsConfig.Clone(),
-			DialContext:           (&net.Dialer{Timeout: DefaultTimeout, KeepAlive: 30 * time.Second}).DialContext,
-			TLSHandshakeTimeout:   DefaultTimeout,
-			ResponseHeaderTimeout: 0,
-			MaxIdleConns:          keepAliveMaxIdle,
-			MaxIdleConnsPerHost:   keepAliveMaxIdlePerHost,
-			MaxConnsPerHost:       keepAliveMaxConnsPerHost,
-			IdleConnTimeout:       keepAliveIdleTimeout,
-			DisableKeepAlives:     c.keepAliveDisabled.Load(),
-		}
+	dial, err := c.targetDialer(proxyURL)
+	if err != nil {
+		return nil, err
 	}
-
-	var transport *http.Transport
-	if proxyURL == "" {
-		transport = newBaseTransport()
-	} else {
-		proxy, err := normalizeProxyURL(proxyURL)
-		if err != nil {
-			return nil, err
-		}
-		transport = newBaseTransport()
-		// HTTP 请求始终为 TCP；UDP 仅出现在 TCP/UDP 规则路径（见 network.DialContext）。
-		switch proxyBaseScheme(proxy) {
-		case schemeHTTP, schemeHTTPS:
-			// HTTP(S) 代理走自实现的 CONNECT 拨号，修正 proxyclient 的 ctx/超时与错误传播问题。
-			p := proxy
-			transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
-				return dialHTTPConnect(ctx, network, addr, p, DefaultDialTimeout)
-			}
-		default:
-			dialer, derr := proxyclient.NewClient(applyProxyTLSDefaults(proxy))
-			if derr != nil {
-				return nil, fmt.Errorf("创建代理客户端失败: %v", derr)
-			}
-			transport.DialContext = dialer.DialContext
-		}
+	transport := &http.Transport{
+		TLSClientConfig:       c.tlsConfig.Clone(),
+		DialContext:           dial,
+		TLSHandshakeTimeout:   DefaultTimeout,
+		ResponseHeaderTimeout: 0,
+		MaxIdleConns:          keepAliveMaxIdle,
+		MaxIdleConnsPerHost:   keepAliveMaxIdlePerHost,
+		MaxConnsPerHost:       keepAliveMaxConnsPerHost,
+		IdleConnTimeout:       keepAliveIdleTimeout,
+		DisableKeepAlives:     c.keepAliveDisabled.Load(),
 	}
-
 	c.transportCache.Store(proxyURL, transport)
 	return transport, nil
+}
+
+// targetDialer 返回连接目标 host:port 的拨号函数：直连，或经代理建立到目标的隧道。
+// HTTP 请求始终为 TCP；UDP 仅出现在 TCP/UDP 规则路径（见 network.DialContext）。
+// 宽松回退与 Transport 使用同一个拨号函数，不存在绕过代理的连接。
+func (c *HTTPClient) targetDialer(proxyURL string) (func(ctx context.Context, network, addr string) (net.Conn, error), error) {
+	if proxyURL == "" {
+		return (&net.Dialer{Timeout: DefaultTimeout, KeepAlive: 30 * time.Second}).DialContext, nil
+	}
+	proxy, err := normalizeProxyURL(proxyURL)
+	if err != nil {
+		return nil, err
+	}
+	switch proxyBaseScheme(proxy) {
+	case schemeHTTP, schemeHTTPS:
+		// HTTP(S) 代理走自实现的 CONNECT 拨号，修正 proxyclient 的 ctx/超时与错误传播问题。
+		return func(ctx context.Context, network, addr string) (net.Conn, error) {
+			return dialHTTPConnect(ctx, network, addr, proxy, DefaultDialTimeout)
+		}, nil
+	default:
+		dialer, derr := proxyclient.NewClient(applyProxyTLSDefaults(proxy))
+		if derr != nil {
+			return nil, fmt.Errorf("创建代理客户端失败: %v", derr)
+		}
+		return dialer.DialContext, nil
+	}
 }
 
 // loggingTransport 包装底层 RoundTripper，输出成对的请求/响应原始数据。

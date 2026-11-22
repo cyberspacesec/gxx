@@ -10,8 +10,6 @@ import (
 	"net/url"
 	"sync"
 	"time"
-
-	"github.com/zan8in/retryablehttp"
 )
 
 // Keep-Alive 连接池参数。
@@ -70,7 +68,7 @@ func setDefaults(options *OptionsRequest) {
 }
 
 // configureHeaders 配置请求头信息。
-func configureHeaders(req *retryablehttp.Request, options OptionsRequest) {
+func configureHeaders(req *http.Request, options OptionsRequest) {
 	req.Header.Set("User-Agent", common.RandomUA())
 	req.Header.Set("Accept", defaultAccept)
 	req.Header.Set("X-Forwarded-For", common.GetRandomIP())
@@ -85,14 +83,6 @@ func configureHeaders(req *retryablehttp.Request, options OptionsRequest) {
 	for key, value := range options.CustomHeaders {
 		req.Header.Set(key, value)
 	}
-}
-
-func clientCacheKey(proxy string, timeout time.Duration, followRedirects bool) string {
-	redir := "0"
-	if followRedirects {
-		redir = "1"
-	}
-	return proxy + "|" + timeout.String() + "|" + redir
 }
 
 // createRedirectPolicy 创建页面请求的重定向策略：跟随 HTTP 30x，最多 maxRedirects 跳。

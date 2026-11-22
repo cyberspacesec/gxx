@@ -91,9 +91,9 @@ func TestHTTPClientHandshakesWithAllSupportedCipherSuites(t *testing.T) {
 	}
 }
 
-// 目标返回非 HTTP 报文时 retryablehttp 会触发 Raw TCP 回退。配置了代理后，回退必须同样走代理，
-// 不能由库内部直接拨号目标而泄漏真实出口。
-func TestProxyIsNeverBypassedByRawTCPFallback(t *testing.T) {
+// 目标返回非 HTTP 报文时，配置了代理的请求只按重试策略重试，所有连接都经过代理，
+// 不会有直接拨号目标而泄漏真实出口的连接。
+func TestProxyIsNeverBypassedByTolerantFallback(t *testing.T) {
 	var targetConns atomic.Int32
 	target, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
@@ -172,7 +172,7 @@ func TestProxyIsNeverBypassedByRawTCPFallback(t *testing.T) {
 }
 
 // 未配置代理时保持原有的兼容行为：非标准 HTTP 报文仍会被回退读取，而不是直接失败。
-func TestRawTCPFallbackStillWorksWithoutProxy(t *testing.T) {
+func TestTolerantFallbackStillWorksWithoutProxy(t *testing.T) {
 	target, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		t.Fatal(err)
@@ -198,7 +198,7 @@ func TestRawTCPFallbackStillWorksWithoutProxy(t *testing.T) {
 	defer cancel()
 	resp, err := client.SendRequestHttp(ctx, http.MethodGet, "http://"+target.Addr().String()+"/", "", OptionsRequest{Timeout: 2 * time.Second})
 	if err != nil {
-		t.Fatalf("无代理时应保留 Raw TCP 回退: %v", err)
+		t.Fatalf("无代理时应保留宽松回退: %v", err)
 	}
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
