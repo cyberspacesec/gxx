@@ -105,6 +105,7 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		ResponseCacheBudget:  cfg.responseCacheBudget,
 		IconEvidence:         cfg.iconEvidence,
 		IconEvidenceData:     cfg.iconEvidenceData,
+		JARM:                 cfg.jarm,
 	}
 	if !cfg.enableRateLimit {
 		scanCfg.RateLimitQPS = 0

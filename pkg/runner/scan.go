@@ -129,6 +129,9 @@ func (r *Runner) scanTarget(ctx context.Context, target string, opts ScanOptions
 		} else {
 			r.applyBaseInfo(result, base)
 			earlier = r.warmUpRequestCache(result, base, cache)
+			if base.TLS != nil {
+				ctx = network.WithJARM(ctx, base.TLS.JARM)
+			}
 		}
 	}
 

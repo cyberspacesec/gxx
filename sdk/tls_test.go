@@ -5,6 +5,7 @@ import (
 	"context"
 	"crypto/tls"
 	"io"
+	"log"
 	"net"
 	"net/http"
 	"net/http/httptest"
@@ -125,5 +126,32 @@ func TestPlainTargetHasNoTLSInfo(t *testing.T) {
 	}
 	if result.TLS != nil || len(result.Matches) != 1 || len(result.HeaderOrder) == 0 {
 		t.Fatalf("TLS=%+v matches=%v order=%v", result.TLS, resultIDs(result), result.HeaderOrder)
+	}
+}
+
+// WithJARM 为 HTTPS 目标计算 JARM：结果写入 TLS.JARM，规则可读取 response.jarm；
+// 10 个探测各是一次连接，经过交换观察器记为 tls 记录。
+func TestScanWithJARM(t *testing.T) {
+	server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) { _, _ = io.WriteString(w, "ok") }))
+	server.Config.ErrorLog = log.New(io.Discard, "", 0)
+	server.StartTLS()
+	defer server.Close()
+	rules := map[string]string{"jarm": exprRule("jarm", `size(response.jarm) == 62 && response.jarm != "00000000000000000000000000000000000000000000000000000000000000"`)}
+	e := newRuleEngine(t, rules, sdk.WithJARM(true))
+	var probes int
+	result, err := e.ScanWith(context.Background(), server.URL, sdk.ScanObserver(func(ex sdk.Exchange) {
+		if ex.Kind == sdk.RequestTLS {
+			probes++
+		}
+	}, sdk.ExchangeLimits{}))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.TLS == nil || len(result.TLS.JARM) != 62 || len(result.Matches) != 1 || probes != 10 {
+		t.Fatalf("TLS=%+v matches=%v probes=%d", result.TLS, resultIDs(result), probes)
+	}
+	plain := newRuleEngine(t, rules)
+	if result, err := plain.Scan(context.Background(), server.URL); err != nil || result.TLS == nil || result.TLS.JARM != "" || len(result.Matches) != 0 {
+		t.Fatalf("默认不计算 JARM: %+v %v", result, err)
 	}
 }

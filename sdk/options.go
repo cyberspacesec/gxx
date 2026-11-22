@@ -45,6 +45,7 @@ type engineConfig struct {
 	bodyLimit           int64
 	iconEvidence        bool
 	iconEvidenceData    int
+	jarm                bool
 
 	// 监控
 	enableMonitor    bool
@@ -319,6 +320,19 @@ func WithIconEvidence(maxData int) Option {
 			return fmt.Errorf("%w: icon evidence data limit must be >= 0, got %d", ErrInvalidOption, maxData)
 		}
 		c.iconEvidence, c.iconEvidenceData = true, maxData
+		return nil
+	}
+}
+
+// WithJARM 为 HTTPS 目标计算 JARM 指纹，写入 TargetResult.TLS.JARM 与表达式变量
+// response.jarm。默认关闭。
+//
+// JARM 按公开算法向最终页面所在的主机端口依次发送 10 个构造的 ClientHello 并解析
+// 响应，每个探测是一次独立连接，经过网络策略（CheckTarget、Dial、代理）与限速；
+// 目标没有以 TLS 响应或探测超时时为 62 个 0。
+func WithJARM(enable bool) Option {
+	return func(c *engineConfig) error {
+		c.jarm = enable
 		return nil
 	}
 }

@@ -176,6 +176,8 @@ type ScanConfig struct {
 	// IconEvidence 为 true 时记录最终页面图标的证据，原始字节最多保留 IconEvidenceData。
 	IconEvidence     bool
 	IconEvidenceData int
+	// JARM 为 true 时为 HTTPS 目标计算 JARM 指纹（另发 10 个 TLS 探测）。
+	JARM bool
 }
 
 // ScanOptions 是单次扫描的附加配置，零值与普通扫描相同。

@@ -35,7 +35,7 @@ func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Du
 	navCtx, cancel := context.WithTimeout(ctx, 2*timeout)
 	defer cancel()
 	resourceOptions := r.buildHTTPOptions(timeout, true)
-	base, err := walkEntry(ctx, navCtx, r.httpClient, r.log, target, resourceOptions)
+	base, err := walkEntry(ctx, navCtx, r.httpClient, r.log, target, resourceOptions, entryOptions{jarm: r.cfg.JARM})
 	if err != nil || base.pages == nil {
 		return base, err
 	}
@@ -51,10 +51,6 @@ func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Du
 		return nil, err
 	}
 	base.Certs = finger.GetCertInfos(base.Response)
-	base.HeaderOrder = network.ResponseHeaderOrder(last.source)
-	if info, ok := network.ResponseTLS(last.source); ok {
-		base.TLS = &info
-	}
 	base.Server = finger.GetServerInfoFromResponse(final)
 	base.ICP = finger.ExtractICPRecordFromBody(last.body)
 	if wapp, err := wappalyzer.NewWappalyzer(); err == nil {
@@ -65,10 +61,16 @@ func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Du
 	return base, nil
 }
 
+// entryOptions 是入口跳转链的附加采集。
+type entryOptions struct {
+	// jarm 为 true 时，最后一页是 HTTPS 页面则计算其所在主机端口的 JARM 指纹。
+	jarm bool
+}
+
 // walkEntry 请求入口并逐跳跟随，返回链上各页及其规则可见的响应。
 // navCtx 约束整条链的耗时，ctx 是调用方的生命周期。options 是资源请求（图标）
 // 使用的选项，各跳请求在此基础上关闭自动跟随。
-func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logger.Sink, target string, options network.OptionsRequest) (*BaseInfoResponse, error) {
+func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logger.Sink, target string, options network.OptionsRequest, extra entryOptions) (*BaseInfoResponse, error) {
 	hopOptions := options
 	hopOptions.FollowRedirects = false
 	hopOptions.Probe = true
@@ -138,6 +140,23 @@ func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logg
 
 	// 中间页只参与规则匹配，图标只为最后一页提取。
 	last := base.pages[len(base.pages)-1]
+	base.HeaderOrder = network.ResponseHeaderOrder(last.source)
+	if info, ok := network.ResponseTLS(last.source); ok {
+		base.TLS = &info
+		// JARM 在构造页面响应之前计算，使入口页与之后的规则都能读取 response.jarm。
+		if lastURL, err := url.Parse(last.url); extra.jarm && err == nil && lastURL.Scheme == "https" {
+			port := lastURL.Port()
+			if port == "" {
+				port = "443"
+			}
+			jarm, err := client.JARM(ctx, lastURL.Hostname(), port, options)
+			if err != nil {
+				log.Debug("目标 %s 计算 JARM 失败: %v", last.url, err)
+			}
+			base.TLS.JARM = jarm
+			ctx = network.WithJARM(ctx, jarm)
+		}
+	}
 	for _, page := range base.pages {
 		pageURL, _ := url.Parse(page.url)
 		pageCtx := ctx
@@ -182,7 +201,7 @@ func EntryChain(ctx context.Context, client *network.HTTPClient, target string, 
 	options.FollowRedirects = true
 	navCtx, cancel := context.WithTimeout(ctx, 2*options.Timeout)
 	defer cancel()
-	base, err := walkEntry(ctx, navCtx, client, logger.Current(), target, options)
+	base, err := walkEntry(ctx, navCtx, client, logger.Current(), target, options, entryOptions{})
 	if err != nil {
 		return nil, nil, err
 	}
