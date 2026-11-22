@@ -9,6 +9,7 @@ import (
 
 	"github.com/cyberspacesec/gxx/pkg/cel"
 	"github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/pkg/network"
 	"github.com/cyberspacesec/gxx/pkg/wappalyzer"
 	"github.com/cyberspacesec/gxx/types"
 	"github.com/cyberspacesec/gxx/utils/logger"
@@ -153,6 +154,15 @@ type ScanConfig struct {
 	InsecureSkipVerify bool
 	CustomHeaders      map[string]string
 	Debug              bool
+
+	// Policy 是引擎级网络策略，约束全部出站连接。
+	Policy network.Policy
+}
+
+// ScanOptions 是单次扫描的附加配置，零值与普通扫描相同。
+type ScanOptions struct {
+	// Policy 逐字段覆盖引擎级网络策略，只作用于本次扫描。
+	Policy network.Policy
 }
 
 // RulePoolStats 规则池任务统计。

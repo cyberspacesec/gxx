@@ -98,6 +98,7 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		InsecureSkipVerify:   cfg.insecureSkipVerify,
 		CustomHeaders:        cfg.customHeaders,
 		Debug:                cfg.debug,
+		Policy:               cfg.policy,
 	}
 	if !cfg.enableRateLimit {
 		scanCfg.RateLimitQPS = 0
@@ -221,33 +222,7 @@ func (e *Engine) LoadFingerOptions(opts FingerOptions) error {
 // 扫描结果在返回调用方之前会先送入 Writer；Writer 失败仅记录日志，
 // 不影响 Scan 的返回值，调用方仍能拿到完整的 *TargetResult。
 func (e *Engine) Scan(ctx context.Context, target string) (*TargetResult, error) {
-	ctx, done, err := e.life.Begin(ctx)
-	if err != nil {
-		if errors.Is(err, lifecycle.ErrClosed) {
-			err = ErrEngineClosed
-		}
-		return nil, err
-	}
-	defer done()
-	if e.IsClosed() {
-		return nil, ErrEngineClosed
-	}
-	if err := ctx.Err(); err != nil {
-		return nil, err
-	}
-	if target == "" {
-		return nil, ErrEmptyTarget
-	}
-	res, err := e.runner.ScanTarget(ctx, target)
-	if err != nil {
-		return nil, fmt.Errorf("scan target %q: %w", target, errors.Join(ErrScanFailed, err))
-	}
-	if res == nil {
-		return nil, fmt.Errorf("%w: target=%s", ErrEmptyResult, target)
-	}
-	out := e.convertTargetResult(res)
-	e.dispatchWriter(ctx, out)
-	return out, nil
+	return e.ScanWith(ctx, target)
 }
 
 // dispatchWriter 把扫描结果交给已配置的 Writer，失败由实例日志记录。

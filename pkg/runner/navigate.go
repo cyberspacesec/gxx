@@ -22,7 +22,8 @@ const maxNavigationHops = 5
 
 // getBaseInfo 请求扫描入口并跟随跳转，返回链上各页与基础信息。
 //
-// 入口的每一跳都单独请求并保留响应。30x 的 Location 总是跟随，可以指向其他主机；
+// 入口的每一跳都单独请求并保留响应。30x 的 Location 默认跟随，可以指向其他主机；
+// 网络策略的 Redirect 可以阻止跟随任意一跳；
 // Refresh、meta refresh 与跳转壳里的脚本跳转是静态识别出来的，只在当前页所在的
 // 资产（协议、主机、端口）内跟随，指向其他资产时停止并记为 RedirectTo。
 // 标题、技术栈、备案与图标取自链上最后一页。
@@ -110,8 +111,14 @@ func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logg
 		if _, seen := visited[key]; seen || len(base.pages) > maxNavigationHops {
 			break
 		}
+		// 网络策略不允许跟随时不访问下一跳，地址记入 RedirectTo，不作为错误。
+		if !client.RedirectAllowed(navCtx, pageURL, next) {
+			base.RedirectTo = hop.To
+			base.Redirects = append(base.Redirects, hop)
+			break
+		}
 		visited[key] = struct{}{}
-		following, err := client.SendRequestHttp(navCtx, http.MethodGet, hop.To, "", optionsFor(origin, next, hopOptions))
+		following, err := client.SendRequestHttp(network.WithRedirectHop(navCtx), http.MethodGet, hop.To, "", optionsFor(origin, next, hopOptions))
 		if err != nil {
 			// 后续页面不可达时保留已取得的页面，仍可识别入口。
 			log.Debug("目标 %s 跟随跳转 %s 失败: %v", entry, hop.To, err)

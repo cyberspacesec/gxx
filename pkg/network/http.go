@@ -85,24 +85,6 @@ func configureHeaders(req *http.Request, options OptionsRequest) {
 	}
 }
 
-// createRedirectPolicy 创建页面请求的重定向策略：跟随 HTTP 30x，最多 maxRedirects 跳。
-//
-// 30x 可以指向其他主机、协议或端口（www 与裸域名、http 与 https 之间的跳转都属于
-// 这种情况）。离开发起请求的源之后只保留浏览器的通用请求头：自定义请求头、认证
-// 信息不会发给其他主机。达到跳数上限时返回最后一个 30x 响应。请求体由 net/http
-// 按状态码处理：307/308 重放原请求体，301/302/303 改为不带请求体的 GET。
-func createRedirectPolicy(followRedirects bool) func(*http.Request, []*http.Request) error {
-	return func(req *http.Request, via []*http.Request) error {
-		if !followRedirects || len(via) >= maxRedirects {
-			return http.ErrUseLastResponse
-		}
-		if !SameOrigin(via[0].URL, req.URL) {
-			KeepPortableHeaders(req.Header)
-		}
-		return nil
-	}
-}
-
 // KeepPortableHeaders 只保留可以发给任何主机的通用请求头，删除其余全部请求头。
 // 请求因重定向离开原来的源时使用：自定义请求头可能带有令牌或内网信息。
 func KeepPortableHeaders(header http.Header) {

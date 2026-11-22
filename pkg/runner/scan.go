@@ -32,6 +32,11 @@ import (
 //  4. executeFingerprintMatching：把所有适用指纹提交到规则池并发评估
 //  5. 清理本目标的缓存条目
 func (r *Runner) ScanTarget(ctx context.Context, target string) (*TargetResult, error) {
+	return r.ScanTargetWith(ctx, target, ScanOptions{})
+}
+
+// ScanTargetWith 与 ScanTarget 相同，并应用本次扫描的附加配置。
+func (r *Runner) ScanTargetWith(ctx context.Context, target string, opts ScanOptions) (*TargetResult, error) {
 	ctx = logger.WithContext(ctx, r.log)
 	ctx, done, err := r.life.Begin(ctx)
 	if err != nil {
@@ -54,6 +59,8 @@ func (r *Runner) ScanTarget(ctx context.Context, target string) (*TargetResult, 
 	ctx = cel.WithResponseCache(ctx)
 	// 一次扫描一个 Cookie 会话：入口、规则请求与页面资源共用，扫描结束即释放。
 	ctx = network.WithCookieJar(ctx)
+	// 引擎级与扫描级策略合并后放入 ctx，TCP、UDP 与 Raw 请求同样读取它。
+	ctx = r.httpClient.WithPolicy(ctx, opts.Policy)
 	var earlier []*scanPage
 	hasHTTP := false
 	for _, entry := range snap {
@@ -117,7 +124,7 @@ func (r *Runner) GetBaseInfo(ctx context.Context, target string) (*BaseInfoRespo
 		return nil, err
 	}
 	defer done()
-	return r.getBaseInfo(ctx, target, r.requestTimeout())
+	return r.getBaseInfo(r.httpClient.WithPolicy(ctx, network.Policy{}), target, r.requestTimeout())
 }
 
 // requestTimeout 返回请求超时；未配置时默认 5 秒。

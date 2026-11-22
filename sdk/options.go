@@ -28,6 +28,7 @@ type engineConfig struct {
 	insecureSkipVerify bool
 	disableKeepAlives  bool
 	customHeaders      map[string]string
+	policy             NetworkPolicy
 
 	// 并发控制
 	urlConcurrency  int

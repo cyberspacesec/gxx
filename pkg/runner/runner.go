@@ -80,6 +80,9 @@ func NewRunner(cfg ScanConfig, pocOptions types.YamlFingerType) (*Runner, error)
 	if cfg.Debug {
 		r.httpClient.SetHTTPDebug(true)
 	}
+	if !cfg.Policy.IsZero() {
+		r.httpClient.SetPolicy(cfg.Policy)
+	}
 	r.store = NewFingerStore(r.log)
 	r.store.captureEvidence = cfg.CaptureEvidence
 	if err := r.store.Load(pocOptions); err != nil {

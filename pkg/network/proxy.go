@@ -103,22 +103,23 @@ func isUDPNetwork(network string) bool {
 }
 
 // dialThroughProxy 按网络类型与代理方案建立连接：
-//   - 直连：net.Dialer；
-//   - TCP：HTTP CONNECT 或 SOCKS5，由 proxyclient 处理；
+//   - 直连：网络策略的 Dial 或 net.Dialer；
+//   - TCP：HTTP CONNECT 或 SOCKS5，由 proxyclient 处理，连接代理服务器同样经过策略的 Dial；
 //   - UDP：仅 SOCKS5 支持（UDP ASSOCIATE，自实现），HTTP/SOCKS4 明确报错。
 //
 // 调用方负责设置整体超时的 ctx；timeout 为单次拨号超时。
-func dialThroughProxy(ctx context.Context, network, address string, proxy *url.URL, timeout time.Duration) (net.Conn, error) {
+func dialThroughProxy(ctx context.Context, network, address string, proxy *url.URL, timeout time.Duration, policyDial dialFunc) (net.Conn, error) {
 	if timeout <= 0 {
 		timeout = DefaultDialTimeout
 	}
+	dial := policyDialer(policyDial, timeout, 0)
 	if proxy == nil {
-		return (&net.Dialer{Timeout: timeout}).DialContext(ctx, network, address)
+		return dial(ctx, network, address)
 	}
 	if isUDPNetwork(network) {
 		switch proxyBaseScheme(proxy) {
 		case schemeSOCKS5:
-			return dialSOCKS5UDP(ctx, proxy, address, timeout)
+			return dialSOCKS5UDP(ctx, proxy, address, timeout, dial)
 		case schemeHTTP, schemeHTTPS:
 			return nil, fmt.Errorf("HTTP(S) 代理不支持 UDP（请使用 socks5/socks5h 代理）")
 		default:
@@ -129,14 +130,14 @@ func dialThroughProxy(ctx context.Context, network, address string, proxy *url.U
 	case schemeHTTP, schemeHTTPS:
 		// HTTP(S) 代理自实现 CONNECT，修正 proxyclient 忽略 ctx/超时、吞掉非 2xx 错误、
 		// 丢弃隧道首批缓冲字节的问题。
-		return dialHTTPConnect(ctx, network, address, proxy, timeout)
+		return dialHTTPConnect(ctx, network, address, proxy, timeout, dial)
 	default:
 		// SOCKS4/SOCKS5(+TLS) 仍由 proxyclient 处理，其 Dial 会向上游拨号传递 ctx。
-		dial, err := proxyclient.NewClient(applyProxyTLSDefaults(proxy))
+		client, err := proxyclient.NewClientWithDial(applyProxyTLSDefaults(proxy), proxyclient.Dial(dial))
 		if err != nil {
 			return nil, fmt.Errorf("创建代理客户端失败: %w", err)
 		}
-		return dial.DialContext(ctx, network, address)
+		return client.DialContext(ctx, network, address)
 	}
 }
 
@@ -180,6 +181,9 @@ func connectRejected(proxy string, resp *http.Response) error {
 
 // CheckProxy 经代理向 address（host:port）建立一次连接，只在代理本身不可用时返回
 // 错误；目标不可达不算。用于在批量扫描开始前发现配置错误的代理。
+//
+// 连接遵循 ctx 中的网络策略（见 HTTPClient.WithPolicy）：连接代理经过策略的 Dial；
+// CheckTarget 拒绝 address 时只检查代理端口可以连接，不经代理访问该地址。
 func CheckProxy(ctx context.Context, proxyURL, address string, timeout time.Duration) error {
 	proxy, err := normalizeProxyURL(proxyURL)
 	if err != nil || proxy == nil {
@@ -190,13 +194,17 @@ func CheckProxy(ctx context.Context, proxyURL, address string, timeout time.Dura
 	}
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
+	policy := PolicyFrom(ctx)
 	// 先确认代理端口本身可以连接：SOCKS 的拨号错误不区分代理与目标。
-	probe, err := (&net.Dialer{Timeout: timeout}).DialContext(ctx, "tcp", proxy.Host)
+	probe, err := policyDialer(policy.Dial, timeout, 0)(ctx, "tcp", proxy.Host)
 	if err != nil {
 		return &ProxyError{Proxy: proxy.Host, Err: fmt.Errorf("连接代理 %s 失败: %w", proxy.Host, err)}
 	}
 	_ = probe.Close()
-	conn, err := dialThroughProxy(ctx, "tcp", address, proxy, timeout)
+	if checkTarget(ctx, policy, addressTarget(RequestTCP, "tcp", address, RequestInfoFrom(ctx))) != nil {
+		return nil
+	}
+	conn, err := dialThroughProxy(ctx, "tcp", address, proxy, timeout, policy.Dial)
 	if err == nil {
 		_ = conn.Close()
 		return nil
@@ -211,7 +219,7 @@ func CheckProxy(ctx context.Context, proxyURL, address string, timeout time.Dura
 // dialHTTPConnect 经 HTTP(S) 代理用 CONNECT 建立到目标的 TCP 隧道。
 // 与 proxyclient v1.0.2 不同：拨号与 CONNECT 交互都受 ctx/超时约束，取消时立即中断；
 // 代理返回非 2xx 时返回明确错误而非已关闭的连接；并保留响应后属于隧道的缓冲字节。
-func dialHTTPConnect(ctx context.Context, network, address string, proxy *url.URL, timeout time.Duration) (net.Conn, error) {
+func dialHTTPConnect(ctx context.Context, network, address string, proxy *url.URL, timeout time.Duration, dial dialFunc) (net.Conn, error) {
 	switch strings.ToLower(network) {
 	case "tcp", "tcp4", "tcp6":
 	default:
@@ -220,7 +228,10 @@ func dialHTTPConnect(ctx context.Context, network, address string, proxy *url.UR
 	if timeout <= 0 {
 		timeout = DefaultDialTimeout
 	}
-	conn, err := (&net.Dialer{Timeout: timeout}).DialContext(ctx, "tcp", proxy.Host)
+	if dial == nil {
+		dial = policyDialer(nil, timeout, 0)
+	}
+	conn, err := dial(ctx, "tcp", proxy.Host)
 	if err != nil {
 		return nil, &ProxyError{Proxy: proxy.Host, Err: fmt.Errorf("连接 HTTP 代理失败: %w", err)}
 	}
@@ -313,7 +324,7 @@ type socks5UDPConn struct {
 	header []byte   // 预构造的目标地址 SOCKS5 UDP 头（RSV FRAG ATYP ADDR PORT）
 }
 
-func dialSOCKS5UDP(ctx context.Context, proxy *url.URL, target string, timeout time.Duration) (net.Conn, error) {
+func dialSOCKS5UDP(ctx context.Context, proxy *url.URL, target string, timeout time.Duration, dial dialFunc) (net.Conn, error) {
 	host, port, err := splitHostPort(target)
 	if err != nil {
 		return nil, fmt.Errorf("解析 UDP 目标地址失败: %w", err)
@@ -324,7 +335,7 @@ func dialSOCKS5UDP(ctx context.Context, proxy *url.URL, target string, timeout t
 			return nil, err
 		}
 	}
-	ctrl, err := (&net.Dialer{Timeout: timeout}).DialContext(ctx, "tcp", proxy.Host)
+	ctrl, err := dial(ctx, "tcp", proxy.Host)
 	if err != nil {
 		return nil, fmt.Errorf("连接 SOCKS5 代理失败: %w", err)
 	}
@@ -351,7 +362,7 @@ func dialSOCKS5UDP(ctx context.Context, proxy *url.URL, target string, timeout t
 		_ = ctrl.Close()
 		return nil, err
 	}
-	udpConn, err := (&net.Dialer{Timeout: timeout}).DialContext(ctx, "udp", relayAddr)
+	udpConn, err := dial(ctx, "udp", relayAddr)
 	if err != nil {
 		_ = ctrl.Close()
 		return nil, fmt.Errorf("连接 SOCKS5 UDP 中继失败: %w", err)

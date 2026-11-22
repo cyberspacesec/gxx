@@ -37,6 +37,7 @@ type HTTPClient struct {
 	keepAliveDisabled atomic.Bool
 	debugHTTP         atomic.Bool
 	closed            atomic.Bool
+	policy            atomic.Pointer[Policy]
 	resourceMu        sync.Mutex
 	resourceHashes    map[[32]byte]*list.Element
 	resourceOrder     *list.List
@@ -170,7 +171,7 @@ func (c *HTTPClient) SendRequestHttp(ctx context.Context, method, urlStr, body s
 	}
 	configureHeaders(req, options)
 
-	client, err := c.configureClient(options)
+	client, err := c.configureClient(ctx, options)
 	if err != nil {
 		return nil, err
 	}
@@ -190,19 +191,19 @@ func (c *HTTPClient) SendRequestHttp(ctx context.Context, method, urlStr, body s
 // maxRedirects 跳；离开请求的源之后不再携带自定义请求头。
 func (c *HTTPClient) GetResource(ctx context.Context, rawURL string, options OptionsRequest) (*http.Response, error) {
 	setDefaults(&options)
-	ctx = WithCookieJar(ctx)
+	ctx = withKind(WithCookieJar(ctx), RequestIcon)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
 	if err != nil {
 		return nil, err
 	}
 	configureHeaders(req, options)
-	client, err := c.configureClient(options)
+	client, err := c.configureClient(ctx, options)
 	if err != nil {
 		return nil, err
 	}
 	resourceClient := *client
 	resourceClient.CheckRedirect = func(next *http.Request, via []*http.Request) error {
-		if len(via) >= maxRedirects {
+		if len(via) >= maxRedirects || !c.RedirectAllowed(next.Context(), via[len(via)-1].URL, next.URL) {
 			return http.ErrUseLastResponse
 		}
 		if !SameOrigin(req.URL, next.URL) {
@@ -233,15 +234,23 @@ func (c *HTTPClient) ResourceCookies(ctx context.Context, rawURL string) []*http
 	return jar.Cookies(u)
 }
 
-// clientKey 区分子客户端：代理决定 Transport，超时与是否跟随重定向决定客户端本身。
+// clientKey 区分子客户端：代理与是否独立拨号决定 Transport，超时与是否跟随重定向决定客户端本身。
 type clientKey struct {
 	proxy           string
 	timeout         time.Duration
 	followRedirects bool
+	scoped          bool
 }
 
-func (c *HTTPClient) configureClient(options OptionsRequest) (*http.Client, error) {
-	key := clientKey{options.Proxy, options.Timeout, options.FollowRedirects}
+// transportKey 区分 Transport。scoped 的 Transport 不复用连接，拨号使用 ctx 中的策略。
+type transportKey struct {
+	proxy  string
+	scoped bool
+}
+
+func (c *HTTPClient) configureClient(ctx context.Context, options OptionsRequest) (*http.Client, error) {
+	_, state := c.policyFor(ctx)
+	key := clientKey{options.Proxy, options.Timeout, options.FollowRedirects, state != nil && state.scoped}
 	if cached, ok := c.clientCache.Load(key); ok && !c.closed.Load() {
 		return cached.(*http.Client), nil
 	}
@@ -253,25 +262,32 @@ func (c *HTTPClient) configureClient(options OptionsRequest) (*http.Client, erro
 	if cached, ok := c.clientCache.Load(key); ok {
 		return cached.(*http.Client), nil
 	}
-	transport, err := c.createTransport(options.Proxy)
+	transport, err := c.createTransport(transportKey{options.Proxy, key.scoped})
 	if err != nil {
 		return nil, err
 	}
+	base := wrapTransport(transport, c.debugHTTP.Load())
+	engine := base
+	if wrap := c.Policy().WrapTransport; wrap != nil {
+		if wrapped := wrap(base); wrapped != nil {
+			engine = wrapped
+		}
+	}
 	client := &http.Client{
-		Transport:     &requestTransport{base: wrapTransport(transport, c.debugHTTP.Load()), owner: c},
+		Transport:     &requestTransport{base: base, engine: engine, owner: c},
 		Timeout:       options.Timeout,
-		CheckRedirect: createRedirectPolicy(options.FollowRedirects),
+		CheckRedirect: c.redirectPolicy(options.FollowRedirects),
 	}
 	c.clientCache.Store(key, client)
 	return client, nil
 }
 
-// createTransport 返回代理对应的 Transport，调用方持有 c.mu。
-func (c *HTTPClient) createTransport(proxyURL string) (*http.Transport, error) {
-	if cachedTransport, found := c.transportCache.Load(proxyURL); found {
+// createTransport 返回 key 对应的 Transport，调用方持有 c.mu。
+func (c *HTTPClient) createTransport(key transportKey) (*http.Transport, error) {
+	if cachedTransport, found := c.transportCache.Load(key); found {
 		return cachedTransport.(*http.Transport), nil
 	}
-	dial, err := c.targetDialer(proxyURL)
+	dial, err := c.targetDialer(key.proxy, key.scoped)
 	if err != nil {
 		return nil, err
 	}
@@ -284,18 +300,31 @@ func (c *HTTPClient) createTransport(proxyURL string) (*http.Transport, error) {
 		MaxIdleConnsPerHost:   keepAliveMaxIdlePerHost,
 		MaxConnsPerHost:       keepAliveMaxConnsPerHost,
 		IdleConnTimeout:       keepAliveIdleTimeout,
-		DisableKeepAlives:     c.keepAliveDisabled.Load(),
+		DisableKeepAlives:     c.keepAliveDisabled.Load() || key.scoped,
 	}
-	c.transportCache.Store(proxyURL, transport)
+	c.transportCache.Store(key, transport)
 	return transport, nil
+}
+
+// baseDial 返回连接目标或代理服务器所用的策略拨号函数。scoped 时取 ctx 中的策略：
+// 这类 Transport 不复用连接，连接只属于发起它的请求。
+func (c *HTTPClient) baseDial(ctx context.Context, scoped bool) dialFunc {
+	if scoped {
+		if dial := PolicyFrom(ctx).Dial; dial != nil {
+			return dial
+		}
+	}
+	return c.Policy().Dial
 }
 
 // targetDialer 返回连接目标 host:port 的拨号函数：直连，或经代理建立到目标的隧道。
 // HTTP 请求始终为 TCP；UDP 仅出现在 TCP/UDP 规则路径（见 network.DialContext）。
-// 宽松回退与 Transport 使用同一个拨号函数，不存在绕过代理的连接。
-func (c *HTTPClient) targetDialer(proxyURL string) (func(ctx context.Context, network, addr string) (net.Conn, error), error) {
+// 宽松回退与 Transport 使用同一个拨号函数，不存在绕过代理或网络策略的连接。
+func (c *HTTPClient) targetDialer(proxyURL string, scoped bool) (dialFunc, error) {
 	if proxyURL == "" {
-		return (&net.Dialer{Timeout: DefaultTimeout, KeepAlive: 30 * time.Second}).DialContext, nil
+		return func(ctx context.Context, network, addr string) (net.Conn, error) {
+			return policyDialer(c.baseDial(ctx, scoped), DefaultTimeout, 30*time.Second)(ctx, network, addr)
+		}, nil
 	}
 	proxy, err := normalizeProxyURL(proxyURL)
 	if err != nil {
@@ -305,14 +334,35 @@ func (c *HTTPClient) targetDialer(proxyURL string) (func(ctx context.Context, ne
 	case schemeHTTP, schemeHTTPS:
 		// HTTP(S) 代理走自实现的 CONNECT 拨号，修正 proxyclient 的 ctx/超时与错误传播问题。
 		return func(ctx context.Context, network, addr string) (net.Conn, error) {
-			return dialHTTPConnect(ctx, network, addr, proxy, DefaultDialTimeout)
+			return dialHTTPConnect(ctx, network, addr, proxy, DefaultDialTimeout, policyDialer(c.baseDial(ctx, scoped), DefaultDialTimeout, 0))
 		}, nil
 	default:
-		dialer, derr := proxyclient.NewClient(applyProxyTLSDefaults(proxy))
+		upstream := func(ctx context.Context, network, addr string) (net.Conn, error) {
+			return policyDialer(c.baseDial(ctx, scoped), DefaultTimeout, 0)(ctx, network, addr)
+		}
+		dialer, derr := proxyclient.NewClientWithDial(applyProxyTLSDefaults(proxy), upstream)
 		if derr != nil {
 			return nil, fmt.Errorf("创建代理客户端失败: %v", derr)
 		}
 		return dialer.DialContext, nil
+	}
+}
+
+// redirectPolicy 创建页面请求的重定向策略：跟随 HTTP 30x，最多 maxRedirects 跳。
+//
+// 30x 可以指向其他主机、协议或端口（www 与裸域名、http 与 https 之间的跳转都属于
+// 这种情况）。离开发起请求的源之后只保留浏览器的通用请求头：自定义请求头、认证
+// 信息不会发给其他主机。达到跳数上限或网络策略不允许时返回最后一个 30x 响应。
+// 请求体由 net/http 按状态码处理：307/308 重放原请求体，301/302/303 改为不带请求体的 GET。
+func (c *HTTPClient) redirectPolicy(followRedirects bool) func(*http.Request, []*http.Request) error {
+	return func(req *http.Request, via []*http.Request) error {
+		if !followRedirects || len(via) >= maxRedirects || !c.RedirectAllowed(req.Context(), via[len(via)-1].URL, req.URL) {
+			return http.ErrUseLastResponse
+		}
+		if !SameOrigin(via[0].URL, req.URL) {
+			KeepPortableHeaders(req.Header)
+		}
+		return nil
 	}
 }
 
@@ -350,28 +400,45 @@ func (t *loggingTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 	return resp, nil
 }
 
-// requestTransport 对重试、重定向及普通请求逐次收费。
+// requestTransport 对重试、重定向及普通请求逐次检查目标并收费。
+// base 是未经策略包装的底层，engine 是客户端级 WrapTransport 包装后的结果；
+// ctx 中的策略覆盖了 WrapTransport 时改用覆盖结果包装 base。
 type requestTransport struct {
-	base  http.RoundTripper
-	owner *HTTPClient
+	base   http.RoundTripper
+	engine http.RoundTripper
+	owner  *HTTPClient
 }
 
 func (t *requestTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	if err := t.owner.WaitRequest(req.Context(), req.URL.String()); err != nil {
+	ctx := req.Context()
+	policy, state := t.owner.policyFor(ctx)
+	info := RequestInfoFrom(ctx)
+	if info.Kind == "" {
+		info.Kind = RequestHTTP
+	}
+	// 重定向的每一跳由 net/http 新建请求，Response 字段指向发出跳转的响应。
+	if err := checkTarget(ctx, policy, urlTarget(info.Kind, req.URL, info, req.Response != nil)); err != nil {
+		return nil, err
+	}
+	if err := t.owner.WaitRequest(ctx, req.URL.String()); err != nil {
 		return nil, err
 	}
 	// Cookie 会话来自请求的 ctx（见 WithCookieJar）。重定向的每一跳都经过这里，
 	// 上一跳设置的 Cookie 会带到下一跳。附加 Cookie 时复制请求，不修改调用方的请求。
-	jar := cookieJarFrom(req.Context())
+	jar := cookieJarFrom(ctx)
 	if jar != nil {
 		if cookies := jar.Cookies(req.URL); len(cookies) > 0 {
-			req = req.Clone(req.Context())
+			req = req.Clone(ctx)
 			for _, cookie := range cookies {
 				req.AddCookie(cookie)
 			}
 		}
 	}
-	resp, err := t.base.RoundTrip(req)
+	rt := t.engine
+	if state != nil && state.override != nil {
+		rt = state.wrappedFor(t.base)
+	}
+	resp, err := rt.RoundTrip(req)
 	if err == nil && jar != nil {
 		if cookies := resp.Cookies(); len(cookies) > 0 {
 			jar.SetCookies(req.URL, cookies)

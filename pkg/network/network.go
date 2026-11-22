@@ -129,12 +129,33 @@ func (c *Client) waitRetry() error {
 
 // DialContext 保持代理、取消和 TLS 策略在初次连接与重试时一致。
 // 支持 TCP/UDP 经 HTTP、SOCKS5、SOCKS5h 代理（UDP 仅 SOCKS5 系）。
+//
+// 连接遵循 ctx 中的网络策略（见 HTTPClient.WithPolicy）：每次拨号之前调用 CheckTarget，
+// 用途取 ctx 的请求标注（未标注时按网络类型为 tcp 或 udp），拨号经过策略的 Dial。
 func DialContext(ctx context.Context, network, address, proxyURL string, timeout time.Duration, useTLS bool, serverName string, insecure bool) (net.Conn, error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
+	info := RequestInfoFrom(ctx)
+	if info.Kind == "" {
+		info.Kind = RequestTCP
+		if isUDPNetwork(network) {
+			info.Kind = RequestUDP
+		}
+	}
+	target := addressTarget(info.Kind, network, address, info)
+	return dialTarget(ctx, PolicyFrom(ctx), &target, network, address, proxyURL, timeout, useTLS, serverName, insecure)
+}
+
+// dialTarget 检查目标后建立连接。target 为 nil 表示调用方已检查过本次连接。
+func dialTarget(ctx context.Context, policy Policy, target *TargetRequest, network, address, proxyURL string, timeout time.Duration, useTLS bool, serverName string, insecure bool) (net.Conn, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
+	}
+	if target != nil {
+		if err := checkTarget(ctx, policy, *target); err != nil {
+			return nil, err
+		}
 	}
 	if useTLS && isUDPNetwork(network) {
 		return nil, errors.New("UDP 不支持 TLS")
@@ -148,7 +169,7 @@ func DialContext(ctx context.Context, network, address, proxyURL string, timeout
 	}
 	dialCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
-	conn, err := dialThroughProxy(dialCtx, network, address, proxy, timeout)
+	conn, err := dialThroughProxy(dialCtx, network, address, proxy, timeout, policy.Dial)
 	if err != nil {
 		return nil, err
 	}

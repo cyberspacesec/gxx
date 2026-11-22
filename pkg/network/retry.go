@@ -89,8 +89,12 @@ func (c *HTTPClient) doWithRetry(client *http.Client, req *http.Request, options
 	}
 }
 
-// retryableError 排除重试也不会成功的错误：重定向超限、协议不支持、证书不受信任。
+// retryableError 排除重试也不会成功的错误：网络策略拒绝、重定向超限、协议不支持、证书不受信任。
 func retryableError(err error) bool {
+	var denied *DeniedError
+	if errors.As(err, &denied) {
+		return false
+	}
 	message := err.Error()
 	if strings.Contains(message, "stopped after") && strings.Contains(message, "redirects") || strings.Contains(message, "unsupported protocol scheme") {
 		return false
@@ -113,21 +117,24 @@ func tolerantError(err error) bool {
 // 无法解析时把收到的全部内容作为 200 响应的正文，用于识别返回非标准报文的设备。
 func (c *HTTPClient) tolerantRoundTrip(req *http.Request, options OptionsRequest) (*http.Response, error) {
 	ctx := req.Context()
+	policy, state := c.policyFor(ctx)
+	info := RequestInfoFrom(ctx)
+	if info.Kind == "" {
+		info.Kind = RequestHTTP
+	}
+	target := urlTarget(info.Kind, req.URL, info, false)
+	if err := checkTarget(ctx, policy, target); err != nil {
+		return nil, err
+	}
 	if err := c.WaitRequest(ctx, req.URL.String()); err != nil {
 		return nil, err
 	}
-	host, port := req.URL.Hostname(), req.URL.Port()
-	if port == "" {
-		port = "80"
-		if req.URL.Scheme == "https" {
-			port = "443"
-		}
-	}
-	dial, err := c.targetDialer("")
+	host := target.Host
+	dial, err := c.targetDialer("", state != nil && state.scoped)
 	if err != nil {
 		return nil, err
 	}
-	conn, err := dial(ctx, "tcp", net.JoinHostPort(host, port))
+	conn, err := dial(ctx, "tcp", net.JoinHostPort(host, target.Port))
 	if err != nil {
 		return nil, err
 	}

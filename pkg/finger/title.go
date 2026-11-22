@@ -107,7 +107,7 @@ func GetTitleFromBody(ctx context.Context, urlStr string, resp *http.Response, b
 	if titleURL != "" {
 		logger.FromContext(ctx).Debug("识别到国际化，从i18n JS文件获取标题数据")
 
-		if respTitle, err := client.SendRequestHttp(ctx, http.MethodGet, titleURL, "", options); err != nil {
+		if respTitle, err := client.SendRequestHttp(network.WithRequestKind(ctx, network.RequestResource), http.MethodGet, titleURL, "", options); err != nil {
 			logger.FromContext(ctx).Debug("获取i18n JS文件出错: %v", err)
 		} else {
 			var script []byte

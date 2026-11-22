@@ -62,9 +62,15 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 	for k, v := range options.CustomHeaders {
 		headers[k] = v
 	}
+	policy := c.PolicyFor(ctx)
+	info := RequestInfoFrom(ctx)
 	for redirects := 0; ; redirects++ {
 		if u.Host == "" || u.Scheme != "http" && u.Scheme != "https" {
 			return nil, fmt.Errorf("无效的 Raw HTTP 重定向: %s", u)
+		}
+		// 先检查目标再计入限速：被策略拒绝的请求不占用名额。
+		if err = checkTarget(ctx, policy, urlTarget(RequestRaw, u, info, redirects > 0)); err != nil {
+			return nil, err
 		}
 		if err = c.WaitRequest(ctx, u.String()); err != nil {
 			return nil, err
@@ -76,7 +82,7 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 				port = "443"
 			}
 		}
-		conn, err := DialContext(ctx, "tcp", net.JoinHostPort(u.Hostname(), port), options.Proxy, options.Timeout, u.Scheme == "https", u.Hostname(), options.InsecureSkipVerify)
+		conn, err := dialTarget(ctx, policy, nil, "tcp", net.JoinHostPort(u.Hostname(), port), options.Proxy, options.Timeout, u.Scheme == "https", u.Hostname(), options.InsecureSkipVerify)
 		if err != nil {
 			return nil, err
 		}
@@ -129,7 +135,7 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 		if options.FollowRedirects && response.Status.IsRedirect() && h.Get("Location") != "" && redirects < maxRedirects {
 			next, err := u.Parse(h.Get("Location"))
 			// Location 无法解析时返回 30x 响应本身。
-			if err == nil && next.Host != "" && (next.Scheme == "http" || next.Scheme == "https") {
+			if err == nil && next.Host != "" && (next.Scheme == "http" || next.Scheme == "https") && redirectAllowed(ctx, policy, u, next) {
 				_ = resp.Body.Close()
 				// 离开原来的源之后只带通用请求头，规则里手写的请求头不发给其他主机。
 				if !SameOrigin(u, next) {
