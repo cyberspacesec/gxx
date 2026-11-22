@@ -118,8 +118,10 @@ func WithRuleSourceVersion(version string) Option {
 	return func(c *engineConfig) error { c.ruleSourceVersion = version; return nil }
 }
 
-// WithProductCatalog 将系统产品目录映射到明确的规则 ID，不从规则作者推测厂商。
-// 参数及每个 Engine 的配置均使用独立副本。
+// WithProductCatalog 按明确的规则 ID 追加或覆盖产品声明：列出的规则没有声明时追加，已有
+// 声明时以目录为准，未列出的规则保留自带声明；不从规则作者推测厂商。同一规则出现在两个
+// 目录项中返回 ErrInvalidOption。覆盖已有产品 ID 时应列出它的全部规则，否则同一产品的
+// 声明不一致，加载时返回 ProductConflictError。参数及每个 Engine 的配置均使用独立副本。
 func WithProductCatalog(products []ProductDefinition) Option {
 	snapshot := cloneProductDefinitions(products)
 	return func(c *engineConfig) error {
