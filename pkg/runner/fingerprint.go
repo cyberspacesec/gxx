@@ -16,6 +16,7 @@ import (
 	iofs "io/fs"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"sync"
 )
@@ -180,6 +181,10 @@ func (fs *FingerStore) executionSnapshot() []fingerExecutionPlan {
 }
 
 // prepare 只编译无动态声明的规则，动态 set/output 保持执行时的类型推导行为。
+//
+// 执行清单把不能只靠已缓存首页批量求值的规则排在前面（同类规则之间保持规则库顺序）：
+// 它们要发自己的请求，先派发能让网络等待与可批量规则的求值重叠，扫描耗时不随规则文件
+// 在库中的排列而变。规则元数据仍按规则库顺序返回；命中结果在汇总时排序，与派发顺序无关。
 func (fs *FingerStore) prepare() {
 	plans := make([]fingerExecutionPlan, len(fs.fingers))
 	for i, fg := range fs.fingers {
@@ -206,6 +211,15 @@ func (fs *FingerStore) prepare() {
 			plans[i].cacheOnly = plan.BatchSafe() && hasOnlyRootRequests(fg)
 		}
 	}
+	slices.SortStableFunc(plans, func(a, b fingerExecutionPlan) int {
+		switch {
+		case !a.cacheOnly && b.cacheOnly:
+			return -1
+		case a.cacheOnly && !b.cacheOnly:
+			return 1
+		}
+		return 0
+	})
 	fs.plans = plans
 }
 

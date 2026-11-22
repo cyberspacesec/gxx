@@ -1,9 +1,11 @@
 package runner
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
+	"testing/fstest"
 
 	"github.com/cyberspacesec/gxx/types"
 	"github.com/cyberspacesec/gxx/utils/logger"
@@ -32,5 +34,27 @@ func TestLoadEmptyDirectoryErrors(t *testing.T) {
 	}
 	if store.Count() != 1 {
 		t.Fatalf("规则数=%d 期望 1", store.Count())
+	}
+}
+
+// 执行清单先派发需要自己发请求的规则，同类之间保持规则库顺序；规则元数据仍按规则库顺序。
+func TestExecutionPlanDispatchesRequestRulesFirst(t *testing.T) {
+	rule := func(id, path string) *fstest.MapFile {
+		return &fstest.MapFile{Data: []byte("id: " + id + "\ninfo:\n  name: " + id + "\nrules:\n  r0:\n    request:\n      method: GET\n      path: " + path + "\n    expression: response.status == 200\nexpression: r0()\n")}
+	}
+	files := fstest.MapFS{"a.yaml": rule("a-root", "/"), "b.yaml": rule("b-login", "/login"), "c.yaml": rule("c-root", "/"), "d.yaml": rule("d-admin", "/admin")}
+	store := NewFingerStore(logger.Discard())
+	if err := store.Load(types.YamlFingerType{FS: files, Root: "."}); err != nil {
+		t.Fatal(err)
+	}
+	var planned, listed []string
+	for _, plan := range store.executionSnapshot() {
+		planned = append(planned, plan.finger.Id)
+	}
+	for _, metadata := range store.Metadata() {
+		listed = append(listed, metadata.ID)
+	}
+	if fmt.Sprint(planned) != "[b-login d-admin a-root c-root]" || fmt.Sprint(listed) != "[a-root b-login c-root d-admin]" {
+		t.Fatalf("派发顺序=%v 元数据顺序=%v", planned, listed)
 	}
 }
