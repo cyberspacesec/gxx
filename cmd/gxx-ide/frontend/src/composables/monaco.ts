@@ -6,7 +6,8 @@
  * 2. 注册自定义语言：
  *    - `cel` —— CEL 表达式（Monarch tokenizer）。
  *    - `http` —— HTTP 报文（通过 Shiki/TextMate grammar，与 VS Code 一致的精确高亮）。
- * 3. 为 YAML / CEL 编辑器提供 CEL 函数与变量字段自动补全。
+ * 3. 为 YAML / CEL 编辑器提供 CEL 函数与变量字段自动补全；YAML 编辑器另提供
+ *    info.product、info.services、info.metadata 的标准格式片段。
  *
  * HTTP 高亮使用 `@shikijs/monaco` 集成 Shiki 的 TextMate grammar（来自 VS Code REST Client），
  * 支持 body 内嵌 JSON/XML/HTML 子语言高亮。
@@ -63,6 +64,28 @@ const RESPONSE_FIELDS = [
   'response.headers', 'response.content_type', 'response.body',
   'response.raw', 'response.raw_header', 'response.icon_hash', 'response.latency',
   'response.tls_version', 'response.cipher_suite', 'response.ja3s', 'response.jarm',
+]
+
+// 指纹标准格式的 info 子字段片段，插入位置为 info 下一级（两个空格缩进）。
+const INFO_SNIPPETS = [
+  {
+    label: 'product',
+    detail: '产品声明：标识、名称、分类、身份与可信度',
+    insertText: [
+      'product:',
+      '  id: ${1:vendor}.${2:product}',
+      '  name: ${3:产品名称}',
+      '  category: ${4|application,middleware,framework,operating-system,cms,database,web-server,security,library,hosting-panel,device,network-device,iot,other|}',
+      '  identity: ${5|product,signal|}',
+      '  assurance: ${6|inferred,verified|}',
+    ].join('\n'),
+  },
+  {
+    label: 'services',
+    detail: 'TCP/UDP 规则识别的服务',
+    insertText: ['services:', '  - protocol: ${1:ssh}', '    transport: ${2|tcp,udp|}', '    ports: [${3:22}]'].join('\n'),
+  },
+  { label: 'metadata', detail: '任意附加信息，引擎只透传', insertText: 'metadata:\n  ${1:key}: ${2:value}' },
 ]
 
 /**
@@ -188,6 +211,18 @@ async function initializeMonaco() {
           detail: 'CEL 变量',
           range,
         })
+      }
+      if (model.getLanguageId() === 'yaml') {
+        for (const snippet of INFO_SNIPPETS) {
+          suggestions.push({
+            label: snippet.label,
+            kind: monaco.languages.CompletionItemKind.Snippet,
+            insertText: snippet.insertText,
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            detail: snippet.detail,
+            range,
+          })
+        }
       }
       for (let i = 0; i < 10; i++) {
         suggestions.push({

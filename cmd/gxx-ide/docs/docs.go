@@ -1006,6 +1006,12 @@ const docTemplate = `{
                 },
                 "valid": {
                     "type": "boolean"
+                },
+                "warnings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.YAMLValidationError"
+                    }
                 }
             }
         },
@@ -1028,6 +1034,9 @@ const docTemplate = `{
             "properties": {
                 "column": {
                     "type": "integer"
+                },
+                "field": {
+                    "type": "string"
                 },
                 "line": {
                     "type": "integer"

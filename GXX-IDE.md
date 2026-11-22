@@ -98,7 +98,7 @@ cmd/gxx-ide/                            # 独立 Go module（go.mod 与主项目
         │   ├── monaco.ts               # Monaco worker / CEL Monarch + HTTP Shiki TextMate / 自动补全
         │   ├── httpLanguage.ts         # HTTP 报文嗅探（请求/响应整体走 http；body 单独走 json/html/xml）
         │   ├── fingerForm.ts           # 指纹表单 ↔ YAML 双向转换
-        │   ├── fingerHints.ts          # CEL 函数 / set 变量 / 数据包模板提示
+        │   ├── fingerHints.ts          # CEL 函数 / set 变量 / 数据包模板 / 产品与服务声明的取值提示
         │   ├── useTheme.ts             # 暗色/亮色主题切换（localStorage + 系统偏好 + Monaco 同步）
         │   └── useHorizontalSplit.ts   # 通用水平分隔条 composable
         ├── components/                 # 通用组件
@@ -143,7 +143,7 @@ cmd/gxx-ide/                            # 独立 Go module（go.mod 与主项目
 | GET  | `/healthz` | 健康检查 |
 | GET  | `/swagger/*any` | Swagger UI |
 | POST | `/api/v1/request/send` | 发送 HTTP 请求并返回完整响应 |
-| POST | `/api/v1/yaml/validate` | 校验 YAML 指纹并返回 outline |
+| POST | `/api/v1/yaml/validate` | 校验 YAML 指纹并返回 outline；`errors` 为结构与表达式错误，`warnings` 为不符合指纹标准格式（产品与服务声明、规则标识等）的提示 |
 | POST | `/api/v1/finger/run` | 逐 rule 运行指纹，返回 r0/r1 中间结果 + varMap |
 | POST | `/api/v1/cel/evaluate` | 单独求值 CEL 表达式 |
 | GET  | `/api/v1/library/default` | 默认指纹库路径 |
@@ -399,6 +399,7 @@ Vite 把 Monaco 拆为独立 chunk（`monaco-*.js`，~3MB），仅在首次实�
 - [x] **CEL 表达式 lint**：高级模式下实时调用 `/api/v1/cel/evaluate` 校验语法，inline 显示 ✓/✗
 - [x] **response.body 多视图**：UTF-8 / Hex（hex dump 含偏移 + ASCII 预览）/ Base64 三种模式切换
 - [x] **指纹库目录树**：按 `relPath` 构建树形结构，目录可展开/折叠，文件缩进分层
+- [x] **指纹标准格式**：表单含产品声明与服务声明面板，分类、身份、可信度给出取值说明；新建规则带产品声明骨架，默认保存为 `.yaml`；校验以格式提示列出产品与服务声明、规则标识等问题；YAML 编辑器提供 product、services、metadata 片段
 - [x] **暗色主题 + Monaco 同步**：`[data-theme="dark"]` CSS 变量 + `gxx-dark` Monaco 主题，`useTheme` composable + localStorage 持久化
 
 ---

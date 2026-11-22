@@ -8,11 +8,23 @@ import {
   compileMatchers,
   defaultMatcher,
   defaultRule,
+  defaultService,
   nextRuleKey,
   type FinalLogic,
 } from '@/composables/fingerForm'
 import CollapsiblePanel from '@/components/CollapsiblePanel.vue'
-import { CEL_SNIPPETS, SET_VAR_PRESETS, VAR_TEMPLATES, VAR_USAGE_TIP, type VarTemplate } from '@/composables/fingerHints'
+import {
+  CEL_SNIPPETS,
+  PRODUCT_ASSURANCES,
+  PRODUCT_CATEGORIES,
+  PRODUCT_IDENTITIES,
+  PRODUCT_TIP,
+  SERVICE_TIP,
+  SET_VAR_PRESETS,
+  VAR_TEMPLATES,
+  VAR_USAGE_TIP,
+  type VarTemplate,
+} from '@/composables/fingerHints'
 import HintChipList from '@/components/HintChipList.vue'
 import PacketDetailDialog from '@/components/PacketDetailDialog.vue'
 import { evaluateCEL, isCanceledError } from '@/api'
@@ -24,6 +36,8 @@ const templateDialog = reactive<{ open: boolean; tpl: VarTemplate | null }>({ op
 const sectionOpen = reactive({
   basic: true,
   meta: false,
+  product: true,
+  services: false,
   set: true,
   templates: false,
   payloads: false,
@@ -116,6 +130,15 @@ function appendCelSnippet(rule: RuleFormItem, snippet: string) {
 
 function removeSetVar(index: number) {
   form.value.setVars.splice(index, 1)
+}
+
+function addService() {
+  form.value.info.services.push(defaultService())
+  sectionOpen.services = true
+}
+
+function removeService(index: number) {
+  form.value.info.services.splice(index, 1)
 }
 
 function togglePayloads(enabled: boolean) {
@@ -306,6 +329,89 @@ onBeforeUnmount(() => {
             <option value="critical">critical</option>
           </select>
         </label>
+      </div>
+    </CollapsiblePanel>
+
+    <CollapsiblePanel v-model:open="sectionOpen.product" title="产品声明 product">
+      <div class="tip-box">{{ PRODUCT_TIP }}</div>
+      <div class="field-row">
+        <label class="field">
+          <span class="field-label-required">产品标识</span>
+          <input v-model="form.info.product.id" class="field-input mono-input" placeholder="厂商段.产品段，如 weaver.e-cology" />
+        </label>
+        <label class="field">
+          <span class="field-label-required">产品名称</span>
+          <input v-model="form.info.product.name" class="field-input" placeholder="规范产品名" />
+        </label>
+      </div>
+      <label class="field">
+        <span>厂商</span>
+        <input v-model="form.info.product.vendor" class="field-input" placeholder="厂商规范名，不确定时留空" />
+      </label>
+      <label class="field">
+        <span class="field-label-required">分类</span>
+        <select v-model="form.info.product.category" class="field-input">
+          <option v-for="option in PRODUCT_CATEGORIES" :key="option.value" :value="option.value">{{ option.label }}</option>
+        </select>
+      </label>
+      <div class="field-row">
+        <label class="field">
+          <span class="field-label-required">身份</span>
+          <select v-model="form.info.product.identity" class="field-input">
+            <option v-for="option in PRODUCT_IDENTITIES" :key="option.value" :value="option.value">{{ option.label }}</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label-required">可信度</span>
+          <select v-model="form.info.product.assurance" class="field-input">
+            <option v-for="option in PRODUCT_ASSURANCES" :key="option.value" :value="option.value">{{ option.label }}</option>
+          </select>
+        </label>
+      </div>
+      <label class="field">
+        <span>用途标签</span>
+        <input v-model="form.info.product.tags" class="field-input" placeholder="逗号分隔，最多 8 个，如 oa, vpn" />
+      </label>
+      <label class="field">
+        <span>别名</span>
+        <textarea v-model="form.info.product.aliases" class="field-input textarea" rows="2" placeholder="每行一个，最多 16 个"></textarea>
+      </label>
+      <label class="field">
+        <span>参考链接</span>
+        <textarea v-model="form.info.product.references" class="field-input textarea" rows="2" placeholder="官方主页、文档或仓库，每行一个；verified 时必填"></textarea>
+      </label>
+      <label class="field">
+        <span>CPE</span>
+        <textarea v-model="form.info.product.cpe" class="field-input textarea mono-input" rows="1" placeholder="CPE 2.3，每行一个；只在有依据时填写"></textarea>
+      </label>
+      <label class="field">
+        <span>产品描述</span>
+        <textarea v-model="form.info.product.description" class="field-input textarea" rows="2" placeholder="最多 500 个字符"></textarea>
+      </label>
+    </CollapsiblePanel>
+
+    <CollapsiblePanel v-model:open="sectionOpen.services" title="服务声明 services">
+      <template #actions>
+        <button type="button" class="btn btn-small" @click="addService">+ 添加服务</button>
+      </template>
+      <div class="tip-box">{{ SERVICE_TIP }}</div>
+      <div v-for="(service, i) in form.info.services" :key="uidFor(service)" class="var-row">
+        <label class="field compact grow">
+          <span class="field-label-required">协议</span>
+          <input v-model="service.protocol" class="field-input" placeholder="ssh / mysql / redis" />
+        </label>
+        <label class="field compact">
+          <span class="field-label-required">传输层</span>
+          <select v-model="service.transport" class="field-input">
+            <option value="tcp">tcp</option>
+            <option value="udp">udp</option>
+          </select>
+        </label>
+        <label class="field compact grow">
+          <span class="field-label-required">端口</span>
+          <input v-model="service.ports" class="field-input" placeholder="22, 2222" />
+        </label>
+        <button type="button" class="btn btn-small btn-danger" @click="removeService(i)">删</button>
       </div>
     </CollapsiblePanel>
 

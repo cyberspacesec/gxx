@@ -60,6 +60,35 @@ export interface RuleFormItem {
 
 export type FinalLogic = 'and' | 'or' | 'custom'
 
+/**
+ * 产品声明（info.product）。列表字段在表单中以文本编辑：tags 用逗号分隔，其余每行一个。
+ * declared 表示源 YAML 已有 product 块；新建规则在填写产品标识或名称后才写出该块。
+ */
+export interface ProductFormModel {
+  declared: boolean
+  id: string
+  name: string
+  vendor: string
+  category: string
+  identity: string
+  assurance: string
+  tags: string
+  aliases: string
+  cpe: string
+  references: string
+  description: string
+  // 表单未展示的键原样保留。
+  extra: Record<string, unknown>
+}
+
+/** 服务声明（info.services 的一项）；ports 以逗号分隔编辑。 */
+export interface ServiceFormItem {
+  protocol: string
+  transport: 'tcp' | 'udp'
+  ports: string
+  extra: Record<string, unknown>
+}
+
 export interface FingerFormModel {
   id: string
   info: {
@@ -71,7 +100,9 @@ export interface FingerFormModel {
     tags: string
     created: string
     severity: string
-    // 表单未展示的元信息字段（classification、affected、solutions 等）。
+    product: ProductFormModel
+    services: ServiceFormItem[]
+    // 表单未展示的元信息字段（metadata、classification、affected、solutions 等）。
     extra: Record<string, unknown>
   }
   setVars: SetVarFormItem[]
@@ -126,6 +157,28 @@ export function detectFinalLogic(expression: string, ruleKeys: string[]): FinalL
   return 'custom'
 }
 
+export function defaultProduct(): ProductFormModel {
+  return {
+    declared: false,
+    id: '',
+    name: '',
+    vendor: '',
+    category: 'application',
+    identity: 'product',
+    assurance: 'inferred',
+    tags: '',
+    aliases: '',
+    cpe: '',
+    references: '',
+    description: '',
+    extra: {},
+  }
+}
+
+export function defaultService(): ServiceFormItem {
+  return { protocol: '', transport: 'tcp', ports: '', extra: {} }
+}
+
 export function defaultFingerForm(): FingerFormModel {
   return {
     id: 'new-rule-id',
@@ -138,6 +191,8 @@ export function defaultFingerForm(): FingerFormModel {
       tags: '',
       created: todayString(),
       severity: 'info',
+      product: defaultProduct(),
+      services: [],
       extra: {},
     },
     setVars: [],
@@ -313,7 +368,87 @@ function tryParseMatchersFromExpression(expr: string): {
   return { matchers: [defaultMatcher()], logic: 'and', mode: 'advanced' }
 }
 
-const INFO_FIELDS = ['name', 'author', 'verified', 'description', 'reference', 'tags', 'created', 'severity']
+const INFO_FIELDS = ['name', 'author', 'verified', 'description', 'reference', 'tags', 'created', 'severity', 'product', 'services']
+const PRODUCT_FIELDS = ['id', 'name', 'vendor', 'category', 'identity', 'assurance', 'tags', 'aliases', 'cpe', 'references', 'description']
+const SERVICE_FIELDS = ['protocol', 'transport', 'ports']
+
+function listText(value: unknown, separator: string): string {
+  if (Array.isArray(value)) return value.map((item) => String(item)).join(separator)
+  return typeof value === 'string' ? value : ''
+}
+
+function splitList(text: string, separator: RegExp): string[] {
+  return text
+    .split(separator)
+    .map((item) => item.trim())
+    .filter(Boolean)
+}
+
+function parseProduct(raw: unknown): ProductFormModel {
+  const product = asRecord(raw)
+  if (!product) return defaultProduct()
+  const defaults = defaultProduct()
+  return {
+    declared: true,
+    id: asString(product.id),
+    name: asString(product.name),
+    vendor: asString(product.vendor),
+    category: asString(product.category, defaults.category),
+    identity: asString(product.identity, defaults.identity),
+    assurance: asString(product.assurance, defaults.assurance),
+    tags: listText(product.tags, ', '),
+    aliases: listText(product.aliases, '\n'),
+    cpe: listText(product.cpe, '\n'),
+    references: listText(product.references, '\n'),
+    description: asString(product.description),
+    extra: extraFields(product, PRODUCT_FIELDS),
+  }
+}
+
+function parseServices(raw: unknown): ServiceFormItem[] {
+  if (!Array.isArray(raw)) return []
+  return raw.map((item): ServiceFormItem => {
+    const service = asRecord(item) ?? {}
+    return {
+      protocol: asString(service.protocol),
+      transport: asString(service.transport) === 'udp' ? 'udp' : 'tcp',
+      ports: listText(service.ports, ', '),
+      extra: extraFields(service, SERVICE_FIELDS),
+    }
+  })
+}
+
+/** 产品声明按标准字段顺序写出，可选项为空时省略。 */
+function buildProduct(product: ProductFormModel): Record<string, unknown> | null {
+  if (!product.declared && !product.id.trim() && !product.name.trim()) return null
+  const result: Record<string, unknown> = { id: product.id.trim(), name: product.name.trim() }
+  if (product.vendor.trim()) result.vendor = product.vendor.trim()
+  result.category = product.category
+  result.identity = product.identity
+  result.assurance = product.assurance
+  const lists: [string, string[]][] = [
+    ['tags', splitList(product.tags, /[,，\s]+/)],
+    ['aliases', splitList(product.aliases, /\r?\n/)],
+    ['cpe', splitList(product.cpe, /\r?\n/)],
+    ['references', splitList(product.references, /\r?\n/)],
+  ]
+  for (const [key, values] of lists) {
+    if (values.length) result[key] = values
+  }
+  if (product.description.trim()) result.description = product.description.trim()
+  return { ...result, ...product.extra }
+}
+
+function buildServices(services: ServiceFormItem[]): Record<string, unknown>[] {
+  return services
+    .filter((service) => service.protocol.trim() || service.ports.trim())
+    .map((service) => ({
+      protocol: service.protocol.trim(),
+      transport: service.transport,
+      ports: splitList(service.ports, /[,，\s]+/).map((port) => Number(port)).filter((port) => Number.isInteger(port)),
+      ...service.extra,
+    }))
+}
 const RULE_FIELDS = ['request', 'expression']
 const REQUEST_FIELDS = ['type', 'method', 'path', 'body', 'headers', 'follow_redirects', 'host', 'data']
 
@@ -412,6 +547,8 @@ export function yamlToForm(content: string): FingerFormModel {
       tags: asString(info.tags),
       created: asString(info.created, todayString()),
       severity: asString(info.severity, 'info'),
+      product: parseProduct(info.product),
+      services: parseServices(info.services),
       extra: extraFields(info, INFO_FIELDS),
     },
     setVars: parseMapSlice(root.set),
@@ -456,6 +593,10 @@ function buildInfoBlock(form: FingerFormModel, refs: string[]): Record<string, u
   if (form.info.tags.trim()) info.tags = form.info.tags.trim()
   if (form.info.created.trim()) info.created = form.info.created.trim()
   if (form.info.severity && form.info.severity !== 'info') info.severity = form.info.severity
+  const product = buildProduct(form.info.product)
+  if (product) info.product = product
+  const services = buildServices(form.info.services)
+  if (services.length) info.services = services
   return { ...info, ...form.info.extra }
 }
 
@@ -523,7 +664,7 @@ export function nextRuleKey(rules: RuleFormItem[]): string {
 
 export function buildSavePath(rootDir: string, id: string): string {
   const safe = (id.trim() || 'new-rule-id').replace(/[^\w.-]+/g, '-')
-  return `${rootDir.replace(/[/\\]+$/, '')}/${safe}.yml`
+  return `${rootDir.replace(/[/\\]+$/, '')}/${safe}.yaml`
 }
 
 export const MATCH_PART_LABELS: Record<MatchPart, string> = {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * 指纹库视图（CRUD 单个 .yml 文件）。
+ * 指纹库视图（CRUD 单个 .yaml 文件）。
  *
  * - 左侧文件列表显示 outline / 大小，点击进入编辑；
  * - 右侧 Monaco 编辑器（懒加载）展示 YAML 内容；
@@ -172,10 +172,11 @@ function toggleCreatePanel() {
 async function createNew() {
   const name = newFileName.value.trim()
   if (!name) return
-  const normalizedName = /\.(ya?ml)$/i.test(name) ? name : `${name}.yml`
+  const normalizedName = /\.(ya?ml)$/i.test(name) ? name : `${name}.yaml`
   const path = `${rootDir.value.replace(/[/\\]+$/, '')}/${normalizedName}`
   const createdDate = new Date().toISOString().slice(0, 10).split('-').join('/')
-  const template = `id: ${normalizedName.replace(/\.[^.]+$/, '')}\n\ninfo:\n  name: \n  author: \n  created: ${createdDate}\n\nrules:\n  r0:\n    request:\n      method: GET\n      path: /\n    expression: response.status == 200\n\nexpression: r0()\n`
+  // 新建规则带指纹标准格式的产品声明骨架：产品标识与名称待填写，校验会给出格式提示。
+  const template = `id: ${normalizedName.replace(/\.[^.]+$/, '')}\n\ninfo:\n  name: \n  author: \n  created: ${createdDate}\n  product:\n    id: \n    name: \n    category: application\n    identity: product\n    assurance: inferred\n\nrules:\n  r0:\n    request:\n      method: GET\n      path: /\n    expression: response.status == 200\n\nexpression: r0()\n`
   try {
     await saveYAML(path, template)
     newFileName.value = ''
@@ -222,7 +223,7 @@ onBeforeUnmount(() => {
         <input
           v-model="newFileName"
           class="input"
-          placeholder="文件名，如 my-finger.yml"
+          placeholder="文件名，如 acme-portal.yaml"
           @keyup.enter="createNew"
         />
         <button type="button" class="btn btn-primary" :disabled="!canCreate" @click="createNew">创建</button>

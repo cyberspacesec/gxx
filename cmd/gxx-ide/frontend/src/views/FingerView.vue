@@ -158,6 +158,7 @@ watch(
         validation.value = {
           valid: false,
           errors: [{ line: 0, column: 0, message: (err as Error).message }],
+          warnings: [],
           outline: null,
         }
       }
@@ -251,10 +252,15 @@ const validationBanner = computed(() => {
   if (!validation.value) return null
   if (validation.value.valid) {
     const o = validation.value.outline
-    return {
-      level: 'ok' as const,
-      text: `校验通过 · ID="${o?.id || ''}" · ${o?.rules?.length ?? 0} 条 rule`,
+    const summary = `校验通过 · ID="${o?.id || ''}" · ${o?.rules?.length ?? 0} 条 rule`
+    // 格式提示不影响运行，但不符合指纹标准格式（产品声明、服务声明、规则标识等）。
+    const warnings = validation.value.warnings ?? []
+    if (warnings.length) {
+      const first = warnings[0]
+      const where = first.line ? `第 ${first.line} 行：` : ''
+      return { level: 'warn' as const, text: `${summary} · ${warnings.length} 条格式提示 · ${where}${first.message}` }
     }
+    return { level: 'ok' as const, text: summary }
   }
   const err = validation.value.errors[0]
   return { level: 'err' as const, text: err ? `第 ${err.line} 行：${err.message}` : '解析失败' }
@@ -484,6 +490,11 @@ const validationBanner = computed(() => {
   background: var(--color-error-bg);
   color: var(--color-error);
   border-color: var(--color-error-border);
+}
+.validation.warn {
+  background: var(--color-warning-bg);
+  color: var(--color-text-secondary);
+  border-color: var(--color-warning-border);
 }
 .spacer {
   flex: 1;

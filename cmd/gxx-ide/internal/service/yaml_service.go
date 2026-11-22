@@ -45,8 +45,24 @@ func (s *YamlService) Validate(content string) *model.ValidateYAMLOutput {
 			Message: where + "：" + celErrorSummary(failed.Err),
 		})
 	}
+	out.Warnings = standardFormatWarnings(content)
 	out.Valid = len(out.Errors) == 0
 	return out
+}
+
+// standardFormatWarnings 用引擎的严格校验检查指纹标准格式：规则标识、产品声明（info.product）、
+// TCP/UDP 规则的服务声明（info.services）、未知键与必填信息。YAML 结构与表达式编译已在上面
+// 报为错误，这里不重复。
+func standardFormatWarnings(content string) []model.YAMLValidationError {
+	var warnings []model.YAMLValidationError
+	for _, diagnostic := range fingerpkg.Validate([]byte(content), fingerpkg.ValidateOptions{Strict: true}) {
+		switch diagnostic.Code {
+		case fingerpkg.CodeYAML, fingerpkg.CodeExpression, fingerpkg.CodeMissingExpression:
+			continue
+		}
+		warnings = append(warnings, model.YAMLValidationError{Line: diagnostic.Line, Column: diagnostic.Column, Field: diagnostic.Field, Message: diagnostic.Message})
+	}
+	return warnings
 }
 
 // expressionLine 返回规则（rule 为空时是指纹本身）的 expression 所在行，找不到时为 0。

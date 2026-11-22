@@ -87,10 +87,12 @@ type ValidateYAMLInput struct {
 	Content string `json:"content"`
 }
 
-// YAMLValidationError 单条 YAML 错误。
+// YAMLValidationError 单条 YAML 错误或格式提示。Field 是规则内的字段路径
+// （如 info.product.category），无法对应到字段时为空。
 type YAMLValidationError struct {
 	Line    int    `json:"line"`
 	Column  int    `json:"column"`
+	Field   string `json:"field,omitempty"`
 	Message string `json:"message"`
 }
 
@@ -117,11 +119,14 @@ type FingerOutline struct {
 	SetVars     []string      `json:"setVars"`
 }
 
-// ValidateYAMLOutput 是 ValidateYAML 的响应。
+// ValidateYAMLOutput 是 ValidateYAML 的响应。Errors 使规则无法加载或无法正确求值
+// （YAML 结构、表达式编译）；Warnings 是不符合指纹标准格式的地方（产品与服务声明、
+// 规则标识、未知键等），引擎仍可加载，但不能进入内置库。Valid 只看 Errors。
 type ValidateYAMLOutput struct {
-	Valid   bool                  `json:"valid"`
-	Errors  []YAMLValidationError `json:"errors"`
-	Outline *FingerOutline        `json:"outline,omitempty"`
+	Valid    bool                  `json:"valid"`
+	Errors   []YAMLValidationError `json:"errors"`
+	Warnings []YAMLValidationError `json:"warnings"`
+	Outline  *FingerOutline        `json:"outline,omitempty"`
 }
 
 // ---- 运行指纹 ----------------------------------------------------------

@@ -128,3 +128,41 @@ Content-Length: 1234\r
     ],
   },
 ]
+
+/** 产品声明 info.product 的取值与说明，与引擎的标准格式校验一致。 */
+export interface OptionHint {
+  value: string
+  label: string
+}
+
+export const PRODUCT_CATEGORIES: OptionHint[] = [
+  { value: 'application', label: 'application 应用系统' },
+  { value: 'middleware', label: 'middleware 中间件' },
+  { value: 'framework', label: 'framework 开发框架' },
+  { value: 'operating-system', label: 'operating-system 操作系统' },
+  { value: 'cms', label: 'cms 内容管理系统' },
+  { value: 'database', label: 'database 数据库' },
+  { value: 'web-server', label: 'web-server Web 服务器' },
+  { value: 'security', label: 'security 安全产品' },
+  { value: 'library', label: 'library 组件库' },
+  { value: 'hosting-panel', label: 'hosting-panel 主机面板' },
+  { value: 'device', label: 'device 设备' },
+  { value: 'network-device', label: 'network-device 网络设备' },
+  { value: 'iot', label: 'iot 物联网' },
+  { value: 'other', label: 'other 其他' },
+]
+
+export const PRODUCT_IDENTITIES: OptionHint[] = [
+  { value: 'product', label: 'product 命中即确认是这个产品' },
+  { value: 'signal', label: 'signal 技术线索（语言、前端库、默认页面、通用特征）' },
+]
+
+export const PRODUCT_ASSURANCES: OptionHint[] = [
+  { value: 'inferred', label: 'inferred 由规则名称与特征推断' },
+  { value: 'verified', label: 'verified 厂商与产品已确认，并有官方参考链接' },
+]
+
+export const PRODUCT_TIP =
+  '产品标识写成“厂商段.产品段”（小写字母、数字与连字符，如 weaver.e-cology）；厂商不确定时留空；同一产品的多条规则声明须完全相同。verified 至少需要一个官方参考链接。'
+
+export const SERVICE_TIP = 'TCP/UDP 规则必须声明识别的服务：协议名、传输层（tcp/udp）与常见端口；HTTP 规则可以不填。'

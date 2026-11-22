@@ -69,6 +69,7 @@ export interface ValidateYAMLInput {
 export interface YAMLValidationError {
   line: number
   column: number
+  field?: string
   message: string
 }
 
@@ -96,6 +97,8 @@ export interface FingerOutline {
 export interface ValidateYAMLOutput {
   valid: boolean
   errors: YAMLValidationError[]
+  // 不符合指纹标准格式的地方，不影响 valid。
+  warnings: YAMLValidationError[]
   outline?: FingerOutline | null
 }
 

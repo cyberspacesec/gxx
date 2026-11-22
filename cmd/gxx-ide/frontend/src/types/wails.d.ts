@@ -65,6 +65,7 @@ export interface RequestResponse {
 export interface YAMLError {
   line: number
   column: number
+  field?: string
   message: string
 }
 
@@ -92,6 +93,7 @@ export interface FingerOutline {
 export interface YAMLValidation {
   valid: boolean
   errors: YAMLError[]
+  warnings: YAMLError[]
   outline?: FingerOutline | null
 }
 

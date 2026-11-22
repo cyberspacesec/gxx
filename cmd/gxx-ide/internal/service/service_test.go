@@ -261,3 +261,32 @@ func TestValidateAcceptsTLSVariables(t *testing.T) {
 		t.Fatal("不存在的字段应报错")
 	}
 }
+
+// 校验认识指纹标准格式：产品声明与服务声明的问题作为格式提示返回，不影响 Valid。
+func TestValidateReportsStandardFormatWarnings(t *testing.T) {
+	standard := "id: acme-portal\ninfo:\n  name: portal\n  product:\n    id: acme.portal\n    name: Acme Portal\n    category: application\n    identity: product\n    assurance: inferred\n  metadata:\n    owner: {team: a}\nrules:\n  r0:\n    request:\n      method: GET\n      path: /\n    expression: response.status == 200\nexpression: r0()\n"
+	if out := NewYamlService().Validate(standard); !out.Valid || len(out.Errors) != 0 || len(out.Warnings) != 0 {
+		t.Fatalf("标准格式不应有错误或提示: %+v", out)
+	}
+	find := func(out *model.ValidateYAMLOutput, field string) *model.YAMLValidationError {
+		for index := range out.Warnings {
+			if out.Warnings[index].Field == field {
+				return &out.Warnings[index]
+			}
+		}
+		return nil
+	}
+	out := NewYamlService().Validate(strings.Replace(standard, "category: application", "category: portal", 1))
+	if warning := find(out, "info.product.category"); !out.Valid || warning == nil || warning.Line != 7 || !strings.Contains(warning.Message, "portal") {
+		t.Fatalf("产品分类不合规应提示并定位: %+v", out)
+	}
+	out = NewYamlService().Validate(strings.Replace(strings.Replace(standard, "id: acme-portal", "id: Acme_Portal", 1), "    assurance: inferred\n", "    assurance: verified\n", 1))
+	if find(out, "id") == nil || find(out, "info.product.references") == nil {
+		t.Fatalf("规则标识与 verified 缺少参考链接应提示: %+v", out.Warnings)
+	}
+	missing := "id: tcp-rule\ninfo:\n  name: tcp\nrules:\n  r0:\n    request:\n      type: tcp\n      host: 127.0.0.1:22\n    expression: response.raw.bcontains(b\"SSH-\")\nexpression: r0()\n"
+	out = NewYamlService().Validate(missing)
+	if !out.Valid || find(out, "info.product") == nil || find(out, "info.services") == nil {
+		t.Fatalf("缺少产品与服务声明应提示: %+v", out.Warnings)
+	}
+}
