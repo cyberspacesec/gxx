@@ -24,6 +24,10 @@ func TestCheckExpressions(t *testing.T) {
 	if failed := checkYAML(t, head+"rules:\n"+rule("r0", `response.status == 200 && response.body.ibcontains(b"x")`)+rule("r1", `response.headers["server"].contains("nginx")`)+"expression: r0() || r1()\n"); len(failed) != 0 {
 		t.Fatalf("合法的指纹被报错: %+v", failed)
 	}
+	// TLS 指纹变量是响应的字符串字段。
+	if failed := checkYAML(t, head+"rules:\n"+rule("r0", `response.tls_version == "TLS 1.2" && response.cipher_suite.startsWith("TLS_") && response.ja3s != "" && response.jarm == ""`)+"expression: r0()\n"); len(failed) != 0 {
+		t.Fatalf("TLS 变量被报错: %+v", failed)
+	}
 	// 语法残缺、未定义的函数、未定义的规则、总表达式残缺。
 	failed := checkYAML(t, head+"rules:\n"+rule("r0", `response.status == `)+rule("r1", `response.body.nosuch(b"x")`)+"expression: r0() && r9()\n")
 	if len(failed) != 3 || failed[0].Rule != "r0" || failed[1].Rule != "r1" || failed[2].Rule != "" {

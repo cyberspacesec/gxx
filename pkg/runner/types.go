@@ -41,8 +41,11 @@ type BaseInfoResponse struct {
 	FinalURL   string
 	RedirectTo string
 	Redirects  []Redirect
-	pages      []*scanPage
-	origin     *url.URL // 入口所在的资产
+	// HeaderOrder 是最后一页的响应头名称，按服务器发送的顺序；TLS 是最后一页所在连接的握手摘要。
+	HeaderOrder []string
+	TLS         *network.TLSInfo
+	pages       []*scanPage
+	origin      *url.URL // 入口所在的资产
 }
 
 // Redirect 入口跳转链上的一跳。Followed 为 false 表示页面里识别出的跳转指向其他资产，没有访问。
@@ -62,6 +65,7 @@ type scanPage struct {
 	body     []byte
 	request  *proto.Request
 	response *proto.Response
+	source   *http.Response // 实际读取的响应，正文已关闭，只用于连接信息
 }
 
 // TargetResult 单个目标的扫描结果。
@@ -79,6 +83,8 @@ type TargetResult struct {
 	FinalURL     string
 	RedirectTo   string
 	Redirects    []Redirect
+	HeaderOrder  []string
+	TLS          *network.TLSInfo
 }
 
 // FingerMatch 单条指纹匹配结果。

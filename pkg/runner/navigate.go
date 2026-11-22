@@ -51,6 +51,10 @@ func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Du
 		return nil, err
 	}
 	base.Certs = finger.GetCertInfos(base.Response)
+	base.HeaderOrder = network.ResponseHeaderOrder(last.source)
+	if info, ok := network.ResponseTLS(last.source); ok {
+		base.TLS = &info
+	}
 	base.Server = finger.GetServerInfoFromResponse(final)
 	base.ICP = finger.ExtractICPRecordFromBody(last.body)
 	if wapp, err := wappalyzer.NewWappalyzer(); err == nil {
@@ -91,7 +95,7 @@ func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logg
 			break
 		}
 		pageURL := resp.Request.URL
-		base.pages = append(base.pages, &scanPage{url: current, status: int32(resp.StatusCode), header: resp.Header, body: data, request: finger.BuildProtoRequest(resp, http.MethodGet, "", "/")})
+		base.pages = append(base.pages, &scanPage{url: current, status: int32(resp.StatusCode), header: resp.Header, body: data, request: finger.BuildProtoRequest(resp, http.MethodGet, "", "/"), source: resp})
 		base.Response = resp
 
 		next, kind := nextHop(pageURL, resp, data)
@@ -236,9 +240,12 @@ func navigationKey(u *url.URL) string {
 }
 
 // pageResponse 还原一页的响应头信息，供标题、Server 与资源提取使用。
+// 连接信息（响应头顺序、TLS 握手）沿用该页实际读取的响应。
 func pageResponse(page *scanPage) *http.Response {
 	u, _ := url.Parse(page.url)
-	return &http.Response{StatusCode: int(page.status), Status: fmt.Sprintf("%d %s", page.status, http.StatusText(int(page.status))), Proto: "HTTP/1.1", ProtoMajor: 1, ProtoMinor: 1, Header: page.header, Body: http.NoBody, Request: &http.Request{Method: http.MethodGet, URL: u, Header: make(http.Header)}}
+	resp := &http.Response{StatusCode: int(page.status), Status: fmt.Sprintf("%d %s", page.status, http.StatusText(int(page.status))), Proto: "HTTP/1.1", ProtoMajor: 1, ProtoMinor: 1, Header: page.header, Body: http.NoBody, Request: &http.Request{Method: http.MethodGet, URL: u, Header: make(http.Header)}}
+	network.AttachResponseDetails(resp, page.source)
+	return resp
 }
 
 // warmUpRequestCache 把入口跳转链写入本次扫描的请求缓存，并返回链上较早的各页。

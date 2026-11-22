@@ -186,10 +186,16 @@ func Read(fileName string) (*Finger, error) {
 	if err != nil {
 		return p, err
 	}
+	return Parse(content, filepath.Base(fileName))
+}
+
+// Parse 解析规则内容；path 记为规则来源，摘要按内容计算。
+func Parse(content []byte, path string) (*Finger, error) {
+	p := &Finger{}
 	if err := yaml.Unmarshal(content, p); err != nil {
 		return p, err
 	}
-	p.Source = Source{Path: filepath.Base(fileName), SHA256: fmt.Sprintf("%x", sha256.Sum256(content))}
+	p.Source = Source{Path: path, SHA256: fmt.Sprintf("%x", sha256.Sum256(content))}
 	return p, nil
 }
 

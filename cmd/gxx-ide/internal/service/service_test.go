@@ -250,3 +250,14 @@ func TestValidateReportsExpressionErrors(t *testing.T) {
 		t.Fatalf("合法的指纹被报错: %+v", out.Errors)
 	}
 }
+
+// TLS 指纹变量与其他响应字段一样可以通过校验；拼错的字段仍然报错。
+func TestValidateAcceptsTLSVariables(t *testing.T) {
+	yaml := "id: demo\ninfo:\n  name: demo\nrules:\n  r0:\n    request:\n      method: GET\n      path: /\n    expression: response.tls_version == \"TLS 1.3\" && response.cipher_suite != \"\" && response.ja3s != \"\" && response.jarm == \"\"\nexpression: r0()\n"
+	if out := NewYamlService().Validate(yaml); !out.Valid {
+		t.Fatalf("TLS 变量被报错: %+v", out.Errors)
+	}
+	if out := NewYamlService().Validate(strings.Replace(yaml, "response.ja3s", "response.ja3", 1)); out.Valid {
+		t.Fatal("不存在的字段应报错")
+	}
+}

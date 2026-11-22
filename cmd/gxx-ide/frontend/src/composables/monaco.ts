@@ -62,6 +62,7 @@ const RESPONSE_FIELDS = [
   'response.url.port', 'response.url.path', 'response.url.query',
   'response.headers', 'response.content_type', 'response.body',
   'response.raw', 'response.raw_header', 'response.icon_hash', 'response.latency',
+  'response.tls_version', 'response.cipher_suite', 'response.ja3s', 'response.jarm',
 ]
 
 /**

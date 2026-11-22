@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"github.com/cyberspacesec/gxx/internal/lifecycle"
 	"github.com/cyberspacesec/gxx/pkg/finger"
+	"github.com/cyberspacesec/gxx/pkg/network"
 	"github.com/cyberspacesec/gxx/pkg/runner"
 	"github.com/cyberspacesec/gxx/pkg/wappalyzer"
 	"github.com/cyberspacesec/gxx/types"
@@ -119,7 +120,14 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		assessments[assessment.RuleID] = assessment
 	}
 
-	r, err := runner.NewRunner(scanCfg, cfg.fingerOptions.toInternal())
+	source := cfg.fingerOptions.toInternal()
+	if cfg.ruleFS != nil {
+		if source.PocFile != "" || source.PocYaml != "" {
+			return nil, fmt.Errorf("%w: WithRuleFS cannot be combined with rule files from WithFingerOptions", ErrInvalidOption)
+		}
+		source.FS, source.Root = cfg.ruleFS, cfg.ruleRoot
+	}
+	r, err := runner.NewRunner(scanCfg, source)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrEngineNotReady, err)
 	}
@@ -410,13 +418,15 @@ func (e *Engine) GetBaseInfo(ctx context.Context, target string) (*BaseInfo, err
 		return nil, fmt.Errorf("%w: target=%s", ErrEmptyResult, target)
 	}
 	info := &BaseInfo{
-		Target:     base.Url,
-		Title:      base.Title,
-		StatusCode: base.StatusCode,
-		ICP:        base.ICP,
-		FinalURL:   base.FinalURL,
-		RedirectTo: base.RedirectTo,
-		Redirects:  convertRedirects(base.Redirects),
+		Target:      base.Url,
+		Title:       base.Title,
+		StatusCode:  base.StatusCode,
+		ICP:         base.ICP,
+		FinalURL:    base.FinalURL,
+		RedirectTo:  base.RedirectTo,
+		Redirects:   convertRedirects(base.Redirects),
+		HeaderOrder: base.HeaderOrder,
+		TLS:         convertTLS(base.TLS),
 	}
 	if base.Server != nil {
 		info.Server = convertServerInfo(base.Server)
@@ -470,14 +480,16 @@ func (e *Engine) NormalizeURL(ctx context.Context, target string) (string, error
 
 func (e *Engine) convertTargetResult(r *runner.TargetResult) *TargetResult {
 	tr := &TargetResult{
-		URL:        r.URL,
-		StatusCode: r.StatusCode,
-		Title:      r.Title,
-		ICP:        r.ICP,
-		FinalURL:   r.FinalURL,
-		RedirectTo: r.RedirectTo,
-		Redirects:  convertRedirects(r.Redirects),
-		Matches:    make([]FingerMatch, 0),
+		URL:         r.URL,
+		StatusCode:  r.StatusCode,
+		Title:       r.Title,
+		ICP:         r.ICP,
+		FinalURL:    r.FinalURL,
+		RedirectTo:  r.RedirectTo,
+		Redirects:   convertRedirects(r.Redirects),
+		Matches:     make([]FingerMatch, 0),
+		HeaderOrder: r.HeaderOrder,
+		TLS:         convertTLS(r.TLS),
 	}
 	if r.LastResponse != nil {
 		tr.Headers = string(r.LastResponse.RawHeader)
@@ -538,6 +550,13 @@ func convertTechStack(w *wappalyzer.TypeWappalyzer) *TechStack {
 		OperatingSystems:     w.OperatingSystems,
 		Other:                w.Other,
 	}
+}
+
+func convertTLS(info *network.TLSInfo) *TLSInfo {
+	if info == nil {
+		return nil
+	}
+	return &TLSInfo{Version: info.Version, CipherSuite: info.CipherSuite, ALPN: info.ALPN, JA3S: info.JA3S, JARM: info.JARM}
 }
 
 func convertRedirects(redirects []runner.Redirect) []Redirect {

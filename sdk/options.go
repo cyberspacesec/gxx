@@ -8,6 +8,7 @@ package sdk
 import (
 	"fmt"
 	"github.com/cyberspacesec/gxx/types"
+	"io/fs"
 	"log/slog"
 	"time"
 )
@@ -21,6 +22,8 @@ type engineConfig struct {
 	reverse           types.ReverseConfig
 	// 指纹相关
 	fingerOptions FingerOptions
+	ruleFS        fs.FS
+	ruleRoot      string
 
 	// 网络层
 	proxy              string
@@ -135,6 +138,22 @@ type Option func(*engineConfig) error
 func WithFingerOptions(opts FingerOptions) Option {
 	return func(c *engineConfig) error {
 		c.fingerOptions = opts
+		return nil
+	}
+}
+
+// WithRuleFS 从文件系统 fsys 的 root 目录加载全部 .yaml/.yml 规则，可用于内存文件系统
+// （如 fstest.MapFS）或 embed.FS；root 为 "" 或 "." 表示根目录。规则来源路径相对于 root。
+// 不能与 WithFingerOptions 指定的目录或文件同时使用。
+func WithRuleFS(fsys fs.FS, root string) Option {
+	return func(c *engineConfig) error {
+		if fsys == nil {
+			return fmt.Errorf("%w: rule filesystem must not be nil", ErrInvalidOption)
+		}
+		if root != "" && !fs.ValidPath(root) {
+			return fmt.Errorf("%w: invalid rule filesystem root %q", ErrInvalidOption, root)
+		}
+		c.ruleFS, c.ruleRoot = fsys, root
 		return nil
 	}
 }

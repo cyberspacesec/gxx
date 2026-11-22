@@ -65,4 +65,8 @@ message Response {
   bytes raw = 8; // response.raw([]byte)原始响应
   bytes raw_header = 9;  // response.raw_header([]byte)原始的 header 部分，需要使用字节流相关方法来判断。
   string icon_hash = 10;  // response.icon_hash(string)通过icon hash来判断
+  string tls_version = 11;  // response.tls_version(string)TLS 版本，如 "TLS 1.2"；明文响应为空
+  string cipher_suite = 12;  // response.cipher_suite(string)TLS 套件名称，如 "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"；明文响应为空
+  string ja3s = 13;  // response.ja3s(string)服务端 ServerHello 的 JA3S 摘要；明文响应为空
+  string jarm = 14;  // response.jarm(string)目标的 JARM 指纹；未启用 JARM 时为空
 }

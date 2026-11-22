@@ -175,8 +175,9 @@ func dialTarget(ctx context.Context, policy Policy, target *TargetRequest, netwo
 	}
 	if useTLS {
 		// 与 HTTP 路径统一的扫描 TLS 策略：最低 TLS 1.0 + 完整套件，兼容老旧设备。
-		secure := tls.Client(conn, &tls.Config{ServerName: serverName, InsecureSkipVerify: insecure, MinVersion: tls.VersionTLS10, CipherSuites: scannerCipherSuites()})
-		if err = secure.HandshakeContext(dialCtx); err != nil {
+		// 握手期间旁路记录 ServerHello，连接的握手摘要见 ConnTLSInfo。
+		secure, _, err := handshakeTLS(dialCtx, conn, &tls.Config{ServerName: serverName, InsecureSkipVerify: insecure, MinVersion: tls.VersionTLS10, CipherSuites: scannerCipherSuites()})
+		if err != nil {
 			_ = conn.Close()
 			return nil, err
 		}

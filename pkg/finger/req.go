@@ -17,6 +17,7 @@ import (
 	"github.com/cyberspacesec/gxx/utils/proto"
 	"net/http"
 	"net/url"
+	"sort"
 	"strings"
 )
 
@@ -80,26 +81,19 @@ func buildProtoResponseBody(ctx context.Context, resp *http.Response, body []byt
 }
 
 func buildProtoResponsePage(ctx context.Context, resp *http.Response, body []byte, latency int64, client *network.HTTPClient, options network.OptionsRequest, pageURL string, icon bool) *proto.Response {
-	headers := make(map[string]string)
+	headers := make(map[string]string, len(resp.Header))
 	rawHeaderBuilder := strings.Builder{}
 	rawHeaderBuilder.WriteString(resp.Proto)
 	rawHeaderBuilder.WriteString(" ")
 	rawHeaderBuilder.WriteString(resp.Status)
 	rawHeaderBuilder.WriteString("\n")
-	for k := range resp.Header {
-		// 按多值逐行写入，避免 Set-Cookie 等多值头被覆盖
-		vals := resp.Header[k]
-		if len(vals) == 0 {
-			continue
-		}
-		headers[strings.ToLower(k)] = strings.Join(vals, ", ")
-		for _, v := range vals {
-			rawHeaderBuilder.WriteString(k)
-			rawHeaderBuilder.WriteString(": ")
-			rawHeaderBuilder.WriteString(v)
-			rawHeaderBuilder.WriteString("\n")
+	for k, vals := range resp.Header {
+		if len(vals) > 0 {
+			headers[strings.ToLower(k)] = strings.Join(vals, ", ")
 		}
 	}
+	// 原始响应头按服务器发送的顺序逐行写入，多值头（如 Set-Cookie）各占一行。
+	writeHeaderLines(&rawHeaderBuilder, resp.Header, network.ResponseHeaderOrder(resp))
 	// 入口页使用最终重定向地址解析资源；规则响应仅在根路径提取。
 	var iconHashStr = ""
 	if icon && resp.Request != nil && resp.Request.URL != nil && resp.Request.Method == http.MethodGet {
@@ -118,7 +112,7 @@ func buildProtoResponsePage(ctx context.Context, resp *http.Response, body []byt
 	n := copy(raw, rawHeader)
 	raw[n], raw[n+1] = '\n', '\n'
 	copy(raw[n+2:], body)
-	return &proto.Response{
+	out := &proto.Response{
 		Status:      int32(resp.StatusCode),
 		Url:         network.Url2ProtoUrl(resp.Request.URL),
 		Headers:     headers,
@@ -128,6 +122,53 @@ func buildProtoResponsePage(ctx context.Context, resp *http.Response, body []byt
 		RawHeader:   []byte(rawHeader),
 		Latency:     latency,
 		IconHash:    iconHashStr,
+		Jarm:        network.JARMFrom(ctx),
+	}
+	if info, ok := network.ResponseTLS(resp); ok {
+		out.TlsVersion, out.CipherSuite, out.Ja3S = info.Version, info.CipherSuite, info.JA3S
+	}
+	return out
+}
+
+// writeHeaderLines 按 order 给出的名称顺序写入响应头；order 中没有的值按名称排序写在最后。
+// order 为空时（无法记录顺序的响应）整体按名称排序，结果与读取次序无关。
+func writeHeaderLines(b *strings.Builder, header http.Header, order []string) {
+	used := make(map[string]int, len(order))
+	write := func(key, value string) {
+		b.WriteString(key)
+		b.WriteString(": ")
+		b.WriteString(value)
+		b.WriteString("\n")
+	}
+	for _, name := range order {
+		key := http.CanonicalHeaderKey(name)
+		values := header[key]
+		if index := used[key]; index < len(values) {
+			write(key, values[index])
+			used[key] = index + 1
+		}
+	}
+	if len(used) == len(header) {
+		complete := true
+		for key, values := range header {
+			if used[key] < len(values) {
+				complete = false
+				break
+			}
+		}
+		if complete {
+			return
+		}
+	}
+	keys := make([]string, 0, len(header))
+	for key := range header {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		for _, value := range header[key][used[key]:] {
+			write(key, value)
+		}
 	}
 }
 

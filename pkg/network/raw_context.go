@@ -2,6 +2,7 @@ package network
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"io"
 	"net"
@@ -124,14 +125,18 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 			return nil, err
 		}
 		h := make(http.Header, len(response.Headers))
+		details := &responseDetails{headerOrder: make([]string, 0, len(response.Headers))}
 		for _, v := range response.Headers {
 			h.Add(v.Key, v.Value)
+			details.headerOrder = append(details.headerOrder, v.Key)
 		}
+		var state *tls.ConnectionState
+		details.tls, state, details.secure = ConnTLSInfo(conn)
 		var body io.Reader = response.Body
 		if parsed.Method == http.MethodHead {
 			body = http.NoBody
 		}
-		resp := &http.Response{StatusCode: response.Status.Code, Status: strconv.Itoa(response.Status.Code) + " " + response.Status.Reason, Proto: response.Version.String(), ProtoMajor: response.Version.Major, ProtoMinor: response.Version.Minor, Header: h, ContentLength: response.ContentLength(), Body: &rawResponseBody{Reader: body, ctx: ctx, conn: conn, stop: stop}, Request: &http.Request{Method: parsed.Method, URL: u, Header: make(http.Header)}}
+		resp := &http.Response{StatusCode: response.Status.Code, Status: strconv.Itoa(response.Status.Code) + " " + response.Status.Reason, Proto: response.Version.String(), ProtoMajor: response.Version.Major, ProtoMinor: response.Version.Minor, Header: h, ContentLength: response.ContentLength(), Body: &rawResponseBody{Reader: body, ctx: ctx, conn: conn, stop: stop}, TLS: state, Request: (&http.Request{Method: parsed.Method, URL: u, Header: make(http.Header)}).WithContext(context.WithValue(ctx, responseDetailsKey{}, details))}
 		if options.FollowRedirects && response.Status.IsRedirect() && h.Get("Location") != "" && redirects < maxRedirects {
 			next, err := u.Parse(h.Get("Location"))
 			// Location 无法解析时返回 30x 响应本身。

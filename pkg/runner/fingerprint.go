@@ -13,6 +13,7 @@ import (
 	"github.com/cyberspacesec/gxx/types"
 	"github.com/cyberspacesec/gxx/utils/common"
 	"github.com/cyberspacesec/gxx/utils/logger"
+	iofs "io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -50,6 +51,50 @@ func (fs *FingerStore) Load(options types.YamlFingerType) error {
 	defer fs.mu.Unlock()
 
 	var next []*finger.Finger
+
+	if options.FS != nil {
+		if options.PocFile != "" || options.PocYaml != "" {
+			return fmt.Errorf("规则文件系统不能与规则目录或文件同时指定")
+		}
+		root := options.Root
+		if root == "" {
+			root = "."
+		}
+		if !iofs.ValidPath(root) {
+			return fmt.Errorf("规则目录 %q 不是有效的文件系统路径", options.Root)
+		}
+		err := iofs.WalkDir(options.FS, root, func(path string, d iofs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if d.IsDir() || !common.IsYamlFile(path) {
+				return nil
+			}
+			content, err := iofs.ReadFile(options.FS, path)
+			if err != nil {
+				return fmt.Errorf("读取 %s: %w", path, err)
+			}
+			relative := strings.TrimPrefix(strings.TrimPrefix(path, root), "/")
+			if root == "." {
+				relative = path
+			}
+			poc, err := finger.Parse(content, relative)
+			if err != nil {
+				return fmt.Errorf("读取 %s: %w", path, err)
+			}
+			next = append(next, poc)
+			return nil
+		})
+		if err != nil {
+			return err
+		}
+		if len(next) == 0 {
+			return fmt.Errorf("规则文件系统的 %s 中未找到有效的 yaml 规则", root)
+		}
+		fs.fingers = next
+		fs.prepare()
+		return nil
+	}
 
 	if options.PocFile == "" && options.PocYaml == "" {
 		fs.log.Info("使用默认指纹库")

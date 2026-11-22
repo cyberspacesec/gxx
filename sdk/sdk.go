@@ -158,6 +158,10 @@ type TargetResult struct {
 	ICP        string         `json:"icp,omitempty"`
 	Certs      []CertInfo     `json:"certs,omitempty"`
 	Products   []ProductMatch `json:"products,omitempty"`
+	// HeaderOrder 是最终页面的响应头名称，按服务器返回的顺序，保留重复与原始大小写。
+	HeaderOrder []string `json:"header_order,omitempty"`
+	// TLS 是最终页面所在连接的握手摘要；明文目标为 nil。
+	TLS *TLSInfo `json:"tls,omitempty"`
 	// Error 由调用方在目标扫描失败时填写，用于把失败原因随结果一起输出；
 	// Scan 成功返回的结果中始终为空。
 	Error string `json:"error,omitempty"`
@@ -175,6 +179,20 @@ type BaseInfo struct {
 	TechStack  *TechStack  `json:"tech_stack,omitempty"`
 	ICP        string      `json:"icp,omitempty"`
 	Certs      []CertInfo  `json:"certs,omitempty"`
+	// HeaderOrder 与 TLS 的含义与 TargetResult 相同。
+	HeaderOrder []string `json:"header_order,omitempty"`
+	TLS         *TLSInfo `json:"tls,omitempty"`
+}
+
+// TLSInfo 是一次 TLS 握手的摘要。版本、套件、ALPN 与 JA3S 取自扫描本来就有的那次
+// 握手：握手期间旁路记录服务端的 ServerHello，按公开的 JA3S 定义计算，不增加连接。
+// JARM 需要另外发送 10 个构造的 ClientHello，只在 WithJARM(true) 时计算。
+type TLSInfo struct {
+	Version     string `json:"version"`        // 如 "TLS 1.2"
+	CipherSuite string `json:"cipher_suite"`   // 如 "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+	ALPN        string `json:"alpn,omitempty"` // 协商的应用层协议
+	JA3S        string `json:"ja3s,omitempty"` // ServerHello 的 JA3S 摘要
+	JARM        string `json:"jarm,omitempty"` // 62 位 JARM 指纹；全零表示目标没有以 TLS 响应
 }
 
 // FingerOptions 指纹规则加载选项（独立类型，不暴露内部 types 包）。

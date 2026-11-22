@@ -313,3 +313,22 @@ func redirectAllowed(ctx context.Context, policy Policy, from, to *url.URL) bool
 func (c *HTTPClient) RedirectAllowed(ctx context.Context, from, to *url.URL) bool {
 	return redirectAllowed(ctx, c.PolicyFor(ctx), from, to)
 }
+
+type jarmKey struct{}
+
+// WithJARM 记录一次扫描中目标的 JARM 指纹，此后构造的响应对象携带它（response.jarm）。
+func WithJARM(ctx context.Context, jarm string) context.Context {
+	if jarm == "" {
+		return ctx
+	}
+	return context.WithValue(ctx, jarmKey{}, jarm)
+}
+
+// JARMFrom 返回 ctx 中记录的 JARM 指纹。
+func JARMFrom(ctx context.Context) string {
+	if ctx == nil {
+		return ""
+	}
+	jarm, _ := ctx.Value(jarmKey{}).(string)
+	return jarm
+}

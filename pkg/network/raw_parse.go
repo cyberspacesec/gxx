@@ -15,9 +15,11 @@ func RawParse(nc *Client, data []byte, res []byte, variableMap map[string]any) e
 	variableMap["request"] = &proto.Request{
 		Raw: []byte(nc.address + "\r\n" + string(data)),
 	}
-	variableMap["response"] = &proto.Response{
-		Raw: res,
+	response := &proto.Response{Raw: res, Jarm: JARMFrom(nc.ctx)}
+	if info, _, ok := ConnTLSInfo(nc.conn); ok {
+		response.TlsVersion, response.CipherSuite, response.Ja3S = info.Version, info.CipherSuite, info.JA3S
 	}
+	variableMap["response"] = response
 	variableMap["fulltarget"] = nc.address
 	return nil
 }

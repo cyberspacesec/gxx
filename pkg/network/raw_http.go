@@ -79,6 +79,10 @@ func SendRawRequest(ctx context.Context, client *HTTPClient, request, baseurl st
 	tempResultResponse.Body = respBody
 	tempResultResponse.Raw = []byte(string(dumpedResponseHeaders) + "\n" + string(respBody))
 	tempResultResponse.RawHeader = dumpedResponseHeaders
+	tempResultResponse.Jarm = JARMFrom(ctx)
+	if info, ok := ResponseTLS(resp); ok {
+		tempResultResponse.TlsVersion, tempResultResponse.CipherSuite, tempResultResponse.Ja3S = info.Version, info.CipherSuite, info.JA3S
+	}
 	variableMap["response"] = tempResultResponse
 
 	tempResultRequest := &proto.Request{}

@@ -15,6 +15,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"net/http/httptrace"
 	"net/http/httputil"
 	"net/url"
 	"strings"
@@ -291,9 +292,38 @@ func (c *HTTPClient) createTransport(key transportKey) (*http.Transport, error) 
 	if err != nil {
 		return nil, err
 	}
+	tlsConfig := c.tlsConfig.Clone()
 	transport := &http.Transport{
-		TLSClientConfig:       c.tlsConfig.Clone(),
-		DialContext:           dial,
+		// 连接由这里建立并包装：明文连接记录响应头顺序；HTTPS 连接在这里完成握手，
+		// 同时旁路记录 ServerHello，握手状态由 requestTransport 填回 resp.TLS。
+		DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			conn, err := dial(ctx, network, addr)
+			if err != nil {
+				return nil, err
+			}
+			return newTrackedConn(conn, nil, nil), nil
+		},
+		DialTLSContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			conn, err := dial(ctx, network, addr)
+			if err != nil {
+				return nil, err
+			}
+			config := tlsConfig.Clone()
+			if config.ServerName == "" {
+				if host, _, splitErr := net.SplitHostPort(addr); splitErr == nil {
+					config.ServerName = host
+				}
+			}
+			handshakeCtx, cancel := context.WithTimeout(ctx, DefaultTimeout)
+			defer cancel()
+			secure, recorder, err := handshakeTLS(handshakeCtx, conn, config)
+			if err != nil {
+				_ = conn.Close()
+				return nil, err
+			}
+			return newTrackedConn(secure, secure, recorder), nil
+		},
+		TLSClientConfig:       tlsConfig,
 		TLSHandshakeTimeout:   DefaultTimeout,
 		ResponseHeaderTimeout: 0,
 		MaxIdleConns:          keepAliveMaxIdle,
@@ -438,11 +468,83 @@ func (t *requestTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 	if state != nil && state.override != nil {
 		rt = state.wrappedFor(t.base)
 	}
-	resp, err := rt.RoundTrip(req)
-	if err == nil && jar != nil {
+	// 取得本次请求实际使用的连接，读取握手摘要与响应头顺序。摘要随 resp.Request 的 ctx
+	// 交给调用方（见 ResponseDetails）。GotConn 在调用 RoundTrip 的协程中触发。
+	details := &responseDetails{}
+	var used net.Conn
+	traced := httptrace.WithClientTrace(context.WithValue(req.Context(), responseDetailsKey{}, details), &httptrace.ClientTrace{
+		GotConn: func(info httptrace.GotConnInfo) { used = info.Conn },
+	})
+	resp, err := rt.RoundTrip(req.WithContext(traced))
+	if err != nil {
+		return resp, err
+	}
+	if tracked, ok := used.(*trackedConn); ok {
+		details.headerOrder = tracked.takeHeaderOrder()
+		if tracked.tls != nil {
+			details.tls, details.secure = tracked.tls.info, true
+			if resp.TLS == nil {
+				resp.TLS = &tracked.tls.state
+			}
+		}
+	}
+	if jar != nil {
 		if cookies := resp.Cookies(); len(cookies) > 0 {
 			jar.SetCookies(req.URL, cookies)
 		}
 	}
-	return resp, err
+	return resp, nil
+}
+
+type responseDetailsKey struct{}
+
+// responseDetails 是 Transport 读取一个响应时记录的连接信息。
+type responseDetails struct {
+	headerOrder []string
+	tls         TLSInfo
+	secure      bool
+}
+
+// ResponseHeaderOrder 返回响应头名称按服务器发送的顺序（保留重复与原始大小写）；
+// 响应不是经当前客户端读取的，或无法记录时返回 nil。
+func ResponseHeaderOrder(resp *http.Response) []string {
+	if details := detailsOf(resp); details != nil {
+		return details.headerOrder
+	}
+	return nil
+}
+
+// ResponseTLS 返回响应所在连接的握手摘要；明文连接或未知时返回 false。
+func ResponseTLS(resp *http.Response) (TLSInfo, bool) {
+	if details := detailsOf(resp); details != nil && details.secure {
+		return details.tls, true
+	}
+	if resp != nil && resp.TLS != nil {
+		return tlsSummary(resp.TLS, ServerHello{}, false), true
+	}
+	return TLSInfo{}, false
+}
+
+// AttachResponseDetails 让由 src 派生的响应 dst（如按已读取的页面重建的响应）
+// 携带 src 的连接信息与握手状态。
+func AttachResponseDetails(dst, src *http.Response) {
+	if dst == nil || src == nil {
+		return
+	}
+	if dst.TLS == nil {
+		dst.TLS = src.TLS
+	}
+	details := detailsOf(src)
+	if details == nil || dst.Request == nil {
+		return
+	}
+	dst.Request = dst.Request.WithContext(context.WithValue(dst.Request.Context(), responseDetailsKey{}, details))
+}
+
+func detailsOf(resp *http.Response) *responseDetails {
+	if resp == nil || resp.Request == nil {
+		return nil
+	}
+	details, _ := resp.Request.Context().Value(responseDetailsKey{}).(*responseDetails)
+	return details
 }
