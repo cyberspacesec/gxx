@@ -10,12 +10,14 @@ info:
     name: MantisBT
     category: application
     identity: product
-    assurance: inferred
+    assurance: verified
     tags:
       - devops
       - issue-tracker
     aliases:
       - Mantis Bug Tracker
+    references:
+      - https://mantisbt.org/
 rules:
   r0:
     request:

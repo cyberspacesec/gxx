@@ -1175,7 +1175,7 @@ web-manageengine-deviceexpert,manageengine-deviceexpert,manageengine.deviceexper
 web-manageengine-opmanager,manageengine-opmanager,manageengine.opmanager,ManageEngine OpManager,ManageEngine,application,product,inferred,high,
 web-manageengine-servicedesk,manageengine-servicedesk-plus,manageengine.servicedesk-plus,ManageEngine ServiceDesk Plus,ManageEngine,application,product,inferred,high,
 web-management-platform,tianyuandike-management-platform,tianyuandike.management-platform,天源迪科管理平台,天源迪科,application,product,inferred,low,
-web-mantisbt,mantisbt,mantisbt.mantisbt,MantisBT,,application,product,inferred,high,
+web-mantisbt,mantisbt,mantisbt.mantisbt,MantisBT,,application,product,verified,high,
 web-mantuoluo-medication,mantuoluo-medical-system,mantuoluo.medical-system,曼陀罗医疗系统,,application,product,inferred,low,
 web-maop-oa,maopu-oa,maopu.oa,猫扑 OA,重庆猫扑网络科技有限公司,application,product,inferred,medium,
 web-marathon,mesosphere-marathon,mesosphere.marathon,Marathon,Mesosphere,middleware,product,verified,high,
@@ -1567,8 +1567,8 @@ web-奇安信-数据脱敏系统,qianxin-data-masking,qianxin.data-masking,网�
 web-奇安信-天机管理中心,qianxin-tianji-console,qianxin.tianji,天机移动终端安全管理系统,奇安信,security,product,inferred,medium,
 web-奇安信-天擎,qianxin-tianqing-skylar-appid,qianxin.tianqing,奇安信天擎终端安全管理系统,奇安信,security,product,inferred,high,
 web-奇安信-天眼,qianxin-tianyan,qianxin.tianyan,奇安信天眼,奇安信,security,product,inferred,high,条件过宽：页面含“360天眼”，只匹配一个字符串，特征较宽泛
-web-奇安信-ngsoc,qianxin-ngsoc,qianxin.ngsoc,奇安信 NGSOC,奇安信,security,product,verified,high,
-web-奇安信-vpn,qianxin-vpn,qianxin.vpn,奇安信 VPN,奇安信,security,product,verified,high,
+web-奇安信-ngsoc,qianxin-ngsoc,qianxin.ngsoc,奇安信 NGSOC,奇安信,security,product,inferred,high,
+web-奇安信-vpn,qianxin-vpn,qianxin.vpn,奇安信 VPN,奇安信,security,product,inferred,high,
 web-奇安信网康互联网控制网关,qianxin-netentsec-icg-favicon,qianxin.netentsec-icg,网康互联网控制网关,奇安信,security,product,inferred,medium,
 web-奇安信网神安全网络路由网关系统,qianxin-secure-routing-gateway,qianxin.secure-routing-gateway,奇安信网神安全网络路由网关系统,奇安信,network-device,product,inferred,medium,
 web-奇安信终端安全管理系统qax天擎,qianxin-tianqing,qianxin.tianqing,奇安信天擎终端安全管理系统,奇安信,security,product,inferred,high,
@@ -1678,7 +1678,7 @@ web-s-cms,s-cms,s-cms.s-cms,S-CMS 闪灵建站系统,,cms,product,inferred,mediu
 web-salien-device-integrity-management-system,salien-device-integrity-management,salien.device-integrity-management,时林设备完整性管理系统,北京市时林电脑公司,application,product,inferred,low,条件过宽：特征仅为浏览器检测正则，误报风险高
 web-salien-performance-management-platform,salien-performance-management,salien.performance-management,时林 Performance Management Platform,北京市时林电脑公司,application,product,inferred,medium,
 web-salien-software-system,salien-software-system,salien.software-system,时林软件系统,北京市时林电脑公司,application,product,inferred,low,条件过宽：r1 只匹配“北京市时林电脑公司”，可能覆盖该厂商多款产品
-web-saltstack,vmware-salt,vmware.salt,Salt,VMware,application,product,verified,high,
+web-saltstack,vmware-salt,vmware.salt,Salt,VMware,application,product,inferred,high,
 web-samphpweb,spacial-sam-broadcaster,spacial.sam-broadcaster,SAM Broadcaster,Spacial Audio Solutions,application,product,inferred,high,
 web-三零盛安-安全邮件系统,30san-secure-mail,30san.secure-mail,三零盛安安全邮件系统,三零盛安,application,product,inferred,medium,
 web-sandu-oa,sandu-oa,sandu.oa,叁度 OA,青岛叁度信息技术有限公司,application,product,inferred,medium,

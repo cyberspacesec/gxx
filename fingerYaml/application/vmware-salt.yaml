@@ -11,7 +11,7 @@ info:
     vendor: VMware
     category: application
     identity: product
-    assurance: verified
+    assurance: inferred
     tags:
       - devops
     aliases:

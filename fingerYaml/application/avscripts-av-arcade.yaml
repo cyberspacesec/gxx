@@ -11,6 +11,8 @@ info:
     category: application
     identity: product
     assurance: inferred
+    references:
+      - http://www.avscripts.net/avarcade/
 rules:
   r0:
     request:

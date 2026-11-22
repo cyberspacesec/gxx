@@ -3162,6 +3162,9 @@
       "category": "application",
       "identity": "product",
       "assurance": "inferred",
+      "references": [
+        "http://www.avscripts.net/avarcade/"
+      ],
       "rule_ids": [
         "avscripts-av-arcade"
       ]
@@ -16393,13 +16396,16 @@
       "name": "MantisBT",
       "category": "application",
       "identity": "product",
-      "assurance": "inferred",
+      "assurance": "verified",
       "tags": [
         "devops",
         "issue-tracker"
       ],
       "aliases": [
         "Mantis Bug Tracker"
+      ],
+      "references": [
+        "https://mantisbt.org/"
       ],
       "rule_ids": [
         "mantisbt"
@@ -21716,7 +21722,7 @@
       "vendor": "奇安信",
       "category": "security",
       "identity": "product",
-      "assurance": "verified",
+      "assurance": "inferred",
       "tags": [
         "siem"
       ],
@@ -21857,7 +21863,7 @@
       "vendor": "奇安信",
       "category": "security",
       "identity": "product",
-      "assurance": "verified",
+      "assurance": "inferred",
       "tags": [
         "vpn"
       ],
@@ -28658,7 +28664,7 @@
       "vendor": "VMware",
       "category": "application",
       "identity": "product",
-      "assurance": "verified",
+      "assurance": "inferred",
       "tags": [
         "devops"
       ],

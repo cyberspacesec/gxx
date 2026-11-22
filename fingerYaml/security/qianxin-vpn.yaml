@@ -11,7 +11,7 @@ info:
     vendor: 奇安信
     category: security
     identity: product
-    assurance: verified
+    assurance: inferred
     tags:
       - vpn
     aliases:
