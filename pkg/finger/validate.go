@@ -1,10 +1,13 @@
 package finger
 
 import (
+	"fmt"
 	"reflect"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
 	yamlv3 "go.yaml.in/yaml/v3"
 )
@@ -35,11 +38,14 @@ const (
 	CodeMissingRules      = "missing-rules"      // 没有子规则
 	CodeMissingExpression = "missing-expression" // 缺少总表达式
 	CodeExpression        = "expression-compile" // 表达式无法编译
+	CodeInvalidProduct    = "invalid-product"    // info.product 缺少必填项或取值不合规
+	CodeMissingServices   = "missing-services"   // TCP/UDP 规则没有声明 info.services
+	CodeInvalidService    = "invalid-service"    // info.services 的一项不合规
 )
 
 // ValidateOptions 是规则校验的选项。
 type ValidateOptions struct {
-	// Strict 为 true 时，规范性问题（未知键、缺少必填信息、表达式无法编译）报告为 error；
+	// Strict 为 true 时，规范性问题（未知键、缺少必填信息、产品与服务声明不合规、表达式无法编译）报告为 error；
 	// 否则报告为 warning，与引擎宽松加载的行为一致。
 	Strict bool
 	// Policy 与加载时使用的规则策略相同；违反策略总是 error。
@@ -95,7 +101,7 @@ func Validate(content []byte, opts ValidateOptions) []Diagnostic {
 	if strings.TrimSpace(fg.Id) == "" {
 		add(CodeMissingID, "id", "缺少规则标识 id")
 	}
-	validateInfo(fg.Info, add)
+	validateInfo(fg, add)
 	if len(fg.Rules) == 0 {
 		add(CodeMissingRules, "rules", "没有子规则")
 	}
@@ -113,9 +119,107 @@ func Validate(content []byte, opts ValidateOptions) []Diagnostic {
 }
 
 // validateInfo 校验 info 中的规则信息。规则信息的必填项与取值约束集中在这里。
-func validateInfo(info Info, add func(code, field, message string)) {
-	if strings.TrimSpace(info.Name) == "" {
+func validateInfo(fg *Finger, add func(code, field, message string)) {
+	if strings.TrimSpace(fg.Info.Name) == "" {
 		add(CodeMissingName, "info.name", "缺少规则名称 info.name")
+	}
+	if fg.Info.Product != nil {
+		validateProduct(*fg.Info.Product, add)
+	}
+	validateServices(fg, add)
+}
+
+// 产品声明的格式与上限。
+var (
+	productIDPattern  = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9-]*$`)
+	productTagPattern = regexp.MustCompile(`^[a-z0-9]+(-[a-z0-9]+)*$`)
+)
+
+const (
+	maxProductIDLength          = 96
+	maxProductNameLength        = 200
+	maxProductTags              = 8
+	maxProductAliases           = 16
+	maxProductReferences        = 16
+	maxProductDescriptionLength = 500
+)
+
+// validateProduct 校验 info.product 的必填项、枚举取值与列表上限。
+func validateProduct(product Product, add func(code, field, message string)) {
+	report := func(field, message string) { add(CodeInvalidProduct, "info.product."+field, message) }
+	switch {
+	case product.ID == "":
+		report("id", "缺少产品标识 info.product.id")
+	case len(product.ID) > maxProductIDLength || !productIDPattern.MatchString(product.ID):
+		report("id", fmt.Sprintf("产品标识 %q 须为“厂商段.产品段”，各段由小写字母、数字与连字符组成，总长不超过 %d", product.ID, maxProductIDLength))
+	}
+	switch {
+	case strings.TrimSpace(product.Name) == "":
+		report("name", "缺少产品名称 info.product.name")
+	case utf8.RuneCountInString(product.Name) > maxProductNameLength:
+		report("name", fmt.Sprintf("产品名称超过 %d 个字符", maxProductNameLength))
+	}
+	enum := func(field, label, value string, allowed []string) {
+		switch {
+		case value == "":
+			report(field, "缺少"+label+" info.product."+field)
+		case !slices.Contains(allowed, value):
+			report(field, fmt.Sprintf("未知的%s %q，可选 %s", label, value, strings.Join(allowed, "、")))
+		}
+	}
+	enum("category", "产品分类", product.Category, ProductCategories)
+	enum("identity", "产品身份", product.Identity, ProductIdentities)
+	enum("assurance", "可信度", product.Assurance, ProductAssurances)
+	list := func(field, label string, values []string, limit int, valid func(string) bool, invalid string) {
+		if len(values) > limit {
+			report(field, fmt.Sprintf("%s有 %d 个，超过上限 %d", label, len(values), limit))
+		}
+		for index, value := range values {
+			item := fmt.Sprintf("%s.%d", field, index)
+			if !valid(value) {
+				report(item, fmt.Sprintf("%s %q %s", label, value, invalid))
+			} else if slices.Index(values, value) != index {
+				report(item, fmt.Sprintf("重复的%s %q", label, value))
+			}
+		}
+	}
+	list("tags", "标签", product.Tags, maxProductTags, productTagPattern.MatchString, "须由小写字母、数字与连字符组成")
+	list("aliases", "别名", product.Aliases, maxProductAliases, func(value string) bool { return strings.TrimSpace(value) != "" }, "不能为空")
+	list("cpe", "CPE", product.CPE, len(product.CPE), ValidCPE, "不是有效的 CPE 2.3 格式化字符串")
+	list("references", "参考链接", product.References, maxProductReferences, ValidReferenceURL, "须为不含账号信息的 http(s) 链接，且不是占位域名")
+	if product.Assurance == "verified" && len(product.References) == 0 {
+		report("references", "可信度为 verified 时至少需要一个官方参考链接")
+	}
+	if utf8.RuneCountInString(product.Description) > maxProductDescriptionLength {
+		report("description", fmt.Sprintf("产品描述超过 %d 个字符", maxProductDescriptionLength))
+	}
+}
+
+// validateServices 校验 info.services；TCP/UDP 规则必须声明识别的服务。
+func validateServices(fg *Finger, add func(code, field, message string)) {
+	network := false
+	for _, rule := range fg.Rules {
+		network = network || rule.Value.Request.Type == TcpType || rule.Value.Request.Type == UdpType
+	}
+	if network && len(fg.Info.Services) == 0 {
+		add(CodeMissingServices, "info.services", "TCP/UDP 规则需要在 info.services 中声明识别的服务")
+	}
+	for index, service := range fg.Info.Services {
+		prefix := fmt.Sprintf("info.services.%d", index)
+		if strings.TrimSpace(service.Protocol) == "" {
+			add(CodeInvalidService, prefix+".protocol", "缺少服务协议 protocol")
+		}
+		if service.Transport != TcpType && service.Transport != UdpType {
+			add(CodeInvalidService, prefix+".transport", fmt.Sprintf("传输层协议 %q 须为 tcp 或 udp", service.Transport))
+		}
+		if len(service.Ports) == 0 {
+			add(CodeInvalidService, prefix+".ports", "缺少端口 ports")
+		}
+		for position, port := range service.Ports {
+			if port < 1 || port > 65535 {
+				add(CodeInvalidService, fmt.Sprintf("%s.ports.%d", prefix, position), fmt.Sprintf("端口 %d 须在 1–65535 之间", port))
+			}
+		}
 	}
 }
 
@@ -128,11 +232,13 @@ func failingRule(message string) string {
 	return ""
 }
 
-// keySchema 描述一层映射允许的键；children 给出键对应的下一层，nil 表示不再检查
-// （用户自定义的键，如 set、output、headers）。each 为 true 表示下一层的每个键都套用 children。
+// keySchema 描述一层允许的键：keys 给出映射的键与对应的下一层；each 非空时映射的每个
+// 键都套用它（子规则名称由用户命名）；items 非空时该层是列表，每一项套用它；freeform
+// 表示不再检查（用户自定义的键，如 set、output、headers、info.metadata）。
 type keySchema struct {
 	keys     map[string]*keySchema
 	each     *keySchema
+	items    *keySchema
 	freeform bool
 }
 
@@ -155,6 +261,10 @@ var fingerSchema = func() *keySchema {
 	rule.keys["request"] = request
 	info := &keySchema{keys: yamlKeys(Info{})}
 	info.keys["classification"] = &keySchema{keys: yamlKeys(Classification{})}
+	info.keys["product"] = &keySchema{keys: yamlKeys(Product{})}
+	info.keys["services"] = &keySchema{items: &keySchema{keys: yamlKeys(Service{})}}
+	// 附加元数据由调用方自定义，引擎只透传，内部的键不检查。
+	info.keys["metadata"] = &keySchema{freeform: true}
 	payloads := &keySchema{keys: yamlKeys(Payloads{})}
 	root := &keySchema{keys: yamlKeys(Finger{})}
 	root.keys["rules"] = &keySchema{each: rule}
@@ -163,9 +273,20 @@ var fingerSchema = func() *keySchema {
 	return root
 }()
 
-// checkKeys 报告映射中不在 schema 内的键。
+// checkKeys 报告映射中不在 schema 内的键；列表项的字段路径以序号表示，如 info.services.0.ports。
 func checkKeys(node *yamlv3.Node, prefix string, schema *keySchema, add func(code, field, message string)) {
-	if node == nil || node.Kind != yamlv3.MappingNode || schema == nil || schema.freeform {
+	if node == nil || schema == nil || schema.freeform {
+		return
+	}
+	if schema.items != nil {
+		if node.Kind == yamlv3.SequenceNode {
+			for index, item := range node.Content {
+				checkKeys(item, prefix+"."+strconv.Itoa(index), schema.items, add)
+			}
+		}
+		return
+	}
+	if node.Kind != yamlv3.MappingNode {
 		return
 	}
 	for i := 0; i+1 < len(node.Content); i += 2 {
@@ -187,7 +308,8 @@ func checkKeys(node *yamlv3.Node, prefix string, schema *keySchema, add func(cod
 	}
 }
 
-// nodePosition 返回字段路径（以 . 分隔）对应值所在的行列；找不到时返回最近的上级。
+// nodePosition 返回字段路径（以 . 分隔，列表项用序号）对应的行列：映射给出键的位置，
+// 列表给出该项的位置；找不到时返回最近的上级。
 func nodePosition(root *yamlv3.Node, field string) (int, int) {
 	node := root
 	if node.Kind == yamlv3.DocumentNode && len(node.Content) == 1 {
@@ -196,6 +318,15 @@ func nodePosition(root *yamlv3.Node, field string) (int, int) {
 	line, column := 0, 0
 	segments := strings.Split(field, ".")
 	for index := 0; index < len(segments); index++ {
+		if node.Kind == yamlv3.SequenceNode {
+			position, err := strconv.Atoi(segments[index])
+			if err != nil || position < 0 || position >= len(node.Content) {
+				break
+			}
+			node = node.Content[position]
+			line, column = node.Line, node.Column
+			continue
+		}
 		if node.Kind != yamlv3.MappingNode {
 			break
 		}

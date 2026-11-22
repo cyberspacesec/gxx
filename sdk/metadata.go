@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"net/url"
 	"slices"
 	"sort"
 	"strings"
@@ -283,12 +282,12 @@ func splitTags(value string) []string {
 	return result
 }
 
+// validReferences 去掉空引用、占位链接与重复项，判定规则与规则校验相同。
 func validReferences(references []string) []string {
 	var result []string
 	for _, reference := range references {
 		reference = strings.TrimSpace(reference)
-		parsed, err := url.Parse(reference)
-		if err != nil || !validReferenceURL(parsed) {
+		if !finger.ValidReferenceURL(reference) {
 			continue
 		}
 		if !slices.Contains(result, reference) {
@@ -296,11 +295,6 @@ func validReferences(references []string) []string {
 		}
 	}
 	return result
-}
-
-func validReferenceURL(parsed *url.URL) bool {
-	host := strings.ToLower(strings.TrimSuffix(parsed.Hostname(), "."))
-	return (parsed.Scheme == "http" || parsed.Scheme == "https") && host != "" && host != "example.com" && !strings.HasSuffix(host, ".example.com") && parsed.User == nil
 }
 
 func productIndex(overrides []ProductDefinition) (map[string]ProductInfo, error) {
@@ -358,54 +352,17 @@ func validateProductDefinitions(products []ProductDefinition) error {
 			rules[id] = true
 		}
 		for _, reference := range product.References {
-			parsed, err := url.Parse(reference)
-			if err != nil || !validReferenceURL(parsed) {
+			if !finger.ValidReferenceURL(reference) {
 				return fmt.Errorf("%w: 产品参考链接无效: %s", ErrInvalidOption, reference)
 			}
 		}
 		for _, cpe := range product.CPE {
-			if !validCPE(cpe) {
+			if !finger.ValidCPE(cpe) {
 				return fmt.Errorf("%w: CPE 格式无效: %s", ErrInvalidOption, cpe)
 			}
 		}
 	}
 	return nil
-}
-
-// CPE 2.3 的属性可包含转义冒号；只按未转义分隔符拆分 11 个属性。
-func validCPE(value string) bool {
-	if !strings.HasPrefix(value, "cpe:2.3:") {
-		return false
-	}
-	attributes := make([]string, 0, 11)
-	start, escaped := len("cpe:2.3:"), false
-	for index := start; index < len(value); index++ {
-		if value[index] < ' ' || value[index] >= 127 {
-			return false
-		}
-		if escaped {
-			escaped = false
-			continue
-		}
-		if value[index] == '\\' {
-			escaped = true
-		} else if value[index] == ':' {
-			attributes = append(attributes, value[start:index])
-			start = index + 1
-		} else if value[index] <= ' ' || value[index] >= 127 {
-			return false
-		}
-	}
-	attributes = append(attributes, value[start:])
-	if escaped || len(attributes) != 11 || (attributes[0] != "a" && attributes[0] != "h" && attributes[0] != "o" && attributes[0] != "*" && attributes[0] != "-") {
-		return false
-	}
-	for _, attribute := range attributes {
-		if attribute == "" {
-			return false
-		}
-	}
-	return true
 }
 
 func convertSubRuleMatches(matches []runner.SubRuleMatch) []SubRuleMatch {

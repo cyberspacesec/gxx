@@ -113,9 +113,16 @@ type Info struct {
 	Tags             string         `yaml:"tags"`      // 标签
 	Classification   Classification `yaml:"classification"`
 	Created          string         `yaml:"created"` // create time
+	// Product 是规则声明的产品信息，未声明时为 nil；调用方自有规则可以不声明。
+	Product *Product `yaml:"product"`
+	// Services 是 TCP/UDP 规则识别的服务；HTTP 规则可以省略。
+	Services []Service `yaml:"services"`
+	// Metadata 是任意附加信息，引擎只透传，不参与匹配。
+	Metadata map[string]any `yaml:"metadata"`
 }
 
-// UnmarshalYAML 区分未填写 verified 与明确的 false，保留原始声明。
+// UnmarshalYAML 区分未填写 verified 与明确的 false，保留原始声明；附加元数据中的嵌套
+// 映射统一为 map[string]any。
 func (i *Info) UnmarshalYAML(unmarshal func(any) error) error {
 	type plainInfo Info
 	var value plainInfo
@@ -130,6 +137,9 @@ func (i *Info) UnmarshalYAML(unmarshal func(any) error) error {
 	}
 	*i = Info(value)
 	i.VerifiedDeclared = declaration.Verified != nil
+	if i.Metadata != nil {
+		i.Metadata = normalizeMetadata(i.Metadata).(map[string]any)
+	}
 	return nil
 }
 

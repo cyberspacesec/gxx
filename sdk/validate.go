@@ -34,10 +34,11 @@ func WithRulePolicy(policy RulePolicy) Option {
 }
 
 // Diagnostic 是规则校验发现的一处问题。Severity 为 "error" 或 "warning"；Line、Column 从 1
-// 开始，无法定位时为 0；Field 是字段路径。Code 取值：yaml（无法解析，含不支持的请求类型）、
-// unknown-key、missing-id、missing-name、missing-rules、missing-expression、
-// expression-compile，以及规则策略的 policy-type、policy-raw、policy-reverse、
-// policy-sleep、policy-sub-rules。
+// 开始，无法定位时为 0；Field 是字段路径，列表项用序号表示（如 info.services.0.ports）。
+// Code 取值：yaml（无法解析，含不支持的请求类型）、unknown-key、missing-id、missing-name、
+// missing-rules、missing-expression、expression-compile、invalid-product（产品声明缺少
+// 必填项或取值不合规）、missing-services（TCP/UDP 规则没有声明服务）、invalid-service，
+// 以及规则策略的 policy-type、policy-raw、policy-reverse、policy-sleep、policy-sub-rules。
 type Diagnostic struct {
 	Code     string `json:"code"`
 	Field    string `json:"field,omitempty"`
@@ -48,7 +49,8 @@ type Diagnostic struct {
 }
 
 // ValidateOptions 是 ValidateRule 的选项。Strict 为 true 时规范性问题（未知键、缺少
-// 必填信息、表达式无法编译）报告为 error，否则为 warning；Policy 与 WithRulePolicy 相同。
+// 必填信息、产品与服务声明不合规、表达式无法编译）报告为 error，否则为 warning；
+// Policy 与 WithRulePolicy 相同。
 type ValidateOptions struct {
 	Strict bool
 	Policy RulePolicy

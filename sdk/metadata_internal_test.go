@@ -4,17 +4,7 @@ import (
 	"testing"
 )
 
-func TestProductCPEAndReferencesValidation(t *testing.T) {
-	for _, cpe := range []string{`cpe:2.3:a:apache:http_server:*:*:*:*:*:*:*:*`, `cpe:2.3:a:vendor:product\:name:1.0:*:*:*:*:*:*:*`} {
-		if !validCPE(cpe) {
-			t.Fatalf("合法 CPE 结构被拒绝: %s", cpe)
-		}
-	}
-	for _, cpe := range []string{`cpe:2.3:a:vendor:product:*`, `cpe:2.3:x:vendor:product:*:*:*:*:*:*:*:*`, `cpe:2.3:a:vendor:product:*:*:*:*:*:*:*:`, `cpe:2.3:a:vendor:product:*:*:*:*:*:*:*:\`} {
-		if validCPE(cpe) {
-			t.Fatalf("非法 CPE 结构被接受: %s", cpe)
-		}
-	}
+func TestProductReferencesValidation(t *testing.T) {
 	if len(validReferences([]string{"https://EXAMPLE.COM", "https://test.example.com.", "", "https://user:pass@example.org/", "https://httpd.apache.org/", "https://httpd.apache.org/"})) != 1 {
 		t.Fatal("无效引用或占位链接进入结果")
 	}
