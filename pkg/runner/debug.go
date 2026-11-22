@@ -28,7 +28,8 @@ type RuleDebug struct {
 	Match      *FingerMatch
 	SubRules   []SubRuleDebug
 	Evaluation RuleEvaluation
-	Result     *TargetResult
+	// Result 是只执行这条规则的扫描结果（入口跳转链、标题、证书等与普通扫描相同）。
+	Result *TargetResult
 }
 
 // ruleDebug 是一次评估（一页）的子规则记录。

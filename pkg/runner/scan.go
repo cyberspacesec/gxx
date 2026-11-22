@@ -86,7 +86,8 @@ func (r *Runner) scanTarget(ctx context.Context, target string, opts ScanOptions
 	// 引擎级与扫描级策略合并后放入 ctx，TCP、UDP 与 Raw 请求同样读取它。
 	ctx = r.httpClient.WithPolicy(ctx, opts.Policy)
 	state.labeled = state.recorder != nil || state.tracing() || r.httpClient.PolicyFor(ctx).CheckTarget != nil
-	if !state.labeled && !state.tracing() && state.recorder == nil {
+	if !state.labeled {
+		// 普通扫描没有任何附加观测，规则执行走原有路径。
 		state = nil
 	}
 
@@ -581,7 +582,9 @@ func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, t
 				ruleMatched = rb
 				customLib.WriteRuleFunctionsROptions(ruleCopy.Key, rb)
 				if sub != nil {
-					sub.Result = &rb
+					// 只在调试时分配结果副本，普通扫描中 rb 不逃逸到堆上。
+					value := rb
+					sub.Result = &value
 				}
 			} else {
 				r.log.Debug("规则 %s CEL结果非布尔值（%T）", ruleCopy.Key, result.Value())

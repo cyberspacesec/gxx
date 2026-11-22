@@ -19,6 +19,8 @@ import (
 // ResponseBody 是其中前 MaxBody 字节；BodyTruncated 为 true 表示 ResponseBody 短于
 // BodyBytes，或正文达到引擎的读取上限、没有读到结尾。
 //
+// Latency 是从发出请求到正文关闭（或出错）的耗时，Cached 记录为 0。
+//
 // 记录中的切片与映射只读，多个记录可能共用同一份数据；回调需要保留时自行复制。
 type Exchange struct {
 	Sequence            int
