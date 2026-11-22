@@ -11,6 +11,7 @@ __pycache__
 .venv
 ./main
 gxx
+*.test
 build/
 .DS_Store
 dist/
