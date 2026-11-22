@@ -51,6 +51,7 @@ func (r *Runner) getBaseInfo(ctx context.Context, target string, timeout time.Du
 		return nil, err
 	}
 	base.Certs = finger.GetCertInfos(base.Response)
+	base.Resources = r.fetchResources(ctx, last.url, optionsFor(base.origin, final.Request.URL, resourceOptions))
 	base.Server = finger.GetServerInfoFromResponse(final)
 	base.ICP = finger.ExtractICPRecordFromBody(last.body)
 	if wapp, err := wappalyzer.NewWappalyzer(); err == nil {

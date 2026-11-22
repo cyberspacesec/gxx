@@ -45,9 +45,11 @@ type BaseInfoResponse struct {
 	HeaderOrder []string
 	TLS         *network.TLSInfo
 	// Icon 是最后一页图标的证据，开启 IconEvidence 时记录。
-	Icon   *finger.IconEvidence
-	pages  []*scanPage
-	origin *url.URL // 入口所在的资产
+	Icon *finger.IconEvidence
+	// Resources 是最后一页所在资产的附属资源，开启 Resources 时读取。
+	Resources []Resource
+	pages     []*scanPage
+	origin    *url.URL // 入口所在的资产
 }
 
 // Redirect 入口跳转链上的一跳。Followed 为 false 表示页面里识别出的跳转指向其他资产，没有访问。
@@ -90,6 +92,7 @@ type TargetResult struct {
 	HeaderOrder  []string
 	TLS          *network.TLSInfo
 	Icon         *finger.IconEvidence
+	Resources    []Resource
 }
 
 // FingerMatch 单条指纹匹配结果。
@@ -178,6 +181,8 @@ type ScanConfig struct {
 	IconEvidenceData int
 	// JARM 为 true 时为 HTTPS 目标计算 JARM 指纹（另发 10 个 TLS 探测）。
 	JARM bool
+	// Resources 选择要读取的附属资源，默认全关。
+	Resources ResourceOptions
 }
 
 // ScanOptions 是单次扫描的附加配置，零值与普通扫描相同。

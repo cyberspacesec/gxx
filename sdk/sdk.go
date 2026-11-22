@@ -164,6 +164,8 @@ type TargetResult struct {
 	TLS *TLSInfo `json:"tls,omitempty"`
 	// Icon 是最终页面图标的证据，WithIconEvidence 开启且页面有图标时非空。
 	Icon *IconEvidence `json:"icon,omitempty"`
+	// Resources 是最终页面所在资产的附属资源（robots.txt、sitemap.xml），WithResources 开启时读取。
+	Resources []Resource `json:"resources,omitempty"`
 	// Error 由调用方在目标扫描失败时填写，用于把失败原因随结果一起输出；
 	// Scan 成功返回的结果中始终为空。
 	Error string `json:"error,omitempty"`
@@ -181,10 +183,24 @@ type BaseInfo struct {
 	TechStack  *TechStack  `json:"tech_stack,omitempty"`
 	ICP        string      `json:"icp,omitempty"`
 	Certs      []CertInfo  `json:"certs,omitempty"`
-	// HeaderOrder、TLS 与 Icon 的含义与 TargetResult 相同。
+	// HeaderOrder、TLS、Icon 与 Resources 的含义与 TargetResult 相同。
 	HeaderOrder []string      `json:"header_order,omitempty"`
 	TLS         *TLSInfo      `json:"tls,omitempty"`
 	Icon        *IconEvidence `json:"icon,omitempty"`
+	Resources   []Resource    `json:"resources,omitempty"`
+}
+
+// Resource 是一个附属资源。Kind 为 "robots" 或 "sitemap"；URL 是跟随同站跳转后的地址。
+// Body 是正文的前 MaxBytes 字节；BodyBytes 与 SHA256 覆盖实际读取的正文（受 WithBodyLimit
+// 约束）；Truncated 表示 Body 短于实际正文，或正文超过读取上限。请求失败的资源不出现。
+type Resource struct {
+	Kind       string `json:"kind"`
+	URL        string `json:"url"`
+	StatusCode int    `json:"status_code"`
+	Body       []byte `json:"body,omitempty"`
+	BodyBytes  int64  `json:"body_bytes"`
+	SHA256     string `json:"sha256"`
+	Truncated  bool   `json:"truncated,omitempty"`
 }
 
 // IconEvidence 是最终页面图标的证据，来自计算 icon_hash 的同一次真实请求，不另发请求。

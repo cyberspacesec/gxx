@@ -203,6 +203,7 @@ func (r *Runner) applyBaseInfo(result *TargetResult, base *BaseInfoResponse) {
 	result.HeaderOrder = base.HeaderOrder
 	result.TLS = base.TLS
 	result.Icon = base.Icon
+	result.Resources = base.Resources
 }
 
 // executeFingerprintMatching 并发评估当前指纹库的所有规则。

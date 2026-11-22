@@ -226,6 +226,34 @@ func (c *HTTPClient) GetResource(ctx context.Context, rawURL string, options Opt
 	return resourceClient.Do(req)
 }
 
+// GetSiteResource 请求页面所在站点的附属资源（robots.txt、sitemap.xml）。只跟随指向
+// 同一站点的 30x（最多 maxRedirects 跳），并遵循网络策略的 Redirect；离开请求的源之后
+// 不再携带自定义请求头。
+func (c *HTTPClient) GetSiteResource(ctx context.Context, rawURL string, options OptionsRequest) (*http.Response, error) {
+	setDefaults(&options)
+	ctx = withKind(WithCookieJar(ctx), RequestResource)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
+	if err != nil {
+		return nil, err
+	}
+	configureHeaders(req, options)
+	client, err := c.configureClient(ctx, options)
+	if err != nil {
+		return nil, err
+	}
+	resourceClient := *client
+	resourceClient.CheckRedirect = func(next *http.Request, via []*http.Request) error {
+		if len(via) >= maxRedirects || !SameSite(req.URL, next.URL) || !c.RedirectAllowed(next.Context(), via[len(via)-1].URL, next.URL) {
+			return http.ErrUseLastResponse
+		}
+		if !SameOrigin(req.URL, next.URL) {
+			KeepPortableHeaders(next.Header)
+		}
+		return nil
+	}
+	return resourceClient.Do(req)
+}
+
 // ResourceCookies 返回 ctx 会话中将发往 rawURL 的 Cookie 快照，供内容缓存隔离。
 func (c *HTTPClient) ResourceCookies(ctx context.Context, rawURL string) []*http.Cookie {
 	u, err := url.Parse(rawURL)

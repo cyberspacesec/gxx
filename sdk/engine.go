@@ -106,6 +106,7 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		IconEvidence:         cfg.iconEvidence,
 		IconEvidenceData:     cfg.iconEvidenceData,
 		JARM:                 cfg.jarm,
+		Resources:            cfg.resources,
 	}
 	if !cfg.enableRateLimit {
 		scanCfg.RateLimitQPS = 0
@@ -434,6 +435,7 @@ func (e *Engine) GetBaseInfo(ctx context.Context, target string) (*BaseInfo, err
 		HeaderOrder: base.HeaderOrder,
 		TLS:         convertTLS(base.TLS),
 		Icon:        convertIcon(base.Icon),
+		Resources:   convertResources(base.Resources),
 	}
 	if base.Server != nil {
 		info.Server = convertServerInfo(base.Server)
@@ -498,6 +500,7 @@ func (e *Engine) convertTargetResult(r *runner.TargetResult) *TargetResult {
 		HeaderOrder: r.HeaderOrder,
 		TLS:         convertTLS(r.TLS),
 		Icon:        convertIcon(r.Icon),
+		Resources:   convertResources(r.Resources),
 	}
 	if r.LastResponse != nil {
 		tr.Headers = string(r.LastResponse.RawHeader)
@@ -572,6 +575,17 @@ func convertIcon(icon *finger.IconEvidence) *IconEvidence {
 		return nil
 	}
 	return &IconEvidence{URL: icon.URL, ContentType: icon.ContentType, Bytes: icon.Bytes, SHA256: icon.SHA256, MMH3: icon.MMH3, Data: icon.Data, TooLarge: icon.TooLarge, CrossOrigin: icon.CrossOrigin}
+}
+
+func convertResources(resources []runner.Resource) []Resource {
+	if len(resources) == 0 {
+		return nil
+	}
+	out := make([]Resource, len(resources))
+	for i, resource := range resources {
+		out[i] = Resource(resource)
+	}
+	return out
 }
 
 func convertRedirects(redirects []runner.Redirect) []Redirect {

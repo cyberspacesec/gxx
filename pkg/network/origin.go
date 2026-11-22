@@ -2,10 +2,13 @@ package network
 
 import (
 	"context"
+	"net"
 	"net/http/httptrace"
 	"net/url"
 	"strings"
 	"sync/atomic"
+
+	"golang.org/x/net/publicsuffix"
 )
 
 // 一个资产由协议、主机和端口共同确定：http://a.com、https://a.com 与
@@ -39,6 +42,25 @@ func Origin(u *url.URL) string {
 func SameOrigin(a, b *url.URL) bool {
 	origin := Origin(a)
 	return origin != "" && origin == Origin(b)
+}
+
+// SameSite 报告两个 http/https 地址是否属于同一站点：主机相同，或两者都是域名且
+// 可注册域（eTLD+1）相同。站点不区分协议与端口，用于附属资源的跳转判断。
+func SameSite(a, b *url.URL) bool {
+	if a == nil || b == nil || Origin(a) == "" || Origin(b) == "" {
+		return false
+	}
+	hostA := strings.ToLower(strings.TrimSuffix(a.Hostname(), "."))
+	hostB := strings.ToLower(strings.TrimSuffix(b.Hostname(), "."))
+	if hostA == hostB {
+		return true
+	}
+	if net.ParseIP(hostA) != nil || net.ParseIP(hostB) != nil {
+		return false
+	}
+	siteA, errA := publicsuffix.EffectiveTLDPlusOne(hostA)
+	siteB, errB := publicsuffix.EffectiveTLDPlusOne(hostB)
+	return errA == nil && errB == nil && siteA == siteB
 }
 
 // TargetCandidates 返回目标可能对应的完整地址，按尝试顺序排列。

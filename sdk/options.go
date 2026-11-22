@@ -7,6 +7,7 @@ package sdk
 
 import (
 	"fmt"
+	"github.com/cyberspacesec/gxx/pkg/runner"
 	"github.com/cyberspacesec/gxx/types"
 	"io/fs"
 	"log/slog"
@@ -46,6 +47,7 @@ type engineConfig struct {
 	iconEvidence        bool
 	iconEvidenceData    int
 	jarm                bool
+	resources           ResourceOptions
 
 	// 监控
 	enableMonitor    bool
@@ -333,6 +335,23 @@ func WithIconEvidence(maxData int) Option {
 func WithJARM(enable bool) Option {
 	return func(c *engineConfig) error {
 		c.jarm = enable
+		return nil
+	}
+}
+
+// ResourceOptions 选择要读取的附属资源：Robots 读取 /robots.txt，Sitemap 读取
+// /sitemap.xml；MaxBytes 是每个资源保留的正文上限，0 表示 64 KiB。
+type ResourceOptions = runner.ResourceOptions
+
+// WithResources 读取最终页面所在资产的附属资源，写入 TargetResult.Resources，默认全关。
+// 只请求与最终页面同一资产（协议、主机、端口）的地址，只跟随指向同一站点的跳转，
+// 请求经过网络策略与限速，交换观察器记为 resource 记录。
+func WithResources(opts ResourceOptions) Option {
+	return func(c *engineConfig) error {
+		if opts.MaxBytes < 0 {
+			return fmt.Errorf("%w: resource max bytes must be >= 0, got %d", ErrInvalidOption, opts.MaxBytes)
+		}
+		c.resources = opts
 		return nil
 	}
 }
