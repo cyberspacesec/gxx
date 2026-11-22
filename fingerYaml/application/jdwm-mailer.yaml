@@ -1,10 +1,20 @@
-id: web-mailer
+id: jdwm-mailer
 info:
   name: mailer
   author: archer
   verified: false
   description: 检测到mailer系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jdwm.mailer
+    name: jdwm Mailer
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - mailer
 rules:
   r0:
     request:

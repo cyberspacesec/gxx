@@ -1,10 +1,16 @@
-id: web-muhttpd
+id: muhttpd
 info:
   name: muhttpd
   author: archer
   verified: true
   description: 检测到muhttpd系统或组件的特征
   created: 2025/04/24
+  product:
+    id: muhttpd.muhttpd
+    name: muhttpd
+    category: web-server
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

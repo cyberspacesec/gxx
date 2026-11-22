@@ -1,10 +1,20 @@
-id: web-jsf
+id: jakarta-faces
 info:
   name: jsf
   author: archer
   verified: false
   description: 检测到jsf系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jakarta.faces
+    name: JavaServer Faces (Jakarta Faces)
+    category: framework
+    identity: signal
+    assurance: inferred
+    tags:
+      - dev-framework
+    aliases:
+      - jsf
 rules:
   r0:
     request:

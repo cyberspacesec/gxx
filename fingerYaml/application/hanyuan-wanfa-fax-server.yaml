@@ -1,10 +1,18 @@
-id: web-hanyuan-wanfa-fax-server
+id: hanyuan-wanfa-fax-server
 info:
   name: hanyuan-wanfa-fax-server
   author: archer
   verified: false
   description: 检测到hanyuan-wanfa-fax-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hanyuan.wanfa-fax-server
+    name: 万发传真服务器
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - hanyuan-wanfa-fax-server
 rules:
   r0:
     request:

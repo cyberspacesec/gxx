@@ -1,10 +1,17 @@
-id: web-remobjects-dxsock
+id: remobjects-remobjects-sdk
 info:
   name: remobjects-dxsock
   author: archer
   verified: false
   description: 检测到remobjects-dxsock系统或组件的特征
   created: 2025/04/24
+  product:
+    id: remobjects.remobjects-sdk
+    name: RemObjects SDK
+    vendor: RemObjects Software
+    category: framework
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

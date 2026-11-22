@@ -1,10 +1,18 @@
-id: web-nmap-log
+id: nmap
 info:
   name: nmap-log
   author: archer
   verified: false
   description: 检测到nmap-log系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nmap.nmap
+    name: Nmap
+    category: security
+    identity: signal
+    assurance: inferred
+    tags:
+      - exposure
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-oscshop
+id: oscshop
 info:
   name: oscshop
   author: archer
   verified: false
   description: 检测到oscshop系统或组件的特征
   created: 2025/04/24
+  product:
+    id: oscshop.oscshop
+    name: OSCshop
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

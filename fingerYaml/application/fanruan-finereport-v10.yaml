@@ -1,10 +1,23 @@
-id: web-帆软V1011
+id: fanruan-finereport-v10
 info:
   name: 帆软V10/11
   author: archer
   verified: false
   description: 检测到帆软V10/11系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fanruan.finereport
+    name: FineReport
+    vendor: 帆软
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - bi
+    aliases:
+      - 帆软报表
+    references:
+      - https://www.fanruan.com/
 rules:
   r0:
     request:

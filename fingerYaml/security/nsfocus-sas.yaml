@@ -1,10 +1,22 @@
-id: web-nsfocus-堡垒机
+id: nsfocus-sas
 info:
   name: nsfocus-堡垒机
   author: archer
   verified: false
   description: 检测到nsfocus-堡垒机系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nsfocus.sas
+    name: 绿盟运维安全管理系统
+    vendor: 绿盟科技
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - bastion
+    aliases:
+      - 绿盟堡垒机
+      - SAS-H
 rules:
   r0:
     request:

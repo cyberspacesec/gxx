@@ -1,10 +1,20 @@
-id: web-h3c-cas
+id: h3c-cas
 info:
   name: h3c-cas
   author: archer
   verified: false
   description: 检测到h3c-cas系统或组件的特征
   created: 2025/04/24
+  product:
+    id: h3c.cas
+    name: H3C CAS 云计算管理平台
+    vendor: 新华三
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+      - cloud
 rules:
   r0:
     request:

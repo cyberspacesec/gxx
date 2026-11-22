@@ -27,8 +27,9 @@ type FingerStore struct {
 	plans           []fingerExecutionPlan
 	log             logger.Sink
 	captureEvidence bool
-	// policy 在每次加载时检查；违反时保留原规则集。
+	// policy 与 check 在每次加载时检查；失败时保留原规则集。
 	policy finger.RulePolicy
+	check  func([]*finger.Finger) error
 }
 
 // 执行清单与只读规则快照同时发布，按连续索引取得程序及调度条件。
@@ -157,10 +158,15 @@ func (fs *FingerStore) Load(options types.YamlFingerType) error {
 	return fs.commit(next)
 }
 
-// commit 检查规则策略后整体替换规则集；调用方持有写锁。
+// commit 检查规则策略与规则集后整体替换规则集；调用方持有写锁。
 func (fs *FingerStore) commit(next []*finger.Finger) error {
 	if err := finger.CheckLibraryPolicy(next, fs.policy); err != nil {
 		return err
+	}
+	if fs.check != nil {
+		if err := fs.check(next); err != nil {
+			return err
+		}
 	}
 	fs.fingers = next
 	fs.prepare()

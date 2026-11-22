@@ -1,10 +1,23 @@
-id: web-silverstripe
+id: silverstripe
 info:
   name: silverstripe
   author: archer
   verified: false
   description: 检测到silverstripe系统或组件的特征
   created: 2025/04/24
+  product:
+    id: silverstripe.silverstripe
+    name: Silverstripe CMS
+    vendor: Silverstripe
+    category: cms
+    identity: product
+    assurance: verified
+    tags:
+      - cms
+    aliases:
+      - SilverStripe
+    references:
+      - https://www.silverstripe.org/
 rules:
   r0:
     request:

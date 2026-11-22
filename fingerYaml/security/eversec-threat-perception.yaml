@@ -1,10 +1,19 @@
-id: web-eversec-企业安全威胁感知系统
+id: eversec-threat-perception
 info:
   name: eversec-企业安全威胁感知系统
   author: archer
   verified: false
   description: 检测到eversec-企业安全威胁感知系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: eversec.threat-perception
+    name: 恒安嘉新企业安全威胁感知系统
+    vendor: 恒安嘉新
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - ids
 rules:
   r0:
     request:

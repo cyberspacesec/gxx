@@ -28,21 +28,35 @@ type RuleSource struct {
 	Version string `json:"version,omitempty"`
 }
 
-// ProductInfo 是独立产品目录中的信息；未知厂商、CPE 和分类不从名称自动推断。
+// ProductInfo 是规则命中的产品，来自规则的 info.product 声明，或 WithProductCatalog 对该规则
+// 的覆盖；未知厂商、CPE 和分类不从名称自动推断。Identity 为 product 表示命中即确认是这个
+// 产品，signal 表示只是技术线索；Assurance 为 verified 表示厂商与产品已确认且有官方参考
+// 链接，inferred 表示由规则名称与特征推断。
 type ProductInfo struct {
 	ID          string   `json:"id"`
 	Name        string   `json:"name"`
 	Vendor      string   `json:"vendor,omitempty"`
 	Category    string   `json:"category,omitempty"`
+	Identity    string   `json:"identity,omitempty"`
+	Assurance   string   `json:"assurance,omitempty"`
 	Tags        []string `json:"tags,omitempty"`
 	Aliases     []string `json:"aliases,omitempty"`
 	CPE         []string `json:"cpe,omitempty"`
 	References  []string `json:"references,omitempty"`
 	Description string   `json:"description,omitempty"`
 }
+
+// ProductDefinition 是产品目录的一项：产品信息与声明它的规则标识。
 type ProductDefinition struct {
 	ProductInfo
 	RuleIDs []string `json:"rule_ids"`
+}
+
+// Service 是 TCP/UDP 规则识别的服务，来自规则的 info.services。
+type Service struct {
+	Protocol  string `json:"protocol"`
+	Transport string `json:"transport"`
+	Ports     []int  `json:"ports,omitempty"`
 }
 
 // ValidationInfo 描述测试方法和样本范围，不把有限样本测试当作实际准确率。
@@ -104,39 +118,49 @@ type ProductMatch struct {
 	RuleIDs         []string `json:"rule_ids"`
 }
 
+// 内置产品目录由 fingerYaml/ 的产品声明生成；规则或声明变化后重新生成，测试断言二者一致。
+//
+//go:generate go run ../internal/catalog/gen -rules ../fingerYaml -out catalog.json
 //go:embed catalog.json
 var catalogData []byte
+
+// 专项样本记录绑定规则文件的实际 SHA256，由样本测试执行后写入，见 product_integration_test.go。
+//
+//go:embed validations.json
+var validationData []byte
+
 var catalogOnce sync.Once
 var builtinCatalog struct {
-	Products    []ProductDefinition       `json:"products"`
-	Validations map[string]RuleAssessment `json:"validations"`
+	Products    []ProductDefinition
+	Validations []RuleAssessment
 }
 var catalogError error
 
 func loadCatalog() error {
 	catalogOnce.Do(func() {
-		// 目录错误经 productIndex 冒泡到 NewEngine，与同函数内的校验器保持
-		// 同一 sentinel，调用方用 errors.Is(err, ErrInvalidOption) 即可统一判定。
-		if err := json.Unmarshal(catalogData, &builtinCatalog); err != nil {
+		// 目录错误经 NewEngine 冒泡，与同函数内的校验器保持同一 sentinel，
+		// 调用方用 errors.Is(err, ErrInvalidOption) 即可统一判定。
+		var products struct {
+			Products []ProductDefinition `json:"products"`
+		}
+		if err := json.Unmarshal(catalogData, &products); err != nil {
 			catalogError = fmt.Errorf("%w: 解析产品目录失败: %v", ErrInvalidOption, err)
 			return
 		}
+		if err := json.Unmarshal(validationData, &builtinCatalog.Validations); err != nil {
+			catalogError = fmt.Errorf("%w: 解析专项样本记录失败: %v", ErrInvalidOption, err)
+			return
+		}
+		builtinCatalog.Products = products.Products
 		if catalogError = validateProductDefinitions(builtinCatalog.Products); catalogError == nil {
-			assessments := make([]RuleAssessment, 0, len(builtinCatalog.Validations))
-			for id, assessment := range builtinCatalog.Validations {
-				if id != assessment.RuleID {
-					catalogError = fmt.Errorf("%w: 产品目录的测试记录 ID 不一致: %s", ErrInvalidOption, id)
-					return
-				}
-				assessments = append(assessments, assessment)
-			}
-			catalogError = validateAssessments(assessments)
+			catalogError = validateAssessments(builtinCatalog.Validations)
 		}
 	})
 	return catalogError
 }
 
-// ProductCatalog 返回内置产品目录的独立副本，便于系统扩展及导入。
+// ProductCatalog 返回内置产品目录的独立副本，便于系统扩展及导入。目录由内置规则的
+// 产品声明生成，每个产品列出声明它的全部规则标识。
 func ProductCatalog() ([]ProductDefinition, error) {
 	if err := loadCatalog(); err != nil {
 		return nil, err
@@ -176,27 +200,55 @@ func (e *Engine) RuleCatalog(ctx context.Context) ([]RuleMetadata, error) {
 			_, exists := rule.Output["product_version"]
 			versionExtractor = versionExtractor || exists
 		}
-		if current.Info.Product == nil {
-			current.MissingMetadata = append(current.MissingMetadata, "product-catalog")
-		}
-		if current.Info.Vendor == "" {
-			current.MissingMetadata = append(current.MissingMetadata, "vendor")
-		}
-		if len(current.Info.Tags) == 0 {
-			current.MissingMetadata = append(current.MissingMetadata, "tags")
-		}
-		if len(current.Info.References) == 0 {
-			current.MissingMetadata = append(current.MissingMetadata, "references")
-		}
-		if current.Info.Validation.Status == "not-tested" {
-			current.MissingMetadata = append(current.MissingMetadata, "sample-validation")
-		}
-		if !versionExtractor {
-			current.MissingMetadata = append(current.MissingMetadata, "version-extractor")
-		}
+		current.MissingMetadata = missingMetadata(current, versionExtractor)
 		result[index] = current
 	}
 	return result, nil
+}
+
+// MissingMetadata 的取值，按以下顺序列出，表示尚需补充或核实的数据项，不代表规则失效。
+const (
+	MissingProduct          = "product"           // 规则没有产品声明，WithProductCatalog 也没有覆盖
+	MissingVendor           = "vendor"            // 产品没有厂商
+	MissingProductAssurance = "product-assurance" // 产品信息为推断（assurance 不是 verified）
+	MissingTags             = "tags"              // 规则与产品都没有标签
+	MissingReferences       = "references"        // 规则与产品都没有有效参考链接
+	MissingServices         = "services"          // TCP/UDP 规则没有声明识别的服务
+	MissingSampleValidation = "sample-validation" // 没有绑定当前规则内容的专项样本记录
+	MissingVersionExtractor = "version-extractor" // 没有子规则输出 product_version
+)
+
+func missingMetadata(rule RuleMetadata, versionExtractor bool) []string {
+	var missing []string
+	info := rule.Info
+	if info.Product == nil {
+		missing = append(missing, MissingProduct)
+	} else {
+		if info.Product.Vendor == "" {
+			missing = append(missing, MissingVendor)
+		}
+		if info.Product.Assurance != "verified" {
+			missing = append(missing, MissingProductAssurance)
+		}
+	}
+	if len(info.Tags) == 0 {
+		missing = append(missing, MissingTags)
+	}
+	if len(info.References) == 0 {
+		missing = append(missing, MissingReferences)
+	}
+	if (rule.Transport == "tcp" || rule.Transport == "udp" || rule.Transport == "mixed" && slices.ContainsFunc(rule.Detection, func(d DetectionRule) bool {
+		return d.Transport == "tcp" || d.Transport == "udp"
+	})) && len(info.Services) == 0 {
+		missing = append(missing, MissingServices)
+	}
+	if info.Validation.Status == "not-tested" {
+		missing = append(missing, MissingSampleValidation)
+	}
+	if !versionExtractor {
+		missing = append(missing, MissingVersionExtractor)
+	}
+	return missing
 }
 
 func (e *Engine) convertFingerInfo(metadata finger.Metadata) FingerInfo {
@@ -204,7 +256,8 @@ func (e *Engine) convertFingerInfo(metadata finger.Metadata) FingerInfo {
 	result := FingerInfo{ID: metadata.ID, Name: info.Name, Author: info.Author, Severity: info.Severity,
 		Description: info.Description, Tags: splitTags(info.Tags), Created: info.Created,
 		References: validReferences(info.Reference), Source: RuleSource{Path: metadata.Source.Path, SHA256: metadata.Source.SHA256},
-		VerificationStatus: "unknown", Validation: ValidationInfo{Status: "not-tested"}}
+		VerificationStatus: "unknown", Validation: ValidationInfo{Status: "not-tested"},
+		Services: convertServices(info.Services), Metadata: finger.CloneMetadata(info.Metadata)}
 	if info.VerifiedDeclared {
 		verified := info.Verified
 		result.Verified = &verified
@@ -218,8 +271,7 @@ func (e *Engine) convertFingerInfo(metadata finger.Metadata) FingerInfo {
 	} else {
 		result.Source.Version = e.cfg.ruleSourceVersion
 	}
-	if product, exists := e.products[metadata.ID]; exists {
-		product = cloneProduct(product)
+	if product, exists := e.ruleProduct(metadata.ID, info.Product); exists {
 		result.Product, result.Vendor = &product, product.Vendor
 		for _, tag := range product.Tags {
 			if !slices.Contains(result.Tags, tag) {
@@ -297,29 +349,82 @@ func validReferences(references []string) []string {
 	return result
 }
 
-func productIndex(overrides []ProductDefinition) (map[string]ProductInfo, error) {
-	if err := loadCatalog(); err != nil {
-		return nil, err
-	}
-	products := make(map[string]ProductInfo)
-	rules := make(map[string]string)
-	for _, definition := range builtinCatalog.Products {
-		products[definition.ID] = definition.ProductInfo
+// catalogOverrides 把 WithProductCatalog 的目录展开为按规则标识的覆盖；同一规则只能
+// 出现在一个目录项中，由 validateProductDefinitions 保证。
+func catalogOverrides(definitions []ProductDefinition) map[string]ProductInfo {
+	overrides := make(map[string]ProductInfo)
+	for _, definition := range definitions {
 		for _, ruleID := range definition.RuleIDs {
-			rules[ruleID] = definition.ID
+			overrides[ruleID] = cloneProduct(definition.ProductInfo)
 		}
 	}
-	for _, definition := range overrides {
-		products[definition.ID] = cloneProduct(definition.ProductInfo)
-		for _, ruleID := range definition.RuleIDs {
-			rules[ruleID] = definition.ID
+	return overrides
+}
+
+// ruleProduct 返回规则的产品信息：WithProductCatalog 按规则标识的覆盖优先，否则取规则
+// 自带的声明；声明没有产品标识时视为未声明。返回值是独立副本。
+func (e *Engine) ruleProduct(ruleID string, declared *finger.Product) (ProductInfo, bool) {
+	if product, exists := e.productOverrides[ruleID]; exists {
+		return cloneProduct(product), true
+	}
+	if declared == nil || declared.ID == "" {
+		return ProductInfo{}, false
+	}
+	return declaredProduct(*declared), true
+}
+
+// declaredProduct 把规则声明转为产品信息；无效的参考链接与 CPE 不进入结果，与规则引用的处理一致。
+func declaredProduct(declared finger.Product) ProductInfo {
+	product := ProductInfo{ID: declared.ID, Name: declared.Name, Vendor: declared.Vendor, Category: declared.Category,
+		Identity: declared.Identity, Assurance: declared.Assurance, Tags: slices.Clone(declared.Tags),
+		Aliases: slices.Clone(declared.Aliases), References: validReferences(declared.References), Description: declared.Description}
+	for _, cpe := range declared.CPE {
+		if finger.ValidCPE(cpe) {
+			product.CPE = append(product.CPE, cpe)
 		}
 	}
-	index := make(map[string]ProductInfo, len(rules))
-	for ruleID, productID := range rules {
-		index[ruleID] = products[productID]
+	return product
+}
+
+// checkRuleProducts 检查规则集中同一产品标识的有效声明（规则声明叠加目录覆盖后）完全一致，
+// 否则产品归并的结果会取决于命中顺序。返回 *ProductConflictError。
+func checkRuleProducts(fingers []*finger.Finger, overrides map[string]ProductInfo) error {
+	type declaration struct {
+		ruleID  string
+		product finger.Product
 	}
-	return index, nil
+	seen := make(map[string]declaration)
+	for _, fg := range fingers {
+		var product ProductInfo
+		if override, exists := overrides[fg.Id]; exists {
+			product = override
+		} else if fg.Info.Product != nil && fg.Info.Product.ID != "" {
+			product = declaredProduct(*fg.Info.Product)
+		} else {
+			continue
+		}
+		current := finger.Product(product)
+		first, exists := seen[product.ID]
+		if !exists {
+			seen[product.ID] = declaration{fg.Id, current}
+			continue
+		}
+		if field := first.product.DifferentField(current); field != "" {
+			return &ProductConflictError{ProductID: product.ID, RuleIDs: [2]string{first.ruleID, fg.Id}, Field: field}
+		}
+	}
+	return nil
+}
+
+func convertServices(services []finger.Service) []Service {
+	if len(services) == 0 {
+		return nil
+	}
+	result := make([]Service, len(services))
+	for index, service := range services {
+		result[index] = Service{Protocol: service.Protocol, Transport: service.Transport, Ports: slices.Clone(service.Ports)}
+	}
+	return result
 }
 
 func cloneProduct(product ProductInfo) ProductInfo {
@@ -336,7 +441,7 @@ func cloneProductDefinitions(products []ProductDefinition) []ProductDefinition {
 	return result
 }
 func validateProductDefinitions(products []ProductDefinition) error {
-	ids, rules := make(map[string]bool), make(map[string]bool)
+	ids, rules := make(map[string]bool), make(map[string]string)
 	for _, product := range products {
 		if strings.TrimSpace(product.ID) == "" || strings.TrimSpace(product.Name) == "" || len(product.RuleIDs) == 0 {
 			return fmt.Errorf("%w: 产品目录需要 ID、名称和规则 ID", ErrInvalidOption)
@@ -346,10 +451,21 @@ func validateProductDefinitions(products []ProductDefinition) error {
 		}
 		ids[product.ID] = true
 		for _, id := range product.RuleIDs {
-			if id == "" || rules[id] {
-				return fmt.Errorf("%w: 产品规则 ID 为空或重复: %s", ErrInvalidOption, id)
+			if id == "" {
+				return fmt.Errorf("%w: 产品 %s 的规则 ID 为空", ErrInvalidOption, product.ID)
 			}
-			rules[id] = true
+			if owner, exists := rules[id]; exists {
+				return fmt.Errorf("%w: 规则 %s 同时由产品 %s 与 %s 声明", ErrInvalidOption, id, owner, product.ID)
+			}
+			rules[id] = product.ID
+		}
+		for field, value := range map[string]struct {
+			value   string
+			allowed []string
+		}{"category": {product.Category, finger.ProductCategories}, "identity": {product.Identity, finger.ProductIdentities}, "assurance": {product.Assurance, finger.ProductAssurances}} {
+			if value.value != "" && !slices.Contains(value.allowed, value.value) {
+				return fmt.Errorf("%w: 产品 %s 的 %s 取值无效: %s", ErrInvalidOption, product.ID, field, value.value)
+			}
 		}
 		for _, reference := range product.References {
 			if !finger.ValidReferenceURL(reference) {

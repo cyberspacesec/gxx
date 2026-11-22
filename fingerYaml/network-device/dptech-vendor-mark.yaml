@@ -1,10 +1,20 @@
-id: web-迪普Web网管终端
+id: dptech-vendor-mark
 info:
   name: 迪普Web网管终端
   author: archer
   verified: false
   description: 检测到迪普Web网管终端系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dptech.vendor-mark
+    name: 迪普科技厂商标识
+    vendor: 迪普科技
+    category: network-device
+    identity: signal
+    assurance: inferred
+    aliases:
+      - 迪普 Web 网管
+      - 迪普Web网管终端
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: web-apache-storm
+id: apache-storm
 info:
   tags: middleware
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 用于实时数据流处理的分布式计算系统。
   created: 2025/04/24
+  product:
+    id: apache.storm
+    name: Apache Storm
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+      - big-data
+    aliases:
+      - apache-storm
+    references:
+      - https://storm.apache.org/
+    description: 用于实时数据流处理的分布式计算系统。
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-dtcloud
+id: dtcloud
 info:
   name: dtcloud
   author: archer
   verified: true
   description: 检测到dtcloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dtcloud.dtcloud
+    name: DTCloud
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - cloud
 rules:
   r0:
     request:

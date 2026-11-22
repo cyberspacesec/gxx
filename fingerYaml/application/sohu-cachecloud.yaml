@@ -1,10 +1,21 @@
-id: web-cachecloud
+id: sohu-cachecloud
 info:
   name: cachecloud
   author: archer
   verified: false
   description: 检测到cachecloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sohu.cachecloud
+    name: CacheCloud
+    vendor: 搜狐
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - db-admin
+    references:
+      - https://github.com/sohutv/cachecloud
 rules:
   r0:
     request:

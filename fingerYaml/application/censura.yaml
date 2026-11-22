@@ -1,10 +1,18 @@
-id: web-censura
+id: censura
 info:
   name: censura
   author: archer
   verified: false
   description: 检测到censura系统或组件的特征
   created: 2025/04/24
+  product:
+    id: censura.censura
+    name: Censura
+    category: application
+    identity: product
+    assurance: inferred
+    references:
+      - http://www.censura.info/
 rules:
   r0:
     request:

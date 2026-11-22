@@ -1,10 +1,22 @@
-id: web-graylog
+id: graylog
 info:
   name: graylog
   author: archer
   verified: false
   description: 检测到graylog系统或组件的特征
   created: 2025/04/24
+  product:
+    id: graylog.graylog
+    name: Graylog
+    vendor: Graylog
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - siem
+      - monitoring
+    references:
+      - https://graylog.org/
 rules:
   r0:
     request:

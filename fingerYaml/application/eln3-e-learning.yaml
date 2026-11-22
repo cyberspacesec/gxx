@@ -1,10 +1,20 @@
-id: web-e-learning
+id: eln3-e-learning
 info:
   name: e-learning
   author: archer
   verified: false
   description: 检测到e-learning系统或组件的特征
   created: 2025/04/24
+  product:
+    id: eln3.e-learning
+    name: e-Learning 学习平台
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
+    aliases:
+      - e-learning
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-rainmail
+id: carizen-rainmail-v2
 info:
   name: rainmail
   author: archer
   verified: false
   description: 检测到rainmail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: carizen.rainmail
+    name: RainMail Intranet
+    vendor: Carizen
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

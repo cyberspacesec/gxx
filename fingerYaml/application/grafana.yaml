@@ -1,4 +1,4 @@
-id: web-grafana
+id: grafana
 info:
   tags: application
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 用于查询、可视化与监控指标和日志的应用。
   created: 2025/04/24
+  product:
+    id: grafana.grafana
+    name: Grafana
+    vendor: Grafana Labs
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - monitoring
+    aliases:
+      - grafana
+    references:
+      - https://grafana.com/oss/grafana/
+    description: 用于查询、可视化与监控指标和日志的应用。
 rules:
   r0:
     request:

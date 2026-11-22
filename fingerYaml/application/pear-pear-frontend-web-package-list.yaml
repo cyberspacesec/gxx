@@ -1,10 +1,22 @@
-id: web-pear
+id: pear-pear-frontend-web-package-list
 info:
   name: pear
   author: archer
   verified: false
   description: 检测到pear系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pear.pear-frontend-web
+    name: PEAR_Frontend_Web
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - language
+    aliases:
+      - PEAR
+      - PEAR Frontend Web
+      - PEAR Web Frontend
 rules:
   r0:
     request:

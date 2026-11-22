@@ -1,10 +1,18 @@
-id: web-协达oa
+id: xieda-oa
 info:
   name: 协达oa
   author: archer
   verified: false
   description: 检测到协达oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xieda.oa
+    name: 协达OA
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

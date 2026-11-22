@@ -1,10 +1,19 @@
-id: web-sx-shop
+id: sourceworx-sx-shop
 info:
   name: sx-shop
   author: archer
   verified: false
   description: 检测到sx-shop系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sourceworx.sx-shop
+    name: sx-shop
+    vendor: Source Worx
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

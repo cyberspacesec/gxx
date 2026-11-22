@@ -1,10 +1,18 @@
-id: web-kindeditor
+id: kindeditor
 info:
   name: kindeditor
   author: archer
   verified: false
   description: 检测到kindeditor系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kindeditor.kindeditor
+    name: KindEditor
+    category: library
+    identity: signal
+    assurance: inferred
+    tags:
+      - js-library
 rules:
   r0:
     request:

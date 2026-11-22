@@ -1,10 +1,17 @@
-id: web-tuling-procurement-strategy-management-system
+id: tuling-procurement-strategy-management
 info:
   name: tuling-procurement-strategy-management-system
   author: archer
   verified: false
   description: 检测到tuling-procurement-strategy-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tuling.procurement-strategy-management
+    name: 采购策略管理系统
+    vendor: 长沙图灵科技
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

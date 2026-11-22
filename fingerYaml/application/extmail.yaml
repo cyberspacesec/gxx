@@ -1,10 +1,18 @@
-id: web-extmail
+id: extmail
 info:
   name: extmail
   author: archer
   verified: false
   description: 检测到extmail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: extmail.extmail
+    name: ExtMail
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

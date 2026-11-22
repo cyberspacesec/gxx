@@ -1,10 +1,16 @@
-id: web-imgallery
+id: imgallery
 info:
   name: imgallery
   author: archer
   verified: false
   description: 检测到imgallery系统或组件的特征
   created: 2025/04/24
+  product:
+    id: imgallery.imgallery
+    name: imGallery
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

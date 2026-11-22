@@ -1,10 +1,19 @@
-id: web-任子行-ssl-vpn
+id: surfilter-ssl-vpn
 info:
   name: 任子行-ssl-vpn
   author: archer
   verified: false
   description: 检测到任子行-ssl-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: surfilter.ssl-vpn
+    name: 任子行 SSL VPN
+    vendor: 任子行
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

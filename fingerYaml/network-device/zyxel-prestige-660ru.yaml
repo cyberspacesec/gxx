@@ -1,4 +1,4 @@
-id: fingeryaml-25
+id: zyxel-prestige-660ru
 info:
   name: ZyXEL-Prestige-660RU-T3/T7
   author: zhizhuo
@@ -6,6 +6,18 @@ info:
   description: 'Converted from FOFA rule: fingeryaml-25'
   tags: web,fofa,converted
   created: 2025/04/07
+  product:
+    id: zyxel.prestige-660ru
+    name: ZyXEL Prestige 660RU-T3/T7
+    vendor: Zyxel
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - router
+    aliases:
+      - Prestige 660RU-T3
+      - Prestige 660RU-T7
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-天迈科技网络视频监控系统
+id: tianmai-video-surveillance
 info:
   name: 天迈科技网络视频监控系统
   author: archer
   verified: false
   description: 检测到天迈科技网络视频监控系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tianmai.video-surveillance
+    name: 天迈科技网络视频监控系统
+    vendor: 天迈科技
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
 rules:
   r0:
     request:

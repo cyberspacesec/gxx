@@ -1,10 +1,19 @@
-id: web-ibm-websphere
+id: ibm-websphere-application-server
 info:
   name: ibm-websphere
   author: archer
   verified: false
   description: 检测到ibm-websphere系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ibm.websphere-application-server
+    name: WebSphere Application Server
+    vendor: IBM
+    category: middleware
+    identity: product
+    assurance: inferred
+    aliases:
+      - ibm-websphere
 rules:
   r0:
     request:

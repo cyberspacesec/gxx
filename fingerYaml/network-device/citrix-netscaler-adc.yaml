@@ -1,10 +1,22 @@
-id: web-citrix-netscaler
+id: citrix-netscaler-adc
 info:
   name: citrix-netscaler
   author: archer
   verified: false
   description: 检测到citrix-netscaler系统或组件的特征
   created: 2025/04/24
+  product:
+    id: citrix.netscaler-adc
+    name: NetScaler ADC
+    vendor: Citrix
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - load-balancer
+    aliases:
+      - Citrix ADC
+      - Citrix NetScaler
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-norton-cloud-connect
+id: norton-cloud-connect
 info:
   name: norton-cloud-connect
   author: archer
   verified: false
   description: 检测到norton-cloud-connect系统或组件的特征
   created: 2025/04/24
+  product:
+    id: norton.cloud-connect
+    name: Norton Cloud Connect
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

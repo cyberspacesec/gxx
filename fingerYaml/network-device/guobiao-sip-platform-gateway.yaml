@@ -1,10 +1,20 @@
-id: web-国标sip平台网关
+id: guobiao-sip-platform-gateway
 info:
   name: 国标sip平台网关
   author: archer
   verified: false
   description: 检测到国标sip平台网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: guobiao.sip-platform-gateway
+    name: 国标 SIP 平台网关
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - video
+    aliases:
+      - 国标sip平台网关
 rules:
   r0:
     request:

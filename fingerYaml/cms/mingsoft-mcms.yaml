@@ -1,10 +1,21 @@
-id: web-mcms
+id: mingsoft-mcms
 info:
   name: mcms
   author: archer
   verified: false
   description: 检测到mcms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mingsoft.mcms
+    name: MCMS
+    vendor: 铭飞科技
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - 铭飞 MCMS
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-lasso-web-data-engine
+id: lassosoft-lasso
 info:
   name: lasso-web-data-engine
   author: archer
   verified: false
   description: 检测到lasso-web-data-engine系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lassosoft.lasso
+    name: Lasso
+    vendor: LassoSoft
+    category: middleware
+    identity: product
+    assurance: inferred
+    tags:
+      - language
+    aliases:
+      - lasso-web-data-engine
 rules:
   r0:
     request:

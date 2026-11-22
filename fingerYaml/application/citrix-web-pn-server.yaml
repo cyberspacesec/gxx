@@ -1,10 +1,19 @@
-id: web-citrix-web-pn-server
+id: citrix-web-pn-server
 info:
   name: citrix-web-pn-server
   author: archer
   verified: false
   description: 检测到citrix-web-pn-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: citrix.web-pn-server
+    name: Citrix Web PN Server
+    vendor: Citrix
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - remote-access
 rules:
   r0:
     request:

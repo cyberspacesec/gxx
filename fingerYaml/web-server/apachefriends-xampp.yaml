@@ -1,10 +1,19 @@
-id: web-xampp
+id: apachefriends-xampp
 info:
   name: xampp
   author: archer
   verified: false
   description: 检测到xampp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: apachefriends.xampp
+    name: XAMPP
+    vendor: Apache Friends
+    category: web-server
+    identity: product
+    assurance: verified
+    references:
+      - https://www.apachefriends.org/
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-reviewboard
+id: reviewboard-review-board
 info:
   name: reviewboard
   author: archer
   verified: false
   description: 检测到reviewboard系统或组件的特征
   created: 2025/04/24
+  product:
+    id: reviewboard.review-board
+    name: Review Board
+    vendor: Beanbag
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - devops
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-hjtcloud
+id: hjtcloud
 info:
   name: hjtcloud
   author: archer
   verified: false
   description: 检测到hjtcloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hjtcloud.hjtcloud
+    name: HJTCloud
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

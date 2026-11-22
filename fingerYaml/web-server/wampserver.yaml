@@ -1,10 +1,16 @@
-id: web-WAMPSERVER
+id: wampserver
 info:
   name: WAMPSERVER
   author: archer
   verified: true
   description: 检测到WAMPSERVER系统或组件的特征
   created: 2025/04/16
+  product:
+    id: wampserver.wampserver
+    name: WampServer
+    category: web-server
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

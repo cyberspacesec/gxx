@@ -1,5 +1,5 @@
 ---
-id: fingeryaml-7
+id: actfax-activefax
 info:
   reference:
     - https://www.actfax.com/
@@ -9,6 +9,19 @@ info:
   description: 用于企业传真发送、接收与管理的软件。
   tags: web,fofa,converted,application
   created: 2025/04/07
+  product:
+    id: actfax.activefax
+    name: ActiveFax
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+    aliases:
+      - ACTFAX-ActiveFax
+    references:
+      - https://www.actfax.com/
+    description: 用于企业传真发送、接收与管理的软件。
 rules:
   r0:
     request:

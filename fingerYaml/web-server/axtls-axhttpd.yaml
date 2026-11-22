@@ -1,10 +1,18 @@
-id: web-axtls-embad-httpd
+id: axtls-axhttpd
 info:
   name: axtls-embad-httpd
   author: archer
   verified: false
   description: 检测到axtls-embad-httpd系统或组件的特征
   created: 2025/04/24
+  product:
+    id: axtls.axhttpd
+    name: axhttpd
+    category: web-server
+    identity: product
+    assurance: inferred
+    tags:
+      - web-server
 rules:
   r0:
     request:

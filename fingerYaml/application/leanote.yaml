@@ -1,10 +1,21 @@
-id: web-leanote-notepad
+id: leanote
 info:
   name: leanote-notepad
   author: archer
   verified: false
   description: 检测到leanote-notepad系统或组件的特征
   created: 2025/04/24
+  product:
+    id: leanote.leanote
+    name: Leanote（蚂蚁笔记）
+    category: application
+    identity: product
+    assurance: verified
+    aliases:
+      - leanote-notepad
+      - 蚂蚁笔记
+    references:
+      - https://github.com/leanote/leanote
 rules:
   r0:
     request:

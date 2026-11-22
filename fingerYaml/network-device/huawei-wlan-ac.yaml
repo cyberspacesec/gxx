@@ -1,10 +1,19 @@
-id: web-华为无线接入控制器
+id: huawei-wlan-ac
 info:
   name: 华为无线接入控制器
   author: archer
   verified: false
   description: 检测到华为无线接入控制器系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huawei.wlan-ac
+    name: 无线接入控制器（WLAN AC）
+    vendor: 华为
+    category: network-device
+    identity: product
+    assurance: inferred
+    aliases:
+      - 华为无线接入控制器
 rules:
   r0:
     request:

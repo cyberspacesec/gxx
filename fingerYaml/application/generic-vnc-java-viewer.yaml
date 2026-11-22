@@ -1,10 +1,18 @@
-id: web-vnc
+id: generic-vnc-java-viewer
 info:
   name: vnc
   author: archer
   verified: false
   description: 检测到vnc系统或组件的特征
   created: 2025/04/24
+  product:
+    id: generic.vnc-java-viewer
+    name: VNC Java 查看器
+    category: application
+    identity: signal
+    assurance: inferred
+    tags:
+      - remote-access
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-aliyun-rds
+id: aliyun-rds
 info:
   name: aliyun-rds
   author: archer
   verified: false
   description: 检测到aliyun-rds系统或组件的特征
   created: 2025/04/24
+  product:
+    id: aliyun.rds
+    name: 阿里云 RDS 管理系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - db-admin
 rules:
   r0:
     request:

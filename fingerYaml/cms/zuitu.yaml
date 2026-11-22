@@ -1,10 +1,20 @@
-id: web-zuitu
+id: zuitu
 info:
   name: zuitu
   author: archer
   verified: false
   description: 检测到zuitu系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zuitu.zuitu
+    name: 最土团购系统
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
+    aliases:
+      - Zuitu
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-xjhyt-system
+id: xjhyt-xjhyt-system
 info:
   name: xjhyt-system
   author: archer
   verified: false
   description: 检测到xjhyt-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xjhyt.xjhyt-system
+    name: XJHYT 系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

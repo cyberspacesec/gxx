@@ -1,10 +1,21 @@
-id: web-ruijie-eweb网管系统
+id: ruijie-eweb
 info:
   name: ruijie-eweb网管系统
   author: archer
   verified: false
   description: 检测到ruijie-eweb网管系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruijie.eweb
+    name: 锐捷 EWEB 网管系统
+    vendor: 锐捷网络
+    category: network-device
+    identity: product
+    assurance: verified
+    aliases:
+      - ruijie-eweb
+    references:
+      - https://www.ruijie.com.cn/
 rules:
   r0:
     request:

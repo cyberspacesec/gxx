@@ -1,10 +1,18 @@
-id: web-shop7z
+id: shop7z
 info:
   name: shop7z
   author: archer
   verified: false
   description: 检测到shop7z系统或组件的特征
   created: 2025/04/24
+  product:
+    id: shop7z.shop7z
+    name: Shop7z 网上购物系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

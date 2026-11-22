@@ -1,10 +1,21 @@
-id: web-emby
+id: emby-emby-server
 info:
   name: emby
   author: archer
   verified: false
   description: 检测到emby系统或组件的特征
   created: 2025/04/24
+  product:
+    id: emby.emby-server
+    name: Emby Server
+    vendor: Emby
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - video
+    references:
+      - https://emby.media/
 rules:
   r0:
     request:

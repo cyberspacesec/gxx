@@ -1,10 +1,19 @@
-id: web-oracle-xdb
+id: oracle-database
 info:
   name: oracle-xdb
   author: archer
   verified: false
   description: 检测到oracle-xdb系统或组件的特征
   created: 2025/04/24
+  product:
+    id: oracle.database
+    name: Oracle Database
+    vendor: Oracle
+    category: database
+    identity: product
+    assurance: inferred
+    aliases:
+      - Oracle XML DB
 rules:
   r0:
     request:

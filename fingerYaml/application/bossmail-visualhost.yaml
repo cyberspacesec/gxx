@@ -1,10 +1,23 @@
-id: web-laobanmail-visualhost
+id: bossmail-visualhost
 info:
   name: laobanmail-visualhost
   author: archer
   verified: false
   description: 检测到laobanmail-visualhost系统或组件的特征
   created: 2025/04/24
+  product:
+    id: bossmail.bossmail
+    name: 老板邮局（BossMail）
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - BossMail
+      - 老板邮局
+      - 老板邮局-bossmail
+      - laobanmail-visualhost
 rules:
   r0:
     request:

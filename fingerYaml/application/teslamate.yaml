@@ -1,10 +1,16 @@
-id: web-teslamate
+id: teslamate
 info:
   name: teslamate
   author: archer
   verified: true
   description: 检测到teslamate系统或组件的特征
   created: 2025/04/24
+  product:
+    id: teslamate.teslamate
+    name: TeslaMate
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

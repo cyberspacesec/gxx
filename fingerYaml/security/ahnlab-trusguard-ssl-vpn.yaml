@@ -1,10 +1,21 @@
-id: web-ahnlab-trusguard-ssl-vpn
+id: ahnlab-trusguard-ssl-vpn
 info:
   name: ahnlab-trusguard-ssl-vpn
   author: archer
   verified: false
   description: 检测到ahnlab-trusguard-ssl-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ahnlab.trusguard-ssl-vpn
+    name: TrusGuard SSL VPN
+    vendor: AhnLab
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
+    aliases:
+      - AhnLab TrusGuard
 rules:
   r0:
     request:

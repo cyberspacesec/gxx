@@ -1,10 +1,18 @@
-id: web-pg-roomate-finder-solution
+id: pilotgroup-pg-roommate-finder
 info:
   name: pg-roomate-finder-solution
   author: archer
   verified: false
   description: 检测到pg-roomate-finder-solution系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pilotgroup.pg-roommate-finder
+    name: PG Roommate Finder
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - PG Roommate Finder Solution
 rules:
   r0:
     request:

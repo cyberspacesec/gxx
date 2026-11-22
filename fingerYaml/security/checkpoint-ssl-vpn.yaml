@@ -1,10 +1,21 @@
-id: web-check-point-vpn
+id: checkpoint-ssl-vpn
 info:
   name: check-point-vpn
   author: archer
   verified: false
   description: 检测到check-point-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: checkpoint.ssl-vpn
+    name: Check Point SSL VPN
+    vendor: Check Point
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
+    aliases:
+      - Check Point Mobile Access
 rules:
   r0:
     request:

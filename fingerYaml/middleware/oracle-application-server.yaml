@@ -1,10 +1,22 @@
-id: web-oracle-application-server
+id: oracle-application-server
 info:
   name: oracle-application-server
   author: archer
   verified: false
   description: 检测到oracle-application-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: oracle.application-server
+    name: Oracle Application Server
+    vendor: Oracle
+    category: middleware
+    identity: product
+    assurance: inferred
+    tags:
+      - default-page
+    aliases:
+      - Oracle HTTP Server
+      - Oracle iAS
 rules:
   r0:
     request:

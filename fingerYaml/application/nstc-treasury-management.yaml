@@ -1,10 +1,20 @@
-id: web-nstc-software
+id: nstc-treasury-management
 info:
   name: nstc-software
   author: archer
   verified: false
   description: 检测到nstc-software系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nstc.treasury-management
+    name: 九恒星资金管理系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - finance
+    aliases:
+      - NSTC
 rules:
   r0:
     request:

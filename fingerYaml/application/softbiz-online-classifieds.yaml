@@ -1,10 +1,19 @@
-id: web-softbiz-online-classifieds
+id: softbiz-online-classifieds
 info:
   name: softbiz-online-classifieds
   author: archer
   verified: false
   description: 检测到softbiz-online-classifieds系统或组件的特征
   created: 2025/04/24
+  product:
+    id: softbiz.online-classifieds
+    name: Softbiz Online Classifieds
+    vendor: Softbiz
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - Classified Ads Plus
 rules:
   r0:
     request:

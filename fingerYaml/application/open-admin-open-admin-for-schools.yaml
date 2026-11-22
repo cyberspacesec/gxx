@@ -1,10 +1,18 @@
-id: web-open-admin-for-schools
+id: open-admin-open-admin-for-schools
 info:
   name: open-admin-for-schools
   author: archer
   verified: false
   description: 检测到open-admin-for-schools系统或组件的特征
   created: 2025/04/24
+  product:
+    id: open-admin.open-admin-for-schools
+    name: Open Admin for Schools
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
 rules:
   r0:
     request:

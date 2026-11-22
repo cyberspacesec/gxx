@@ -1,10 +1,19 @@
-id: web-NSFOCUS绿盟安全设备
+id: nsfocus-vendor-mark
 info:
   name: NSFOCUS 绿盟安全设备
   author: archer
   verified: false
   description: 检测到NSFOCUS 绿盟安全设备系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nsfocus.vendor-mark
+    name: 绿盟科技厂商标识
+    vendor: 绿盟科技
+    category: security
+    identity: signal
+    assurance: inferred
+    aliases:
+      - 绿盟科技安全设备
 rules:
   r0:
     request:

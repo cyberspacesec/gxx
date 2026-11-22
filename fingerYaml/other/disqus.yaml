@@ -1,10 +1,19 @@
-id: web-disqus
+id: disqus
 info:
   name: disqus
   author: archer
   verified: false
   description: 检测到disqus系统或组件的特征
   created: 2025/04/24
+  product:
+    id: disqus.disqus
+    name: Disqus
+    vendor: Disqus
+    category: other
+    identity: signal
+    assurance: inferred
+    tags:
+      - js-library
 rules:
   r0:
     request:

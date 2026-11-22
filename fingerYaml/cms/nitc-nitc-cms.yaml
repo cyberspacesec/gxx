@@ -1,10 +1,18 @@
-id: web-nitc-cms
+id: nitc-nitc-cms
 info:
   name: nitc-cms
   author: archer
   verified: false
   description: 检测到nitc-cms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nitc.nitc-cms
+    name: NITC CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

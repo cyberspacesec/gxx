@@ -1,10 +1,16 @@
-id: web-heading-web-server
+id: heading-web-server
 info:
   name: heading-web-server
   author: archer
   verified: false
   description: 检测到heading-web-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: heading.web-server
+    name: Heading Web Server
+    category: web-server
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

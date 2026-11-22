@@ -1,10 +1,20 @@
-id: web-elastichd-dashboard
+id: elastichd
 info:
   name: elastichd-dashboard
   author: archer
   verified: false
   description: 检测到elastichd-dashboard系统或组件的特征
   created: 2025/04/24
+  product:
+    id: elastichd.elastichd
+    name: ElasticHD
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - db-admin
+    aliases:
+      - Elastic HD Dashboard
 rules:
   r0:
     request:

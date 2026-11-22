@@ -1,10 +1,16 @@
-id: web-phpcollab
+id: phpcollab
 info:
   name: phpcollab
   author: archer
   verified: false
   description: 检测到phpcollab系统或组件的特征
   created: 2025/04/24
+  product:
+    id: phpcollab.phpcollab
+    name: phpCollab
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

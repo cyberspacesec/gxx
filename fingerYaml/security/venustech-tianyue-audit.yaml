@@ -1,10 +1,19 @@
-id: web-启明星辰-天玥网络安全审计
+id: venustech-tianyue-audit
 info:
   name: 启明星辰-天玥网络安全审计
   author: archer
   verified: false
   description: 检测到启明星辰-天玥网络安全审计系统或组件的特征
   created: 2025/04/24
+  product:
+    id: venustech.tianyue-audit
+    name: 天玥网络安全审计系统
+    vendor: 启明星辰
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - audit
 rules:
   r0:
     request:

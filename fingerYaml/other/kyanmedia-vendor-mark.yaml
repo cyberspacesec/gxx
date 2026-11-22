@@ -1,10 +1,20 @@
-id: web-kyan-design
+id: kyanmedia-vendor-mark
 info:
   name: kyan-design
   author: archer
   verified: false
   description: 检测到kyan-design系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kyanmedia.vendor-mark
+    name: Kyan Media 厂商标识
+    vendor: Kyan Media
+    category: other
+    identity: signal
+    assurance: inferred
+    aliases:
+      - Kyan Media 网站
+      - kyan-design
 rules:
   r0:
     request:

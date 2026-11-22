@@ -1,10 +1,20 @@
-id: web-drrui-cloud-office-system
+id: drrui-cloud-office
 info:
   name: drrui-cloud-office-system
   author: archer
   verified: false
   description: 检测到drrui-cloud-office-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: drrui.cloud-office
+    name: Drrui 云办公系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - drrui-cloud-office-system
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-sillysmart
+id: sillysmart
 info:
   name: sillysmart
   author: archer
   verified: false
   description: 检测到sillysmart系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sillysmart.sillysmart
+    name: SillySmart
+    category: framework
+    identity: product
+    assurance: inferred
+    tags:
+      - dev-framework
 rules:
   r0:
     request:

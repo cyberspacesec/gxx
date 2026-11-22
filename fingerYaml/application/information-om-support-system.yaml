@@ -1,10 +1,18 @@
-id: web-information-operation-and-maintenance-support-system
+id: information-om-support-system
 info:
   name: information-operation-and-maintenance-support-system
   author: archer
   verified: false
   description: 检测到information-operation-and-maintenance-support-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: information-om.support-system
+    name: 信息运维支撑系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - information-operation-and-maintenance-support-system
 rules:
   r0:
     request:

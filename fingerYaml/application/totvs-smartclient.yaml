@@ -1,10 +1,19 @@
-id: web-totvs-smartclient
+id: totvs-smartclient
 info:
   name: totvs-smartclient
   author: archer
   verified: false
   description: 检测到totvs-smartclient系统或组件的特征
   created: 2025/04/24
+  product:
+    id: totvs.smartclient
+    name: TOTVS SmartClient
+    vendor: TOTVS
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
 rules:
   r0:
     request:

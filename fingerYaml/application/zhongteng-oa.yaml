@@ -1,10 +1,18 @@
-id: web-中腾oa
+id: zhongteng-oa
 info:
   name: 中腾oa
   author: archer
   verified: false
   description: 检测到中腾oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhongteng.oa
+    name: 中腾OA
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

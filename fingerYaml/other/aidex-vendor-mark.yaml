@@ -1,10 +1,16 @@
-id: web-aidex
+id: aidex-vendor-mark
 info:
   name: aidex
   author: archer
   verified: false
   description: 检测到aidex系统或组件的特征
   created: 2025/04/24
+  product:
+    id: aidex.vendor-mark
+    name: AIDEX 厂商标识
+    category: other
+    identity: signal
+    assurance: inferred
 rules:
   r0:
     request:

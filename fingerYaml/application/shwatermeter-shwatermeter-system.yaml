@@ -1,10 +1,16 @@
-id: web-shwatermeter-system
+id: shwatermeter-shwatermeter-system
 info:
   name: shwatermeter-system
   author: archer
   verified: false
   description: 检测到shwatermeter-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: shwatermeter.shwatermeter-system
+    name: shwatermeter-system
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

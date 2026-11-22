@@ -1,10 +1,19 @@
-id: web-H3CSecPathACG1000
+id: h3c-secpath-acg
 info:
   name: H3C SecPath ACG1000
   author: archer
   verified: false
   description: 检测到H3C SecPath ACG1000系统或组件的特征
   created: 2025/04/24
+  product:
+    id: h3c.secpath-acg
+    name: H3C SecPath ACG1000
+    vendor: 新华三
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
 rules:
   r0:
     request:

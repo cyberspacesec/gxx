@@ -1,10 +1,21 @@
-id: web-huawei-anyoffice
+id: huawei-anyoffice
 info:
   name: huawei-anyoffice
   author: archer
   verified: false
   description: 检测到huawei-anyoffice系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huawei.anyoffice
+    name: AnyOffice
+    vendor: 华为
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
+    aliases:
+      - huawei-anyoffice
 rules:
   r0:
     request:

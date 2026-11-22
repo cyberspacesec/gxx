@@ -1,10 +1,18 @@
-id: web-heading-e-commerce-platform
+id: heading-e-commerce-platform
 info:
   name: heading-e-commerce-platform
   author: archer
   verified: false
   description: 检测到heading-e-commerce-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: heading.e-commerce-platform
+    name: Heading 电子商务平台
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

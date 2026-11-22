@@ -1,10 +1,19 @@
-id: web-ipguard-system
+id: ip-guard
 info:
   name: ipguard-system
   author: archer
   verified: false
   description: 检测到ipguard-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ip-guard.ip-guard
+    name: IP-guard
+    vendor: 溢信科技
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - ipguard-system
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-lighttpd
+id: lighttpd
 info:
   name: lighttpd
   author: archer
   verified: false
   description: 检测到lighttpd系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lighttpd.lighttpd
+    name: lighttpd
+    category: web-server
+    identity: product
+    assurance: verified
+    references:
+      - https://www.lighttpd.net/
 rules:
   r0:
     request:

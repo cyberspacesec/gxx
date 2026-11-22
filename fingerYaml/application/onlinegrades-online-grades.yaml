@@ -1,10 +1,18 @@
-id: web-online-grades
+id: onlinegrades-online-grades
 info:
   name: online-grades
   author: archer
   verified: false
   description: 检测到online-grades系统或组件的特征
   created: 2025/04/24
+  product:
+    id: onlinegrades.online-grades
+    name: Online Grades
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
 rules:
   r0:
     request:

@@ -1,10 +1,17 @@
-id: web-jigsaw
+id: w3c-jigsaw
 info:
   name: jigsaw
   author: archer
   verified: false
   description: 检测到jigsaw系统或组件的特征
   created: 2025/04/24
+  product:
+    id: w3c.jigsaw
+    name: Jigsaw
+    vendor: W3C
+    category: web-server
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

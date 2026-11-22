@@ -1,10 +1,19 @@
-id: web-openfiler
+id: openfiler
 info:
   name: openfiler
   author: archer
   verified: false
   description: 检测到openfiler系统或组件的特征
   created: 2025/04/24
+  product:
+    id: openfiler.openfiler
+    name: Openfiler
+    category: operating-system
+    identity: product
+    assurance: inferred
+    tags:
+      - nas
+      - storage
 rules:
   r0:
     request:

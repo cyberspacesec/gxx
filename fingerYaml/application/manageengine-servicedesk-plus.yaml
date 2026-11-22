@@ -1,10 +1,19 @@
-id: web-manageengine-servicedesk
+id: manageengine-servicedesk-plus
 info:
   name: manageengine-servicedesk
   author: archer
   verified: false
   description: 检测到manageengine-servicedesk系统或组件的特征
   created: 2025/04/24
+  product:
+    id: manageengine.servicedesk-plus
+    name: ManageEngine ServiceDesk Plus
+    vendor: ManageEngine
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - manageengine-servicedesk
 rules:
   r0:
     request:

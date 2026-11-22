@@ -1,10 +1,22 @@
-id: web-h2-database
+id: h2database-h2
 info:
   name: h2-database
   author: archer
   verified: false
   description: 检测到h2-database系统或组件的特征
   created: 2025/04/24
+  product:
+    id: h2database.h2
+    name: H2 Database Engine
+    category: database
+    identity: product
+    assurance: verified
+    tags:
+      - db-admin
+    aliases:
+      - H2 Console
+    references:
+      - https://www.h2database.com/
 rules:
   r0:
     request:

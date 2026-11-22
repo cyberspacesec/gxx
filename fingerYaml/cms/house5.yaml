@@ -1,10 +1,18 @@
-id: web-house5
+id: house5
 info:
   name: house5
   author: archer
   verified: false
   description: 检测到house5系统或组件的特征
   created: 2025/04/24
+  product:
+    id: house5.house5
+    name: House5 房产网站系统
+    category: cms
+    identity: product
+    assurance: inferred
+    aliases:
+      - house5
 rules:
   r0:
     request:

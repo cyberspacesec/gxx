@@ -1,10 +1,21 @@
-id: web-peoplenet-ikey
+id: peoplenet-ikey
 info:
   name: peoplenet-ikey
   author: archer
   verified: false
   description: 检测到peoplenet-ikey系统或组件的特征
   created: 2025/04/24
+  product:
+    id: peoplenet.ikey
+    name: 众人科技 iKey
+    vendor: 众人科技
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - sso
+    aliases:
+      - iKey
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-hanweb-system
+id: hanweb-jcms
 info:
   name: hanweb-system
   author: archer
   verified: false
   description: 检测到hanweb-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hanweb.jcms
+    name: 大汉 JCMS
+    vendor: 大汉网络
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - 大汉版通
 rules:
   r0:
     request:

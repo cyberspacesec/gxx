@@ -1,10 +1,20 @@
-id: web-destoon
+id: destoon
 info:
   name: destoon
   author: archer
   verified: false
   description: 检测到destoon系统或组件的特征
   created: 2025/04/24
+  product:
+    id: destoon.destoon
+    name: DESTOON
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
+    aliases:
+      - Destoon B2B
 rules:
   r0:
     request:

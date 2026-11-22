@@ -1,10 +1,19 @@
-id: web-op5-monitor
+id: op5-op5-monitor
 info:
   name: op5-monitor
   author: archer
   verified: false
   description: 检测到op5-monitor系统或组件的特征
   created: 2025/04/24
+  product:
+    id: op5.op5-monitor
+    name: op5 Monitor
+    vendor: op5
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

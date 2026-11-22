@@ -1,10 +1,16 @@
-id: web-yizhitong-e7
+id: yizhitong-e7
 info:
   name: yizhitong-e7
   author: archer
   verified: false
   description: 检测到yizhitong-e7系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yizhitong.e7
+    name: Yizhitong E7
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

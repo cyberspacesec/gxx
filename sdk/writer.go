@@ -31,6 +31,8 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/cyberspacesec/gxx/pkg/finger"
 )
 
 // OutputFormat 列举 FileWriter 支持的写出格式。
@@ -816,7 +818,21 @@ func cloneFingerInfo(info FingerInfo) FingerInfo {
 		p := cloneProduct(*info.Product)
 		info.Product = &p
 	}
+	info.Services = cloneServices(info.Services)
+	info.Metadata = finger.CloneMetadata(info.Metadata)
 	return info
+}
+
+// cloneServices 深拷贝服务声明的端口列表。
+func cloneServices(services []Service) []Service {
+	if services == nil {
+		return nil
+	}
+	result := slices.Clone(services)
+	for index := range result {
+		result[index].Ports = slices.Clone(result[index].Ports)
+	}
+	return result
 }
 
 // cloneProductMatch 深拷贝产品聚合结果。

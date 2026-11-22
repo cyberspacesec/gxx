@@ -1,10 +1,18 @@
-id: web-sdcncsi
+id: sdcncsi
 info:
   name: sdcncsi
   author: archer
   verified: false
   description: 检测到sdcncsi系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sdcncsi.sdcncsi
+    name: 在沃系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - sdcncsi
 rules:
   r0:
     request:

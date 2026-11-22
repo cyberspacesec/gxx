@@ -1,10 +1,21 @@
-id: web-ioa
+id: rongneng-ioa
 info:
   name: ioa
   author: archer
   verified: false
   description: 检测到ioa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: rongneng.ioa
+    name: iOA 爱办公
+    vendor: 厦门容能科技有限公司
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - ioa
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: web-apache-tomcat
+id: apache-tomcat
 info:
   tags: middleware
   reference:
@@ -8,6 +8,20 @@ info:
   verified: true
   description: 实现 Jakarta Servlet 等规范的 Web 应用容器。
   created: 2025/04/24
+  product:
+    id: apache.tomcat
+    name: Apache Tomcat
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+    aliases:
+      - apache-tomcat
+    references:
+      - https://tomcat.apache.org/
+    description: 实现 Jakarta Servlet 等规范的 Web 应用容器。
 rules:
   r0:
     request:

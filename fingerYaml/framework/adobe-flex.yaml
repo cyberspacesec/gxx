@@ -1,10 +1,21 @@
-id: web-adobe-flex
+id: adobe-flex
 info:
   name: adobe-flex
   author: archer
   verified: false
   description: 检测到adobe-flex系统或组件的特征
   created: 2025/04/24
+  product:
+    id: adobe.flex
+    name: Adobe Flex
+    vendor: Adobe
+    category: framework
+    identity: signal
+    assurance: inferred
+    tags:
+      - ui-framework
+    aliases:
+      - Apache Flex
 rules:
   r0:
     request:

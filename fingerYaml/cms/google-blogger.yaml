@@ -1,10 +1,20 @@
-id: web-blogger
+id: google-blogger
 info:
   name: blogger
   author: archer
   verified: false
   description: 检测到blogger系统或组件的特征
   created: 2025/04/24
+  product:
+    id: google.blogger
+    name: Blogger
+    vendor: Google
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+      - blog
 rules:
   r0:
     request:

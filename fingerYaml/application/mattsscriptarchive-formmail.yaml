@@ -1,10 +1,16 @@
-id: web-formmail
+id: mattsscriptarchive-formmail
 info:
   name: formmail
   author: archer
   verified: false
   description: 检测到formmail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mattsscriptarchive.formmail
+    name: FormMail
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

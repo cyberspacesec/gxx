@@ -1,10 +1,19 @@
-id: web-e-plugger-srm
+id: eplugger-srm
 info:
   name: e-plugger-srm
   author: archer
   verified: false
   description: 检测到e-plugger-srm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: eplugger.srm
+    name: 易普拉格科研管理系统
+    vendor: 北京易普拉格科技
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - e-plugger-srm
 rules:
   r0:
     request:

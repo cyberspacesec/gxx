@@ -1,4 +1,4 @@
-id: web-apache-apisix-dashboard
+id: apache-apisix-dashboard
 info:
   tags: hosting-panel
   reference:
@@ -8,6 +8,21 @@ info:
   verified: true
   description: Apache APISIX 的 Web 管理界面。
   created: 2025/04/24
+  product:
+    id: apache.apisix-dashboard
+    name: Apache APISIX Dashboard
+    vendor: Apache Software Foundation
+    category: hosting-panel
+    identity: product
+    assurance: verified
+    tags:
+      - hosting-panel
+      - api-gateway
+    aliases:
+      - apache-apisix-dashboard
+    references:
+      - https://github.com/apache/apisix-dashboard
+    description: Apache APISIX 的 Web 管理界面。
 rules:
   r0:
     request:

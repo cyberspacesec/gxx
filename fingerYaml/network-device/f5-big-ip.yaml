@@ -1,10 +1,21 @@
-id: web-f5-big-ip
+id: f5-big-ip
 info:
   name: f5-big-ip
   author: archer
   verified: false
   description: 检测到f5-big-ip系统或组件的特征
   created: 2025/04/24
+  product:
+    id: f5.big-ip
+    name: BIG-IP
+    vendor: F5
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - load-balancer
+    aliases:
+      - F5 BIG-IP
 rules:
   r0:
     request:

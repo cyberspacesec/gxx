@@ -1,10 +1,20 @@
-id: web-evercookie
+id: evercookie
 info:
   name: evercookie
   author: archer
   verified: false
   description: 检测到evercookie系统或组件的特征
   created: 2025/04/24
+  product:
+    id: evercookie.evercookie
+    name: evercookie
+    category: library
+    identity: signal
+    assurance: verified
+    tags:
+      - js-library
+    references:
+      - https://github.com/samyk/evercookie
 rules:
   r0:
     request:

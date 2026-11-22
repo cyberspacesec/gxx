@@ -1,10 +1,18 @@
-id: web-cnway-ilims
+id: cnway-ilims
 info:
   name: cnway-ilims
   author: archer
   verified: false
   description: 检测到cnway-ilims系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cnway.ilims
+    name: iLIMS
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - cnway-ilims
 rules:
   r0:
     request:

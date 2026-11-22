@@ -1,10 +1,23 @@
-id: web-信呼OA
+id: xinhu-oa
 info:
   name: 信呼OA
   author: archer
   verified: true
   description: 检测到信呼OA系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xinhu.oa
+    name: 信呼OA
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - oa
+    aliases:
+      - RockOA
+      - 信呼
+    references:
+      - http://www.rockoa.com/
 rules:
   r0:
     request:

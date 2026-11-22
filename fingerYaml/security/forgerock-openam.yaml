@@ -1,10 +1,19 @@
-id: web-openam
+id: forgerock-openam
 info:
   name: openam
   author: archer
   verified: false
   description: 检测到openam系统或组件的特征
   created: 2025/04/24
+  product:
+    id: forgerock.openam
+    name: OpenAM
+    vendor: ForgeRock
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - sso
 rules:
   r0:
     request:

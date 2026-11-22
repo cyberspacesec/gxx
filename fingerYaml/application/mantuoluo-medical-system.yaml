@@ -1,10 +1,20 @@
-id: web-mantuoluo-medication
+id: mantuoluo-medical-system
 info:
   name: mantuoluo-medication
   author: archer
   verified: false
   description: 检测到mantuoluo-medication系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mantuoluo.medical-system
+    name: 曼陀罗医疗系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - medical
+    aliases:
+      - 曼陀罗医疗
 rules:
   r0:
     request:

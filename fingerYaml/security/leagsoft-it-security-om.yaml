@@ -1,10 +1,20 @@
-id: web-联软it安全运维管理系统
+id: leagsoft-it-security-om
 info:
   name: 联软it安全运维管理系统
   author: archer
   verified: false
   description: 检测到联软it安全运维管理系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: leagsoft.it-security-om
+    name: 联软 IT 安全运维管理系统
+    vendor: 联软科技
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - 联软it安全运维管理系统
+      - 联软科技-it安全运维管理系统
 rules:
   r0:
     request:

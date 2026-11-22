@@ -1,10 +1,19 @@
-id: web-cogent-datahub
+id: cogent-datahub
 info:
   name: cogent-datahub
   author: archer
   verified: false
   description: 检测到cogent-datahub系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cogent.datahub
+    name: Cogent DataHub
+    vendor: Cogent Real-Time Systems
+    category: middleware
+    identity: product
+    assurance: inferred
+    tags:
+      - industrial
 rules:
   r0:
     request:

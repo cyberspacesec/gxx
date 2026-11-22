@@ -1,10 +1,16 @@
-id: web-sq580-system
+id: sq580-sq580-system
 info:
   name: sq580-system
   author: archer
   verified: false
   description: 检测到sq580-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sq580.sq580-system
+    name: sq580-system
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

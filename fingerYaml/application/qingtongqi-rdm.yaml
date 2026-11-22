@@ -1,10 +1,21 @@
-id: web-cnrdm-product
+id: qingtongqi-rdm
 info:
   name: cnrdm-product
   author: archer
   verified: false
   description: 检测到cnrdm-product系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qingtongqi.rdm
+    name: 青铜器RDM
+    vendor: 青铜器软件
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - devops
+    aliases:
+      - cnrdm
 rules:
   r0:
     request:

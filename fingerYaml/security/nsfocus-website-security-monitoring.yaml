@@ -1,10 +1,19 @@
-id: web-nsfocus-网站安全监测系统
+id: nsfocus-website-security-monitoring
 info:
   name: nsfocus-网站安全监测系统
   author: archer
   verified: false
   description: 检测到nsfocus-网站安全监测系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nsfocus.website-security-monitoring
+    name: 绿盟网站安全监测系统
+    vendor: 绿盟科技
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-whfst-cms
+id: fusite-cms
 info:
   name: whfst-cms
   author: archer
   verified: false
   description: 检测到whfst-cms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fusite.cms
+    name: 富思特 CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

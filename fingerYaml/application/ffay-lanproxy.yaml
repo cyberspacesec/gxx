@@ -1,10 +1,20 @@
-id: web-ffay-lanproxy
+id: ffay-lanproxy
 info:
   name: ffay-lanproxy
   author: archer
   verified: false
   description: 检测到ffay-lanproxy系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ffay.lanproxy
+    name: lanproxy
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - proxy
+    references:
+      - https://github.com/ffay/lanproxy
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-u-reader-digital-library
+id: dynomedia-u-reader
 info:
   name: u-reader-digital-library
   author: archer
   verified: false
   description: 检测到u-reader-digital-library系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dynomedia.u-reader
+    name: U-Reader 数字图书馆
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - ureader
 rules:
   r0:
     request:

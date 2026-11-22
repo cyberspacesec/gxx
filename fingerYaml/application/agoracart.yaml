@@ -1,10 +1,20 @@
-id: web-agoracgi
+id: agoracart
 info:
   name: agoracgi
   author: archer
   verified: false
   description: 检测到agoracgi系统或组件的特征
   created: 2025/04/24
+  product:
+    id: agoracart.agoracart
+    name: AgoraCart
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
+    aliases:
+      - agora.cgi
 rules:
   r0:
     request:

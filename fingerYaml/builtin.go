@@ -21,7 +21,7 @@ func matchesBuiltin(path, digest string) bool {
 //go:embed */*.yaml
 var embeddedFingerFS embed.FS
 
-// GetEmbeddedFingerYaml 从嵌入 FS 加载全部指纹规则。
+// GetEmbeddedFingerYaml 从嵌入 FS 加载全部指纹规则，并检查同一产品标识的声明完全一致。
 func GetEmbeddedFingerYaml() ([]*finger2.Finger, error) {
 	var allFinger []*finger2.Finger
 	err := fs.WalkDir(embeddedFingerFS, ".", func(path string, d fs.DirEntry, err error) error {
@@ -45,6 +45,9 @@ func GetEmbeddedFingerYaml() ([]*finger2.Finger, error) {
 	})
 	if err != nil {
 		return nil, fmt.Errorf("遍历嵌入指纹目录出错: %w", err)
+	}
+	if err := finger2.CheckProductDeclarations(allFinger); err != nil {
+		return nil, fmt.Errorf("内置指纹库: %w", err)
 	}
 	return allFinger, nil
 }

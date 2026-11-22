@@ -1,10 +1,20 @@
-id: web-mas-mobile-agent-serve
+id: mas-mobile-agent-server
 info:
   name: mas-mobile-agent-serve
   author: archer
   verified: false
   description: 检测到mas-mobile-agent-serve系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mas.mobile-agent-server
+    name: MAS 移动代理服务器
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+    aliases:
+      - MAS
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-sun-glassfish
+id: eclipse-glassfish
 info:
   name: sun-glassfish
   author: archer
   verified: false
   description: 检测到sun-glassfish系统或组件的特征
   created: 2025/04/24
+  product:
+    id: eclipse.glassfish
+    name: Eclipse GlassFish
+    vendor: Eclipse Foundation
+    category: middleware
+    identity: product
+    assurance: inferred
+    aliases:
+      - GlassFish Server
+      - Sun GlassFish
+      - Oracle GlassFish Server
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-dejavu
+id: appbaseio-dejavu
 info:
   name: dejavu
   author: archer
   verified: false
   description: 检测到dejavu系统或组件的特征
   created: 2025/04/24
+  product:
+    id: appbaseio.dejavu
+    name: Dejavu
+    vendor: appbase.io
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - db-admin
+    references:
+      - https://github.com/appbaseio/dejavu
 rules:
   r0:
     request:

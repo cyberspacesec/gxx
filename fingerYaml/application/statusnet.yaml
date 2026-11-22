@@ -1,10 +1,20 @@
-id: web-statusnet
+id: statusnet
 info:
   name: statusnet
   author: archer
   verified: false
   description: 检测到statusnet系统或组件的特征
   created: 2025/04/24
+  product:
+    id: statusnet.statusnet
+    name: StatusNet
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - blog
+    aliases:
+      - GNU social
 rules:
   r0:
     request:

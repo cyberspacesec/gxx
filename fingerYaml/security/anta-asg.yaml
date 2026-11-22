@@ -1,10 +1,18 @@
-id: web-anta-asg
+id: anta-asg
 info:
   name: anta-asg
   author: archer
   verified: false
   description: 检测到anta-asg系统或组件的特征
   created: 2025/04/24
+  product:
+    id: anta.asg
+    name: ANTA ASG
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
 rules:
   r0:
     request:

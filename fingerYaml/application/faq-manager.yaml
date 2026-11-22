@@ -1,10 +1,16 @@
-id: web-faq-manager
+id: faq-manager
 info:
   name: faq-manager
   author: archer
   verified: false
   description: 检测到faq-manager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: faq-manager.faq-manager
+    name: FAQ Manager
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

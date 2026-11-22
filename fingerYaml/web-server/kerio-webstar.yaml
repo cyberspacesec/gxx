@@ -1,10 +1,20 @@
-id: web-kerio-webstar
+id: kerio-webstar
 info:
   name: kerio-webstar
   author: archer
   verified: false
   description: 检测到kerio-webstar系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kerio.webstar
+    name: WebSTAR
+    vendor: Kerio Technologies
+    category: web-server
+    identity: product
+    assurance: inferred
+    aliases:
+      - kerio-webstar
+      - 4D WebSTAR
 rules:
   r0:
     request:

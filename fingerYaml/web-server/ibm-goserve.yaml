@@ -1,10 +1,19 @@
-id: web-ibm-goserve
+id: ibm-goserve
 info:
   name: ibm-goserve
   author: archer
   verified: false
   description: 检测到ibm-goserve系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ibm.goserve
+    name: GoServe
+    vendor: IBM
+    category: web-server
+    identity: product
+    assurance: inferred
+    aliases:
+      - ibm-goserve
 rules:
   r0:
     request:

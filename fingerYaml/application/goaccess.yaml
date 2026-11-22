@@ -1,10 +1,20 @@
-id: web-goaccess-log
+id: goaccess
 info:
   name: goaccess-log
   author: archer
   verified: false
   description: 检测到goaccess-log系统或组件的特征
   created: 2025/04/24
+  product:
+    id: goaccess.goaccess
+    name: GoAccess
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://goaccess.io/
 rules:
   r0:
     request:

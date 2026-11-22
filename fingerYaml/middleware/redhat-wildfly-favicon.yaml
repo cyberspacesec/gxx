@@ -1,10 +1,19 @@
-id: web-WildFly
+id: redhat-wildfly-favicon
 info:
   name: WildFly
   author: archer
   verified: true
   description: 检测到WildFly系统或组件的特征
   created: 2025/04/16
+  product:
+    id: redhat.wildfly
+    name: WildFly
+    vendor: Red Hat
+    category: middleware
+    identity: product
+    assurance: verified
+    references:
+      - https://www.wildfly.org/
 rules:
   r0:
     request:

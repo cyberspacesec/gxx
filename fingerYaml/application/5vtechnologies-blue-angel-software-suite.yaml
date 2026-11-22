@@ -1,10 +1,17 @@
-id: web-5vtechnologies-blueangelsoftwaresuite
+id: 5vtechnologies-blue-angel-software-suite
 info:
   name: 5vtechnologies-blueangelsoftwaresuite
   author: zhizhuo
   verified: true
   description: 识别特定Web应用
   created: 2025/04/15
+  product:
+    id: 5vtechnologies.blue-angel-software-suite
+    name: Blue Angel Software Suite
+    vendor: 5V Technologies
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

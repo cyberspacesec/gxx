@@ -1,10 +1,19 @@
-id: web-netzone-webcache
+id: gaodu-netzone-webcache
 info:
   name: netzone-webcache
   author: archer
   verified: false
   description: 检测到netzone-webcache系统或组件的特征
   created: 2025/04/24
+  product:
+    id: gaodu.netzone-webcache
+    name: NetZone WebCache
+    vendor: 广州高度软件有限公司
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - proxy
 rules:
   r0:
     request:

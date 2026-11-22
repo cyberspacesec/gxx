@@ -1,5 +1,5 @@
 ---
-id: fofayaml-29
+id: biscom-delivery-server
 info:
   name: Biscom-Delivery-Server
   author: zhizhuo
@@ -7,6 +7,17 @@ info:
   description: 'Converted from FOFA rule: fofayaml-29'
   tags: web,fofa,converted
   created: 2025/04/07
+  product:
+    id: biscom.delivery-server
+    name: Biscom Delivery Server
+    vendor: Biscom
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - file-transfer
+    aliases:
+      - BDS
 rules:
   r0:
     request:

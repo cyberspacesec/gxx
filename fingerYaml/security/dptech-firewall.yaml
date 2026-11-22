@@ -1,10 +1,19 @@
-id: web-迪普防火墙
+id: dptech-firewall
 info:
   name: 迪普防火墙
   author: archer
   verified: true
   description: 检测到迪普防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dptech.firewall
+    name: 迪普防火墙
+    vendor: 迪普科技
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
 rules:
   r0:
     request:

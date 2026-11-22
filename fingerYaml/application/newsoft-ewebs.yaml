@@ -1,10 +1,21 @@
-id: web-ewebs
+id: newsoft-ewebs
 info:
   name: ewebs
   author: archer
   verified: false
   description: 检测到ewebs系统或组件的特征
   created: 2025/04/24
+  product:
+    id: newsoft.ewebs
+    name: 极通EWEBS
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - remote-access
+      - virtualization
+    aliases:
+      - ewebs
 rules:
   r0:
     request:

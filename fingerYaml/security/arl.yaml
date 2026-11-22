@@ -1,4 +1,4 @@
-id: web-arl
+id: arl
 info:
   tags: security
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 资产发现、指纹识别与安全监测系统。
   created: 2025/04/24
+  product:
+    id: arl.arl
+    name: ARL 资产侦察灯塔系统
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - security
+    aliases:
+      - arl
+      - 资产灯塔系统
+      - ARL
+    references:
+      - https://github.com/tophant-ai/ARL-doc
+    description: 资产发现、指纹识别与安全监测系统。
 rules:
   r0:
     request:

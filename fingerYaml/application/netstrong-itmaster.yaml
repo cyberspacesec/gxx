@@ -1,10 +1,18 @@
-id: web-nstrong-itmaster
+id: netstrong-itmaster
 info:
   name: nstrong-itmaster
   author: archer
   verified: false
   description: 检测到nstrong-itmaster系统或组件的特征
   created: 2025/04/24
+  product:
+    id: netstrong.itmaster
+    name: 网强 ITMaster
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

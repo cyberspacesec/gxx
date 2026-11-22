@@ -1,10 +1,19 @@
-id: web-webray-situation-awareness
+id: webray-website-monitoring-platform
 info:
   name: webray-situation-awareness
   author: archer
   verified: false
   description: 检测到webray-situation-awareness系统或组件的特征
   created: 2025/04/24
+  product:
+    id: webray.website-monitoring-platform
+    name: 盛邦安全网站监控预警平台
+    vendor: 盛邦安全
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

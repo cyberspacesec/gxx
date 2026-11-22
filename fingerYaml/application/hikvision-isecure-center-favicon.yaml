@@ -1,10 +1,26 @@
-id: web-hikvision-isecure-center
+id: hikvision-isecure-center-favicon
 info:
   name: hikvision-isecure-center
   author: archer
   verified: true
   description: 检测到hikvision-isecure-center系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hikvision.isecure-center
+    name: iSecure Center 综合安防管理平台
+    vendor: 海康威视
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video
+      - camera
+      - monitoring
+    aliases:
+      - 海康威视综合安防管理平台
+      - iSecure Center
+      - hikvision-isecure-center
+      - 综合安防管理平台
 rules:
   r0:
     request:

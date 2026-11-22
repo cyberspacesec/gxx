@@ -1,10 +1,16 @@
-id: web-secusys-tc348nt安全访问模块
+id: secusys-tc348nt
 info:
   name: secusys-tc348nt安全访问模块
   author: archer
   verified: false
   description: 检测到secusys-tc348nt安全访问模块系统或组件的特征
   created: 2025/04/24
+  product:
+    id: secusys.tc348nt
+    name: TC348NT 安全访问模块
+    category: device
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

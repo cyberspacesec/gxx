@@ -1,10 +1,16 @@
-id: web-yzruida-system
+id: yzruida-yzruida-system
 info:
   name: yzruida-system
   author: archer
   verified: false
   description: 检测到yzruida-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yzruida.yzruida-system
+    name: Yzruida 系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

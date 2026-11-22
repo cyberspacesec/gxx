@@ -1,10 +1,17 @@
-id: web-aisino-telecom
+id: aisino-telecom-edition
 info:
   name: aisino-telecom
   author: archer
   verified: false
   description: 检测到aisino-telecom系统或组件的特征
   created: 2025/04/24
+  product:
+    id: aisino.telecom-edition
+    name: 航天信息电信行业版
+    vendor: 航天信息
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

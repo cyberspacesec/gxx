@@ -1,10 +1,20 @@
-id: web-mihalism-multi-host
+id: mihalism-multi-host
 info:
   name: mihalism-multi-host
   author: archer
   verified: false
   description: 检测到mihalism-multi-host系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mihalism.multi-host
+    name: Mihalism Multi Host
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - file-sharing
+    aliases:
+      - MMH
 rules:
   r0:
     request:

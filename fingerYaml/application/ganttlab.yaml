@@ -1,10 +1,18 @@
-id: web-ganttlab
+id: ganttlab
 info:
   name: ganttlab
   author: archer
   verified: false
   description: 检测到ganttlab系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ganttlab.ganttlab
+    name: GanttLab
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - devops
 rules:
   r0:
     request:

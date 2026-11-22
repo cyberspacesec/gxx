@@ -1,10 +1,21 @@
-id: web-263-meeting
+id: 263-meeting
 info:
   name: 263-meeting
   author: archer
   verified: false
   description: 检测到263-meeting系统或组件的特征
   created: 2025/04/24
+  product:
+    id: 263.meeting
+    name: 263 网络会议
+    vendor: 二六三网络通信
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
+    aliases:
+      - 263 Meeting
 rules:
   r0:
     request:

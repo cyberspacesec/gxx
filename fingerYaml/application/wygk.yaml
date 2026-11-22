@@ -1,10 +1,16 @@
-id: web-wygk-product
+id: wygk
 info:
   name: wygk-product
   author: archer
   verified: false
   description: 检测到wygk-product系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wygk.wygk
+    name: WYGK 系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-hims-hotel-cloud-computing-service
+id: hims-hotel-cloud
 info:
   name: hims-hotel-cloud-computing-service
   author: archer
   verified: false
   description: 检测到hims-hotel-cloud-computing-service系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hims.hotel-cloud
+    name: HIMS 酒店云计算服务
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - cloud
+    aliases:
+      - hims-hotel-cloud-computing-service
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-fujitsu-vpn
+id: fujitsu-sslvpn
 info:
   name: fujitsu-vpn
   author: archer
   verified: false
   description: 检测到fujitsu-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fujitsu.sslvpn
+    name: 富士通 SSL-VPN
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

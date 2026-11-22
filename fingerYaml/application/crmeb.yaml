@@ -1,10 +1,18 @@
-id: web-crmeb
+id: crmeb
 info:
   name: crmeb
   author: archer
   verified: true
   description: 检测到crmeb系统或组件的特征
   created: 2025/04/24
+  product:
+    id: crmeb.crmeb
+    name: CRMEB
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

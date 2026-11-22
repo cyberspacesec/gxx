@@ -1,10 +1,20 @@
-id: web-phpatm
+id: phpatm
 info:
   name: phpatm
   author: archer
   verified: false
   description: 检测到phpatm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: phpatm.phpatm
+    name: PHP Advanced Transfer Manager
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - file-transfer
+    aliases:
+      - phpATM
 rules:
   r0:
     request:

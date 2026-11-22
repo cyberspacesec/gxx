@@ -1,10 +1,19 @@
-id: web-sundray-企业防火墙
+id: sundray-firewall
 info:
   name: sundray-企业防火墙
   author: archer
   verified: false
   description: 检测到sundray-企业防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sundray.firewall
+    name: 信锐企业防火墙
+    vendor: 信锐技术
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
 rules:
   r0:
     request:

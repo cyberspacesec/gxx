@@ -1,10 +1,16 @@
-id: web-brocade-data-angle-guard-database
+id: data-angle-guard
 info:
   name: brocade-data-angle-guard-database
   author: archer
   verified: false
   description: 检测到brocade-data-angle-guard-database系统或组件的特征
   created: 2025/04/24
+  product:
+    id: data-angle-guard.data-angle-guard
+    name: Data Angle Guard Database
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

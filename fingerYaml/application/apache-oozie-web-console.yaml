@@ -1,4 +1,4 @@
-id: web-apache-oozie-web-console
+id: apache-oozie-web-console
 info:
   tags: application
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 用于 Hadoop 作业编排与调度的工作流系统。
   created: 2025/04/24
+  product:
+    id: apache.oozie-web-console
+    name: Apache Oozie
+    vendor: Apache Software Foundation
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - big-data
+    aliases:
+      - apache-oozie-web-console
+    references:
+      - https://oozie.apache.org/
+    description: 用于 Hadoop 作业编排与调度的工作流系统。
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-jiaozhichu-online-test-system
+id: jiaozhichu-online-exam
 info:
   name: jiaozhichu-online-test-system
   author: archer
   verified: false
   description: 检测到jiaozhichu-online-test-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jiaozhichu.online-exam
+    name: 教之初在线考试系统
+    vendor: 教之初
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
+    aliases:
+      - jiaozhichu-online-test-system
 rules:
   r0:
     request:

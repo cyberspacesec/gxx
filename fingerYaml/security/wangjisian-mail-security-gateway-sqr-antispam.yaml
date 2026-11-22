@@ -1,10 +1,22 @@
-id: web-网际思安邮件安全网关-sqr反垃圾邮件系统
+id: wangjisian-mail-security-gateway-sqr-antispam
 info:
   name: 网际思安邮件安全网关-sqr反垃圾邮件系统
   author: archer
   verified: false
   description: 检测到网际思安邮件安全网关-sqr反垃圾邮件系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wangjisian.mail-security-gateway
+    name: 网际思安邮件安全网关
+    vendor: 网际思安
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+      - gateway
+    aliases:
+      - SQR反垃圾邮件系统
 rules:
   r0:
     request:

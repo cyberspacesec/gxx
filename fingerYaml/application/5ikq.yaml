@@ -1,10 +1,18 @@
-id: web-5ikq
+id: 5ikq
 info:
   name: 5ikq
   author: zhizhuo
   verified: true
   description: 识别特定Web应用
   created: 2025/04/15
+  product:
+    id: 5ikq.5ikq
+    name: 我爱考勤云平台
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - hr
 rules:
   r0:
     request:

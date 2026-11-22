@@ -1,10 +1,18 @@
-id: web-phorum
+id: phorum
 info:
   name: phorum
   author: archer
   verified: false
   description: 检测到phorum系统或组件的特征
   created: 2025/04/24
+  product:
+    id: phorum.phorum
+    name: Phorum
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - forum
 rules:
   r0:
     request:

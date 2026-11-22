@@ -1,10 +1,18 @@
-id: web-瑞智康诚-vpn
+id: ruizhi-kangcheng-vpn
 info:
   name: 瑞智康诚-vpn
   author: archer
   verified: false
   description: 检测到瑞智康诚-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruizhi-kangcheng.vpn
+    name: 瑞智康诚 VPN
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

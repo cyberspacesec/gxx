@@ -1,10 +1,21 @@
-id: web-docmail-cwindow
+id: guoxinguanqun-docmail
 info:
   name: docmail-cwindow
   author: archer
   verified: false
   description: 检测到docmail-cwindow系统或组件的特征
   created: 2025/04/24
+  product:
+    id: guoxinguanqun.docmail
+    name: DocMail 邮件系统
+    vendor: 国信冠群
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - docmail-cwindow
 rules:
   r0:
     request:

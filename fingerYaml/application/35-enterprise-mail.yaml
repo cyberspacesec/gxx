@@ -1,10 +1,19 @@
-id: web-35企业邮箱
+id: 35-enterprise-mail
 info:
   name: 35企业邮箱
   author: archer
   verified: true
   description: 检测到35企业邮箱系统或组件的特征
   created: 2025/04/24
+  product:
+    id: 35.enterprise-mail
+    name: 35企业邮箱
+    vendor: 三五互联
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

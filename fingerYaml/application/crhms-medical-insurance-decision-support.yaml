@@ -1,10 +1,18 @@
-id: web-crhms-medical-insurance-decision-support-system
+id: crhms-medical-insurance-decision-support
 info:
   name: crhms-medical-insurance-decision-support-system
   author: archer
   verified: false
   description: 检测到crhms-medical-insurance-decision-support-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: crhms.medical-insurance-decision-support
+    name: 医保决策支持系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - crhms-medical-insurance-decision-support-system
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-移动办公及工作督办系统
+id: yidong-bangong-duban
 info:
   name: 移动办公及工作督办系统
   author: archer
   verified: false
   description: 检测到移动办公及工作督办系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yidong-bangong-duban.yidong-bangong-duban
+    name: 移动办公及工作督办系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

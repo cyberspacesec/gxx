@@ -1,10 +1,18 @@
-id: web-yunhezi
+id: yunhezi
 info:
   name: yunhezi
   author: archer
   verified: false
   description: 检测到yunhezi系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yunhezi.yunhezi
+    name: 云盒子
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
 rules:
   r0:
     request:

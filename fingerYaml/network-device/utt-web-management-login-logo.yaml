@@ -1,10 +1,21 @@
-id: web-utt-device
+id: utt-web-management-login-logo
 info:
   name: utt-device
   author: archer
   verified: false
   description: 检测到utt-device系统或组件的特征
   created: 2025/04/24
+  product:
+    id: utt.web-management
+    name: 艾泰网络设备管理系统
+    vendor: 艾泰科技
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - router
+    aliases:
+      - 艾泰安全网络管理系统
 rules:
   r0:
     request:

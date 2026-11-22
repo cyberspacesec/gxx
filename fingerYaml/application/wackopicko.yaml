@@ -1,10 +1,16 @@
-id: web-wackopicko
+id: wackopicko
 info:
   name: wackopicko
   author: archer
   verified: false
   description: 检测到wackopicko系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wackopicko.wackopicko
+    name: WackoPicko
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

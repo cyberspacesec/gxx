@@ -1,10 +1,18 @@
-id: web-hanwei-mobile-platform
+id: hanwei-mobile-platform
 info:
   name: hanwei-mobile-platform
   author: archer
   verified: false
   description: 检测到hanwei-mobile-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hanwei.mobile-platform
+    name: 汉威移动平台
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - hanwei-mobile-platform
 rules:
   r0:
     request:

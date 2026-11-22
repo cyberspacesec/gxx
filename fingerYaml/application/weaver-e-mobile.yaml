@@ -1,10 +1,23 @@
-id: web-ecology泛微e-mobile
+id: weaver-e-mobile
 info:
   name: ecology泛微e-mobile
   author: archer
   verified: false
   description: 检测到ecology泛微e-mobile系统或组件的特征
   created: 2025/04/24
+  product:
+    id: weaver.e-mobile
+    name: e-mobile
+    vendor: 泛微网络
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - 泛微 E-Mobile
+    references:
+      - https://www.weaver.com.cn/
 rules:
   r0:
     request:

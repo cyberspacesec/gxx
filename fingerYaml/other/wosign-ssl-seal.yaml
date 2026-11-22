@@ -1,10 +1,19 @@
-id: web-wosign-ssl-cert
+id: wosign-ssl-seal
 info:
   name: wosign-ssl-cert
   author: archer
   verified: false
   description: 检测到wosign-ssl-cert系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wosign.ssl-seal
+    name: 沃通 SSL 证书标识
+    vendor: 沃通
+    category: other
+    identity: signal
+    assurance: inferred
+    aliases:
+      - WoSign
 rules:
   r0:
     request:

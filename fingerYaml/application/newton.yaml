@@ -1,10 +1,16 @@
-id: web-newton
+id: newton
 info:
   name: newton
   author: archer
   verified: false
   description: 检测到newton系统或组件的特征
   created: 2025/04/24
+  product:
+    id: newton.newton
+    name: Newton
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

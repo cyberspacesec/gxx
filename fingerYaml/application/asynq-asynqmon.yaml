@@ -1,10 +1,20 @@
-id: web-asynqmon
+id: asynq-asynqmon
 info:
   name: asynqmon
   author: archer
   verified: true
   description: 检测到asynqmon系统或组件的特征
   created: 2025/04/24
+  product:
+    id: asynq.asynqmon
+    name: Asynqmon
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://github.com/hibiken/asynqmon
 rules:
   r0:
     request:

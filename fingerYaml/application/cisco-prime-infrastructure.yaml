@@ -1,10 +1,19 @@
-id: web-cisco-prime-infrastructure
+id: cisco-prime-infrastructure
 info:
   name: cisco-prime-infrastructure
   author: archer
   verified: false
   description: 检测到cisco-prime-infrastructure系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cisco.prime-infrastructure
+    name: Cisco Prime Infrastructure
+    vendor: Cisco
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

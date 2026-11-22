@@ -1,10 +1,16 @@
-id: web-pcitc-lims
+id: pcitc-lims
 info:
   name: pcitc-lims
   author: archer
   verified: false
   description: 检测到pcitc-lims系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pcitc.lims
+    name: 石化盈科 LIMS
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

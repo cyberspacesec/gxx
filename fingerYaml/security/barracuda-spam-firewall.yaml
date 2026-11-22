@@ -1,10 +1,24 @@
-id: web-梭子鱼垃圾邮件防火墙
+id: barracuda-spam-firewall
 info:
   name: 梭子鱼垃圾邮件防火墙
   author: archer
   verified: false
   description: 检测到梭子鱼垃圾邮件防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: barracuda.spam-firewall
+    name: Barracuda Spam Firewall
+    vendor: Barracuda Networks
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - mail
+      - firewall
+    aliases:
+      - 梭子鱼垃圾邮件防火墙
+    references:
+      - https://www.barracuda.com/
 rules:
   r0:
     request:

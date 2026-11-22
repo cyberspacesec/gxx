@@ -1,10 +1,23 @@
-id: web-join_cheer-report
+id: join-cheer-netrep
 info:
   name: join_cheer-report
   author: archer
   verified: false
   description: 检测到join_cheer-report系统或组件的特征
   created: 2025/04/24
+  product:
+    id: join-cheer.netrep
+    name: 久其网络报表系统
+    vendor: 久其软件
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - bi
+    aliases:
+      - join_cheer-report
+      - join-cheer-general-financial-system
+      - 久其通用财务系统
 rules:
   r0:
     request:

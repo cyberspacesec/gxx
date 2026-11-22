@@ -1,10 +1,22 @@
-id: web-瑞友天翼应用虚拟化系统
+id: realor-tianyi
 info:
   name: 瑞友天翼应用虚拟化系统
   author: archer
   verified: false
   description: 检测到瑞友天翼应用虚拟化系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: realor.tianyi
+    name: 瑞友天翼应用虚拟化系统
+    vendor: 瑞友科技
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+      - remote-access
+    aliases:
+      - Realor
 rules:
   r0:
     request:

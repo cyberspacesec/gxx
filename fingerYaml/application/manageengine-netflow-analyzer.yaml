@@ -1,10 +1,21 @@
-id: web-netflow-analyzer-zoho-traffic-management
+id: manageengine-netflow-analyzer
 info:
   name: netflow-analyzer-zoho-traffic-management
   author: archer
   verified: false
   description: 检测到netflow-analyzer-zoho-traffic-management系统或组件的特征
   created: 2025/04/24
+  product:
+    id: manageengine.netflow-analyzer
+    name: ManageEngine NetFlow Analyzer
+    vendor: ManageEngine
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
+    aliases:
+      - NetFlow Analyzer
 rules:
   r0:
     request:

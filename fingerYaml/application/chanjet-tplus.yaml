@@ -1,10 +1,21 @@
-id: web-畅捷通
+id: chanjet-tplus
 info:
   name: 畅捷通
   author: archer
   verified: true
   description: 检测到畅捷通系统或组件的特征
   created: 2025/04/24
+  product:
+    id: chanjet.tplus
+    name: 畅捷通T+
+    vendor: 畅捷通
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
+    aliases:
+      - T+
 rules:
   r0:
     request:

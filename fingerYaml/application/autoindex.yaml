@@ -1,10 +1,16 @@
-id: web-autoindex-php-script
+id: autoindex
 info:
   name: autoindex-php-script
   author: archer
   verified: false
   description: 检测到autoindex-php-script系统或组件的特征
   created: 2025/04/24
+  product:
+    id: autoindex.autoindex
+    name: AutoIndex PHP Script
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

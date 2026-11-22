@@ -1,10 +1,24 @@
-id: web-papercut
+id: papercut
 info:
   name: papercut
   author: archer
   verified: false
   description: 检测到papercut系统或组件的特征
   created: 2025/04/24
+  product:
+    id: papercut.papercut
+    name: PaperCut NG/MF
+    vendor: PaperCut Software
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - printer
+    aliases:
+      - PaperCut MF
+      - PaperCut NG
+    references:
+      - https://www.papercut.com/
 rules:
   r0:
     request:

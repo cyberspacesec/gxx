@@ -1,10 +1,18 @@
-id: web-365xxy-examing
+id: 365xxy-online-exam
 info:
   name: 365xxy-examing
   author: archer
   verified: false
   description: 检测到365xxy-examing系统或组件的特征
   created: 2025/04/24
+  product:
+    id: 365xxy.online-exam
+    name: 云时政在线考试系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: aircube-login
+id: ubiquiti-aircube
 info:
   reference:
     - https://techspecs.ui.com/uisp/wired/acb-ac
@@ -8,6 +8,22 @@ info:
   description: Ubiquiti 提供的无线网络接入设备。
   tags: web,fofa,converted,device
   created: 2025/04/07
+  product:
+    id: ubiquiti.aircube
+    name: airCube
+    vendor: Ubiquiti
+    category: device
+    identity: product
+    assurance: verified
+    tags:
+      - device
+      - router
+      - login
+    aliases:
+      - AirCube
+    references:
+      - https://techspecs.ui.com/uisp/wired/acb-ac
+    description: Ubiquiti 提供的无线网络接入设备。
 rules:
   r0:
     request:

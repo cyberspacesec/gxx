@@ -1,10 +1,16 @@
-id: web-pollutionsourcemonitoringdataexchangeplatform
+id: wuranyuan-jiance-shuju-jiaohuan-pingtai
 info:
   name: pollutionsourcemonitoringdataexchangeplatform
   author: archer
   verified: false
   description: 检测到pollutionsourcemonitoringdataexchangeplatform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wuranyuan-jiance.shuju-jiaohuan-pingtai
+    name: 污染源监测数据交换平台
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

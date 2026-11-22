@@ -1,10 +1,19 @@
-id: web-金山timeon云杀毒
+id: kingsoft-timeon
 info:
   name: 金山timeon云杀毒
   author: archer
   verified: false
   description: 检测到金山timeon云杀毒系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kingsoft.timeon
+    name: 金山 TimeOn 云杀毒
+    vendor: 金山
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - 金山timeon云杀毒
 rules:
   r0:
     request:

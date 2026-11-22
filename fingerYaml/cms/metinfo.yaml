@@ -1,10 +1,23 @@
-id: web-米拓企业建站系统
+id: metinfo
 info:
   name: 米拓企业建站系统
   author: archer
   verified: false
   description: 检测到米拓企业建站系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: metinfo.metinfo
+    name: MetInfo
+    vendor: 米拓信息
+    category: cms
+    identity: product
+    assurance: verified
+    tags:
+      - cms
+    aliases:
+      - 米拓企业建站系统
+    references:
+      - https://www.metinfo.cn/
 rules:
   r0:
     request:

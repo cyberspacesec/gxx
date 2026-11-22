@@ -1,10 +1,19 @@
-id: web-hisense-business-management-platform
+id: hisense-business-management-platform
 info:
   name: hisense-business-management-platform
   author: archer
   verified: false
   description: 检测到hisense-business-management-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hisense.business-management-platform
+    name: 海信业务管理平台
+    vendor: 海信
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - hisense-business-management-platform
 rules:
   r0:
     request:

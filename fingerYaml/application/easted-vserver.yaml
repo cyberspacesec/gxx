@@ -1,10 +1,21 @@
-id: web-easted-ecloud
+id: easted-vserver
 info:
   name: easted-ecloud
   author: archer
   verified: false
   description: 检测到easted-ecloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: easted.vserver
+    name: EASTED vServer 虚拟数据中心系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+      - cloud
+    aliases:
+      - easted-ecloud
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-vpn358system
+id: vpn358
 info:
   name: vpn358system
   author: archer
   verified: false
   description: 检测到vpn358system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vpn358.vpn358
+    name: VPN358 系统
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

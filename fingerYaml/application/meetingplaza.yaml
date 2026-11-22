@@ -1,10 +1,18 @@
-id: web-meetingplaza
+id: meetingplaza
 info:
   name: meetingplaza
   author: archer
   verified: false
   description: 检测到meetingplaza系统或组件的特征
   created: 2025/04/24
+  product:
+    id: meetingplaza.meetingplaza
+    name: MeetingPlaza
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
 rules:
   r0:
     request:

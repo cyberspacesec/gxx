@@ -1,4 +1,4 @@
-id: web-wordpress
+id: wordpress
 info:
   tags: cms
   reference:
@@ -8,6 +8,23 @@ info:
   verified: false
   description: 开源内容管理与站点发布系统。
   created: 2025/04/16
+  product:
+    id: wordpress.wordpress
+    name: WordPress
+    vendor: WordPress
+    category: cms
+    identity: product
+    assurance: verified
+    tags:
+      - cms
+      - blog
+    aliases:
+      - wordpress
+    cpe:
+      - cpe:2.3:a:wordpress:wordpress:*:*:*:*:*:*:*:*
+    references:
+      - https://wordpress.org/
+    description: 开源内容管理与站点发布系统。
 rules:
   r0:
     request:

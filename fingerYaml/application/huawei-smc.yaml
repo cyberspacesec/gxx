@@ -1,10 +1,21 @@
-id: web-huaweismc
+id: huawei-smc
 info:
   name: huaweismc
   author: archer
   verified: false
   description: 检测到huaweismc系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huawei.smc
+    name: SMC 视讯管理平台
+    vendor: 华为
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
+    aliases:
+      - huaweismc
 rules:
   r0:
     request:

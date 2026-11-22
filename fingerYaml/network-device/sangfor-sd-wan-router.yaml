@@ -1,10 +1,21 @@
-id: web-深信服SD-WAN安全智能路由器
+id: sangfor-sd-wan-router
 info:
   name: 深信服SD-WAN安全智能路由器
   author: archer
   verified: false
   description: 检测到深信服SD-WAN安全智能路由器系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.sd-wan-router
+    name: 深信服 SD-WAN 安全智能路由器
+    vendor: 深信服
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - router
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

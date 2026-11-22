@@ -1,10 +1,19 @@
-id: web-gzqxrh-system
+id: quanxi-ruohai-system
 info:
   name: gzqxrh-system
   author: archer
   verified: false
   description: 检测到gzqxrh-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: quanxi-ruohai.system
+    name: 全息若海信息系统
+    vendor: 广州全息若海信息科技有限公司
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - gzqxrh-system
 rules:
   r0:
     request:

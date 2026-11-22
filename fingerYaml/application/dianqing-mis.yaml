@@ -1,10 +1,16 @@
-id: web-点晴mis管理信息系统
+id: dianqing-mis
 info:
   name: 点晴mis管理信息系统
   author: archer
   verified: true
   description: 检测到点晴mis管理信息系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dianqing.mis
+    name: 点晴MIS管理信息系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

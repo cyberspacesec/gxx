@@ -1,10 +1,18 @@
-id: web-新网互联-准讯邮件系统
+id: zhunxun-mail
 info:
   name: 新网互联-准讯邮件系统
   author: archer
   verified: false
   description: 检测到新网互联-准讯邮件系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhunxun.mail
+    name: 准讯邮件系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

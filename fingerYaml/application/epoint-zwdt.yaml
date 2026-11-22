@@ -1,10 +1,19 @@
-id: web-epoint-web-zwdt
+id: epoint-zwdt
 info:
   name: epoint-web-zwdt
   author: archer
   verified: false
   description: 检测到epoint-web-zwdt系统或组件的特征
   created: 2025/04/24
+  product:
+    id: epoint.zwdt
+    name: 新点网上政务大厅
+    vendor: 新点软件
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - epoint-web-zwdt
 rules:
   r0:
     request:

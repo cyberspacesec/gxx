@@ -1,10 +1,19 @@
-id: web-glodon-console
+id: glodon-console
 info:
   name: glodon-console
   author: archer
   verified: false
   description: 检测到glodon-console系统或组件的特征
   created: 2025/04/24
+  product:
+    id: glodon.console
+    name: 广联达管理控制台
+    vendor: 广联达
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - glodon-console
 rules:
   r0:
     request:

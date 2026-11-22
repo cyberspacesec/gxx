@@ -1,4 +1,4 @@
-id: web-rabbitmq
+id: rabbitmq
 info:
   tags: middleware
   reference:
@@ -8,6 +8,19 @@ info:
   verified: false
   description: 支持消息队列与多种消息传输协议的消息代理。
   created: 2025/04/24
+  product:
+    id: rabbitmq.rabbitmq
+    name: RabbitMQ
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+    aliases:
+      - rabbitmq
+    references:
+      - https://www.rabbitmq.com/
+    description: 支持消息队列与多种消息传输协议的消息代理。
 rules:
   r0:
     request:

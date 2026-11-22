@@ -1,10 +1,19 @@
-id: web-佑友-佑友防火墙
+id: youyou-firewall
 info:
   name: 佑友-佑友防火墙
   author: archer
   verified: false
   description: 检测到佑友-佑友防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: youyou.firewall
+    name: 佑友防火墙
+    vendor: 佑友
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
 rules:
   r0:
     request:

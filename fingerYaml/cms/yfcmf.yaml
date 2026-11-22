@@ -1,10 +1,18 @@
-id: web-thinkphp-yfcmf
+id: yfcmf
 info:
   name: thinkphp-yfcmf
   author: archer
   verified: false
   description: 检测到thinkphp-yfcmf系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yfcmf.yfcmf
+    name: YFCMF
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

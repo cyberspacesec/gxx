@@ -1,10 +1,17 @@
-id: web-threatconnect-platform
+id: threatconnect-threatconnect-platform
 info:
   name: threatconnect-platform
   author: archer
   verified: false
   description: 检测到threatconnect-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: threatconnect.threatconnect-platform
+    name: ThreatConnect Platform
+    vendor: ThreatConnect
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-renwoxing-crm
+id: renwoxing-crm-login-page
 info:
   name: renwoxing-crm
   author: archer
   verified: false
   description: 检测到renwoxing-crm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: renwoxing.crm
+    name: 任我行 CRM
+    vendor: 任我行软件
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - crm
+    aliases:
+      - renwoxing-crm
 rules:
   r0:
     request:

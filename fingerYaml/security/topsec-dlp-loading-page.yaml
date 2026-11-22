@@ -1,10 +1,23 @@
-id: web-topsec-dlp
+id: topsec-dlp-loading-page
 info:
   name: topsec-dlp
   author: archer
   verified: false
   description: 检测到topsec-dlp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: topsec.dlp
+    name: 天融信数据防泄漏系统
+    vendor: 天融信
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - 天融信数据泄露防护系统
+      - TopDLP
+      - 天融信DLP
+    references:
+      - https://www.topsec.com.cn/
 rules:
   r0:
     request:

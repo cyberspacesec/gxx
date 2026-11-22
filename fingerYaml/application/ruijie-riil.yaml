@@ -1,10 +1,21 @@
-id: web-ruijie-it
+id: ruijie-riil
 info:
   name: ruijie-it
   author: archer
   verified: false
   description: 检测到ruijie-it系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruijie.riil
+    name: 锐捷 RIIL 运维管理平台
+    vendor: 锐捷网络
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
+    aliases:
+      - ruijie-it
 rules:
   r0:
     request:

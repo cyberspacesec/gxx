@@ -1,10 +1,21 @@
-id: web-nsfocus-enterprise-security-center
+id: nsfocus-espc-logo
 info:
   name: nsfocus-enterprise-security-center
   author: archer
   verified: false
   description: 检测到nsfocus-enterprise-security-center系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nsfocus.espc
+    name: 绿盟企业安全中心
+    vendor: 绿盟科技
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - siem
+    aliases:
+      - ESPC
 rules:
   r0:
     request:

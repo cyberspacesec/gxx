@@ -1,10 +1,19 @@
-id: web-web-wiz-rich-text-editor
+id: webwiz-rich-text-editor
 info:
   name: web-wiz-rich-text-editor
   author: archer
   verified: false
   description: 检测到web-wiz-rich-text-editor系统或组件的特征
   created: 2025/04/24
+  product:
+    id: webwiz.rich-text-editor
+    name: Web Wiz Rich Text Editor
+    vendor: Web Wiz
+    category: library
+    identity: product
+    assurance: inferred
+    tags:
+      - js-library
 rules:
   r0:
     request:

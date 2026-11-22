@@ -1,4 +1,4 @@
-id: web-apache-ambari
+id: apache-ambari
 info:
   tags: application
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: Hadoop 集群的部署、管理与监控平台。
   created: 2025/04/24
+  product:
+    id: apache.ambari
+    name: Apache Ambari
+    vendor: Apache Software Foundation
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - big-data
+    aliases:
+      - apache-ambari
+    references:
+      - https://ambari.apache.org/
+    description: Hadoop 集群的部署、管理与监控平台。
 rules:
   r0:
     request:

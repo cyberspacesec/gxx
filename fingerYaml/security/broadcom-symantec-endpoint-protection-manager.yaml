@@ -1,10 +1,21 @@
-id: web-symantec-endpoint-protection-manager
+id: broadcom-symantec-endpoint-protection-manager
 info:
   name: symantec-endpoint-protection-manager
   author: archer
   verified: false
   description: 检测到symantec-endpoint-protection-manager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: broadcom.symantec-endpoint-protection-manager
+    name: Symantec Endpoint Protection Manager
+    vendor: Broadcom
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - edr
+    aliases:
+      - SEPM
 rules:
   r0:
     request:

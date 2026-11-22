@@ -1,10 +1,19 @@
-id: web-adt-iam
+id: adt-iam-gateway-meta-keywords
 info:
   name: adt-iam
   author: archer
   verified: false
   description: 检测到adt-iam系统或组件的特征
   created: 2025/04/24
+  product:
+    id: adt.iam-gateway
+    name: 安达通 IAM 网关
+    vendor: 安达通
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
 rules:
   r0:
     request:

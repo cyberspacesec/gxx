@@ -1,10 +1,22 @@
-id: web-nextcloud-product
+id: nextcloud
 info:
   name: nextcloud-product
   author: archer
   verified: false
   description: 检测到nextcloud-product系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nextcloud.nextcloud
+    name: Nextcloud
+    vendor: Nextcloud GmbH
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - storage
+      - cloud
+    references:
+      - https://nextcloud.com/
 rules:
   r0:
     request:

@@ -1,10 +1,24 @@
-id: web-traefik
+id: traefik
 info:
   name: traefik
   author: archer
   verified: true
   description: 检测到traefik系统或组件的特征
   created: 2025/04/24
+  product:
+    id: traefik.traefik
+    name: Traefik
+    vendor: Traefik Labs
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - proxy
+      - load-balancer
+    aliases:
+      - Traefik Proxy
+    references:
+      - https://traefik.io/
 rules:
   r0:
     request:

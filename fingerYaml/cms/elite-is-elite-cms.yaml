@@ -1,10 +1,20 @@
-id: web-elite_cms
+id: elite-is-elite-cms
 info:
   name: elite_cms
   author: archer
   verified: false
   description: 检测到elite_cms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: elite-is.elite-cms
+    name: Elite CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - elite_cms
 rules:
   r0:
     request:

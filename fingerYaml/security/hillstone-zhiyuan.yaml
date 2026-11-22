@@ -1,10 +1,21 @@
-id: web-hillstone-智能安全运营系统
+id: hillstone-zhiyuan
 info:
   name: hillstone-智能安全运营系统
   author: archer
   verified: false
   description: 检测到hillstone-智能安全运营系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hillstone.zhiyuan
+    name: 智源智能安全运营系统
+    vendor: 山石网科
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - siem
+    aliases:
+      - hillstone-智能安全运营系统
 rules:
   r0:
     request:

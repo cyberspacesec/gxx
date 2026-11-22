@@ -1,10 +1,20 @@
-id: web-mailmax-邮件服务器
+id: mailmax
 info:
   name: mailmax-邮件服务器
   author: archer
   verified: false
   description: 检测到mailmax-邮件服务器系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mailmax.mailmax
+    name: MailMax 邮件服务器
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - mailmax-邮件服务器
 rules:
   r0:
     request:

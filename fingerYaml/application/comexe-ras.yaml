@@ -1,10 +1,21 @@
-id: web-comexe-ras
+id: comexe-ras
 info:
   name: comexe-ras
   author: archer
   verified: false
   description: 检测到comexe-ras系统或组件的特征
   created: 2025/04/24
+  product:
+    id: comexe.ras
+    name: 科迈RAS
+    vendor: 科迈
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - remote-access
+    aliases:
+      - comexe-ras
 rules:
   r0:
     request:

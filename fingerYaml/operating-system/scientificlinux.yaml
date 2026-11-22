@@ -1,5 +1,5 @@
 ---
-id: fofayaml-50
+id: scientificlinux
 info:
   reference:
     - https://scientificlinux.org/
@@ -9,6 +9,19 @@ info:
   description: 面向科研使用场景的 Linux 发行版；响应标记不等同于主机系统已核实。
   tags: web,fofa,converted,operating-system
   created: 2025/04/07
+  product:
+    id: scientificlinux.scientificlinux
+    name: Scientific Linux
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - operating-system
+    aliases:
+      - Scientific Linux
+    references:
+      - https://scientificlinux.org/
+    description: 面向科研使用场景的 Linux 发行版；响应标记不等同于主机系统已核实。
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-qcodo-development-framework
+id: qcodo
 info:
   name: qcodo-development-framework
   author: archer
   verified: false
   description: 检测到qcodo-development-framework系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qcodo.qcodo
+    name: Qcodo
+    category: framework
+    identity: product
+    assurance: inferred
+    tags:
+      - dev-framework
 rules:
   r0:
     request:

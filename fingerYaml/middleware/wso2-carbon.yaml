@@ -1,10 +1,19 @@
-id: web-wso2-carbon-server
+id: wso2-carbon
 info:
   name: wso2-carbon-server
   author: archer
   verified: false
   description: 检测到wso2-carbon-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wso2.carbon
+    name: WSO2 Carbon
+    vendor: WSO2
+    category: middleware
+    identity: product
+    assurance: verified
+    references:
+      - https://wso2.com/
 rules:
   r0:
     request:

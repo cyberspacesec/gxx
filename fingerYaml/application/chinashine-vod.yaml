@@ -1,10 +1,19 @@
-id: web-china-shine-video-on-demand
+id: chinashine-vod
 info:
   name: china-shine-video-on-demand
   author: archer
   verified: false
   description: 检测到china-shine-video-on-demand系统或组件的特征
   created: 2025/04/24
+  product:
+    id: chinashine.vod
+    name: 视翰视频点播系统
+    vendor: 视翰
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video
 rules:
   r0:
     request:

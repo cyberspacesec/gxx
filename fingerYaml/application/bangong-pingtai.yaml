@@ -1,10 +1,18 @@
-id: web-办公平台
+id: bangong-pingtai
 info:
   name: 办公平台
   author: archer
   verified: false
   description: 检测到办公平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: bangong-pingtai.bangong-pingtai
+    name: 办公平台
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

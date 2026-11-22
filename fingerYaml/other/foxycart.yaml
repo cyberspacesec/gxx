@@ -1,10 +1,21 @@
-id: web-foxycart
+id: foxycart
 info:
   name: foxycart
   author: archer
   verified: false
   description: 检测到foxycart系统或组件的特征
   created: 2025/04/24
+  product:
+    id: foxycart.foxycart
+    name: FoxyCart
+    vendor: FoxyCart
+    category: other
+    identity: signal
+    assurance: inferred
+    tags:
+      - ecommerce
+    aliases:
+      - Foxy.io
 rules:
   r0:
     request:

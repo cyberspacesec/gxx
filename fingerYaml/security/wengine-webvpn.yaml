@@ -1,10 +1,19 @@
-id: web-WebVPN
+id: wengine-webvpn
 info:
   name: WebVPN
   author: archer
   verified: false
   description: 检测到WebVPN系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wengine.webvpn
+    name: WebVPN（wengine）
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
+      - remote-access
 rules:
   r0:
     request:

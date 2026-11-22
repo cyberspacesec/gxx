@@ -1,10 +1,18 @@
-id: web-oss
+id: oss
 info:
   name: oss
   author: archer
   verified: false
   description: 检测到oss系统或组件的特征
   created: 2025/04/24
+  product:
+    id: oss.oss
+    name: OSS
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - login
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: web-gitlab
+id: gitlab
 info:
   tags: application
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 提供代码托管、协作与持续集成能力的开发平台。
   created: 2025/04/24
+  product:
+    id: gitlab.gitlab
+    name: GitLab
+    vendor: GitLab
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - devops
+    aliases:
+      - gitlab
+    references:
+      - https://about.gitlab.com/
+    description: 提供代码托管、协作与持续集成能力的开发平台。
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: web-apache-flink
+id: apache-flink
 info:
   tags: middleware
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 面向有界与无界数据流的分布式处理引擎。
   created: 2025/04/24
+  product:
+    id: apache.flink
+    name: Apache Flink
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+      - big-data
+    aliases:
+      - apache-flink
+    references:
+      - https://flink.apache.org/
+    description: 面向有界与无界数据流的分布式处理引擎。
 rules:
   r0:
     request:

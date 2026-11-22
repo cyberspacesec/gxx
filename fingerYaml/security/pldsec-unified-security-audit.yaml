@@ -1,10 +1,18 @@
-id: web-pldsec-统一安全管理和综合审计系统
+id: pldsec-unified-security-audit
 info:
   name: pldsec-统一安全管理和综合审计系统
   author: archer
   verified: false
   description: 检测到pldsec-统一安全管理和综合审计系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pldsec.unified-security-audit
+    name: 统一安全管理和综合审计系统
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - bastion
 rules:
   r0:
     request:

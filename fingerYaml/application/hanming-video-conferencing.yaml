@@ -1,10 +1,20 @@
-id: web-hanming-video-conferencing
+id: hanming-video-conferencing
 info:
   name: hanming-video-conferencing
   author: archer
   verified: false
   description: 检测到hanming-video-conferencing系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hanming.video-conferencing
+    name: Hanming 视频会议系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
+    aliases:
+      - hanming-video-conferencing
 rules:
   r0:
     request:

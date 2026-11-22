@@ -1,10 +1,17 @@
-id: web-zoom-search-engine
+id: wrensoft-zoom-search-engine
 info:
   name: zoom-search-engine
   author: archer
   verified: false
   description: 检测到zoom-search-engine系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wrensoft.zoom-search-engine
+    name: Zoom Search Engine
+    vendor: Wrensoft
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

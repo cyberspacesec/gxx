@@ -1,10 +1,22 @@
-id: web-synology-webstation
+id: synology-web-station
 info:
   name: synology-webstation
   author: archer
   verified: false
   description: 检测到synology-webstation系统或组件的特征
   created: 2025/04/24
+  product:
+    id: synology.web-station
+    name: Synology Web Station
+    vendor: Synology
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - nas
+      - default-page
+    references:
+      - https://www.synology.com/
 rules:
   r0:
     request:

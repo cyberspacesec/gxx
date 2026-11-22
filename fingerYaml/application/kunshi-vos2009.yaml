@@ -1,10 +1,17 @@
-id: web-vos-vos2009
+id: kunshi-vos2009
 info:
   name: vos-vos2009
   author: archer
   verified: false
   description: 检测到vos-vos2009系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kunshi.vos2009
+    name: VOS2009
+    vendor: 昆石网络
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

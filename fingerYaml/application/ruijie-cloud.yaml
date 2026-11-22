@@ -1,10 +1,23 @@
-id: web-ruijie-cloud
+id: ruijie-cloud
 info:
   name: ruijie-cloud
   author: archer
   verified: false
   description: 检测到ruijie-cloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruijie.cloud
+    name: 锐捷 RCP 管理平台
+    vendor: 锐捷网络
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - cloud
+    aliases:
+      - ruijie-cloud
+    references:
+      - https://www.ruijie.com.cn/
 rules:
   r0:
     request:

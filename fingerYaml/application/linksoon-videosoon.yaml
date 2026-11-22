@@ -1,10 +1,16 @@
-id: web-videosoon
+id: linksoon-videosoon
 info:
   name: videosoon
   author: archer
   verified: false
   description: 检测到videosoon系统或组件的特征
   created: 2025/04/24
+  product:
+    id: linksoon.videosoon
+    name: VideoSoon
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

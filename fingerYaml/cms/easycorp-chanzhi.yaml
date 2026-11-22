@@ -1,10 +1,23 @@
-id: web-chanzhicms
+id: easycorp-chanzhi
 info:
   name: chanzhicms
   author: archer
   verified: false
   description: 检测到chanzhicms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: easycorp.chanzhi
+    name: 蝉知CMS
+    vendor: 易软天创
+    category: cms
+    identity: product
+    assurance: verified
+    tags:
+      - cms
+    aliases:
+      - chanzhiCMS
+    references:
+      - http://www.chanzhi.org/
 rules:
   r0:
     request:

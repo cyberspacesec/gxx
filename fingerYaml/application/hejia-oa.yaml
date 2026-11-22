@@ -1,10 +1,18 @@
-id: web-hejia-oa
+id: hejia-oa
 info:
   name: hejia-oa
   author: archer
   verified: false
   description: 检测到hejia-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hejia.oa
+    name: Hejia OA
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

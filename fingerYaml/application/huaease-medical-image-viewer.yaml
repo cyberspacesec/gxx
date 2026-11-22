@@ -1,10 +1,18 @@
-id: web-huaease-medication
+id: huaease-medical-image-viewer
 info:
   name: huaease-medication
   author: archer
   verified: false
   description: 检测到huaease-medication系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huaease.medical-image-viewer
+    name: Web 医学影像浏览器
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - huaease-medication
 rules:
   r0:
     request:

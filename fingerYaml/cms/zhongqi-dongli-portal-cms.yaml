@@ -1,10 +1,21 @@
-id: web-crow-force-portal-cms
+id: zhongqi-dongli-portal-cms
 info:
   name: crow-force-portal-cms
   author: archer
   verified: false
   description: 检测到crow-force-portal-cms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhongqi-dongli.portal-cms
+    name: 中企动力门户 CMS
+    vendor: 中企动力
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - crow-force-portal-cms
 rules:
   r0:
     request:

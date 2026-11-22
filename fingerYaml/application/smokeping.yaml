@@ -1,10 +1,20 @@
-id: web-smokeping
+id: smokeping
 info:
   name: smokeping
   author: archer
   verified: false
   description: 检测到smokeping系统或组件的特征
   created: 2025/04/24
+  product:
+    id: smokeping.smokeping
+    name: SmokePing
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://oss.oetiker.ch/smokeping/
 rules:
   r0:
     request:

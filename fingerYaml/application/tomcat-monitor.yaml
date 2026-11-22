@@ -1,10 +1,18 @@
-id: web-tomcat-monitor-uses-wadl
+id: tomcat-monitor
 info:
   name: tomcat-monitor-uses-wadl
   author: archer
   verified: false
   description: 检测到tomcat-monitor-uses-wadl系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tomcat-monitor.tomcat-monitor
+    name: Tomcat Monitor
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

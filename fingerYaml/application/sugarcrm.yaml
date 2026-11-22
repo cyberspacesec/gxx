@@ -1,10 +1,21 @@
-id: web-sugarcrm
+id: sugarcrm
 info:
   name: sugarcrm
   author: archer
   verified: false
   description: 检测到sugarcrm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sugarcrm.sugarcrm
+    name: SugarCRM
+    vendor: SugarCRM
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - crm
+    references:
+      - https://www.sugarcrm.com/
 rules:
   r0:
     request:

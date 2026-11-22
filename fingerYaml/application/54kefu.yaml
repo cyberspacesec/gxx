@@ -1,10 +1,18 @@
-id: web-54-customer-service
+id: 54kefu
 info:
   name: 54-customer-service
   author: archer
   verified: false
   description: 检测到54-customer-service系统或组件的特征
   created: 2025/04/24
+  product:
+    id: 54kefu.54kefu
+    name: 54客服
+    category: application
+    identity: signal
+    assurance: inferred
+    tags:
+      - im
 rules:
   r0:
     request:

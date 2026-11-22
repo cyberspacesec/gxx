@@ -1,10 +1,16 @@
-id: web-庞培软件开发系统
+id: pangpei-software-dev-system
 info:
   name: 庞培软件开发系统
   author: archer
   verified: false
   description: 检测到庞培软件开发系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pangpei.software-dev-system
+    name: 庞培软件开发系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

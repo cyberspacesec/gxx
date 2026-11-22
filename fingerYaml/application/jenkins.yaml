@@ -1,4 +1,4 @@
-id: web-jenkins
+id: jenkins
 info:
   tags: application
   reference:
@@ -8,6 +8,21 @@ info:
   verified: true
   description: 用于构建、测试和交付流程自动化的服务器。
   created: 2025/04/24
+  product:
+    id: jenkins.jenkins
+    name: Jenkins
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - ci
+      - devops
+    aliases:
+      - jenkins
+    references:
+      - https://www.jenkins.io/
+    description: 用于构建、测试和交付流程自动化的服务器。
 rules:
   r0:
     request:

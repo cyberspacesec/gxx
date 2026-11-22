@@ -1,10 +1,23 @@
-id: web-django-rest-framework
+id: encode-django-rest-framework
 info:
   name: django-rest-framework
   author: archer
   verified: false
   description: 检测到django-rest-framework系统或组件的特征
   created: 2025/04/24
+  product:
+    id: encode.django-rest-framework
+    name: Django REST framework
+    vendor: Encode
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    aliases:
+      - DRF
+    references:
+      - https://www.django-rest-framework.org/
 rules:
   r0:
     request:

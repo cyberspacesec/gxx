@@ -1,10 +1,20 @@
-id: web-jupyter-notebook
+id: jupyter-notebook
 info:
   name: jupyter-notebook
   author: archer
   verified: true
   description: 检测到jupyter-notebook系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jupyter.notebook
+    name: Jupyter Notebook
+    category: application
+    identity: product
+    assurance: verified
+    aliases:
+      - jupyter-notebook
+    references:
+      - https://jupyter.org/
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-vam-product
+id: vam-virtual-airlines-manager
 info:
   name: vam-product
   author: archer
   verified: false
   description: 检测到vam-product系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vam.virtual-airlines-manager
+    name: Virtual Airlines Manager
+    category: application
+    identity: product
+    assurance: verified
+    aliases:
+      - VAM
+    references:
+      - https://virtualairlinesmanager.net/
 rules:
   r0:
     request:

@@ -1,10 +1,17 @@
-id: web-teradata-parallel
+id: teradata-parallel
 info:
   name: teradata-parallel
   author: archer
   verified: false
   description: 检测到teradata-parallel系统或组件的特征
   created: 2025/04/24
+  product:
+    id: teradata.parallel
+    name: teradata-parallel
+    vendor: Teradata
+    category: database
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

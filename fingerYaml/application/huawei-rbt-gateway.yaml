@@ -1,10 +1,21 @@
-id: web-huawei-rbt网关管理系统
+id: huawei-rbt-gateway
 info:
   name: huawei-rbt网关管理系统
   author: archer
   verified: false
   description: 检测到huawei-rbt网关管理系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huawei.rbt-gateway
+    name: RBT 网关管理系统
+    vendor: 华为
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+    aliases:
+      - huawei-rbt网关管理系统
 rules:
   r0:
     request:

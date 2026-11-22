@@ -1,10 +1,22 @@
-id: web-acunetix-wvs
+id: acunetix
 info:
   name: acunetix-wvs
   author: archer
   verified: false
   description: 检测到acunetix-wvs系统或组件的特征
   created: 2025/04/24
+  product:
+    id: acunetix.acunetix
+    name: Acunetix Web Vulnerability Scanner
+    vendor: Acunetix
+    category: security
+    identity: product
+    assurance: verified
+    aliases:
+      - Acunetix
+      - Acunetix WVS
+    references:
+      - https://www.acunetix.com/
 rules:
   r0:
     request:

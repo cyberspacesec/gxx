@@ -1,10 +1,19 @@
-id: web-圣博润-lansecs第二代防火墙
+id: shengborun-lansecs-firewall
 info:
   name: 圣博润-lansecs第二代防火墙
   author: archer
   verified: false
   description: 检测到圣博润-lansecs第二代防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: shengborun.lansecs-firewall
+    name: 圣博润 LanSecS 第二代防火墙
+    vendor: 圣博润
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
 rules:
   r0:
     request:

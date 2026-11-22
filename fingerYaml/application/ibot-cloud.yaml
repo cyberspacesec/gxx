@@ -1,10 +1,18 @@
-id: web-ibot-cloud
+id: ibot-cloud
 info:
   name: ibot-cloud
   author: archer
   verified: false
   description: 检测到ibot-cloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ibot.cloud
+    name: iBot Cloud
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - ibot-cloud
 rules:
   r0:
     request:

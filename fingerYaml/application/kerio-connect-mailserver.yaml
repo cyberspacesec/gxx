@@ -1,10 +1,22 @@
-id: web-kerio-mailserver
+id: kerio-connect-mailserver
 info:
   name: kerio-mailserver
   author: archer
   verified: false
   description: 检测到kerio-mailserver系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kerio.connect
+    name: Kerio Connect
+    vendor: Kerio Technologies
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - kerio-connect
+      - Kerio MailServer
 rules:
   r0:
     request:

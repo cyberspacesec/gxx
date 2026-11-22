@@ -1,10 +1,16 @@
-id: web-cancosoft-asset-management
+id: cancosoft-asset-management
 info:
   name: cancosoft-asset-management
   author: archer
   verified: false
   description: 检测到cancosoft-asset-management系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cancosoft.asset-management
+    name: Cancosoft Asset Management
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

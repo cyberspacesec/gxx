@@ -1,10 +1,17 @@
-id: web-sheca-cert
+id: sheca-yizhengtong
 info:
   name: sheca-cert
   author: archer
   verified: false
   description: 检测到sheca-cert系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sheca.yizhengtong
+    name: SHECA 一证通
+    vendor: 上海市数字证书认证中心
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

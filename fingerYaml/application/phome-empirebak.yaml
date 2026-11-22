@@ -1,10 +1,21 @@
-id: web-empirebak
+id: phome-empirebak
 info:
   name: empirebak
   author: archer
   verified: false
   description: 检测到empirebak系统或组件的特征
   created: 2025/04/24
+  product:
+    id: phome.empirebak
+    name: 帝国备份王
+    vendor: 帝国软件
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - db-admin
+    aliases:
+      - EmpireBak
 rules:
   r0:
     request:

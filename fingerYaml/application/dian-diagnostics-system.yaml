@@ -1,10 +1,19 @@
-id: web-dian-diagnostics
+id: dian-diagnostics-system
 info:
   name: dian-diagnostics
   author: archer
   verified: false
   description: 检测到dian-diagnostics系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dian-diagnostics.system
+    name: 迪安诊断业务系统
+    vendor: 浙江迪安诊断技术股份有限公司
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - dian-diagnostics
 rules:
   r0:
     request:

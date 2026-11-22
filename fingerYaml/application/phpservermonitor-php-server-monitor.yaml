@@ -1,10 +1,20 @@
-id: web-php-server-monitor
+id: phpservermonitor-php-server-monitor
 info:
   name: php-server-monitor
   author: archer
   verified: false
   description: 检测到php-server-monitor系统或组件的特征
   created: 2025/04/24
+  product:
+    id: phpservermonitor.php-server-monitor
+    name: PHP Server Monitor
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://www.phpservermonitor.org/
 rules:
   r0:
     request:

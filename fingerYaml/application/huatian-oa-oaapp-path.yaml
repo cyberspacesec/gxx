@@ -1,10 +1,24 @@
-id: web-cnpower-oa
+id: huatian-oa-oaapp-path
 info:
   name: cnpower-oa
   author: archer
   verified: false
   description: 检测到cnpower-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huatian.oa
+    name: 华天动力协同 OA
+    vendor: 华天动力
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - 华天动力OA
+      - OA8000
+      - cnpower-oa
+      - 华天动力协同oa办公系统
 rules:
   r0:
     request:

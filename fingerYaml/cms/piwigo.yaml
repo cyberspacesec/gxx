@@ -1,10 +1,20 @@
-id: web-piwigo
+id: piwigo
 info:
   name: piwigo
   author: archer
   verified: false
   description: 检测到piwigo系统或组件的特征
   created: 2025/04/24
+  product:
+    id: piwigo.piwigo
+    name: Piwigo
+    category: cms
+    identity: product
+    assurance: verified
+    tags:
+      - photo-gallery
+    references:
+      - https://piwigo.org/
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-emerson-permasense
+id: emerson-permasense
 info:
   name: emerson-permasense
   author: archer
   verified: false
   description: 检测到emerson-permasense系统或组件的特征
   created: 2025/04/24
+  product:
+    id: emerson.permasense
+    name: Permasense
+    vendor: Emerson
+    category: iot
+    identity: product
+    assurance: inferred
+    tags:
+      - industrial
 rules:
   r0:
     request:

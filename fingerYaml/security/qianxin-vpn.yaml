@@ -1,10 +1,23 @@
-id: web-奇安信-vpn
+id: qianxin-vpn
 info:
   name: 奇安信-vpn
   author: archer
   verified: true
   description: 检测到奇安信-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qianxin.vpn
+    name: 奇安信 VPN
+    vendor: 奇安信
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - vpn
+    aliases:
+      - QianxinVPN
+    references:
+      - https://www.qianxin.com/
 rules:
   r0:
     request:

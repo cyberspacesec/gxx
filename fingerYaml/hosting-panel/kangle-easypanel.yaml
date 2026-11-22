@@ -1,10 +1,16 @@
-id: web-easypanel
+id: kangle-easypanel
 info:
   name: easypanel
   author: archer
   verified: false
   description: 检测到easypanel系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kangle.easypanel
+    name: EasyPanel
+    category: hosting-panel
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

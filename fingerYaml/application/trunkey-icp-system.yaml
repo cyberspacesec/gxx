@@ -1,10 +1,16 @@
-id: web-trunkey-icpsystem
+id: trunkey-icp-system
 info:
   name: trunkey-icpsystem
   author: archer
   verified: false
   description: 检测到trunkey-icpsystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: trunkey.icp-system
+    name: Trunkey ICP 系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

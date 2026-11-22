@@ -1,10 +1,18 @@
-id: web-cool-admin
+id: cool-admin
 info:
   name: cool-admin
   author: archer
   verified: true
   description: 检测到cool-admin系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cool-admin.cool-admin
+    name: Cool Admin
+    category: framework
+    identity: product
+    assurance: inferred
+    tags:
+      - dev-framework
 rules:
   r0:
     request:

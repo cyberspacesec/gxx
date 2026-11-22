@@ -1,10 +1,20 @@
-id: web-zte-zxsec统一安全网关
+id: zte-zxsec
 info:
   name: zte-zxsec统一安全网关
   author: archer
   verified: false
   description: 检测到zte-zxsec统一安全网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zte.zxsec
+    name: 中兴 ZXSEC 统一安全网关
+    vendor: 中兴
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+      - gateway
 rules:
   r0:
     request:

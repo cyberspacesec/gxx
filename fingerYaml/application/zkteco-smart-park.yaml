@@ -1,10 +1,17 @@
-id: web-zkteco
+id: zkteco-smart-park
 info:
   name: zkteco
   author: archer
   verified: true
   description: 检测到zkteco系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zkteco.smart-park
+    name: 智慧园区综合管理平台
+    vendor: 熵基科技
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

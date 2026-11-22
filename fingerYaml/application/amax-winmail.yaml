@@ -1,10 +1,21 @@
-id: web-winmail-server
+id: amax-winmail
 info:
   name: winmail-server
   author: archer
   verified: false
   description: 检测到winmail-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: amax.winmail
+    name: Winmail Server
+    vendor: 华美科技
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - Winmail Mail Server
 rules:
   r0:
     request:

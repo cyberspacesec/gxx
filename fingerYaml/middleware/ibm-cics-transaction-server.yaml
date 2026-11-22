@@ -1,10 +1,19 @@
-id: web-ibm-cics-transaction-server
+id: ibm-cics-transaction-server
 info:
   name: ibm-cics-transaction-server
   author: archer
   verified: false
   description: 检测到ibm-cics-transaction-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ibm.cics-transaction-server
+    name: CICS Transaction Server
+    vendor: IBM
+    category: middleware
+    identity: product
+    assurance: inferred
+    aliases:
+      - ibm-cics-transaction-server
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-squarespace
+id: squarespace
 info:
   name: squarespace
   author: archer
   verified: false
   description: 检测到squarespace系统或组件的特征
   created: 2025/04/24
+  product:
+    id: squarespace.squarespace
+    name: Squarespace
+    vendor: Squarespace
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    references:
+      - https://www.squarespace.com/
 rules:
   r0:
     request:

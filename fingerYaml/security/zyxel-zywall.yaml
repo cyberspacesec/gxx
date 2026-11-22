@@ -1,10 +1,20 @@
-id: web-zyxel-zywall
+id: zyxel-zywall
 info:
   name: zyxel-zywall
   author: archer
   verified: false
   description: 检测到zyxel-zywall系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zyxel.zywall
+    name: Zyxel ZyWALL
+    vendor: Zyxel
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+      - vpn
 rules:
   r0:
     request:

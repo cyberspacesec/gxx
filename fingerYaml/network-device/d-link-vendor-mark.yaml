@@ -1,10 +1,19 @@
-id: web-d-link
+id: d-link-vendor-mark
 info:
   name: d-link
   author: archer
   verified: false
   description: 检测到d-link系统或组件的特征
   created: 2025/04/24
+  product:
+    id: d-link.vendor-mark
+    name: D-Link 厂商标识
+    vendor: D-Link
+    category: network-device
+    identity: signal
+    assurance: inferred
+    aliases:
+      - D-Link 设备
 rules:
   r0:
     request:

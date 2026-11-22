@@ -1,10 +1,16 @@
-id: web-soft78-system
+id: soft78-soft78-system
 info:
   name: soft78-system
   author: archer
   verified: false
   description: 检测到soft78-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: soft78.soft78-system
+    name: soft78-system
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

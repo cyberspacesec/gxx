@@ -1,10 +1,21 @@
-id: web-leadsec-防病毒网关系统
+id: leadsec-antivirus-gateway
 info:
   name: leadsec-防病毒网关系统
   author: archer
   verified: false
   description: 检测到leadsec-防病毒网关系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: leadsec.antivirus-gateway
+    name: 网御防病毒网关系统
+    vendor: 网御星云
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+    aliases:
+      - leadsec-防病毒网关系统
 rules:
   r0:
     request:

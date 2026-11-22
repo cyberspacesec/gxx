@@ -1,10 +1,22 @@
-id: web-jianhengxinan-jh-las
+id: jianhengxinan-log-audit
 info:
   name: jianhengxinan-jh-las
   author: archer
   verified: false
   description: 检测到jianhengxinan-jh-las系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jianhengxinan.log-audit
+    name: 建恒信安日志审计系统
+    vendor: 建恒信安
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - siem
+    aliases:
+      - jianhengxinan-jh-las
+      - JH-LAS
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-processmaker
+id: processmaker
 info:
   name: processmaker
   author: archer
   verified: false
   description: 检测到processmaker系统或组件的特征
   created: 2025/04/24
+  product:
+    id: processmaker.processmaker
+    name: ProcessMaker
+    vendor: ProcessMaker
+    category: application
+    identity: product
+    assurance: verified
+    references:
+      - https://www.processmaker.com/
 rules:
   r0:
     request:

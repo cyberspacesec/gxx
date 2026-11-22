@@ -1,10 +1,20 @@
-id: web-kenna-system
+id: cisco-kenna-security
 info:
   name: kenna-system
   author: archer
   verified: false
   description: 检测到kenna-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cisco.kenna-security
+    name: Kenna Security
+    vendor: Cisco
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - kenna-system
+      - Cisco Vulnerability Management
 rules:
   r0:
     request:

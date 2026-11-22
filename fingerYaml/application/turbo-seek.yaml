@@ -1,10 +1,16 @@
-id: web-turbo-seek
+id: turbo-seek
 info:
   name: turbo-seek
   author: archer
   verified: false
   description: 检测到turbo-seek系统或组件的特征
   created: 2025/04/24
+  product:
+    id: turbo-seek.turbo-seek
+    name: Turbo Seek
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

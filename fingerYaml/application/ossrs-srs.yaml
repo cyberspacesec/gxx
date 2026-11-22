@@ -1,10 +1,22 @@
-id: web-srs-live-server
+id: ossrs-srs
 info:
   name: srs-live-server
   author: archer
   verified: false
   description: 检测到srs-live-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ossrs.srs
+    name: SRS
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - video
+    aliases:
+      - Simple Realtime Server
+    references:
+      - https://github.com/ossrs/srs
 rules:
   r0:
     request:

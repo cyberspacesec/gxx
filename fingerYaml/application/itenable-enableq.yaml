@@ -1,10 +1,20 @@
-id: web-itenable
+id: itenable-enableq
 info:
   name: itenable
   author: archer
   verified: false
   description: 检测到itenable系统或组件的特征
   created: 2025/04/24
+  product:
+    id: itenable.enableq
+    name: EnableQ 在线问卷调查引擎
+    vendor: 科维能动
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - itenable
+      - EnableQ
 rules:
   r0:
     request:

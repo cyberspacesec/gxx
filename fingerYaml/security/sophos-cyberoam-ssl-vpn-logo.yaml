@@ -1,10 +1,19 @@
-id: web-sophos-cyberoam-ssl-vpn
+id: sophos-cyberoam-ssl-vpn-logo
 info:
   name: sophos-cyberoam-ssl-vpn
   author: archer
   verified: false
   description: 检测到sophos-cyberoam-ssl-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sophos.cyberoam-ssl-vpn
+    name: Cyberoam SSL VPN
+    vendor: Sophos
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

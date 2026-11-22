@@ -1,10 +1,22 @@
-id: web-qax-secfox
+id: qianxin-secfox-bastion
 info:
   name: qax-secfox
   author: archer
   verified: true
   description: 检测到qax-secfox系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qianxin.secfox-bastion
+    name: 网神 SecFox 运维安全管理与审计系统
+    vendor: 奇安信
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - bastion
+    aliases:
+      - 奇安信堡垒机
+      - SecFox
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-ostec-firebox
+id: ostec-firebox
 info:
   name: ostec-firebox
   author: archer
   verified: false
   description: 检测到ostec-firebox系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ostec.firebox
+    name: OSTEC Firebox
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
 rules:
   r0:
     request:

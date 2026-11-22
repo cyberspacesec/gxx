@@ -1,10 +1,20 @@
-id: web-minergate-claymore-miner
+id: claymore-claymore-miner
 info:
   name: minergate-claymore-miner
   author: archer
   verified: false
   description: 检测到minergate-claymore-miner系统或组件的特征
   created: 2025/04/24
+  product:
+    id: claymore.claymore-miner
+    name: Claymore's Dual Ethereum Miner
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - crypto-mining
+    aliases:
+      - Claymore Miner
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-modlogan
+id: modlogan
 info:
   name: modlogan
   author: archer
   verified: false
   description: 检测到modlogan系统或组件的特征
   created: 2025/04/24
+  product:
+    id: modlogan.modlogan
+    name: ModLogAn
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

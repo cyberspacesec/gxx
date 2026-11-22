@@ -1,10 +1,22 @@
-id: web-paloalto网络设备
+id: paloalto-pan-os
 info:
   name: paloalto网络设备
   author: archer
   verified: true
   description: 检测到paloalto网络设备系统或组件的特征
   created: 2025/04/24
+  product:
+    id: paloalto.pan-os
+    name: PAN-OS
+    vendor: Palo Alto Networks
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+      - vpn
+    aliases:
+      - GlobalProtect
 rules:
   r0:
     request:

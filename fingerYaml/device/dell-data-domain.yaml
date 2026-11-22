@@ -1,10 +1,21 @@
-id: web-emc-dd-system-manager
+id: dell-data-domain
 info:
   name: emc-dd-system-manager
   author: archer
   verified: false
   description: 检测到emc-dd-system-manager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dell.data-domain
+    name: Data Domain System Manager
+    vendor: Dell
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
+    aliases:
+      - EMC Data Domain
 rules:
   r0:
     request:

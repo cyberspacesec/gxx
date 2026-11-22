@@ -1,10 +1,20 @@
-id: web-5k-crm
+id: 5kcrm
 info:
   name: 5k-crm
   author: zhizhuo
   verified: true
   description: 识别特定Web应用
   created: 2025/04/15
+  product:
+    id: 5kcrm.5kcrm
+    name: 悟空CRM
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - crm
+    aliases:
+      - 5kcrm
 rules:
   r0:
     request:

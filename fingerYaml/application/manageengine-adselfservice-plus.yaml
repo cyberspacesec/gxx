@@ -1,10 +1,21 @@
-id: web-manageengine-adselfservice
+id: manageengine-adselfservice-plus
 info:
   name: manageengine-adselfservice
   author: archer
   verified: false
   description: 检测到manageengine-adselfservice系统或组件的特征
   created: 2025/04/24
+  product:
+    id: manageengine.adselfservice-plus
+    name: ManageEngine ADSelfService Plus
+    vendor: ManageEngine
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - sso
+    aliases:
+      - manageengine-adselfservice
 rules:
   r0:
     request:

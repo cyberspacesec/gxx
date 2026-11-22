@@ -1,10 +1,18 @@
-id: web-phpsysinfo
+id: phpsysinfo
 info:
   name: phpsysinfo
   author: archer
   verified: false
   description: 检测到phpsysinfo系统或组件的特征
   created: 2025/04/24
+  product:
+    id: phpsysinfo.phpsysinfo
+    name: phpSysInfo
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

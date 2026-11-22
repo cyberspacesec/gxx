@@ -1,5 +1,5 @@
 ---
-id: fofayaml-41
+id: microsoft-windows
 info:
   reference:
     - https://learn.microsoft.com/en-us/windows/
@@ -9,6 +9,21 @@ info:
   description: Microsoft 的操作系统；响应标记不等同于主机系统已核实。
   tags: web,fofa,converted,operating-system
   created: 2025/04/07
+  product:
+    id: microsoft.windows
+    name: Windows
+    vendor: Microsoft
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - operating-system
+    aliases:
+      - windows 64bit
+      - WINDOWS 32bit
+    references:
+      - https://learn.microsoft.com/en-us/windows/
+    description: Microsoft 的操作系统；响应标记不等同于主机系统已核实。
 rules:
   r0:
     request:

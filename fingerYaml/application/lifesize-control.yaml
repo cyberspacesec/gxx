@@ -1,10 +1,21 @@
-id: web-lifesize-control
+id: lifesize-control
 info:
   name: lifesize-control
   author: archer
   verified: false
   description: 检测到lifesize-control系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lifesize.control
+    name: Lifesize Control
+    vendor: Lifesize
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
+    aliases:
+      - lifesize-control
 rules:
   r0:
     request:

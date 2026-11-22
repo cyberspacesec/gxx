@@ -1,10 +1,16 @@
-id: web-avantfax
+id: avantfax
 info:
   name: avantfax
   author: archer
   verified: false
   description: 检测到avantfax系统或组件的特征
   created: 2025/04/24
+  product:
+    id: avantfax.avantfax
+    name: AvantFax
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-logsign-siem
+id: logsign-siem
 info:
   name: logsign-siem
   author: archer
   verified: false
   description: 检测到logsign-siem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: logsign.siem
+    name: Logsign SIEM
+    vendor: Logsign
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - siem
+    aliases:
+      - logsign-siem
 rules:
   r0:
     request:

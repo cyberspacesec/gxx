@@ -1,10 +1,20 @@
-id: web-hospital-material-supplier-b2b-platform
+id: hospital-material-supplier-b2b-platform
 info:
   name: hospital-material-supplier-b2b-platform
   author: archer
   verified: false
   description: 检测到hospital-material-supplier-b2b-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hospital-material-supplier.b2b-platform
+    name: 医院物资供应商 B2B 平台
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
+    aliases:
+      - hospital-material-supplier-b2b-platform
 rules:
   r0:
     request:

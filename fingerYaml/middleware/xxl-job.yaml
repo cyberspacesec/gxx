@@ -1,10 +1,18 @@
-id: web-xxl-job
+id: xxl-job
 info:
   name: xxl-job
   author: archer
   verified: false
   description: 检测到xxl-job系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xxl-job.xxl-job
+    name: XXL-JOB
+    category: middleware
+    identity: product
+    assurance: verified
+    references:
+      - https://github.com/xuxueli/xxl-job
 rules:
   r0:
     request:

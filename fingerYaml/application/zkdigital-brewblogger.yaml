@@ -1,10 +1,21 @@
-id: web-brewblogger
+id: zkdigital-brewblogger
 info:
   name: brewblogger
   author: archer
   verified: false
   description: 检测到brewblogger系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zkdigital.brewblogger
+    name: BrewBlogger
+    vendor: zkdigital
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - blog
+    references:
+      - http://www.zkdigital.com/
 rules:
   r0:
     request:

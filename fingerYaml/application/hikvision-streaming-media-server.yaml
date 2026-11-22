@@ -1,10 +1,19 @@
-id: web-海康威视流媒体管理服务器
+id: hikvision-streaming-media-server
 info:
   name: 海康威视流媒体管理服务器
   author: archer
   verified: false
   description: 检测到海康威视流媒体管理服务器系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hikvision.streaming-media-server
+    name: 海康威视流媒体管理服务器
+    vendor: 海康威视
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video
 rules:
   r0:
     request:

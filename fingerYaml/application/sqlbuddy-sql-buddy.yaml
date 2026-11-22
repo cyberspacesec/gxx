@@ -1,10 +1,18 @@
-id: web-sql-buddy
+id: sqlbuddy-sql-buddy
 info:
   name: sql-buddy
   author: archer
   verified: false
   description: 检测到sql-buddy系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sqlbuddy.sql-buddy
+    name: SQL Buddy
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - db-admin
 rules:
   r0:
     request:

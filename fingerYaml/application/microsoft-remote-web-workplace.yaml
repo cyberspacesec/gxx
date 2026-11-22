@@ -1,10 +1,21 @@
-id: web-microsoft-remote-web-workplace
+id: microsoft-remote-web-workplace
 info:
   name: microsoft-remote-web-workplace
   author: archer
   verified: false
   description: 检测到microsoft-remote-web-workplace系统或组件的特征
   created: 2025/04/24
+  product:
+    id: microsoft.remote-web-workplace
+    name: Remote Web Workplace
+    vendor: Microsoft
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - remote-access
+    aliases:
+      - RWW
 rules:
   r0:
     request:

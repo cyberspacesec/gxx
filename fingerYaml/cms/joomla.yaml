@@ -1,4 +1,4 @@
-id: web-joomla
+id: joomla
 info:
   tags: cms
   reference:
@@ -8,6 +8,19 @@ info:
   verified: false
   description: 用于内容管理和站点发布的开源平台。
   created: 2025/04/24
+  product:
+    id: joomla.joomla
+    name: Joomla
+    category: cms
+    identity: product
+    assurance: verified
+    tags:
+      - cms
+    aliases:
+      - joomla
+    references:
+      - https://www.joomla.org/
+    description: 用于内容管理和站点发布的开源平台。
 rules:
   r0:
     request:

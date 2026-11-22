@@ -1,5 +1,5 @@
 ---
-id: fofayaml-23
+id: hp-printer
 info:
   name: HP-Printer
   author: zhizhuo
@@ -7,6 +7,17 @@ info:
   description: 'Converted from FOFA rule: fofayaml-23'
   tags: web,fofa,converted
   created: 2025/04/07
+  product:
+    id: hp.printer
+    name: HP Printer
+    vendor: HP Inc.
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - printer
+    aliases:
+      - HP HTTP Server
 rules:
   r0:
     request:

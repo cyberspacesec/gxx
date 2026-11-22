@@ -1,10 +1,20 @@
-id: web-kamailio-sip-server
+id: kamailio
 info:
   name: kamailio-sip-server
   author: archer
   verified: false
   description: 检测到kamailio-sip-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kamailio.kamailio
+    name: Kamailio
+    category: application
+    identity: product
+    assurance: verified
+    aliases:
+      - kamailio-sip-server
+    references:
+      - https://www.kamailio.org/
 rules:
   r0:
     request:

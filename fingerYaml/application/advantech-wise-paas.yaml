@@ -1,10 +1,19 @@
-id: web-advantech_wise
+id: advantech-wise-paas
 info:
   name: advantech_wise
   author: archer
   verified: false
   description: 检测到advantech_wise系统或组件的特征
   created: 2025/04/24
+  product:
+    id: advantech.wise-paas
+    name: WISE-PaaS
+    vendor: 研华
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - iot-platform
 rules:
   r0:
     request:

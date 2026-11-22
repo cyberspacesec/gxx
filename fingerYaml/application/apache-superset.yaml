@@ -1,4 +1,4 @@
-id: web-apache-superset
+id: apache-superset
 info:
   tags: application
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 用于数据探索和可视化的业务分析平台。
   created: 2025/04/24
+  product:
+    id: apache.superset
+    name: Apache Superset
+    vendor: Apache Software Foundation
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - bi
+    aliases:
+      - apache-superset
+    references:
+      - https://superset.apache.org/
+    description: 用于数据探索和可视化的业务分析平台。
 rules:
   r0:
     request:

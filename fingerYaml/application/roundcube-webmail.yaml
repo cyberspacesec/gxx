@@ -1,10 +1,22 @@
-id: web-roundcube-webmail
+id: roundcube-webmail
 info:
   name: roundcube-webmail
   author: archer
   verified: true
   description: 检测到roundcube-webmail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: roundcube.webmail
+    name: Roundcube Webmail
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - mail
+    aliases:
+      - RoundCube
+    references:
+      - https://roundcube.net/
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-infogo-imc
+id: infogo-imc
 info:
   name: infogo-imc
   author: archer
   verified: false
   description: 检测到infogo-imc系统或组件的特征
   created: 2025/04/24
+  product:
+    id: infogo.imc
+    name: Infogo iMC
+    vendor: 盈高科技
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - infogo-imc
 rules:
   r0:
     request:

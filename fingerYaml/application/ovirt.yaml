@@ -1,10 +1,20 @@
-id: web-ovirt-virtualization
+id: ovirt
 info:
   name: ovirt-virtualization
   author: archer
   verified: false
   description: 检测到ovirt-virtualization系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ovirt.ovirt
+    name: oVirt
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - virtualization
+    references:
+      - https://www.ovirt.org/
 rules:
   r0:
     request:

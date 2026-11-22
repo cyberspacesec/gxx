@@ -1,10 +1,17 @@
-id: web-neusoft-neteye-bitsaver
+id: neusoft-neteye-bitsaver
 info:
   name: neusoft-neteye-bitsaver
   author: archer
   verified: false
   description: 检测到neusoft-neteye-bitsaver系统或组件的特征
   created: 2025/04/24
+  product:
+    id: neusoft.neteye-bitsaver
+    name: NetEye BitSaver
+    vendor: 东软
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

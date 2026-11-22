@@ -1,10 +1,17 @@
-id: web-vos3000
+id: kunshi-vos3000
 info:
   name: vos3000
   author: archer
   verified: false
   description: 检测到vos3000系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kunshi.vos3000
+    name: VOS3000
+    vendor: 昆石网络
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,22 @@
-id: web-腾讯cos
+id: tencent-cos
 info:
   name: 腾讯cos
   author: archer
   verified: false
   description: 检测到腾讯cos系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tencent.cos
+    name: 腾讯云对象存储 COS
+    vendor: 腾讯
+    category: other
+    identity: product
+    assurance: verified
+    tags:
+      - cloud
+      - storage
+    references:
+      - https://cloud.tencent.com/product/cos
 rules:
   r0:
     request:

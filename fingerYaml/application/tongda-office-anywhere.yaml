@@ -1,10 +1,24 @@
-id: web-通达OA
+id: tongda-office-anywhere
 info:
   name: 通达OA
   author: archer
   verified: false
   description: 检测到通达OA系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tongda.office-anywhere
+    name: 通达OA
+    vendor: 通达信科
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - oa
+    aliases:
+      - Office Anywhere
+      - Tongda OA
+    references:
+      - https://www.tongda2000.com/
 rules:
   r0:
     request:

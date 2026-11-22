@@ -1,10 +1,19 @@
-id: web-emc-documentum-webtop
+id: opentext-documentum-webtop
 info:
   name: emc-documentum-webtop
   author: archer
   verified: false
   description: 检测到emc-documentum-webtop系统或组件的特征
   created: 2025/04/24
+  product:
+    id: opentext.documentum-webtop
+    name: Documentum Webtop
+    vendor: OpenText
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - EMC Documentum Webtop
 rules:
   r0:
     request:

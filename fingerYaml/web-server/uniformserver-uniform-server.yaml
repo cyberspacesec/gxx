@@ -1,10 +1,18 @@
-id: web-uniform-server
+id: uniformserver-uniform-server
 info:
   name: uniform-server
   author: archer
   verified: false
   description: 检测到uniform-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: uniformserver.uniform-server
+    name: The Uniform Server
+    category: web-server
+    identity: product
+    assurance: inferred
+    aliases:
+      - Uniform Server
 rules:
   r0:
     request:

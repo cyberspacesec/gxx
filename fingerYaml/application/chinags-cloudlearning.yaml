@@ -1,10 +1,18 @@
-id: web-chinags-cloudlearning
+id: chinags-cloudlearning
 info:
   name: chinags-cloudlearning
   author: archer
   verified: false
   description: 检测到chinags-cloudlearning系统或组件的特征
   created: 2025/04/24
+  product:
+    id: chinags.cloudlearning
+    name: chinags Cloud Learning
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
 rules:
   r0:
     request:

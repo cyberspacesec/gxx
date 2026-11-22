@@ -1,10 +1,20 @@
-id: web-raiden-mail
+id: raidenmaild
 info:
   name: raiden-mail
   author: archer
   verified: false
   description: 检测到raiden-mail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: raidenmaild.raidenmaild
+    name: RaidenMAILD
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - raiden-mail
 rules:
   r0:
     request:

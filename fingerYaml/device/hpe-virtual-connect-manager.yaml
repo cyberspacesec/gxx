@@ -1,10 +1,19 @@
-id: web-hp-virtual-connect-manager
+id: hpe-virtual-connect-manager
 info:
   name: hp-virtual-connect-manager
   author: archer
   verified: false
   description: 检测到hp-virtual-connect-manager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hpe.virtual-connect-manager
+    name: HP Virtual Connect Manager
+    vendor: Hewlett Packard Enterprise
+    category: device
+    identity: product
+    assurance: inferred
+    aliases:
+      - hp-virtual-connect-manager
 rules:
   r0:
     request:

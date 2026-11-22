@@ -1,10 +1,20 @@
-id: web-ruvar-oa
+id: ruvar-oa
 info:
   name: ruvar-oa
   author: archer
   verified: false
   description: 检测到ruvar-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruvar.oa
+    name: RuvarOA 协同办公平台
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - ruvar-oa
 rules:
   r0:
     request:

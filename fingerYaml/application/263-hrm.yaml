@@ -1,10 +1,18 @@
-id: web-263-hrm
+id: 263-hrm
 info:
   name: 263-hrm
   author: archer
   verified: false
   description: 检测到263-hrm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: 263.hrm
+    name: 263 HRM
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - hr
 rules:
   r0:
     request:

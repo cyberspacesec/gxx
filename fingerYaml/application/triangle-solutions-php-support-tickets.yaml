@@ -1,10 +1,19 @@
-id: web-php-support-tickets
+id: triangle-solutions-php-support-tickets
 info:
   name: php-support-tickets
   author: archer
   verified: false
   description: 检测到php-support-tickets系统或组件的特征
   created: 2025/04/24
+  product:
+    id: triangle-solutions.php-support-tickets
+    name: PHP Support Tickets
+    vendor: Triangle Solutions Ltd
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - helpdesk
 rules:
   r0:
     request:

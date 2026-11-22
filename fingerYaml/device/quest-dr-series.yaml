@@ -1,10 +1,19 @@
-id: web-quest-dr
+id: quest-dr-series
 info:
   name: quest-dr
   author: archer
   verified: false
   description: 检测到quest-dr系统或组件的特征
   created: 2025/04/24
+  product:
+    id: quest.dr-series
+    name: Quest DR Series
+    vendor: Quest Software
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
 rules:
   r0:
     request:

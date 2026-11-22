@@ -1,10 +1,21 @@
-id: web-open-xchange
+id: open-xchange
 info:
   name: open-xchange
   author: archer
   verified: false
   description: 检测到open-xchange系统或组件的特征
   created: 2025/04/24
+  product:
+    id: open-xchange.open-xchange
+    name: Open-Xchange
+    vendor: Open-Xchange
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - OX App Suite
 rules:
   r0:
     request:

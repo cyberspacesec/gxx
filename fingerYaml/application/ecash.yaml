@@ -1,10 +1,20 @@
-id: web-ecash-system
+id: ecash
 info:
   name: ecash-system
   author: archer
   verified: false
   description: 检测到ecash-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ecash.ecash
+    name: e-cash 系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - payment
+    aliases:
+      - ecash-system
 rules:
   r0:
     request:

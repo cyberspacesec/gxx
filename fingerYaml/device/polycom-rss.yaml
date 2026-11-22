@@ -1,10 +1,19 @@
-id: web-polycom-rss-record
+id: polycom-rss
 info:
   name: polycom-rss-record
   author: archer
   verified: false
   description: 检测到polycom-rss-record系统或组件的特征
   created: 2025/04/24
+  product:
+    id: polycom.rss
+    name: Polycom RSS 录播服务器
+    vendor: Polycom
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
 rules:
   r0:
     request:

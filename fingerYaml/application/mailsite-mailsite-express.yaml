@@ -1,10 +1,22 @@
-id: web-mailsite-express
+id: mailsite-mailsite-express
 info:
   name: mailsite-express
   author: archer
   verified: false
   description: 检测到mailsite-express系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mailsite.mailsite-express
+    name: MailSite Express
+    vendor: Rockliffe Systems
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - mailsite-express
+      - mailsiteexpress
 rules:
   r0:
     request:

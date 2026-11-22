@@ -1,4 +1,4 @@
-id: web-Dify
+id: langgenius-dify
 
 info:
   name: Dify
@@ -8,6 +8,17 @@ info:
   reference:
     -
   created: 2025/12/05
+  product:
+    id: langgenius.dify
+    name: Dify
+    vendor: LangGenius
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - ai
+    references:
+      - https://github.com/langgenius/dify
 
 rules:
   r0:

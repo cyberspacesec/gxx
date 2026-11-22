@@ -1,10 +1,23 @@
-id: web-vertx
+id: eclipse-vertx
 info:
   name: vertx
   author: archer
   verified: false
   description: 检测到vertx系统或组件的特征
   created: 2025/04/24
+  product:
+    id: eclipse.vertx
+    name: Eclipse Vert.x
+    vendor: Eclipse Foundation
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    aliases:
+      - Vert.x Web
+    references:
+      - https://vertx.io/
 rules:
   r0:
     request:

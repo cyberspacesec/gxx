@@ -1,10 +1,21 @@
-id: web-中铁信安-科博安全隔离与信息单向导入系统
+id: zhongtiexinan-kebo-isolation-gateway
 info:
   name: 中铁信安-科博安全隔离与信息单向导入系统
   author: archer
   verified: false
   description: 检测到中铁信安-科博安全隔离与信息单向导入系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhongtiexinan.kebo-isolation-gateway
+    name: 科博安全隔离与信息单向导入系统
+    vendor: 中铁信安
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+    aliases:
+      - 科博安全隔离与信息交换系统
 rules:
   r0:
     request:

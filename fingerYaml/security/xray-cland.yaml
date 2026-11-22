@@ -1,10 +1,16 @@
-id: web-xray-clandbeta
+id: xray-cland
 info:
   name: xray-clandbeta
   author: archer
   verified: true
   description: 检测到xray-clandbeta系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xray.cland
+    name: xray Cland
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

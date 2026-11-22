@@ -1,10 +1,19 @@
-id: web-lezhixing
+id: lezhixing-datacenter
 info:
   name: lezhixing
   author: archer
   verified: false
   description: 检测到lezhixing系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lezhixing.datacenter
+    name: 乐知行数据中心
+    vendor: 乐知行
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - lezhixing
 rules:
   r0:
     request:

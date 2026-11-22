@@ -1,10 +1,17 @@
-id: web-raisecom-ivoice8000
+id: raisecom-ivoice8000
 info:
   name: raisecom-ivoice8000
   author: archer
   verified: false
   description: 检测到raisecom-ivoice8000系统或组件的特征
   created: 2025/04/24
+  product:
+    id: raisecom.ivoice8000
+    name: 瑞斯康达 iVoice8000
+    vendor: 瑞斯康达
+    category: network-device
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

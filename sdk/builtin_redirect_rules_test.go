@@ -23,34 +23,34 @@ type builtinEntryCase struct {
 // 30x 响应本身也必须参与匹配。跳转目标统一返回不含任何特征的页面，
 // 因此命中只能来自 30x 响应。
 var builtinRedirectCases = []builtinEntryCase{
-	{"web-协众oa", "r0", 302, [][2]string{{"Location", "index.php?app=main&func=passport&action=login"}, {"Set-Cookie", "CNOAOASESSID=0f3k2; path=/"}}, ""},
-	{"web-宝塔控制面板", "r0", 302, [][2]string{{"Location", "/login"}, {"Set-Cookie", "BT_PANEL_6=3d5f1c; Path=/; HttpOnly"}}, ""},
-	{"web-apache-struts", "r0", 302, [][2]string{{"Location", "/index.action"}}, ""},
-	{"web-apache-struts", "r1", 302, [][2]string{{"Location", "/login.action"}}, ""},
-	{"web-atlassian-jira", "r0", 302, [][2]string{{"Location", "/secure/SetupMode!default.jspa"}}, ""},
-	{"web-深信服数据中心管理系统", "r1", 302, [][2]string{{"Location", "./src/acloglogin.php"}}, ""},
-	{"web-ecology泛微e-office", "r0", 302, [][2]string{{"Location", "/login/Login.jsp"}}, `<script>var dynamiCode="";var iSignaturePortal="";</script>`},
-	{"web-360新天擎", "r0", 302, [][2]string{{"Location", "/login?refer=%2F"}, {"Set-Cookie", "SKYLARa0aede9e785feabae789c6e03d=k3; path=/"}}, ""},
-	{"web-microsoft-exchange", "r0", 302, [][2]string{{"Location", "/owa/"}, {"Server", "Microsoft-IIS/10.0"}, {"X-Powered-By", "ASP.NET"}}, ""},
-	{"web-splunk", "r1", 303, [][2]string{{"Location", "/en-US/"}, {"Server", "Splunkd"}, {"Set-Cookie", "ROUTEID=.1; path=/"}}, "<html><head><title>303 See Other</title></head></html>"},
-	{"web-ezoffice", "r0", 302, [][2]string{{"Location", "/defaultroot/portal.jsp?access=oa"}}, ""},
-	{"web-深信服零信任访问控制系统aTrust", "r2", 302, [][2]string{{"Location", "/portal/"}}, "<html><head><title>aTrust</title></head></html>"},
-	{"web-Dify", "r0", 307, [][2]string{{"Location", "/apps"}}, "/apps"},
-	{"web-jfrog", "r2", 302, [][2]string{{"Location", "/artifactory/"}}, ""},
-	{"web-apache-solr", "r0", 302, [][2]string{{"Location", "/solr/"}}, ""},
-	{"web-confluence", "r0", 302, [][2]string{{"Location", "/login.action?os_destination=%2Findex.action&permissionViolation=true"}, {"X-Confluence-Request-Time", "1700000000000"}}, ""},
-	{"web-vectr", "r0", 302, [][2]string{{"Location", "/sra-purpletools-webui/app"}}, ""},
-	{"web-citrix-xenmobile", "r0", 302, [][2]string{{"Location", "/zdm/login_xdm_uc.jsp"}, {"Citrix-TransactionId", "8f1c2d"}, {"Set-Cookie", "xmscookie=1; Path=/; Secure"}}, ""},
-	{"web-citrix-access-gateway", "r0", 302, [][2]string{{"Location", "/vpn/index.html"}}, `<script>var r = "/vpn/resources/{lang}";</script>`},
+	{"cnoa-oa-session-cookie", "r0", 302, [][2]string{{"Location", "index.php?app=main&func=passport&action=login"}, {"Set-Cookie", "CNOAOASESSID=0f3k2; path=/"}}, ""},
+	{"bt-panel", "r0", 302, [][2]string{{"Location", "/login"}, {"Set-Cookie", "BT_PANEL_6=3d5f1c; Path=/; HttpOnly"}}, ""},
+	{"apache-struts", "r0", 302, [][2]string{{"Location", "/index.action"}}, ""},
+	{"apache-struts", "r1", 302, [][2]string{{"Location", "/login.action"}}, ""},
+	{"atlassian-jira", "r0", 302, [][2]string{{"Location", "/secure/SetupMode!default.jspa"}}, ""},
+	{"sangfor-data-center", "r1", 302, [][2]string{{"Location", "./src/acloglogin.php"}}, ""},
+	{"weaver-e-office", "r0", 302, [][2]string{{"Location", "/login/Login.jsp"}}, `<script>var dynamiCode="";var iSignaturePortal="";</script>`},
+	{"qianxin-tianqing-skylar-cookie", "r0", 302, [][2]string{{"Location", "/login?refer=%2F"}, {"Set-Cookie", "SKYLARa0aede9e785feabae789c6e03d=k3; path=/"}}, ""},
+	{"microsoft-exchange-server", "r0", 302, [][2]string{{"Location", "/owa/"}, {"Server", "Microsoft-IIS/10.0"}, {"X-Powered-By", "ASP.NET"}}, ""},
+	{"splunk-splunk-enterprise", "r1", 303, [][2]string{{"Location", "/en-US/"}, {"Server", "Splunkd"}, {"Set-Cookie", "ROUTEID=.1; path=/"}}, "<html><head><title>303 See Other</title></head></html>"},
+	{"wanhu-ezoffice-portal-redirect", "r0", 302, [][2]string{{"Location", "/defaultroot/portal.jsp?access=oa"}}, ""},
+	{"sangfor-atrust", "r2", 302, [][2]string{{"Location", "/portal/"}}, "<html><head><title>aTrust</title></head></html>"},
+	{"langgenius-dify", "r0", 307, [][2]string{{"Location", "/apps"}}, "/apps"},
+	{"jfrog-artifactory", "r2", 302, [][2]string{{"Location", "/artifactory/"}}, ""},
+	{"apache-solr", "r0", 302, [][2]string{{"Location", "/solr/"}}, ""},
+	{"atlassian-confluence", "r0", 302, [][2]string{{"Location", "/login.action?os_destination=%2Findex.action&permissionViolation=true"}, {"X-Confluence-Request-Time", "1700000000000"}}, ""},
+	{"securityriskadvisors-vectr", "r0", 302, [][2]string{{"Location", "/sra-purpletools-webui/app"}}, ""},
+	{"citrix-xenmobile", "r0", 302, [][2]string{{"Location", "/zdm/login_xdm_uc.jsp"}, {"Citrix-TransactionId", "8f1c2d"}, {"Set-Cookie", "xmscookie=1; Path=/; Secure"}}, ""},
+	{"citrix-netscaler-gateway", "r0", 302, [][2]string{{"Location", "/vpn/index.html"}}, `<script>var r = "/vpn/resources/{lang}";</script>`},
 }
 
 // 规则里用于判断“响应头存在”的子规则：值是任意的，不能要求字面量 "*"。
 var builtinHeaderPresenceCases = []builtinEntryCase{
-	{"web-kong", "r2", 200, [][2]string{{"X-Kong-Response-Latency", "1"}}, "ok"},
-	{"web-spring-framework", "r3", 200, [][2]string{{"X-Application-Context", "application:8080"}}, "ok"},
-	{"web-apache-cocoon", "r0", 200, [][2]string{{"X-Cocoon-Version", "2.1.11"}}, "ok"},
-	{"web-elastic", "r0", 200, [][2]string{{"kbn-license-sig", "ab12"}}, "<html><head><title>Elastic</title></head></html>"},
-	{"web-深信服终端安全管理系统", "r0", 200, [][2]string{{"Etag", `"5f1c-2d"`}}, `<html><head><title>Loading...</title><script>location.href = "./ui/";</script></head></html>`},
+	{"kong-kong-gateway", "r2", 200, [][2]string{{"X-Kong-Response-Latency", "1"}}, "ok"},
+	{"spring-framework", "r3", 200, [][2]string{{"X-Application-Context", "application:8080"}}, "ok"},
+	{"apache-cocoon", "r0", 200, [][2]string{{"X-Cocoon-Version", "2.1.11"}}, "ok"},
+	{"elastic-kibana-login", "r0", 200, [][2]string{{"kbn-license-sig", "ab12"}}, "<html><head><title>Elastic</title></head></html>"},
+	{"sangfor-edr-console", "r0", 200, [][2]string{{"Etag", `"5f1c-2d"`}}, `<html><head><title>Loading...</title><script>location.href = "./ui/";</script></head></html>`},
 }
 
 func TestBuiltinRulesMatchEntryRedirectResponses(t *testing.T) {

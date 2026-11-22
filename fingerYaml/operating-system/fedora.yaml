@@ -1,5 +1,5 @@
 ---
-id: fofayaml-68
+id: fedora
 info:
   reference:
     - https://fedoraproject.org/
@@ -9,6 +9,19 @@ info:
   description: Linux 发行版；响应标记不等同于主机系统已核实。
   tags: web,fofa,converted,operating-system
   created: 2025/04/07
+  product:
+    id: fedora.fedora
+    name: Fedora Linux
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - operating-system
+    aliases:
+      - Fedora
+    references:
+      - https://fedoraproject.org/
+    description: Linux 发行版；响应标记不等同于主机系统已核实。
 rules:
   r0:
     request:

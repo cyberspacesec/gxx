@@ -1,10 +1,16 @@
-id: web-eticket
+id: eticket
 info:
   name: eticket
   author: archer
   verified: false
   description: 检测到eticket系统或组件的特征
   created: 2025/04/24
+  product:
+    id: eticket.eticket
+    name: eTicket
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

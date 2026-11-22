@@ -1,10 +1,21 @@
-id: web-红帆ioffice
+id: hongfan-ioffice
 info:
   name: 红帆ioffice
   author: archer
   verified: false
   description: 检测到红帆ioffice系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hongfan.ioffice
+    name: iOffice.net
+    vendor: 红帆
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - 红帆ioffice
 rules:
   r0:
     request:

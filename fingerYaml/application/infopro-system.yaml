@@ -1,10 +1,18 @@
-id: web-infopro-system
+id: infopro-system
 info:
   name: infopro-system
   author: archer
   verified: false
   description: 检测到infopro-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: infopro.system
+    name: InfoPro 系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - infopro-system
 rules:
   r0:
     request:

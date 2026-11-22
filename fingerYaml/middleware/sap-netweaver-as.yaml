@@ -1,10 +1,19 @@
-id: web-sap-web-application-server
+id: sap-netweaver-as
 info:
   name: sap-web-application-server
   author: archer
   verified: false
   description: 检测到sap-web-application-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sap.netweaver-as
+    name: SAP NetWeaver Application Server
+    vendor: SAP
+    category: middleware
+    identity: product
+    assurance: inferred
+    aliases:
+      - SAP Web Application Server
 rules:
   r0:
     request:

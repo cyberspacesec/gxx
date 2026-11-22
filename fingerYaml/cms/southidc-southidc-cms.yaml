@@ -1,10 +1,19 @@
-id: web-southidc
+id: southidc-southidc-cms
 info:
   name: southidc
   author: archer
   verified: false
   description: 检测到southidc系统或组件的特征
   created: 2025/04/24
+  product:
+    id: southidc.southidc-cms
+    name: 南方数据企业网站管理系统
+    vendor: 南方数据
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

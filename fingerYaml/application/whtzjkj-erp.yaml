@@ -1,10 +1,18 @@
-id: web-whtzjkj-erp
+id: whtzjkj-erp
 info:
   name: whtzjkj-erp
   author: archer
   verified: false
   description: 检测到whtzjkj-erp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: whtzjkj.erp
+    name: WHTZJKJ ERP
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
 rules:
   r0:
     request:

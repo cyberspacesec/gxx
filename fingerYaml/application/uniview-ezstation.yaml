@@ -1,10 +1,20 @@
-id: web-uniview-ezstation
+id: uniview-ezstation
 info:
   name: uniview-ezstation
   author: archer
   verified: false
   description: 检测到uniview-ezstation系统或组件的特征
   created: 2025/04/24
+  product:
+    id: uniview.ezstation
+    name: EZStation
+    vendor: 宇视科技
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
+      - nvr
 rules:
   r0:
     request:

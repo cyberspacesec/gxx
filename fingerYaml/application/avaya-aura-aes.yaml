@@ -1,10 +1,19 @@
-id: web-avaya-application-enablement-services
+id: avaya-aura-aes
 info:
   name: avaya-application-enablement-services
   author: archer
   verified: false
   description: 检测到avaya-application-enablement-services系统或组件的特征
   created: 2025/04/24
+  product:
+    id: avaya.aura-aes
+    name: Avaya Aura Application Enablement Services
+    vendor: Avaya
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - AES
 rules:
   r0:
     request:

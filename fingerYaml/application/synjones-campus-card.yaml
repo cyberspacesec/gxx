@@ -1,10 +1,17 @@
-id: web-campus-card-management-system
+id: synjones-campus-card
 info:
   name: campus-card-management-system
   author: archer
   verified: false
   description: 检测到campus-card-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: synjones.campus-card
+    name: 新中新校园一卡通管理系统
+    vendor: 新中新
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-h3c-cloud
+id: h3c-distributed-storage
 info:
   name: h3c-cloud
   author: archer
   verified: false
   description: 检测到h3c-cloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: h3c.distributed-storage
+    name: H3C 分布式存储管理系统
+    vendor: 新华三
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
+    aliases:
+      - h3c-cloud
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-valley-platform
+id: valley-platform
 info:
   name: valley-platform
   author: archer
   verified: false
   description: 检测到valley-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: valley-platform.valley-platform
+    name: Valley Platform
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

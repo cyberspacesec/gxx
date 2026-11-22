@@ -1,5 +1,5 @@
 ---
-id: fofayaml-11
+id: dell-laser-printer
 info:
   name: Dell-Printer
   author: zhizhuo
@@ -7,6 +7,15 @@ info:
   description: 'Converted from FOFA rule: fofayaml-11'
   tags: web,fofa,converted
   created: 2025/04/07
+  product:
+    id: dell.laser-printer
+    name: Dell Laser Printer
+    vendor: Dell
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - printer
 rules:
   r0:
     request:

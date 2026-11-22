@@ -1,10 +1,20 @@
-id: web-phpstudy
+id: phpstudy
 info:
   name: phpstudy
   author: archer
   verified: true
   description: 检测到phpstudy系统或组件的特征
   created: 2025/04/24
+  product:
+    id: phpstudy.phpstudy
+    name: phpStudy
+    category: web-server
+    identity: product
+    assurance: inferred
+    tags:
+      - default-page
+    aliases:
+      - 小皮面板
 rules:
   r0:
     request:

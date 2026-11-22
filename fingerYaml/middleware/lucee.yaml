@@ -1,10 +1,21 @@
-id: web-lucee
+id: lucee
 info:
   name: lucee
   author: archer
   verified: false
   description: 检测到lucee系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lucee.lucee
+    name: Lucee
+    vendor: Lucee Association Switzerland
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - language
+    references:
+      - https://www.lucee.org/
 rules:
   r0:
     request:

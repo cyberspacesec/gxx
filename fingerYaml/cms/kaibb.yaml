@@ -1,10 +1,18 @@
-id: web-kaibb
+id: kaibb
 info:
   name: kaibb
   author: archer
   verified: false
   description: 检测到kaibb系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kaibb.kaibb
+    name: KaiBB
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - forum
 rules:
   r0:
     request:

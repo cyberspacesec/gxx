@@ -1,10 +1,16 @@
-id: web-znv-digital-campus
+id: znv-digital-campus
 info:
   name: znv-digital-campus
   author: archer
   verified: false
   description: 检测到znv-digital-campus系统或组件的特征
   created: 2025/04/24
+  product:
+    id: znv.digital-campus
+    name: 数字校园系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,22 @@
-id: web-金蝶云星空
+id: kingdee-k3cloud
 info:
   name: 金蝶云星空
   author: archer
   verified: false
   description: 检测到金蝶云星空系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kingdee.k3cloud
+    name: 金蝶云·星空
+    vendor: 金蝶
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
+    aliases:
+      - 金蝶云星空
+      - K/3 Cloud
 rules:
   r0:
     request:

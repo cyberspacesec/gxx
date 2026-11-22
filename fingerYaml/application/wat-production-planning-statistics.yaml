@@ -1,10 +1,16 @@
-id: web-wat-system
+id: wat-production-planning-statistics
 info:
   name: wat-system
   author: archer
   verified: false
   description: 检测到wat-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wat.production-planning-statistics
+    name: 生产经营计划统计一体化管理信息系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-serendipity-php-architecture
+id: s9y-serendipity
 info:
   name: serendipity-php-architecture
   author: archer
   verified: false
   description: 检测到serendipity-php-architecture系统或组件的特征
   created: 2025/04/24
+  product:
+    id: s9y.serendipity
+    name: Serendipity
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - blog
+    aliases:
+      - s9y
 rules:
   r0:
     request:

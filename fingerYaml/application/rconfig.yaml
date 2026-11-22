@@ -1,10 +1,19 @@
-id: web-rconfig
+id: rconfig
 info:
   name: rconfig
   author: archer
   verified: false
   description: 检测到rconfig系统或组件的特征
   created: 2025/04/24
+  product:
+    id: rconfig.rconfig
+    name: rConfig
+    vendor: rConfig
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - devops
 rules:
   r0:
     request:

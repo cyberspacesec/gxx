@@ -1,10 +1,16 @@
-id: web-前沿文档安全管理软件
+id: qianyan-document-security
 info:
   name: 前沿文档安全管理软件
   author: archer
   verified: false
   description: 检测到前沿文档安全管理软件系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qianyan.document-security
+    name: 前沿文档安全管理软件
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

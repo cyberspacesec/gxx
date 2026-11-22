@@ -1,10 +1,21 @@
-id: web-b2evolution
+id: b2evolution
 info:
   name: b2evolution
   author: archer
   verified: false
   description: 检测到b2evolution系统或组件的特征
   created: 2025/04/24
+  product:
+    id: b2evolution.b2evolution
+    name: b2evolution
+    category: cms
+    identity: product
+    assurance: verified
+    tags:
+      - cms
+      - blog
+    references:
+      - https://b2evolution.net/
 rules:
   r0:
     request:

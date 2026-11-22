@@ -1,10 +1,19 @@
-id: web-meitrack
+id: meitrack-gps-tracking-platform
 info:
   name: meitrack
   author: archer
   verified: false
   description: 检测到meitrack系统或组件的特征
   created: 2025/04/24
+  product:
+    id: meitrack.gps-tracking-platform
+    name: Meitrack GPS 跟踪平台
+    vendor: Meitrack
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - iot-platform
 rules:
   r0:
     request:

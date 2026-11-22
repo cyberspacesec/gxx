@@ -1,10 +1,19 @@
-id: web-中科网威-防火墙
+id: zhongkewangwei-firewall
 info:
   name: 中科网威-防火墙
   author: archer
   verified: false
   description: 检测到中科网威-防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhongkewangwei.firewall
+    name: 中科网威防火墙
+    vendor: 中科网威
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
 rules:
   r0:
     request:

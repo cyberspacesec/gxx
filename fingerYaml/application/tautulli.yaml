@@ -1,10 +1,22 @@
-id: web-tautulli
+id: tautulli
 info:
   name: tautulli
   author: archer
   verified: false
   description: 检测到tautulli系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tautulli.tautulli
+    name: Tautulli
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    aliases:
+      - PlexPy
+    references:
+      - https://github.com/Tautulli/Tautulli
 rules:
   r0:
     request:

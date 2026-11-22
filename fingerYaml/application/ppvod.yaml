@@ -1,10 +1,18 @@
-id: web-ppvod-videosystem
+id: ppvod
 info:
   name: ppvod-videosystem
   author: archer
   verified: false
   description: 检测到ppvod-videosystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ppvod.ppvod
+    name: PPVOD 视频系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-pmway-e5
+id: pmway-e5
 info:
   name: pmway-e5
   author: archer
   verified: false
   description: 检测到pmway-e5系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pmway.e5
+    name: 鹏为 E5
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - crm
 rules:
   r0:
     request:

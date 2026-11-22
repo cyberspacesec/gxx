@@ -1,10 +1,19 @@
-id: web-lpse
+id: lkpp-spse
 info:
   name: lpse
   author: archer
   verified: false
   description: 检测到lpse系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lkpp.spse
+    name: SPSE 电子采购系统（LPSE）
+    vendor: LKPP
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - lpse
 rules:
   r0:
     request:

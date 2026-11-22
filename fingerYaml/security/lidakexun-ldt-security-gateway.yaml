@@ -1,10 +1,21 @@
-id: web-力达科讯-ldt安全网关
+id: lidakexun-ldt-security-gateway
 info:
   name: 力达科讯-ldt安全网关
   author: archer
   verified: false
   description: 检测到力达科讯-ldt安全网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lidakexun.ldt-security-gateway
+    name: LDT 安全网关
+    vendor: 力达科讯
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+    aliases:
+      - 力达科讯-ldt安全网关
 rules:
   r0:
     request:

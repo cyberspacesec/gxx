@@ -1,10 +1,22 @@
-id: web-rocketmq-console
+id: apache-rocketmq-console
 info:
   name: rocketmq-console
   author: archer
   verified: false
   description: 检测到rocketmq-console系统或组件的特征
   created: 2025/04/24
+  product:
+    id: apache.rocketmq-console
+    name: Apache RocketMQ Console
+    vendor: Apache Software Foundation
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
+    aliases:
+      - RocketMQ-console-ng
+      - RocketMQ Dashboard
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-接入网关管理平台
+id: edp-access-gateway-management
 info:
   name: 接入网关管理平台
   author: archer
   verified: false
   description: 检测到接入网关管理平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: edp.access-gateway-management
+    name: 接入网关管理平台
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
 rules:
   r0:
     request:

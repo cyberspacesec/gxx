@@ -1,10 +1,21 @@
-id: web-intelligence-parking-integrated-management-platform
+id: lizhi-parking-platform
 info:
   name: intelligence-parking-integrated-management-platform
   author: archer
   verified: false
   description: 检测到intelligence-parking-integrated-management-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lizhi.parking-platform
+    name: 智能停车综合管理平台
+    vendor: 厦门立智通讯科技有限公司
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - iot-platform
+    aliases:
+      - intelligence-parking-integrated-management-platform
 rules:
   r0:
     request:

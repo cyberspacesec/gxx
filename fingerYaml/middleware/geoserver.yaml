@@ -1,10 +1,18 @@
-id: web-geoserver
+id: geoserver
 info:
   name: geoserver
   author: archer
   verified: false
   description: 检测到geoserver系统或组件的特征
   created: 2025/04/16
+  product:
+    id: geoserver.geoserver
+    name: GeoServer
+    category: middleware
+    identity: product
+    assurance: verified
+    references:
+      - https://geoserver.org/
 rules:
   r0:
     request:

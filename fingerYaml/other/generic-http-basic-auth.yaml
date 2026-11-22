@@ -1,10 +1,20 @@
-id: web-http基本认证
+id: generic-http-basic-auth
 info:
   name: http基本认证
   author: archer
   verified: false
   description: 检测到http基本认证系统或组件的特征
   created: 2025/04/24
+  product:
+    id: generic.http-basic-auth
+    name: HTTP 基本认证
+    category: other
+    identity: signal
+    assurance: inferred
+    tags:
+      - login
+    aliases:
+      - http基本认证
 rules:
   r0:
     request:

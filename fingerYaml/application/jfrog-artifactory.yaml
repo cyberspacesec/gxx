@@ -1,10 +1,24 @@
-id: web-jfrog
+id: jfrog-artifactory
 info:
   name: jfrog
   author: archer
   verified: false
   description: 检测到jfrog系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jfrog.artifactory
+    name: JFrog Artifactory
+    vendor: JFrog
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    aliases:
+      - jfrog
+      - Artifactory
+    references:
+      - https://jfrog.com/
 rules:
   r0:
     request:

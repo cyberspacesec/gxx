@@ -1,10 +1,23 @@
-id: web-jeecgboot
+id: jeecg-jeecg-boot
 info:
   name: jeecgboot
   author: archer
   verified: true
   description: 检测到jeecgboot系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jeecg.jeecg-boot
+    name: JeecgBoot
+    vendor: 北京国炬信息技术有限公司
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    aliases:
+      - JEECG
+    references:
+      - https://github.com/jeecgboot/JeecgBoot
 rules:
   r0:
     request:

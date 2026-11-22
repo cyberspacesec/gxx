@@ -1,10 +1,16 @@
-id: web-pcitc-management-platform
+id: pcitc-it-management-platform
 info:
   name: pcitc-management-platform
   author: archer
   verified: false
   description: 检测到pcitc-management-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pcitc.it-management-platform
+    name: 石化 IT 管控平台
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

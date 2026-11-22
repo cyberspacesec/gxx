@@ -1,10 +1,18 @@
-id: web-kordil-edms
+id: kordil-edms
 info:
   name: kordil-edms
   author: archer
   verified: false
   description: 检测到kordil-edms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kordil.edms
+    name: Kordil EDMS
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - kordil-edms
 rules:
   r0:
     request:

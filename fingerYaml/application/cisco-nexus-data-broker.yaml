@@ -1,10 +1,17 @@
-id: web-cisco-nexus-data-broker
+id: cisco-nexus-data-broker
 info:
   name: cisco-nexus-data-broker
   author: archer
   verified: false
   description: 检测到cisco-nexus-data-broker系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cisco.nexus-data-broker
+    name: Cisco Nexus Data Broker
+    vendor: Cisco
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-iscripts-reservelogic
+id: iscripts-reservelogic
 info:
   name: iscripts-reservelogic
   author: archer
   verified: false
   description: 检测到iscripts-reservelogic系统或组件的特征
   created: 2025/04/24
+  product:
+    id: iscripts.reservelogic
+    name: ReserveLogic
+    vendor: iScripts
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - iscripts-reservelogic
 rules:
   r0:
     request:

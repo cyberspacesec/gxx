@@ -1,10 +1,21 @@
-id: web-emerson-xweb-evo
+id: emerson-xweb
 info:
   name: emerson-xweb-evo
   author: archer
   verified: false
   description: 检测到emerson-xweb-evo系统或组件的特征
   created: 2025/04/24
+  product:
+    id: emerson.xweb
+    name: Dixell XWEB
+    vendor: Emerson
+    category: iot
+    identity: product
+    assurance: inferred
+    tags:
+      - industrial
+    aliases:
+      - XWEB EVO
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-h3cer3200
+id: h3c-er-router-er3200
 info:
   name: h3cer3200
   author: archer
   verified: false
   description: 检测到h3cer3200系统或组件的特征
   created: 2025/04/24
+  product:
+    id: h3c.er-router
+    name: H3C ER 系列路由器
+    vendor: 新华三
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - router
 rules:
   r0:
     request:

@@ -1,10 +1,23 @@
-id: web-yii-framework
+id: yiisoft-yii
 info:
   name: yii-framework
   author: archer
   verified: false
   description: 检测到yii-framework系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yiisoft.yii
+    name: Yii Framework
+    vendor: Yii Software
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    aliases:
+      - Yii
+    references:
+      - https://www.yiiframework.com/
 rules:
   r0:
     request:

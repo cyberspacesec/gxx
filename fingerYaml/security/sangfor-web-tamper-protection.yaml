@@ -1,10 +1,19 @@
-id: web-深信服web防篡改管理系统
+id: sangfor-web-tamper-protection
 info:
   name: 深信服web防篡改管理系统
   author: archer
   verified: false
   description: 检测到深信服web防篡改管理系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.web-tamper-protection
+    name: 深信服 Web 防篡改管理系统
+    vendor: 深信服
+    category: security
+    identity: product
+    assurance: inferred
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

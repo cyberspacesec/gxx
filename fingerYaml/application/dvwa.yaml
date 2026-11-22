@@ -1,10 +1,20 @@
-id: web-dvwa
+id: dvwa
 info:
   name: dvwa
   author: archer
   verified: false
   description: 检测到dvwa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dvwa.dvwa
+    name: DVWA
+    category: application
+    identity: product
+    assurance: verified
+    aliases:
+      - Damn Vulnerable Web Application
+    references:
+      - https://github.com/digininja/DVWA
 rules:
   r0:
     request:

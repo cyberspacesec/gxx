@@ -1,10 +1,21 @@
-id: web-codiad
+id: hackmd-codimd
 info:
   name: codiad
   author: archer
   verified: false
   description: 检测到codiad系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hackmd.codimd
+    name: CodiMD
+    vendor: HackMD
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - wiki
+    references:
+      - https://github.com/hackmdio/codimd
 rules:
   r0:
     request:

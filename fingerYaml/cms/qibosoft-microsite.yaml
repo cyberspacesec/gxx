@@ -1,10 +1,20 @@
-id: web-qibosoft-microsite
+id: qibosoft-microsite
 info:
   name: qibosoft-microsite
   author: archer
   verified: false
   description: 检测到qibosoft-microsite系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qibosoft.microsite
+    name: 齐博微站
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - qibosoft-microsite
 rules:
   r0:
     request:

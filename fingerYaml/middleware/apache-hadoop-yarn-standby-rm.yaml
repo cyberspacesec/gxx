@@ -1,10 +1,25 @@
-id: web-resourcemanager
+id: apache-hadoop-yarn-standby-rm
 info:
   name: resourcemanager
   author: archer
   verified: false
   description: 检测到resourcemanager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: apache.hadoop-yarn
+    name: Apache Hadoop YARN
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+      - big-data
+    aliases:
+      - apache-hadoop-yarn
+    references:
+      - https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html
+    description: Hadoop 集群的资源管理与作业调度组件。
 rules:
   r0:
     request:

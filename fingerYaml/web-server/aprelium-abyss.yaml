@@ -1,4 +1,4 @@
-id: abyss-web-server
+id: aprelium-abyss
 info:
   reference:
     - https://aprelium.com/abyssws/
@@ -8,6 +8,20 @@ info:
   description: Aprelium 提供的 Web 服务器。
   tags: web,fofa,converted,web-server
   created: 2025/04/07
+  product:
+    id: aprelium.abyss
+    name: Abyss Web Server
+    vendor: Aprelium
+    category: web-server
+    identity: product
+    assurance: verified
+    tags:
+      - web-server
+    aliases:
+      - Detect Abyss Web Server
+    references:
+      - https://aprelium.com/abyssws/
+    description: Aprelium 提供的 Web 服务器。
 rules:
   r0:
     request:

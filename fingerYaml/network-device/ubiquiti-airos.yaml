@@ -1,5 +1,5 @@
 ---
-id: fofayaml-35
+id: ubiquiti-airos
 info:
   name: AirOS
   author: zhizhuo
@@ -7,6 +7,15 @@ info:
   description: 'Converted from FOFA rule: fofayaml-35'
   tags: web,fofa,converted
   created: 2025/04/07
+  product:
+    id: ubiquiti.airos
+    name: airOS
+    vendor: Ubiquiti
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - router
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-bluequartz
+id: bluequartz
 info:
   name: bluequartz
   author: archer
   verified: false
   description: 检测到bluequartz系统或组件的特征
   created: 2025/04/24
+  product:
+    id: bluequartz.bluequartz
+    name: BlueQuartz
+    category: hosting-panel
+    identity: product
+    assurance: inferred
+    aliases:
+      - Sun Cobalt RaQ
 rules:
   r0:
     request:

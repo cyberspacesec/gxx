@@ -1,10 +1,21 @@
-id: web-lansweeper
+id: lansweeper
 info:
   name: lansweeper
   author: archer
   verified: false
   description: 检测到lansweeper系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lansweeper.lansweeper
+    name: Lansweeper
+    vendor: Lansweeper
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://www.lansweeper.com/
 rules:
   r0:
     request:

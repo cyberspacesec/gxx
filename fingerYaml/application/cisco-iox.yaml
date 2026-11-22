@@ -1,10 +1,17 @@
-id: web-cisco-iox
+id: cisco-iox
 info:
   name: cisco-iox
   author: archer
   verified: false
   description: 检测到cisco-iox系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cisco.iox
+    name: Cisco IOx
+    vendor: Cisco
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

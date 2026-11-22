@@ -1,10 +1,19 @@
-id: web-ultimus-bpm
+id: ultimus-bpm
 info:
   name: ultimus-bpm
   author: archer
   verified: false
   description: 检测到ultimus-bpm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ultimus.bpm
+    name: Ultimus BPM Suite
+    vendor: Ultimus
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - Ultimus iPortal
 rules:
   r0:
     request:

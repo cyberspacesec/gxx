@@ -1,10 +1,21 @@
-id: web-锐捷路由器
+id: ruijie-router
 info:
   name: 锐捷路由器
   author: archer
   verified: true
   description: 检测到锐捷路由器系统或组件的特征
   created: 2025/04/16
+  product:
+    id: ruijie.router
+    name: 锐捷路由器
+    vendor: 锐捷网络
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - router
+    references:
+      - https://www.ruijie.com.cn/
 rules:
   r0:
     request:

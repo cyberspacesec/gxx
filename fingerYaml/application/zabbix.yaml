@@ -1,4 +1,4 @@
-id: web-zabbix
+id: zabbix
 info:
   tags: application
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 用于监控网络、服务器与应用状态的系统。
   created: 2025/04/24
+  product:
+    id: zabbix.zabbix
+    name: Zabbix
+    vendor: Zabbix
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - monitoring
+    aliases:
+      - zabbix
+    references:
+      - https://www.zabbix.com/
+    description: 用于监控网络、服务器与应用状态的系统。
 rules:
   r0:
     request:

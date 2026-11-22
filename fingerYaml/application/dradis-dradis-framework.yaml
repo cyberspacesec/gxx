@@ -1,10 +1,18 @@
-id: web-dradis-framework
+id: dradis-dradis-framework
 info:
   name: dradis-framework
   author: archer
   verified: false
   description: 检测到dradis-framework系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dradis.dradis-framework
+    name: Dradis Framework
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - Dradis
 rules:
   r0:
     request:

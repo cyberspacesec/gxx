@@ -1,10 +1,21 @@
-id: web-明源云erp
+id: mingyuanyun-erp
 info:
   name: 明源云erp
   author: archer
   verified: false
   description: 检测到明源云erp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mingyuanyun.erp
+    name: 明源云 ERP
+    vendor: 明源云
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
+    aliases:
+      - 明源ERP
 rules:
   r0:
     request:

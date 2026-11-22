@@ -1,10 +1,26 @@
-id: web-hadoop-administration
+id: apache-hadoop-web-ui
 info:
   name: hadoop-administration
   author: archer
   verified: false
   description: 检测到hadoop-administration系统或组件的特征
   created: 2025/04/24
+  product:
+    id: apache.hadoop
+    name: Apache Hadoop
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+      - big-data
+    aliases:
+      - apache-hadoop
+      - httpfs
+    references:
+      - https://hadoop.apache.org/
+    description: 面向大规模数据的分布式存储与处理框架。
 rules:
   r0:
     request:

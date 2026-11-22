@@ -1,10 +1,19 @@
-id: web-axgate-sslvpn
+id: axgate-ssl-vpn
 info:
   name: axgate-sslvpn
   author: archer
   verified: false
   description: 检测到axgate-sslvpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: axgate.ssl-vpn
+    name: AXGATE SSL VPN
+    vendor: AXGATE
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

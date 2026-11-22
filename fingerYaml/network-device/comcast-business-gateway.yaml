@@ -1,10 +1,21 @@
-id: web-comcast-business
+id: comcast-business-gateway
 info:
   name: comcast-business
   author: archer
   verified: false
   description: 检测到comcast-business系统或组件的特征
   created: 2025/04/24
+  product:
+    id: comcast.business-gateway
+    name: Comcast Business Gateway
+    vendor: Comcast
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - router
+    aliases:
+      - comcast-business
 rules:
   r0:
     request:

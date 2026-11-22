@@ -1,10 +1,22 @@
-id: web-mailman
+id: gnu-mailman
 info:
   name: mailman
   author: archer
   verified: false
   description: 检测到mailman系统或组件的特征
   created: 2025/04/24
+  product:
+    id: gnu.mailman
+    name: GNU Mailman
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - mail
+    aliases:
+      - mailman
+    references:
+      - https://www.list.org/
 rules:
   r0:
     request:

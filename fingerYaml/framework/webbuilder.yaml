@@ -1,10 +1,18 @@
-id: web-webbuilder
+id: webbuilder
 info:
   name: webbuilder
   author: archer
   verified: false
   description: 检测到webbuilder系统或组件的特征
   created: 2025/04/24
+  product:
+    id: webbuilder.webbuilder
+    name: WebBuilder
+    category: framework
+    identity: product
+    assurance: inferred
+    tags:
+      - dev-framework
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-pinpoint
+id: naver-pinpoint
 info:
   name: pinpoint
   author: archer
   verified: false
   description: 检测到pinpoint系统或组件的特征
   created: 2025/04/24
+  product:
+    id: naver.pinpoint
+    name: Pinpoint
+    vendor: NAVER
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://github.com/pinpoint-apm/pinpoint
 rules:
   r0:
     request:

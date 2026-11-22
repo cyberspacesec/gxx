@@ -1,10 +1,25 @@
-id: web-aws-ec2
+id: nginx-amazon-ec2-default-page
 info:
   name: aws-ec2
   author: archer
   verified: false
   description: 检测到aws-ec2系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nginx.nginx
+    name: nginx
+    category: web-server
+    identity: product
+    assurance: verified
+    tags:
+      - web-server
+      - proxy
+      - default-page
+    aliases:
+      - NGINX
+    references:
+      - https://nginx.org/en/
+    description: 提供 HTTP 服务和反向代理的开源 Web 服务器。
 rules:
   r0:
     request:

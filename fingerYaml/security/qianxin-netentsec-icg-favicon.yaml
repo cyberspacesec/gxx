@@ -1,10 +1,23 @@
-id: web-奇安信网康互联网控制网关
+id: qianxin-netentsec-icg-favicon
 info:
   name: 奇安信网康互联网控制网关
   author: archer
   verified: true
   description: 检测到奇安信网康互联网控制网关系统或组件的特征
   created: 2025/04/16
+  product:
+    id: qianxin.netentsec-icg
+    name: 网康互联网控制网关
+    vendor: 奇安信
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+    aliases:
+      - 奇安信网康互联网控制网关
+      - NS-ICG
+      - 网康科技互联网控制网关
 rules:
   r0:
     request:

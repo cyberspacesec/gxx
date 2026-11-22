@@ -1,10 +1,19 @@
-id: web-天融信-数据安全系统sbu
+id: topsec-sbu
 info:
   name: 天融信-数据安全系统sbu
   author: archer
   verified: false
   description: 检测到天融信-数据安全系统sbu系统或组件的特征
   created: 2025/04/24
+  product:
+    id: topsec.sbu
+    name: 天融信数据安全系统 SBU
+    vendor: 天融信
+    category: security
+    identity: product
+    assurance: verified
+    references:
+      - https://www.topsec.com.cn/
 rules:
   r0:
     request:

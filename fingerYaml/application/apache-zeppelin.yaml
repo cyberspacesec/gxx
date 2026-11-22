@@ -1,10 +1,21 @@
-id: web-zeppelin
+id: apache-zeppelin
 info:
   name: zeppelin
   author: archer
   verified: false
   description: 检测到zeppelin系统或组件的特征
   created: 2025/04/24
+  product:
+    id: apache.zeppelin
+    name: Apache Zeppelin
+    vendor: Apache Software Foundation
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - big-data
+    references:
+      - https://zeppelin.apache.org/
 rules:
   r0:
     request:

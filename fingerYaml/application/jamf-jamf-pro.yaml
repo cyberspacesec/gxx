@@ -1,10 +1,21 @@
-id: web-jamf-panel
+id: jamf-jamf-pro
 info:
   name: jamf-panel
   author: archer
   verified: false
   description: 检测到jamf-panel系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jamf.jamf-pro
+    name: Jamf Pro
+    vendor: Jamf
+    category: application
+    identity: product
+    assurance: verified
+    aliases:
+      - jamf-panel
+    references:
+      - https://www.jamf.com/
 rules:
   r0:
     request:

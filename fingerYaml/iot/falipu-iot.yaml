@@ -1,10 +1,20 @@
-id: web-falipu-iot
+id: falipu-iot
 info:
   name: falipu-iot
   author: archer
   verified: false
   description: 检测到falipu-iot系统或组件的特征
   created: 2025/04/24
+  product:
+    id: falipu.iot
+    name: Falipu 物联网平台
+    category: iot
+    identity: product
+    assurance: inferred
+    tags:
+      - iot-platform
+    aliases:
+      - falipu-iot
 rules:
   r0:
     request:

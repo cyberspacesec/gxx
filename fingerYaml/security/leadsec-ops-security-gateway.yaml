@@ -1,10 +1,19 @@
-id: web-网御运维安全网关
+id: leadsec-ops-security-gateway
 info:
   name: 网御运维安全网关
   author: archer
   verified: false
   description: 检测到网御运维安全网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: leadsec.ops-security-gateway
+    name: 网御运维安全网关
+    vendor: 网御星云
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - bastion
 rules:
   r0:
     request:

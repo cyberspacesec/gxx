@@ -1,10 +1,18 @@
-id: web-pc4uploader
+id: pc4uploader
 info:
   name: pc4uploader
   author: archer
   verified: false
   description: 检测到pc4uploader系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pc4uploader.pc4uploader
+    name: PC4Uploader
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - file-sharing
 rules:
   r0:
     request:

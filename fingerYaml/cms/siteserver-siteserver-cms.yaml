@@ -1,10 +1,20 @@
-id: web-siteserver
+id: siteserver-siteserver-cms
 info:
   name: siteserver
   author: archer
   verified: false
   description: 检测到siteserver系统或组件的特征
   created: 2025/04/24
+  product:
+    id: siteserver.siteserver-cms
+    name: SiteServer CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - SSCMS
 rules:
   r0:
     request:

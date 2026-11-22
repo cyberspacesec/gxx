@@ -1,10 +1,18 @@
-id: web-redwoodhq
+id: redwoodhq
 info:
   name: redwoodhq
   author: archer
   verified: false
   description: 检测到redwoodhq系统或组件的特征
   created: 2025/04/24
+  product:
+    id: redwoodhq.redwoodhq
+    name: RedwoodHQ
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - devops
 rules:
   r0:
     request:

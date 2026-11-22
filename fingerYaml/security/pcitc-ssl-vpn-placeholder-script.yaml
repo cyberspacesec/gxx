@@ -1,10 +1,19 @@
-id: web-pcitc-sslvpn
+id: pcitc-ssl-vpn-placeholder-script
 info:
   name: pcitc-sslvpn
   author: archer
   verified: false
   description: 检测到pcitc-sslvpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pcitc.ssl-vpn
+    name: 石化盈科 SSL VPN 远程接入系统
+    vendor: 石化盈科
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

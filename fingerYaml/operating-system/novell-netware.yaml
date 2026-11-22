@@ -1,10 +1,19 @@
-id: web-novell-netware
+id: novell-netware
 info:
   name: novell-netware
   author: archer
   verified: false
   description: 检测到novell-netware系统或组件的特征
   created: 2025/04/24
+  product:
+    id: novell.netware
+    name: NetWare
+    vendor: Novell
+    category: operating-system
+    identity: product
+    assurance: inferred
+    aliases:
+      - Novell NetWare
 rules:
   r0:
     request:

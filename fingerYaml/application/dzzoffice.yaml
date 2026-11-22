@@ -1,10 +1,20 @@
-id: web-dzzoffice-product
+id: dzzoffice
 info:
   name: dzzoffice-product
   author: archer
   verified: false
   description: 检测到dzzoffice-product系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dzzoffice.dzzoffice
+    name: DzzOffice
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    references:
+      - http://www.dzzoffice.com/
 rules:
   r0:
     request:

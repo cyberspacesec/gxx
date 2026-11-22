@@ -1,10 +1,17 @@
-id: web-semaphore
+id: smartlogic-semaphore
 info:
   name: semaphore
   author: archer
   verified: false
   description: 检测到semaphore系统或组件的特征
   created: 2025/04/24
+  product:
+    id: smartlogic.semaphore
+    name: Semaphore
+    vendor: Smartlogic
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

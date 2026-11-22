@@ -1,10 +1,20 @@
-id: web-casdoor
+id: casdoor
 info:
   name: casdoor
   author: archer
   verified: false
   description: 检测到casdoor系统或组件的特征
   created: 2025/04/24
+  product:
+    id: casdoor.casdoor
+    name: Casdoor
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - sso
+    references:
+      - https://github.com/casdoor/casdoor
 rules:
   r0:
     request:

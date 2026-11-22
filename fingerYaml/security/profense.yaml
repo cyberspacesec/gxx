@@ -1,10 +1,18 @@
-id: web-profense-firewall
+id: profense
 info:
   name: profense-firewall
   author: archer
   verified: false
   description: 检测到profense-firewall系统或组件的特征
   created: 2025/04/24
+  product:
+    id: profense.profense
+    name: Profense
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - waf
 rules:
   r0:
     request:

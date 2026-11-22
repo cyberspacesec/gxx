@@ -1,10 +1,20 @@
-id: web-lanyeye
+id: lanyeye-threat-detection
 info:
   name: lanyeye
   author: archer
   verified: false
   description: 检测到lanyeye系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lanyeye.threat-detection
+    name: 兰眼下一代威胁感知系统
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - ids
+    aliases:
+      - lanyeye
 rules:
   r0:
     request:

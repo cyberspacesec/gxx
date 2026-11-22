@@ -1,10 +1,20 @@
-id: web-ipcop-firewall
+id: ipcop
 info:
   name: ipcop-firewall
   author: archer
   verified: false
   description: 检测到ipcop-firewall系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ipcop.ipcop
+    name: IPCop
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+    aliases:
+      - ipcop-firewall
 rules:
   r0:
     request:

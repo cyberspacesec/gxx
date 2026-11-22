@@ -1,10 +1,22 @@
-id: web-Mailcow邮箱
+id: mailcow
 info:
   name: Mailcow邮箱
   author: archer
   verified: true
   description: 检测到Mailcow邮箱系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mailcow.mailcow
+    name: mailcow
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - mail
+    aliases:
+      - Mailcow邮箱
+    references:
+      - https://mailcow.email/
 rules:
   r0:
     request:

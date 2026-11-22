@@ -1,10 +1,17 @@
-id: web-kampyle
+id: medallia-kampyle
 info:
   name: kampyle
   author: archer
   verified: false
   description: 检测到kampyle系统或组件的特征
   created: 2025/04/24
+  product:
+    id: medallia.kampyle
+    name: Kampyle
+    vendor: Medallia
+    category: other
+    identity: signal
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,22 @@
-id: web-eisoo-anybackup
+id: aishu-anybackup
 info:
   name: eisoo-anybackup
   author: archer
   verified: false
   description: 检测到eisoo-anybackup系统或组件的特征
   created: 2025/04/24
+  product:
+    id: aishu.anybackup
+    name: AnyBackup
+    vendor: 爱数
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
+    aliases:
+      - EISOO AnyBackup
+      - 爱数AnyBackup
 rules:
   r0:
     request:

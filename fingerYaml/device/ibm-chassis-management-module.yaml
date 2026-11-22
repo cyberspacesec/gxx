@@ -1,10 +1,19 @@
-id: web-ibm-chassis-management
+id: ibm-chassis-management-module
 info:
   name: ibm-chassis-management
   author: archer
   verified: false
   description: 检测到ibm-chassis-management系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ibm.chassis-management-module
+    name: IBM Chassis Management Module
+    vendor: IBM
+    category: device
+    identity: product
+    assurance: inferred
+    aliases:
+      - ibm-chassis-management
 rules:
   r0:
     request:

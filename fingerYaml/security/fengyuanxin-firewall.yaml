@@ -1,10 +1,21 @@
-id: web-丰源芯科技-防火墙
+id: fengyuanxin-firewall
 info:
   name: 丰源芯科技-防火墙
   author: archer
   verified: false
   description: 检测到丰源芯科技-防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fengyuanxin.firewall
+    name: 丰源芯防火墙
+    vendor: 深圳市丰源芯科技产业控股有限公司
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+    aliases:
+      - 丰源芯科技-防火墙
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-powercreator-cms
+id: powercreator-powercreator-cms
 info:
   name: powercreator-cms
   author: archer
   verified: false
   description: 检测到powercreator-cms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: powercreator.powercreator-cms
+    name: PowerCreator CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
 rules:
   r0:
     request:

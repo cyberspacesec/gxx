@@ -1,10 +1,16 @@
-id: web-teamdoc-filesystem
+id: teamdoc
 info:
   name: teamdoc-filesystem
   author: archer
   verified: false
   description: 检测到teamdoc-filesystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: teamdoc.teamdoc
+    name: teamdoc-filesystem
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

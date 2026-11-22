@@ -1,10 +1,19 @@
-id: web-argosoft-mail-server
+id: argosoft-mail-server
 info:
   name: argosoft-mail-server
   author: archer
   verified: false
   description: 检测到argosoft-mail-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: argosoft.mail-server
+    name: ArGoSoft Mail Server
+    vendor: ArGoSoft
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

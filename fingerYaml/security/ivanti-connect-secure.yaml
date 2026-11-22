@@ -1,10 +1,25 @@
-id: web-pulsesecure-ssl-vpn
+id: ivanti-connect-secure
 info:
   name: pulsesecure-ssl-vpn
   author: archer
   verified: false
   description: 检测到pulsesecure-ssl-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ivanti.connect-secure
+    name: Ivanti Connect Secure
+    vendor: Ivanti
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
+    aliases:
+      - juniper-vpn
+      - Junos Pulse Secure Access Service
+      - Pulse Connect Secure
+      - Pulse Secure
+      - Juniper SSL VPN
 rules:
   r0:
     request:

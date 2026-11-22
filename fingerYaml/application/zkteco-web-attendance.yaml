@@ -1,10 +1,21 @@
-id: web-zknet-attendance-management
+id: zkteco-web-attendance
 info:
   name: zknet-attendance-management
   author: archer
   verified: false
   description: 检测到zknet-attendance-management系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zkteco.web-attendance
+    name: ZKTeco Web 考勤管理系统
+    vendor: 熵基科技
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - hr
+    aliases:
+      - ZKSoftware
 rules:
   r0:
     request:

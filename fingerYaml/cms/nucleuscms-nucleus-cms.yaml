@@ -1,10 +1,19 @@
-id: web-nucleus-cms
+id: nucleuscms-nucleus-cms
 info:
   name: nucleus-cms
   author: archer
   verified: false
   description: 检测到nucleus-cms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nucleuscms.nucleus-cms
+    name: Nucleus CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - blog
+      - cms
 rules:
   r0:
     request:

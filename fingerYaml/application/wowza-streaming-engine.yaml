@@ -1,10 +1,19 @@
-id: web-wowza-wowzastreamingengine
+id: wowza-streaming-engine
 info:
   name: wowza-wowzastreamingengine
   author: archer
   verified: false
   description: 检测到wowza-wowzastreamingengine系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wowza.streaming-engine
+    name: Wowza Streaming Engine
+    vendor: Wowza Media Systems
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - Wowza Media Server
 rules:
   r0:
     request:

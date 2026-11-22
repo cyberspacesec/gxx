@@ -1,10 +1,16 @@
-id: web-正通慧丰实例控制台-oa
+id: zhengtonghuifeng-instance-console
 info:
   name: 正通慧丰实例控制台-oa
   author: archer
   verified: true
   description: 检测到正通慧丰实例控制台-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhengtonghuifeng.instance-console
+    name: 正通慧丰实例控制台
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

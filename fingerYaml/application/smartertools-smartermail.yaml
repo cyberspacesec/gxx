@@ -1,10 +1,21 @@
-id: web-smartermail
+id: smartertools-smartermail
 info:
   name: smartermail
   author: archer
   verified: false
   description: 检测到smartermail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: smartertools.smartermail
+    name: SmarterMail
+    vendor: SmarterTools
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - mail
+    references:
+      - https://www.smartertools.com/
 rules:
   r0:
     request:

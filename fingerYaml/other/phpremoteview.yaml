@@ -1,10 +1,18 @@
-id: web-phpremoteview
+id: phpremoteview
 info:
   name: phpremoteview
   author: archer
   verified: false
   description: 检测到phpremoteview系统或组件的特征
   created: 2025/04/24
+  product:
+    id: phpremoteview.phpremoteview
+    name: phpRemoteView
+    category: other
+    identity: product
+    assurance: inferred
+    tags:
+      - webshell
 rules:
   r0:
     request:

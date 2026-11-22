@@ -1,10 +1,19 @@
-id: web-keyfocus-webserver
+id: keyfocus-kf-web-server
 info:
   name: keyfocus-webserver
   author: archer
   verified: false
   description: 检测到keyfocus-webserver系统或组件的特征
   created: 2025/04/24
+  product:
+    id: keyfocus.kf-web-server
+    name: KF Web Server
+    vendor: KeyFocus
+    category: web-server
+    identity: product
+    assurance: inferred
+    aliases:
+      - keyfocus-webserver
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-蓝凌OA
+id: landray-ekp
 info:
   name: 蓝凌OA
   author: archer
   verified: true
   description: 检测到蓝凌OA系统或组件的特征
   created: 2025/04/24
+  product:
+    id: landray.ekp
+    name: 蓝凌 EKP
+    vendor: 蓝凌软件
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - 蓝凌OA
 rules:
   r0:
     request:

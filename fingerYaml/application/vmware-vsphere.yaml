@@ -1,10 +1,19 @@
-id: web-vmware-vsphere
+id: vmware-vsphere
 info:
   name: vmware-vsphere
   author: archer
   verified: false
   description: 检测到vmware-vsphere系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vmware.vsphere
+    name: VMware vSphere
+    vendor: VMware
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
 rules:
   r0:
     request:

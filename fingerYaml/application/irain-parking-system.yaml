@@ -1,10 +1,20 @@
-id: web-irainone-parkingsystem
+id: irain-parking-system
 info:
   name: irainone-parkingsystem
   author: archer
   verified: false
   description: 检测到irainone-parkingsystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: irain.parking-system
+    name: iRainOne 停车场系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - iot-platform
+    aliases:
+      - irainone-parkingsystem
 rules:
   r0:
     request:

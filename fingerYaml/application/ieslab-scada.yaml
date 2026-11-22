@@ -1,10 +1,21 @@
-id: web-ieslab-scada
+id: ieslab-scada
 info:
   name: ieslab-scada
   author: archer
   verified: false
   description: 检测到ieslab-scada系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ieslab.scada
+    name: 积成电子 SCADA 系统
+    vendor: 积成电子
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - industrial
+    aliases:
+      - ieslab-scada
 rules:
   r0:
     request:

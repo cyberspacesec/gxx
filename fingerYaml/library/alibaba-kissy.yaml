@@ -1,10 +1,19 @@
-id: web-kissy
+id: alibaba-kissy
 info:
   name: kissy
   author: archer
   verified: false
   description: 检测到kissy系统或组件的特征
   created: 2025/04/24
+  product:
+    id: alibaba.kissy
+    name: KISSY
+    vendor: Alibaba
+    category: library
+    identity: signal
+    assurance: inferred
+    tags:
+      - js-library
 rules:
   r0:
     request:

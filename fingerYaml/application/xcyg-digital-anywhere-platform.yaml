@@ -1,10 +1,16 @@
-id: web-xcyg-system
+id: xcyg-digital-anywhere-platform
 info:
   name: xcyg-system
   author: archer
   verified: false
   description: 检测到xcyg-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xcyg.digital-anywhere-platform
+    name: Digital Anywhere Platform
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

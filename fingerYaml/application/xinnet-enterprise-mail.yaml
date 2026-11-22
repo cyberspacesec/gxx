@@ -1,10 +1,19 @@
-id: web-xinnet-enterprise-mail
+id: xinnet-enterprise-mail
 info:
   name: xinnet-enterprise-mail
   author: archer
   verified: false
   description: 检测到xinnet-enterprise-mail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xinnet.enterprise-mail
+    name: 新网企业邮箱
+    vendor: 新网数码
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

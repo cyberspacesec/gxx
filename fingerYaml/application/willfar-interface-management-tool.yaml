@@ -1,10 +1,16 @@
-id: web-willfar-interface-management-tool
+id: willfar-interface-management-tool
 info:
   name: willfar-interface-management-tool
   author: archer
   verified: false
   description: 检测到willfar-interface-management-tool系统或组件的特征
   created: 2025/04/24
+  product:
+    id: willfar.interface-management-tool
+    name: 接口应用管理工具
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

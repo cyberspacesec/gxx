@@ -1,10 +1,21 @@
-id: web-everything
+id: voidtools-everything
 info:
   name: everything
   author: archer
   verified: false
   description: 检测到everything系统或组件的特征
   created: 2025/04/24
+  product:
+    id: voidtools.everything
+    name: Everything
+    vendor: voidtools
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - file-transfer
+    references:
+      - https://www.voidtools.com/
 rules:
   r0:
     request:

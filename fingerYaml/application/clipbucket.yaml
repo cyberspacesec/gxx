@@ -1,10 +1,20 @@
-id: web-clipbucket
+id: clipbucket
 info:
   name: clipbucket
   author: archer
   verified: false
   description: 检测到clipbucket系统或组件的特征
   created: 2025/04/24
+  product:
+    id: clipbucket.clipbucket
+    name: ClipBucket
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - video
+    references:
+      - http://clip-bucket.com/
 rules:
   r0:
     request:

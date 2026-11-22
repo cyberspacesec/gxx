@@ -1,10 +1,21 @@
-id: web-novell-sentinel-log-manager
+id: novell-sentinel-log-manager
 info:
   name: novell-sentinel-log-manager
   author: archer
   verified: false
   description: 检测到novell-sentinel-log-manager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: novell.sentinel-log-manager
+    name: Sentinel Log Manager
+    vendor: Novell
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - siem
+    aliases:
+      - Novell Sentinel Log Manager
 rules:
   r0:
     request:

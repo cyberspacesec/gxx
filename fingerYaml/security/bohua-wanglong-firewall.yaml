@@ -1,10 +1,18 @@
-id: web-中科博华-网龙防火墙
+id: bohua-wanglong-firewall
 info:
   name: 中科博华-网龙防火墙
   author: archer
   verified: false
   description: 检测到中科博华-网龙防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: bohua.wanglong-firewall
+    name: 博华网龙防火墙
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
 rules:
   r0:
     request:

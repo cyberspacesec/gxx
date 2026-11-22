@@ -1,10 +1,21 @@
-id: web-锐捷-rg-ew1200g
+id: ruijie-rg-ew1200g
 info:
   name: 锐捷-rg-ew1200g
   author: archer
   verified: false
   description: 检测到锐捷-rg-ew1200g系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruijie.rg-ew1200g
+    name: 锐捷 RG-EW1200G 路由器
+    vendor: 锐捷网络
+    category: network-device
+    identity: product
+    assurance: verified
+    tags:
+      - router
+    references:
+      - https://www.ruijie.com.cn/
 rules:
   r0:
     request:

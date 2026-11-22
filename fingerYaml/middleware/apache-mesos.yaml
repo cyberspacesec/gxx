@@ -1,4 +1,4 @@
-id: web-apache-mesos
+id: apache-mesos
 info:
   tags: middleware
   reference:
@@ -8,6 +8,20 @@ info:
   verified: false
   description: 管理和调度分布式集群计算资源的平台。
   created: 2025/04/24
+  product:
+    id: apache.mesos
+    name: Apache Mesos
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+    aliases:
+      - apache-mesos
+    references:
+      - https://mesos.apache.org/
+    description: 管理和调度分布式集群计算资源的平台。
 rules:
   r0:
     request:

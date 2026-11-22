@@ -1,10 +1,18 @@
-id: web-hbjr-labbuilder
+id: hbjr-labbuilder
 info:
   name: hbjr-labbuilder
   author: archer
   verified: false
   description: 检测到hbjr-labbuilder系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hbjr.labbuilder
+    name: LabBuilder 实验室信息管理系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - hbjr-labbuilder
 rules:
   r0:
     request:

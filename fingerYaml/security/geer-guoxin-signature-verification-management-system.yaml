@@ -1,10 +1,17 @@
-id: web-signature-verification-management-system
+id: geer-guoxin-signature-verification-management-system
 info:
   name: signature-verification-management-system
   author: archer
   verified: false
   description: 检测到signature-verification-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: geer-guoxin.signature-verification-management-system
+    name: 签名验签管理系统
+    vendor: 北京格尔国信科技有限公司
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

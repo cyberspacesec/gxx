@@ -1,10 +1,16 @@
-id: web-savant-web-server
+id: savant-savant-web-server
 info:
   name: savant-web-server
   author: archer
   verified: false
   description: 检测到savant-web-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: savant.savant-web-server
+    name: Savant Web Server
+    category: web-server
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

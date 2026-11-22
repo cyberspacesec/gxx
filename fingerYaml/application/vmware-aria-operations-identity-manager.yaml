@@ -1,10 +1,22 @@
-id: web-vmware-vrealize-operations-manager
+id: vmware-aria-operations-identity-manager
 info:
   name: vmware-vrealize-operations-manager
   author: archer
   verified: false
   description: 检测到vmware-vrealize-operations-manager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vmware.aria-operations
+    name: VMware Aria Operations
+    vendor: VMware
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+      - monitoring
+    aliases:
+      - vRealize Operations Manager
 rules:
   r0:
     request:

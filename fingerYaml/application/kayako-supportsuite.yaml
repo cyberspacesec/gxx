@@ -1,10 +1,20 @@
-id: web-kayako-supportsuite
+id: kayako-supportsuite
 info:
   name: kayako-supportsuite
   author: archer
   verified: false
   description: 检测到kayako-supportsuite系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kayako.supportsuite
+    name: Kayako SupportSuite
+    vendor: Kayako
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - kayako-supportsuite
+      - Kayako eSupport
 rules:
   r0:
     request:

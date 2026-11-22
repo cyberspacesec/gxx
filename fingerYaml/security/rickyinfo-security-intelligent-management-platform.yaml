@@ -1,10 +1,17 @@
-id: web-security-intelligent-management-platform
+id: rickyinfo-security-intelligent-management-platform
 info:
   name: security-intelligent-management-platform
   author: archer
   verified: false
   description: 检测到security-intelligent-management-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: rickyinfo.security-intelligent-management-platform
+    name: 安全智能管理平台
+    vendor: Nanjing Rickyinfo Technology
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: web-apache-solr
+id: apache-solr
 info:
   tags: database
   reference:
@@ -8,6 +8,20 @@ info:
   verified: false
   description: 提供全文检索与数据分析功能的搜索平台。
   created: 2025/04/24
+  product:
+    id: apache.solr
+    name: Apache Solr
+    vendor: Apache Software Foundation
+    category: database
+    identity: product
+    assurance: verified
+    tags:
+      - database
+    aliases:
+      - apache-solr
+    references:
+      - https://solr.apache.org/
+    description: 提供全文检索与数据分析功能的搜索平台。
 rules:
   r0:
     request:

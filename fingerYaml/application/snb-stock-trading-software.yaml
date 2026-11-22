@@ -1,10 +1,16 @@
-id: web-snb-stock-trading-software
+id: snb-stock-trading-software
 info:
   name: snb-stock-trading-software
   author: archer
   verified: false
   description: 检测到snb-stock-trading-software系统或组件的特征
   created: 2025/04/24
+  product:
+    id: snb.stock-trading-software
+    name: snb-stock-trading-software
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

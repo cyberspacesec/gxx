@@ -1,10 +1,20 @@
-id: web-we7
+id: we7-title
 info:
   name: we7
   author: archer
   verified: false
   description: 检测到we7系统或组件的特征
   created: 2025/04/24
+  product:
+    id: we7.we7
+    name: 微擎
+    vendor: 微擎
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - We7
+      - w7
 rules:
   r0:
     request:

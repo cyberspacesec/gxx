@@ -1,10 +1,16 @@
-id: web-youhuaopt-system
+id: youhuaopt-youhuaopt-system
 info:
   name: youhuaopt-system
   author: archer
   verified: false
   description: 检测到youhuaopt-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: youhuaopt.youhuaopt-system
+    name: Youhuaopt 系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

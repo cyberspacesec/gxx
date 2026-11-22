@@ -1,10 +1,16 @@
-id: web-terminal-feature-collection-and-control-system
+id: terminal-feature-control
 info:
   name: terminal-feature-collection-and-control-system
   author: archer
   verified: false
   description: 检测到terminal-feature-collection-and-control-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: terminal-feature-control.terminal-feature-control
+    name: 终端特征采集与管控系统
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

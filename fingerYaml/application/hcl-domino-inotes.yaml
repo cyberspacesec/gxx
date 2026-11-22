@@ -1,10 +1,24 @@
-id: web-ibm-lotus-inotes
+id: hcl-domino-inotes
 info:
   name: ibm-lotus-inotes
   author: archer
   verified: false
   description: 检测到ibm-lotus-inotes系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hcl.domino
+    name: HCL Domino
+    vendor: HCL Technologies
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - ibm-lotus-domino
+      - IBM Lotus Domino
+      - Lotus iNotes
+      - ibm-lotus
 rules:
   r0:
     request:

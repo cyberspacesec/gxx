@@ -38,13 +38,14 @@ type TargetCallback func(result *TargetResult) bool
 
 // Engine 指纹识别引擎实例。
 type Engine struct {
-	life        *lifecycle.Gate
-	cfg         engineConfig
-	runner      *runner.Runner
-	writer      Writer
-	closed      atomic.Bool
-	products    map[string]ProductInfo
-	assessments map[string]RuleAssessment
+	life   *lifecycle.Gate
+	cfg    engineConfig
+	runner *runner.Runner
+	writer Writer
+	closed atomic.Bool
+	// productOverrides 是 WithProductCatalog 按规则标识的覆盖；其余规则使用自带的产品声明。
+	productOverrides map[string]ProductInfo
+	assessments      map[string]RuleAssessment
 }
 
 // NewEngine 创建并初始化 Engine 实例。
@@ -109,6 +110,9 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		Resources:            cfg.resources,
 		RulePolicy:           cfg.rulePolicy,
 	}
+	// 产品目录覆盖在加载前确定；每次加载（含 LoadFingerOptions）都检查同一产品的有效声明一致。
+	productOverrides := catalogOverrides(cfg.products)
+	scanCfg.RuleCheck = func(fingers []*finger.Finger) error { return checkRuleProducts(fingers, productOverrides) }
 	if !cfg.enableRateLimit {
 		scanCfg.RateLimitQPS = 0
 		scanCfg.RateLimitBurst = 0
@@ -116,13 +120,12 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 
 	// 先完成不依赖 runner/writer 的产品目录与测试记录构建：这样它们失败时无需、也不会
 	// 关闭调用方经 WithWriter 注入的自定义 Writer（审查问题 4.a）。
-	products, err := productIndex(cfg.products)
-	if err != nil {
+	if err := loadCatalog(); err != nil {
 		return nil, err
 	}
 	assessments := make(map[string]RuleAssessment, len(builtinCatalog.Validations)+len(cfg.assessments))
-	for id, assessment := range builtinCatalog.Validations {
-		assessments[id] = assessment
+	for _, assessment := range builtinCatalog.Validations {
+		assessments[assessment.RuleID] = assessment
 	}
 	for _, assessment := range cfg.assessments {
 		assessments[assessment.RuleID] = assessment
@@ -158,7 +161,7 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		_ = r.Close()
 		return nil, err
 	}
-	return &Engine{cfg: cfg, runner: r, writer: writer, life: lifecycle.New(0), products: products, assessments: assessments}, nil
+	return &Engine{cfg: cfg, runner: r, writer: writer, life: lifecycle.New(0), productOverrides: productOverrides, assessments: assessments}, nil
 }
 
 // buildWriter 根据 engineConfig 装配最终的 Writer：

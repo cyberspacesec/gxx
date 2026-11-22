@@ -1,10 +1,18 @@
-id: web-ewei-plagform
+id: ewei-ewei-platform
 info:
   name: ewei-plagform
   author: archer
   verified: false
   description: 检测到ewei-plagform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ewei.ewei-platform
+    name: 易维平台
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - ewei-plagform
 rules:
   r0:
     request:

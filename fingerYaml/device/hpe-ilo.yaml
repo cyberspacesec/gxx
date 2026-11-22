@@ -1,10 +1,22 @@
-id: web-hp-ilo
+id: hpe-ilo
 info:
   name: hp-ilo
   author: archer
   verified: false
   description: 检测到hp-ilo系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hpe.ilo
+    name: iLO (Integrated Lights-Out)
+    vendor: Hewlett Packard Enterprise
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - remote-access
+    aliases:
+      - hp-ilo
+      - HP iLO
 rules:
   r0:
     request:

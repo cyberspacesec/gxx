@@ -1,10 +1,18 @@
-id: web-ewomail
+id: ewomail
 info:
   name: ewomail
   author: archer
   verified: false
   description: 检测到ewomail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ewomail.ewomail
+    name: EwoMail
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-vmware-vcenter
+id: vmware-vcenter-server
 info:
   name: vmware-vcenter
   author: archer
   verified: false
   description: 检测到vmware-vcenter系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vmware.vcenter-server
+    name: VMware vCenter Server
+    vendor: VMware
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+    aliases:
+      - VMware VirtualCenter
 rules:
   r0:
     request:

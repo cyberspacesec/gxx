@@ -1,10 +1,24 @@
-id: web-freenas
+id: ixsystems-freenas
 info:
   name: freenas
   author: archer
   verified: false
   description: 检测到freenas系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ixsystems.freenas
+    name: FreeNAS
+    vendor: iXsystems
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - nas
+      - storage
+    aliases:
+      - TrueNAS CORE
+    references:
+      - https://www.truenas.com/
 rules:
   r0:
     request:

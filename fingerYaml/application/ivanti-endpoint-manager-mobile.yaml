@@ -1,10 +1,23 @@
-id: web-mobileiron-mdm
+id: ivanti-endpoint-manager-mobile
 info:
   name: mobileiron-mdm
   author: archer
   verified: false
   description: 检测到mobileiron-mdm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ivanti.endpoint-manager-mobile
+    name: Ivanti Endpoint Manager Mobile
+    vendor: Ivanti
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mdm
+    aliases:
+      - MobileIron Core
+      - MobileIron MDM
+      - EPMM
 rules:
   r0:
     request:

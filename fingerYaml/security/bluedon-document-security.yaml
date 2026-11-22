@@ -1,10 +1,19 @@
-id: web-蓝盾-文档安全管理系统
+id: bluedon-document-security
 info:
   name: 蓝盾-文档安全管理系统
   author: archer
   verified: false
   description: 检测到蓝盾-文档安全管理系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: bluedon.document-security
+    name: 蓝盾文档安全管理系统
+    vendor: 蓝盾信息安全
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - 蓝盾-文档安全管理系统
 rules:
   r0:
     request:

@@ -1,10 +1,17 @@
-id: web-websidestory
+id: websidestory-hbx-analytics
 info:
   name: websidestory
   author: archer
   verified: false
   description: 检测到websidestory系统或组件的特征
   created: 2025/04/24
+  product:
+    id: websidestory.hbx-analytics
+    name: WebSideStory HBX Analytics
+    vendor: WebSideStory
+    category: other
+    identity: signal
+    assurance: inferred
 rules:
   r0:
     request:

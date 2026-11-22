@@ -1,10 +1,20 @@
-id: web-hfish
+id: hfish
 info:
   name: hfish
   author: archer
   verified: false
   description: 检测到hfish系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hfish.hfish
+    name: HFish
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - honeypot
+    references:
+      - https://github.com/hacklcx/HFish
 rules:
   r0:
     request:

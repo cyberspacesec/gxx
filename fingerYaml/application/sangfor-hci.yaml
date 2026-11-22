@@ -1,10 +1,23 @@
-id: web-深信服超融合平台
+id: sangfor-hci
 info:
   name: 深信服超融合平台
   author: archer
   verified: false
   description: 检测到深信服超融合平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.hci
+    name: 深信服超融合平台 HCI
+    vendor: 深信服
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+    aliases:
+      - 深信服超融合平台
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

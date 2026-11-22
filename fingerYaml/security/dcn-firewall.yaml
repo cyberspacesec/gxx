@@ -1,10 +1,21 @@
-id: web-dcn-防火墙
+id: dcn-firewall
 info:
   name: dcn-防火墙
   author: archer
   verified: false
   description: 检测到dcn-防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dcn.firewall
+    name: DCN 防火墙
+    vendor: 神州数码网络
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+    aliases:
+      - DCFOS
 rules:
   r0:
     request:

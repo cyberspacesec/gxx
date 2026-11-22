@@ -1,10 +1,18 @@
-id: web-shopxo
+id: shopxo
 info:
   name: shopxo
   author: archer
   verified: true
   description: 检测到shopxo系统或组件的特征
   created: 2025/04/24
+  product:
+    id: shopxo.shopxo
+    name: ShopXO
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

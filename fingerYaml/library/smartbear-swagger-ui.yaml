@@ -1,10 +1,21 @@
-id: web-swagger
+id: smartbear-swagger-ui
 info:
   name: swagger
   author: archer
   verified: false
   description: 检测到swagger系统或组件的特征
   created: 2025/04/24
+  product:
+    id: smartbear.swagger-ui
+    name: Swagger UI
+    vendor: SmartBear
+    category: library
+    identity: product
+    assurance: verified
+    aliases:
+      - Swagger
+    references:
+      - https://github.com/swagger-api/swagger-ui
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-spiceworks
+id: spiceworks
 info:
   name: spiceworks
   author: archer
   verified: false
   description: 检测到spiceworks系统或组件的特征
   created: 2025/04/24
+  product:
+    id: spiceworks.spiceworks
+    name: Spiceworks
+    vendor: Spiceworks
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://www.spiceworks.com/
 rules:
   r0:
     request:

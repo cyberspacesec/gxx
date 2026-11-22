@@ -1,5 +1,5 @@
 ---
-id: fingeryaml-14
+id: femr-smart-outpatient
 info:
   name: FEMR-Smart Outpatient Management System
   author: zhizhuo
@@ -7,6 +7,14 @@ info:
   description: 'Converted from FOFA rule: fingeryaml-14'
   tags: web,fofa,converted
   created: 2025/04/07
+  product:
+    id: femr.smart-outpatient
+    name: FEMR Smart Outpatient Management System
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - login
 rules:
   r0:
     request:

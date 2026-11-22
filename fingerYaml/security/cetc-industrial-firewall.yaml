@@ -1,10 +1,19 @@
-id: web-cetc-工业防火墙
+id: cetc-industrial-firewall
 info:
   name: cetc-工业防火墙
   author: archer
   verified: false
   description: 检测到cetc-工业防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cetc.industrial-firewall
+    name: 中国电科工业防火墙
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+      - industrial
 rules:
   r0:
     request:

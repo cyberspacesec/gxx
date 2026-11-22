@@ -1,10 +1,20 @@
-id: web-golden-dragon-card-ecard-website-query-subsystem
+id: jinlongka-ecard-query
 info:
   name: golden-dragon-card-ecard-website-query-subsystem
   author: archer
   verified: false
   description: 检测到golden-dragon-card-ecard-website-query-subsystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jinlongka.ecard-query
+    name: 金龙卡校园一卡通网站查询子系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - payment
+    aliases:
+      - golden-dragon-card-ecard-website-query-subsystem
 rules:
   r0:
     request:

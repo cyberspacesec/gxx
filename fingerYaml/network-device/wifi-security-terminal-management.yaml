@@ -1,10 +1,16 @@
-id: web-wifi安全终端设备管理
+id: wifi-security-terminal-management
 info:
   name: wifi安全终端设备管理
   author: archer
   verified: false
   description: 检测到wifi安全终端设备管理系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wifi-security-terminal-management.wifi-security-terminal-management
+    name: WiFi 安全终端设备管理
+    category: network-device
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

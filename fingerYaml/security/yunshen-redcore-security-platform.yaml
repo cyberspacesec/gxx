@@ -1,10 +1,17 @@
-id: web-云深互联-红芯安全管控平台
+id: yunshen-redcore-security-platform
 info:
   name: 云深互联-红芯安全管控平台
   author: archer
   verified: false
   description: 检测到云深互联-红芯安全管控平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yunshen.redcore-security-platform
+    name: 红芯安全管控平台
+    vendor: 云深互联
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

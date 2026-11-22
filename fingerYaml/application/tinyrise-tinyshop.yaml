@@ -1,10 +1,18 @@
-id: web-tinyrise-tinyshop
+id: tinyrise-tinyshop
 info:
   name: tinyrise-tinyshop
   author: archer
   verified: false
   description: 检测到tinyrise-tinyshop系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tinyrise.tinyshop
+    name: TinyShop
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

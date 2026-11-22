@@ -1,10 +1,22 @@
-id: web-plesk-plesk-onyx
+id: plesk
 info:
   name: plesk-plesk-onyx
   author: archer
   verified: false
   description: 检测到plesk-plesk-onyx系统或组件的特征
   created: 2025/04/24
+  product:
+    id: plesk.plesk
+    name: Plesk
+    vendor: Plesk
+    category: hosting-panel
+    identity: product
+    assurance: verified
+    aliases:
+      - Parallels Plesk Panel
+      - Plesk Onyx
+    references:
+      - https://www.plesk.com/
 rules:
   r0:
     request:

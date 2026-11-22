@@ -1,10 +1,18 @@
-id: web-dbshop
+id: dbshop
 info:
   name: dbshop
   author: archer
   verified: false
   description: 检测到dbshop系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dbshop.dbshop
+    name: DBShop
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

@@ -89,7 +89,7 @@ func TestFullFingerprintParallelParity(t *testing.T) {
 					ids = append(ids, match.Info.ID)
 				}
 				sort.Strings(ids)
-				if fmt.Sprint(ids) != "[apache-detect web-apache-http web-wordpress]" {
+				if fmt.Sprint(ids) != "[apache-http-server apache-http-server-raw-header-token wordpress]" {
 					t.Errorf("并行结果不一致: %v", ids)
 				}
 			}
@@ -117,7 +117,7 @@ func BenchmarkRuleConcurrency(b *testing.B) {
 }
 func TestFullFingerprintPositiveParity(t *testing.T) {
 	e, url := fullRuleFixture(t, 0)
-	want := []string{"apache-detect", "web-apache-http", "web-wordpress"}
+	want := []string{"apache-http-server", "apache-http-server-raw-header-token", "wordpress"}
 	for i := 0; i < 3; i++ {
 		r, err := e.Scan(context.Background(), url)
 		if err != nil {
@@ -130,6 +130,14 @@ func TestFullFingerprintPositiveParity(t *testing.T) {
 		sort.Strings(got)
 		if fmt.Sprint(got) != fmt.Sprint(want) {
 			t.Fatalf("%v != %v", got, want)
+		}
+		// 同一产品的两条规则归并为一个产品，产品信息来自规则声明。
+		var products []string
+		for _, product := range r.Products {
+			products = append(products, fmt.Sprintf("%s%v/%s/%s", product.ID, product.RuleIDs, product.Identity, product.Assurance))
+		}
+		if fmt.Sprint(products) != "[apache.http-server[apache-http-server apache-http-server-raw-header-token]/product/verified wordpress.wordpress[wordpress]/product/verified]" {
+			t.Fatalf("产品归并不符: %v", products)
 		}
 	}
 	if e.PoolStats().CompletedTasks != int64(3*e.FingerCount()) {

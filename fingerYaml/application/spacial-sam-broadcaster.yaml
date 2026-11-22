@@ -1,10 +1,19 @@
-id: web-samphpweb
+id: spacial-sam-broadcaster
 info:
   name: samphpweb
   author: archer
   verified: false
   description: 检测到samphpweb系统或组件的特征
   created: 2025/04/24
+  product:
+    id: spacial.sam-broadcaster
+    name: SAM Broadcaster
+    vendor: Spacial Audio Solutions
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - samphpweb
 rules:
   r0:
     request:

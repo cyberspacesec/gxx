@@ -1,10 +1,18 @@
-id: web-goldencis-nacp
+id: goldencis-nacp
 info:
   name: goldencis-nacp
   author: archer
   verified: false
   description: 检测到goldencis-nacp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: goldencis.nacp
+    name: 网络准入控制平台 NACP
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - goldencis-nacp
 rules:
   r0:
     request:

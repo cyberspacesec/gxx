@@ -1,10 +1,21 @@
-id: web-EMQX
+id: emqx
 info:
   name: EMQX
   author: archer
   verified: true
   description: 检测到EMQX系统或组件的特征
   created: 2025/04/16
+  product:
+    id: emqx.emqx
+    name: EMQX
+    vendor: EMQ Technologies
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - iot-platform
+    references:
+      - https://github.com/emqx/emqx
 rules:
   r0:
     request:

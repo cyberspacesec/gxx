@@ -1,10 +1,19 @@
-id: web-奇安信-数据脱敏系统
+id: qianxin-data-masking
 info:
   name: 奇安信-数据脱敏系统
   author: archer
   verified: false
   description: 检测到奇安信-数据脱敏系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qianxin.data-masking
+    name: 网神数据脱敏系统
+    vendor: 奇安信
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - 360网神数据脱敏系统
 rules:
   r0:
     request:

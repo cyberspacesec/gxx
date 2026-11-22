@@ -1,10 +1,23 @@
-id: web-MikroTik-RouterOS
+id: mikrotik-routeros
 info:
   name: MikroTik-RouterOS
   author: archer
   verified: false
   description: 检测到MikroTik-RouterOS系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mikrotik.routeros
+    name: RouterOS
+    vendor: MikroTik
+    category: network-device
+    identity: product
+    assurance: verified
+    tags:
+      - router
+    aliases:
+      - MikroTik RouterOS
+    references:
+      - https://mikrotik.com/
 rules:
   r0:
     request:

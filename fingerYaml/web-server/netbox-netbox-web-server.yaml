@@ -1,10 +1,16 @@
-id: web-netbox
+id: netbox-netbox-web-server
 info:
   name: netbox
   author: archer
   verified: false
   description: 检测到netbox系统或组件的特征
   created: 2025/04/24
+  product:
+    id: netbox.netbox-web-server
+    name: NetBox Web Server
+    category: web-server
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

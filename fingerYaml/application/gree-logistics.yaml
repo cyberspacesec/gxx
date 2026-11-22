@@ -1,10 +1,18 @@
-id: web-gree-logistics
+id: gree-logistics
 info:
   name: gree-logistics
   author: archer
   verified: false
   description: 检测到gree-logistics系统或组件的特征
   created: 2025/04/24
+  product:
+    id: gree.logistics
+    name: 格力物流系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - gree-logistics
 rules:
   r0:
     request:

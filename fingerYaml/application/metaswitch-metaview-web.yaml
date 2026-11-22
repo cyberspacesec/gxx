@@ -1,10 +1,19 @@
-id: web-metaswitch-networks-metaview-web
+id: metaswitch-metaview-web
 info:
   name: metaswitch-networks-metaview-web
   author: archer
   verified: false
   description: 检测到metaswitch-networks-metaview-web系统或组件的特征
   created: 2025/04/24
+  product:
+    id: metaswitch.metaview-web
+    name: MetaView Web
+    vendor: Metaswitch Networks
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - Metaswitch MetaView
 rules:
   r0:
     request:

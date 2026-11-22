@@ -1,10 +1,23 @@
-id: web-citrix-access-gateway
+id: citrix-netscaler-gateway
 info:
   name: citrix-access-gateway
   author: archer
   verified: false
   description: 检测到citrix-access-gateway系统或组件的特征
   created: 2025/04/24
+  product:
+    id: citrix.netscaler-gateway
+    name: NetScaler Gateway
+    vendor: Citrix
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
+      - gateway
+    aliases:
+      - Citrix Gateway
+      - Citrix Access Gateway
 rules:
   r0:
     request:

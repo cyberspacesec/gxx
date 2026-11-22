@@ -1,10 +1,21 @@
-id: web-centreon
+id: centreon
 info:
   name: centreon
   author: archer
   verified: false
   description: 检测到centreon系统或组件的特征
   created: 2025/04/24
+  product:
+    id: centreon.centreon
+    name: Centreon
+    vendor: Centreon
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://www.centreon.com/
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-xjhtqy-crm
+id: xjhtqy-crm
 info:
   name: xjhtqy-crm
   author: archer
   verified: false
   description: 检测到xjhtqy-crm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xjhtqy.crm
+    name: HTQY CRM
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - crm
 rules:
   r0:
     request:

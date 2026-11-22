@@ -1,10 +1,19 @@
-id: web-apabi-digital-resource-platform
+id: apabi-digital-resource-platform
 info:
   name: apabi-digital-resource-platform
   author: archer
   verified: false
   description: 检测到apabi-digital-resource-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: apabi.digital-resource-platform
+    name: 方正阿帕比数字资源平台
+    vendor: 方正阿帕比
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - Apabi
 rules:
   r0:
     request:

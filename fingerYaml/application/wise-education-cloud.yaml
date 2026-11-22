@@ -1,10 +1,18 @@
-id: web-wise-education-cloud-masters
+id: wise-education-cloud
 info:
   name: wise-education-cloud-masters
   author: archer
   verified: false
   description: 检测到wise-education-cloud-masters系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wise-education-cloud.wise-education-cloud
+    name: Wise 教育云
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
 rules:
   r0:
     request:

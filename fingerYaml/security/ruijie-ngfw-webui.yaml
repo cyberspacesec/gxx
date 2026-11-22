@@ -1,10 +1,21 @@
-id: web-ruijie-下一代防火墙
+id: ruijie-ngfw-webui
 info:
   name: ruijie-下一代防火墙
   author: archer
   verified: false
   description: 检测到ruijie-下一代防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruijie.ngfw
+    name: 锐捷下一代防火墙
+    vendor: 锐捷网络
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+    references:
+      - https://www.ruijie.com.cn/
 rules:
   r0:
     request:

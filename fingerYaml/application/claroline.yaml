@@ -1,10 +1,18 @@
-id: web-claroline
+id: claroline
 info:
   name: claroline
   author: archer
   verified: false
   description: 检测到claroline系统或组件的特征
   created: 2025/04/24
+  product:
+    id: claroline.claroline
+    name: Claroline
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
 rules:
   r0:
     request:

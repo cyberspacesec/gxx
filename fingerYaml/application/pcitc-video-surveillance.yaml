@@ -1,10 +1,18 @@
-id: web-pcitc-cameras-and-surveillance
+id: pcitc-video-surveillance
 info:
   name: pcitc-cameras-and-surveillance
   author: archer
   verified: false
   description: 检测到pcitc-cameras-and-surveillance系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pcitc.video-surveillance
+    name: 石化盈科视频监控系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
 rules:
   r0:
     request:

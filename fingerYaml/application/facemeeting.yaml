@@ -1,10 +1,21 @@
-id: web-facemeeting-meeting
+id: facemeeting
 info:
   name: facemeeting-meeting
   author: archer
   verified: false
   description: 检测到facemeeting-meeting系统或组件的特征
   created: 2025/04/24
+  product:
+    id: facemeeting.facemeeting
+    name: 飞视美视频会议系统
+    vendor: 飞视美
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
+    aliases:
+      - FaceMeeting
 rules:
   r0:
     request:

@@ -1,10 +1,23 @@
-id: web-expressjs
+id: expressjs-express
 info:
   name: expressjs
   author: archer
   verified: false
   description: 检测到expressjs系统或组件的特征
   created: 2025/04/24
+  product:
+    id: expressjs.express
+    name: Express
+    vendor: OpenJS Foundation
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    aliases:
+      - Express.js
+    references:
+      - https://expressjs.com/
 rules:
   r0:
     request:

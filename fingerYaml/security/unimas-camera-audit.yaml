@@ -1,10 +1,18 @@
-id: web-unimas-cameraaudit
+id: unimas-camera-audit
 info:
   name: unimas-cameraaudit
   author: archer
   verified: false
   description: 检测到unimas-cameraaudit系统或组件的特征
   created: 2025/04/24
+  product:
+    id: unimas.camera-audit
+    name: UniMAS 摄像头审计系统
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-tinyproxy
+id: tinyproxy
 info:
   name: tinyproxy
   author: archer
   verified: false
   description: 检测到tinyproxy系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tinyproxy.tinyproxy
+    name: Tinyproxy
+    category: web-server
+    identity: product
+    assurance: verified
+    tags:
+      - proxy
+    references:
+      - https://github.com/tinyproxy/tinyproxy
 rules:
   r0:
     request:

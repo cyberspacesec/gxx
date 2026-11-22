@@ -1,10 +1,18 @@
-id: web-hw99-checking
+id: hw99-checking
 info:
   name: hw99-checking
   author: archer
   verified: false
   description: 检测到hw99-checking系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hw99.checking
+    name: hw99 考勤系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - hw99-checking
 rules:
   r0:
     request:

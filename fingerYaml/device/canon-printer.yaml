@@ -1,5 +1,5 @@
 ---
-id: fofayaml-5
+id: canon-printer
 info:
   name: Canon-Printer
   author: zhizhuo
@@ -7,6 +7,17 @@ info:
   description: 'Converted from FOFA rule: fofayaml-5'
   tags: web,fofa,converted
   created: 2025/04/07
+  product:
+    id: canon.printer
+    name: Canon Printer
+    vendor: Canon
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - printer
+    aliases:
+      - Canon HTTP Server
 rules:
   r0:
     request:

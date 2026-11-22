@@ -1,10 +1,19 @@
-id: web-clearwell-e-discovery
+id: veritas-ediscovery-platform
 info:
   name: clearwell-e-discovery
   author: archer
   verified: false
   description: 检测到clearwell-e-discovery系统或组件的特征
   created: 2025/04/24
+  product:
+    id: veritas.ediscovery-platform
+    name: Veritas eDiscovery Platform
+    vendor: Veritas
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - Clearwell eDiscovery Platform
 rules:
   r0:
     request:

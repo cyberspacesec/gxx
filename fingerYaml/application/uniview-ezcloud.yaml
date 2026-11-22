@@ -1,10 +1,22 @@
-id: web-uniview-ezclould
+id: uniview-ezcloud
 info:
   name: uniview-ezclould
   author: archer
   verified: false
   description: 检测到uniview-ezclould系统或组件的特征
   created: 2025/04/24
+  product:
+    id: uniview.ezcloud
+    name: EZCloud
+    vendor: 宇视科技
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
+      - cloud
+    aliases:
+      - ezclould
 rules:
   r0:
     request:

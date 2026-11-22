@@ -1,10 +1,18 @@
-id: web-infosec-utrust
+id: utrust-infosec-utrust
 info:
   name: infosec-utrust
   author: archer
   verified: false
   description: 检测到infosec-utrust系统或组件的特征
   created: 2025/04/24
+  product:
+    id: utrust.infosec-utrust
+    name: UTrust 系统
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - infosec-utrust
 rules:
   r0:
     request:

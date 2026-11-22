@@ -1,10 +1,21 @@
-id: web-couchbase
+id: couchbase-couchbase-server
 info:
   name: couchbase
   author: archer
   verified: false
   description: 检测到couchbase系统或组件的特征
   created: 2025/04/24
+  product:
+    id: couchbase.couchbase-server
+    name: Couchbase Server
+    vendor: Couchbase
+    category: database
+    identity: product
+    assurance: verified
+    aliases:
+      - couchbase
+    references:
+      - https://www.couchbase.com/
 rules:
   r0:
     request:

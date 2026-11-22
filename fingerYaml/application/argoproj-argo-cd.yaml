@@ -1,10 +1,21 @@
-id: web-argocd
+id: argoproj-argo-cd
 info:
   name: argocd
   author: archer
   verified: false
   description: 检测到argocd系统或组件的特征
   created: 2025/04/24
+  product:
+    id: argoproj.argo-cd
+    name: Argo CD
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+      - ci
+    references:
+      - https://github.com/argoproj/argo-cd
 rules:
   r0:
     request:

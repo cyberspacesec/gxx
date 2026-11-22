@@ -1,10 +1,17 @@
-id: web-redseal-system
+id: redseal
 info:
   name: redseal-system
   author: archer
   verified: false
   description: 检测到redseal-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: redseal.redseal
+    name: RedSeal
+    vendor: RedSeal
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

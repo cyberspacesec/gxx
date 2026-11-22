@@ -1,10 +1,19 @@
-id: web-genieatm
+id: genie-networks-genieatm
 info:
   name: genieatm
   author: archer
   verified: false
   description: 检测到genieatm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: genie-networks.genieatm
+    name: GenieATM
+    vendor: Genie Networks
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

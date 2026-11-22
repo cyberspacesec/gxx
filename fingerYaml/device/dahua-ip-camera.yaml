@@ -1,10 +1,21 @@
-id: web-大华摄像头
+id: dahua-ip-camera
 info:
   name: 大华摄像头
   author: archer
   verified: false
   description: 检测到大华摄像头系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dahua.ip-camera
+    name: 大华网络摄像机
+    vendor: 大华
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
+    aliases:
+      - 大华摄像头
 rules:
   r0:
     request:

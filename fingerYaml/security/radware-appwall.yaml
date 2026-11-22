@@ -1,10 +1,21 @@
-id: web-radware-appwall
+id: radware-appwall
 info:
   name: radware-appwall
   author: archer
   verified: false
   description: 检测到radware-appwall系统或组件的特征
   created: 2025/04/24
+  product:
+    id: radware.appwall
+    name: Radware AppWall
+    vendor: Radware
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - waf
+    references:
+      - https://www.radware.com/
 rules:
   r0:
     request:

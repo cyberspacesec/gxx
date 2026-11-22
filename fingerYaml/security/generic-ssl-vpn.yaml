@@ -1,10 +1,18 @@
-id: web-SSLVPN
+id: generic-ssl-vpn
 info:
   name: SSL VPN
   author: archer
   verified: false
   description: 检测到SSL VPN系统或组件的特征
   created: 2025/04/24
+  product:
+    id: generic.ssl-vpn
+    name: SSL VPN（未识别厂商）
+    category: security
+    identity: signal
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

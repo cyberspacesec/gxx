@@ -1,10 +1,18 @@
-id: web-knopflerfish-http-server
+id: knopflerfish
 info:
   name: knopflerfish-http-server
   author: archer
   verified: false
   description: 检测到knopflerfish-http-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: knopflerfish.knopflerfish
+    name: Knopflerfish
+    category: middleware
+    identity: product
+    assurance: inferred
+    aliases:
+      - knopflerfish-http-server
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-1caitong
+id: 1caitong
 info:
   name: 1caitong
   author: zhizhuo
   verified: true
   description: 识别特定Web应用
   created: 2025/04/15
+  product:
+    id: 1caitong.1caitong
+    name: 1caitong
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

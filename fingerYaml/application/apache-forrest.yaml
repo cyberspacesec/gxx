@@ -1,4 +1,4 @@
-id: web-apache-forrest
+id: apache-forrest
 info:
   tags: application
   reference:
@@ -8,6 +8,20 @@ info:
   verified: false
   description: 将多种来源内容组织为网站及文档的发布框架。
   created: 2025/04/24
+  product:
+    id: apache.forrest
+    name: Apache Forrest
+    vendor: Apache Software Foundation
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+    aliases:
+      - apache-forrest
+    references:
+      - https://forrest.apache.org/
+    description: 将多种来源内容组织为网站及文档的发布框架。
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-ultrapower-identity
+id: ultrapower-identity-security-management
 info:
   name: ultrapower-identity
   author: archer
   verified: false
   description: 检测到ultrapower-identity系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ultrapower.identity-security-management
+    name: 身份与安全管控系统
+    vendor: 神州泰岳
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - sso
+      - bastion
 rules:
   r0:
     request:

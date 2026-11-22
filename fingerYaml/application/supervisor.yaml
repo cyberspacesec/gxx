@@ -1,10 +1,22 @@
-id: web-supervisord
+id: supervisor
 info:
   name: supervisord
   author: archer
   verified: false
   description: 检测到supervisord系统或组件的特征
   created: 2025/04/24
+  product:
+    id: supervisor.supervisor
+    name: Supervisor
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    aliases:
+      - supervisord
+    references:
+      - http://supervisord.org/
 rules:
   r0:
     request:

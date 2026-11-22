@@ -1,10 +1,21 @@
-id: web-深信服日志审计
+id: sangfor-log-audit
 info:
   name: 深信服日志审计
   author: archer
   verified: false
   description: 检测到深信服日志审计系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.log-audit
+    name: 深信服日志审计系统
+    vendor: 深信服
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - audit
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

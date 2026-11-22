@@ -1,10 +1,18 @@
-id: web-darkstat
+id: darkstat
 info:
   name: darkstat
   author: archer
   verified: false
   description: 检测到darkstat系统或组件的特征
   created: 2025/04/24
+  product:
+    id: darkstat.darkstat
+    name: darkstat
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

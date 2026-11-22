@@ -1,10 +1,19 @@
-id: web-中科网威-4a运维堡垒机系统
+id: zhongkewangwei-bastion
 info:
   name: 中科网威-4a运维堡垒机系统
   author: archer
   verified: false
   description: 检测到中科网威-4a运维堡垒机系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhongkewangwei.bastion
+    name: 中科网威 4A 运维堡垒机系统
+    vendor: 中科网威
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - bastion
 rules:
   r0:
     request:

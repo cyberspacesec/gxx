@@ -1,10 +1,21 @@
-id: web-synology-photo-station
+id: synology-photo-station
 info:
   name: synology-photo-station
   author: archer
   verified: false
   description: 检测到synology-photo-station系统或组件的特征
   created: 2025/04/24
+  product:
+    id: synology.photo-station
+    name: Synology Photo Station
+    vendor: Synology
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - nas
+    references:
+      - https://www.synology.com/
 rules:
   r0:
     request:

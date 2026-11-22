@@ -1,10 +1,18 @@
-id: web-mobile-office-system
+id: yidong-bangong-xitong-redirect
 info:
   name: mobile-office-system
   author: archer
   verified: false
   description: 检测到mobile-office-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yidong-bangong-xitong.yidong-bangong-xitong
+    name: 移动办公系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

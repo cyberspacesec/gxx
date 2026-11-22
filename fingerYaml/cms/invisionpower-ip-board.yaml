@@ -1,10 +1,24 @@
-id: web-invision-ipboard
+id: invisionpower-ip-board
 info:
   name: invision-ipboard
   author: archer
   verified: false
   description: 检测到invision-ipboard系统或组件的特征
   created: 2025/04/24
+  product:
+    id: invisionpower.ip-board
+    name: Invision Power Board
+    vendor: Invision Power Services
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - forum
+    aliases:
+      - invision-ipboard
+      - invision-powerboard
+      - IP.Board
+      - Invision Community
 rules:
   r0:
     request:

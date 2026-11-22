@@ -1,10 +1,18 @@
-id: web-topbpm-user-authorization-center
+id: topbpm-user-authorization-center
 info:
   name: topbpm-user-authorization-center
   author: archer
   verified: false
   description: 检测到topbpm-user-authorization-center系统或组件的特征
   created: 2025/04/24
+  product:
+    id: topbpm.user-authorization-center
+    name: TopBPM 用户授权中心
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - sso
 rules:
   r0:
     request:

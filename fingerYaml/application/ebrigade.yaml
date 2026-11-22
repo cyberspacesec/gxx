@@ -1,10 +1,20 @@
-id: web-ebrigade-erp
+id: ebrigade
 info:
   name: ebrigade-erp
   author: archer
   verified: false
   description: 检测到ebrigade-erp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ebrigade.ebrigade
+    name: eBrigade
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
+    aliases:
+      - ebrigade-erp
 rules:
   r0:
     request:

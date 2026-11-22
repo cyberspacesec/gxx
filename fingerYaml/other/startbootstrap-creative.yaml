@@ -1,10 +1,19 @@
-id: web-startbootstrap-product
+id: startbootstrap-creative
 info:
   name: startbootstrap-product
   author: archer
   verified: false
   description: 检测到startbootstrap-product系统或组件的特征
   created: 2025/04/24
+  product:
+    id: startbootstrap.creative
+    name: Start Bootstrap Creative 模板
+    vendor: Start Bootstrap
+    category: other
+    identity: signal
+    assurance: inferred
+    tags:
+      - default-page
 rules:
   r0:
     request:

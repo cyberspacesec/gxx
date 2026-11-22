@@ -1,10 +1,21 @@
-id: web-sangfor-osm
+id: sangfor-osm
 info:
   name: sangfor-osm
   author: archer
   verified: false
   description: 检测到sangfor-osm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.osm
+    name: 深信服运维安全管理系统 OSM
+    vendor: 深信服
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - bastion
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

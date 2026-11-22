@@ -1,10 +1,18 @@
-id: web-eqmail
+id: eqmail-webmail-frame
 info:
   name: eqmail
   author: archer
   verified: false
   description: 检测到eqmail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: eqmail.eqmail
+    name: EQMail
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

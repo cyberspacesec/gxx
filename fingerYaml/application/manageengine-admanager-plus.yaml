@@ -1,10 +1,19 @@
-id: web-manageengine-admanager-plus
+id: manageengine-admanager-plus
 info:
   name: manageengine-admanager-plus
   author: archer
   verified: false
   description: 检测到manageengine-admanager-plus系统或组件的特征
   created: 2025/04/24
+  product:
+    id: manageengine.admanager-plus
+    name: ManageEngine ADManager Plus
+    vendor: ManageEngine
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - manageengine-admanager-plus
 rules:
   r0:
     request:

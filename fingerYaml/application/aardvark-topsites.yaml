@@ -1,10 +1,16 @@
-id: web-aardvark-topsites
+id: aardvark-topsites
 info:
   name: aardvark-topsites
   author: archer
   verified: false
   description: 检测到aardvark-topsites系统或组件的特征
   created: 2025/04/24
+  product:
+    id: aardvark.topsites
+    name: Aardvark Topsites PHP
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

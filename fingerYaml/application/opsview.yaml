@@ -1,10 +1,19 @@
-id: web-opsview-product
+id: opsview
 info:
   name: opsview-product
   author: archer
   verified: false
   description: 检测到opsview-product系统或组件的特征
   created: 2025/04/24
+  product:
+    id: opsview.opsview
+    name: Opsview
+    vendor: Opsview
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

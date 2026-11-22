@@ -1,10 +1,21 @@
-id: web-yonyou-ufida-nc
+id: yonyou-nc-ufida-logo
 info:
   name: yonyou-ufida-nc
   author: archer
   verified: false
   description: 检测到yonyou-ufida-nc系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yonyou.nc
+    name: 用友 NC
+    vendor: 用友网络
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
+    aliases:
+      - UFIDA NC
 rules:
   r0:
     request:

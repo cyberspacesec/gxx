@@ -1,10 +1,16 @@
-id: web-easyscp
+id: easyscp
 info:
   name: easyscp
   author: archer
   verified: false
   description: 检测到easyscp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: easyscp.easyscp
+    name: EasySCP
+    category: hosting-panel
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,23 @@
-id: web-启明星辰天清汉马usg防火墙
+id: venustech-tianqing-hanma-usg
 info:
   name: 启明星辰天清汉马usg防火墙
   author: archer
   verified: false
   description: 检测到启明星辰天清汉马usg防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: venustech.tianqing-hanma-usg
+    name: 天清汉马 USG 一体化安全网关
+    vendor: 启明星辰
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+      - gateway
+    aliases:
+      - Venusense USG
+      - 天清汉马USG防火墙
 rules:
   r0:
     request:

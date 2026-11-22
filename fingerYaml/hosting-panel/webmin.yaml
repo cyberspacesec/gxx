@@ -1,10 +1,18 @@
-id: web-webmin
+id: webmin
 info:
   name: webmin
   author: archer
   verified: false
   description: 检测到webmin系统或组件的特征
   created: 2025/04/24
+  product:
+    id: webmin.webmin
+    name: Webmin
+    category: hosting-panel
+    identity: product
+    assurance: verified
+    references:
+      - https://webmin.com/
 rules:
   r0:
     request:

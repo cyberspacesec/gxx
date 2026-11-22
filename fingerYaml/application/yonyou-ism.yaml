@@ -1,10 +1,16 @@
-id: web-yonyou-ism
+id: yonyou-ism
 info:
   name: yonyou-ism
   author: archer
   verified: false
   description: 检测到yonyou-ism系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yonyou.ism
+    name: 用友 ISM
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

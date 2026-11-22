@@ -1,10 +1,16 @@
-id: web-zhengdazhongri-education
+id: zhengdazhongri-education-system
 info:
   name: zhengdazhongri-education
   author: archer
   verified: false
   description: 检测到zhengdazhongri-education系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhengdazhongri.education-system
+    name: Zhengdazhongri 教育系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-rmihttpserver
+id: rmihttpserver
 info:
   name: rmihttpserver
   author: archer
   verified: false
   description: 检测到rmihttpserver系统或组件的特征
   created: 2025/04/24
+  product:
+    id: rmihttpserver.rmihttpserver
+    name: rmihttpserver
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,17 @@
-id: web-用友UAP
+id: yonyou-uap
 info:
   name: 用友UAP
   author: archer
   verified: false
   description: 检测到用友UAP系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yonyou.uap
+    name: 用友 UAP
+    vendor: 用友网络
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

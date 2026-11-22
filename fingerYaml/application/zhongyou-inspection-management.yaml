@@ -1,10 +1,17 @@
-id: web-zhongyou-system
+id: zhongyou-inspection-management
 info:
   name: zhongyou-system
   author: archer
   verified: false
   description: 检测到zhongyou-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhongyou.inspection-management
+    name: 众友科技巡检管理软件
+    vendor: 众友科技
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-piaware-skyview
+id: flightaware-piaware
 info:
   name: piaware-skyview
   author: archer
   verified: false
   description: 检测到piaware-skyview系统或组件的特征
   created: 2025/04/24
+  product:
+    id: flightaware.piaware
+    name: PiAware SkyView
+    vendor: FlightAware
+    category: iot
+    identity: product
+    assurance: inferred
+    aliases:
+      - PiAware
 rules:
   r0:
     request:

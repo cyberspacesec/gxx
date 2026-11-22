@@ -1,10 +1,16 @@
-id: web-cirrusgate-system
+id: cirrusgate-dlp
 info:
   name: cirrusgate-system
   author: archer
   verified: false
   description: 检测到cirrusgate-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cirrusgate.dlp
+    name: CirrusGate DLP
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

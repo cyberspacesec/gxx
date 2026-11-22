@@ -1,10 +1,21 @@
-id: web-ultrapower-me移动协调办公平台
+id: ultrapower-me-mobile-office
 info:
   name: ultrapower-me移动协调办公平台
   author: archer
   verified: false
   description: 检测到ultrapower-me移动协调办公平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ultrapower.me-mobile-office
+    name: ME 移动协同办公平台
+    vendor: 神州泰岳
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - ME移动协调办公平台
 rules:
   r0:
     request:

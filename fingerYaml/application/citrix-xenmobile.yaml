@@ -1,10 +1,19 @@
-id: web-citrix-xenmobile
+id: citrix-xenmobile
 info:
   name: citrix-xenmobile
   author: archer
   verified: false
   description: 检测到citrix-xenmobile系统或组件的特征
   created: 2025/04/24
+  product:
+    id: citrix.xenmobile
+    name: Citrix XenMobile
+    vendor: Citrix
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - Citrix Endpoint Management
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: web-apache-nifi
+id: apache-nifi
 info:
   tags: middleware
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 用于处理、路由与分发数据流的平台。
   created: 2025/04/24
+  product:
+    id: apache.nifi
+    name: Apache NiFi
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+      - big-data
+    aliases:
+      - apache-nifi
+    references:
+      - https://nifi.apache.org/
+    description: 用于处理、路由与分发数据流的平台。
 rules:
   r0:
     request:

@@ -1,10 +1,23 @@
-id: web-serv-u-ftp
+id: solarwinds-serv-u
 info:
   name: serv-u-ftp
   author: archer
   verified: false
   description: 检测到serv-u-ftp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: solarwinds.serv-u
+    name: Serv-U
+    vendor: SolarWinds
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - file-transfer
+    aliases:
+      - Serv-U FTP Server
+    references:
+      - https://www.serv-u.com/
 rules:
   r0:
     request:

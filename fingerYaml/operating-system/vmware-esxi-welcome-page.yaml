@@ -1,10 +1,21 @@
-id: web-vmware-esx
+id: vmware-esxi-welcome-page
 info:
   name: vmware-esx
   author: archer
   verified: false
   description: 检测到vmware-esx系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vmware.esxi
+    name: VMware ESXi
+    vendor: VMware
+    category: operating-system
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+    aliases:
+      - VMware ESX
 rules:
   r0:
     request:

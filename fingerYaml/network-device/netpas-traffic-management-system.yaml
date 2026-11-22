@@ -1,10 +1,18 @@
-id: web-netpas-traffic-management-system
+id: netpas-traffic-management-system
 info:
   name: netpas-traffic-management-system
   author: archer
   verified: false
   description: 检测到netpas-traffic-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: netpas.traffic-management-system
+    name: Netpas 流量管理系统
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-nginx-webui
+id: nginxwebui
 info:
   name: nginx-webui
   author: archer
   verified: false
   description: 检测到nginx-webui系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nginxwebui.nginxwebui
+    name: nginxWebUI
+    category: hosting-panel
+    identity: product
+    assurance: inferred
+    tags:
+      - proxy
 rules:
   r0:
     request:

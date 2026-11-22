@@ -1,10 +1,18 @@
-id: web-uin-meeting
+id: uin-uin-meeting
 info:
   name: uin-meeting
   author: archer
   verified: false
   description: 检测到uin-meeting系统或组件的特征
   created: 2025/04/24
+  product:
+    id: uin.uin-meeting
+    name: UIN 会议
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
 rules:
   r0:
     request:

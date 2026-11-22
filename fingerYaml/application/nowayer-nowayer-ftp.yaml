@@ -1,10 +1,18 @@
-id: web-nowayer-ftp
+id: nowayer-nowayer-ftp
 info:
   name: nowayer-ftp
   author: archer
   verified: false
   description: 检测到nowayer-ftp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nowayer.nowayer-ftp
+    name: Nowayer FTP
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - file-transfer
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-xdebug
+id: xdebug
 info:
   name: xdebug
   author: archer
   verified: false
   description: 检测到xdebug系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xdebug.xdebug
+    name: Xdebug
+    category: library
+    identity: product
+    assurance: verified
+    references:
+      - https://xdebug.org/
 rules:
   r0:
     request:

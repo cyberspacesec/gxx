@@ -1,10 +1,20 @@
-id: web-gitea
+id: gitea
 info:
   name: gitea
   author: archer
   verified: false
   description: 检测到gitea系统或组件的特征
   created: 2025/04/24
+  product:
+    id: gitea.gitea
+    name: Gitea
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    references:
+      - https://github.com/go-gitea/gitea
 rules:
   r0:
     request:

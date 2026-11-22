@@ -1,10 +1,20 @@
-id: web-华为云云速邮箱
+id: huawei-cloud-yunsu-mail
 info:
   name: 华为云云速邮箱
   author: archer
   verified: true
   description: 检测到华为云云速邮箱系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huawei.cloud-yunsu-mail
+    name: 华为云云速邮箱
+    vendor: 华为
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+      - cloud
 rules:
   r0:
     request:

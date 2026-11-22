@@ -1,4 +1,4 @@
-id: web-apache-dubbo
+id: apache-dubbo
 info:
   tags: framework
   reference:
@@ -8,6 +8,23 @@ info:
   verified: false
   description: 微服务 RPC 通信、服务发现与治理框架。
   created: 2025/04/24
+  product:
+    id: apache.dubbo
+    name: Apache Dubbo
+    vendor: Apache Software Foundation
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - framework
+      - dev-framework
+    aliases:
+      - apache-dubbo
+      - Apache dubbo
+      - Dubbo
+    references:
+      - https://dubbo.apache.org/
+    description: 微服务 RPC 通信、服务发现与治理框架。
 rules:
   r0:
     request:

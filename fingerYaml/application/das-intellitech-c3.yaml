@@ -1,10 +1,19 @@
-id: web-das-intellitech-c3
+id: das-intellitech-c3
 info:
   name: das-intellitech-c3
   author: archer
   verified: false
   description: 检测到das-intellitech-c3系统或组件的特征
   created: 2025/04/24
+  product:
+    id: das-intellitech.c3
+    name: 达实 C3
+    vendor: 达实智能
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - das-intellitech-c3
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-maccms
+id: maccms
 info:
   name: maccms
   author: archer
   verified: false
   description: 检测到maccms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: maccms.maccms
+    name: 苹果 CMS（MacCMS）
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - video
+    aliases:
+      - maccms
 rules:
   r0:
     request:

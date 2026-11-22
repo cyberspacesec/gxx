@@ -1,10 +1,18 @@
-id: web-installationqualitymanagementsystem
+id: installation-quality-management-system
 info:
   name: installationqualitymanagementsystem
   author: archer
   verified: false
   description: 检测到installationqualitymanagementsystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: installation-quality.management-system
+    name: 安装质量管理系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - installationqualitymanagementsystem
 rules:
   r0:
     request:

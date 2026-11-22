@@ -1,10 +1,17 @@
-id: web-中科网威-安全控制系统
+id: zhongkewangwei-security-control-system
 info:
   name: 中科网威-安全控制系统
   author: archer
   verified: false
   description: 检测到中科网威-安全控制系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhongkewangwei.security-control-system
+    name: 中科网威安全控制系统
+    vendor: 中科网威
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

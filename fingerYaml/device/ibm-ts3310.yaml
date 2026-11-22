@@ -1,10 +1,21 @@
-id: web-ibm-ts3310
+id: ibm-ts3310
 info:
   name: ibm-ts3310
   author: archer
   verified: false
   description: 检测到ibm-ts3310系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ibm.ts3310
+    name: TS3310 磁带库
+    vendor: IBM
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
+    aliases:
+      - ibm-ts3310
 rules:
   r0:
     request:

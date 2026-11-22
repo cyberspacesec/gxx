@@ -1,10 +1,18 @@
-id: web-whatweb
+id: troy-serial-server
 info:
   name: whatweb
   author: archer
   verified: false
   description: 检测到whatweb系统或组件的特征
   created: 2025/04/24
+  product:
+    id: troy.serial-server
+    name: TROY 串口服务器
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - printer
 rules:
   r0:
     request:

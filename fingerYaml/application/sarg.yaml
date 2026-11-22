@@ -1,10 +1,20 @@
-id: web-sarg
+id: sarg
 info:
   name: sarg
   author: archer
   verified: false
   description: 检测到sarg系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sarg.sarg
+    name: SARG
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
+    aliases:
+      - Squid Analysis Report Generator
 rules:
   r0:
     request:

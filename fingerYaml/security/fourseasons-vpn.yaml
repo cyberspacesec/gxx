@@ -1,10 +1,20 @@
-id: web-fourseasonsvpn
+id: fourseasons-vpn
 info:
   name: fourseasonsvpn
   author: archer
   verified: false
   description: 检测到fourseasonsvpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fourseasons.vpn
+    name: Four Seasons VPN
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
+    aliases:
+      - fourseasonsvpn
 rules:
   r0:
     request:

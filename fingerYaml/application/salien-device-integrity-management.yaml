@@ -1,10 +1,17 @@
-id: web-salien-device-integrity-management-system
+id: salien-device-integrity-management
 info:
   name: salien-device-integrity-management-system
   author: zhizhuo
   verified: true
   description: 识别特定Web应用
   created: 2025/04/15
+  product:
+    id: salien.device-integrity-management
+    name: 时林设备完整性管理系统
+    vendor: 北京市时林电脑公司
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

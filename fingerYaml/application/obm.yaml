@@ -1,10 +1,20 @@
-id: web-obm
+id: obm
 info:
   name: obm
   author: archer
   verified: false
   description: 检测到obm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: obm.obm
+    name: OBM
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - crm
+    aliases:
+      - Open Business Management
 rules:
   r0:
     request:

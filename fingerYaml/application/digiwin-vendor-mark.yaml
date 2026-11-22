@@ -1,10 +1,22 @@
-id: web-digiwin-system
+id: digiwin-vendor-mark
 info:
   name: digiwin-system
   author: archer
   verified: false
   description: 检测到digiwin-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: digiwin.vendor-mark
+    name: 鼎捷软件厂商标识
+    vendor: 鼎捷软件
+    category: application
+    identity: signal
+    assurance: inferred
+    tags:
+      - erp
+    aliases:
+      - 鼎捷软件系统
+      - digiwin-system
 rules:
   r0:
     request:

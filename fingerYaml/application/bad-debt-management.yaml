@@ -1,10 +1,16 @@
-id: web-bad-debt-management-system
+id: bad-debt-management
 info:
   name: bad-debt-management-system
   author: archer
   verified: false
   description: 检测到bad-debt-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: bad-debt-management.bad-debt-management
+    name: 坏账管理系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

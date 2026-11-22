@@ -1,10 +1,18 @@
-id: web-ngi-gxd5-pacs
+id: ngi-gxd5-pacs
 info:
   name: ngi-gxd5-pacs
   author: archer
   verified: false
   description: 检测到ngi-gxd5-pacs系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ngi.gxd5-pacs
+    name: GXD5 PACS
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - medical
 rules:
   r0:
     request:

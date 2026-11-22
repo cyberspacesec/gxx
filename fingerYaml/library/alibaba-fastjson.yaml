@@ -1,4 +1,4 @@
-id: web-alibaba-fastjson
+id: alibaba-fastjson
 info:
   name: alibaba-fastjson
   author: archer
@@ -8,6 +8,24 @@ info:
     - https://github.com/alibaba/fastjson
   tags: library,json,java
   created: 2025/04/24
+  product:
+    id: alibaba.fastjson
+    name: Fastjson
+    vendor: Alibaba
+    category: library
+    identity: product
+    assurance: verified
+    tags:
+      - library
+      - dev-framework
+    aliases:
+      - alibaba-fastjson
+      - Fastjson 1
+    cpe:
+      - cpe:2.3:a:alibaba:fastjson:*:*:*:*:*:*:*:*
+    references:
+      - https://github.com/alibaba/fastjson
+    description: Java JSON 解析库，依据 Fastjson 1 的异常类和解析器类名称识别。
 rules:
   r0:
     request:

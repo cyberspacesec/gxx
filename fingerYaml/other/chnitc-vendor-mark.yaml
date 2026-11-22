@@ -1,10 +1,18 @@
-id: web-chnitc-system
+id: chnitc-vendor-mark
 info:
   name: chnitc-system
   author: archer
   verified: false
   description: 检测到chnitc-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: chnitc.vendor-mark
+    name: chnitc 科业厂商标识
+    category: other
+    identity: signal
+    assurance: inferred
+    references:
+      - http://www.chnitc.com/
 rules:
   r0:
     request:

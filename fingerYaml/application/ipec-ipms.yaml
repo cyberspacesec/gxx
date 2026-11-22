@@ -1,10 +1,18 @@
-id: web-ipec-ipms
+id: ipec-ipms
 info:
   name: ipec-ipms
   author: archer
   verified: false
   description: 检测到ipec-ipms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ipec.ipms
+    name: IPMS
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - ipec-ipms
 rules:
   r0:
     request:

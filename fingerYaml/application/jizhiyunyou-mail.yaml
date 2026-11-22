@@ -1,10 +1,18 @@
-id: web-机智云邮
+id: jizhiyunyou-mail
 info:
   name: 机智云邮
   author: archer
   verified: true
   description: 检测到机智云邮系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jizhiyunyou.mail
+    name: 机智云邮
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

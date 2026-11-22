@@ -1,10 +1,19 @@
-id: web-永中dcs
+id: yozosoft-dcs
 info:
   name: 永中dcs
   author: archer
   verified: false
   description: 检测到永中dcs系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yozosoft.dcs
+    name: 永中 DCS 文档在线预览
+    vendor: 永中软件
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - 永中DCS
 rules:
   r0:
     request:

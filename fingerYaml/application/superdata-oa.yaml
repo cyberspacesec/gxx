@@ -1,10 +1,19 @@
-id: web-superdata-oa
+id: superdata-oa
 info:
   name: superdata-oa
   author: archer
   verified: false
   description: 检测到superdata-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: superdata.oa
+    name: 速达 OA
+    vendor: 速达软件
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

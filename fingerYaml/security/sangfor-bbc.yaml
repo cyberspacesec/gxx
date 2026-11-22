@@ -1,10 +1,19 @@
-id: web-深信服BBC集中安全管理平台
+id: sangfor-bbc
 info:
   name: 深信服BBC集中安全管理平台
   author: archer
   verified: false
   description: 检测到深信服BBC集中安全管理平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.bbc
+    name: 深信服 BBC 集中安全管理平台
+    vendor: 深信服
+    category: security
+    identity: product
+    assurance: verified
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

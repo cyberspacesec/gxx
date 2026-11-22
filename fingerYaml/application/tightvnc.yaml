@@ -1,10 +1,21 @@
-id: web-tightvnc
+id: tightvnc
 info:
   name: tightvnc
   author: archer
   verified: false
   description: 检测到tightvnc系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tightvnc.tightvnc
+    name: TightVNC
+    vendor: GlavSoft
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - remote-access
+    references:
+      - https://www.tightvnc.com/
 rules:
   r0:
     request:

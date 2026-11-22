@@ -1,10 +1,16 @@
-id: web-chinamdm-mobile-device-management
+id: justsy-chinamdm
 info:
   name: chinamdm-mobile-device-management
   author: archer
   verified: false
   description: 检测到chinamdm-mobile-device-management系统或组件的特征
   created: 2025/04/24
+  product:
+    id: justsy.chinamdm
+    name: ChinaMDM 移动终端管理系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

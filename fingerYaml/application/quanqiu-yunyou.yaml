@@ -1,10 +1,18 @@
-id: web-全球云邮
+id: quanqiu-yunyou
 info:
   name: 全球云邮
   author: archer
   verified: true
   description: 检测到全球云邮系统或组件的特征
   created: 2025/04/24
+  product:
+    id: quanqiu-yunyou.quanqiu-yunyou
+    name: 全球云邮
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

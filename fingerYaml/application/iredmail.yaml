@@ -1,10 +1,22 @@
-id: web-iredmail
+id: iredmail
 info:
   name: iredmail
   author: archer
   verified: false
   description: 检测到iredmail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: iredmail.iredmail
+    name: iRedMail
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - mail
+    aliases:
+      - iRedAdmin
+    references:
+      - https://www.iredmail.org/
 rules:
   r0:
     request:

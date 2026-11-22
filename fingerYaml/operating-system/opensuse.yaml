@@ -1,5 +1,5 @@
 ---
-id: fofayaml-65
+id: opensuse
 info:
   reference:
     - https://www.opensuse.org/
@@ -9,6 +9,19 @@ info:
   description: Linux 发行版；响应标记不等同于主机系统已核实。
   tags: web,fofa,converted,operating-system
   created: 2025/04/07
+  product:
+    id: opensuse.opensuse
+    name: openSUSE
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - operating-system
+    aliases:
+      - openSUSE
+    references:
+      - https://www.opensuse.org/
+    description: Linux 发行版；响应标记不等同于主机系统已核实。
 rules:
   r0:
     request:

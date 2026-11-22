@@ -1,10 +1,19 @@
-id: web-alibaba-group-dms
+id: alibaba-dms
 info:
   name: alibaba-group-dms
   author: archer
   verified: false
   description: 检测到alibaba-group-dms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: alibaba.dms
+    name: DMS 数据管理
+    vendor: Alibaba
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - db-admin
 rules:
   r0:
     request:

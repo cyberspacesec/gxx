@@ -1,10 +1,21 @@
-id: web-lepus
+id: lepus
 info:
   name: lepus
   author: archer
   verified: false
   description: 检测到lepus系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lepus.lepus
+    name: Lepus 天兔数据库监控系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
+      - db-admin
+    aliases:
+      - lepus
 rules:
   r0:
     request:

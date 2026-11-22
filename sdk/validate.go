@@ -16,6 +16,10 @@ import (
 // 允许全部类型但禁止 raw、反连与 sleep 可以写成 RulePolicy{AllowTypes: []string{"http", "tcp", "udp"}}。
 type RulePolicy = finger.RulePolicy
 
+// ProductConflictError 表示同一产品标识在两条规则中的有效声明（规则声明叠加 WithProductCatalog
+// 的覆盖）不一致。NewEngine 与 LoadFingerOptions 返回的错误可用 errors.As 取得它。
+type ProductConflictError = finger.ProductConflictError
+
 // RulePolicyError 是一处违反规则策略的内容，含规则标识与字段路径（如 rules.r0.request.raw）。
 // NewEngine 与 LoadFingerOptions 返回的错误可用 errors.As 取得它。
 type RulePolicyError = finger.PolicyError

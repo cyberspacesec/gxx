@@ -1,10 +1,24 @@
-id: web-ecology-oa
+id: weaver-e-cology
 info:
   name: ecology-oa
   author: archer
   verified: true
   description: 检测到ecology-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: weaver.e-cology
+    name: e-cology
+    vendor: 泛微网络
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - oa
+    aliases:
+      - 泛微OA
+      - ecology
+    references:
+      - https://www.weaver.com.cn/
 rules:
   r0:
     request:

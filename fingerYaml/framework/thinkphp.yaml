@@ -1,4 +1,4 @@
-id: web-thinkphp
+id: thinkphp
 info:
   tags: framework
   reference:
@@ -8,6 +8,20 @@ info:
   verified: true
   description: 用于构建 Web 应用的 PHP 开发框架。
   created: 2025/04/24
+  product:
+    id: thinkphp.thinkphp
+    name: ThinkPHP
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - framework
+      - dev-framework
+    aliases:
+      - thinkphp
+    references:
+      - https://www.thinkphp.cn/
+    description: 用于构建 Web 应用的 PHP 开发框架。
 rules:
   r0:
     request:

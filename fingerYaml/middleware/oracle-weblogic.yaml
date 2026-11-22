@@ -1,4 +1,4 @@
-id: web-oracle-weblogic
+id: oracle-weblogic
 info:
   tags: middleware
   reference:
@@ -8,6 +8,20 @@ info:
   verified: false
   description: 提供企业 Java 应用运行与管理能力的应用服务器。
   created: 2025/04/24
+  product:
+    id: oracle.weblogic
+    name: Oracle WebLogic Server
+    vendor: Oracle
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+    aliases:
+      - oracle-weblogic
+    references:
+      - https://www.oracle.com/middleware/technologies/weblogic.html
+    description: 提供企业 Java 应用运行与管理能力的应用服务器。
 rules:
   r0:
     request:

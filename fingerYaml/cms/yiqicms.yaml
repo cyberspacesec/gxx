@@ -1,10 +1,20 @@
-id: web-yiqi-cms
+id: yiqicms
 info:
   name: yiqi-cms
   author: archer
   verified: false
   description: 检测到yiqi-cms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yiqicms.yiqicms
+    name: 易企CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - YiqiCMS
 rules:
   r0:
     request:

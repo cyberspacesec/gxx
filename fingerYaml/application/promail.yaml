@@ -1,10 +1,18 @@
-id: web-promail
+id: promail
 info:
   name: promail
   author: archer
   verified: false
   description: 检测到promail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: promail.promail
+    name: ProMail
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

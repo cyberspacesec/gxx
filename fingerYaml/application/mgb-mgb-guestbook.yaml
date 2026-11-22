@@ -1,10 +1,18 @@
-id: web-mgb-opensource-guestbook
+id: mgb-mgb-guestbook
 info:
   name: mgb-opensource-guestbook
   author: archer
   verified: false
   description: 检测到mgb-opensource-guestbook系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mgb.mgb-guestbook
+    name: MGB OpenSource Guestbook
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - guestbook
 rules:
   r0:
     request:

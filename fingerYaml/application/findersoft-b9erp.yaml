@@ -1,10 +1,20 @@
-id: web-findersoft-b9erp
+id: findersoft-b9erp
 info:
   name: findersoft-b9erp
   author: archer
   verified: false
   description: 检测到findersoft-b9erp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: findersoft.b9erp
+    name: B9 ERP
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
+    aliases:
+      - findersoft-b9erp
 rules:
   r0:
     request:

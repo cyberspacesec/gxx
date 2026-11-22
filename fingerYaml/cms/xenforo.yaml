@@ -1,10 +1,21 @@
-id: web-xenforo
+id: xenforo
 info:
   name: xenforo
   author: archer
   verified: false
   description: 检测到xenforo系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xenforo.xenforo
+    name: XenForo
+    vendor: XenForo Ltd.
+    category: cms
+    identity: product
+    assurance: verified
+    tags:
+      - forum
+    references:
+      - https://xenforo.com/
 rules:
   r0:
     request:

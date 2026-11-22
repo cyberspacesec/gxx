@@ -1,10 +1,19 @@
-id: web-xdoa-oa
+id: chuangxinda-xdoa
 info:
   name: xdoa-oa
   author: archer
   verified: false
   description: 检测到xdoa-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: chuangxinda.xdoa
+    name: XDOA
+    vendor: 创信达科技
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

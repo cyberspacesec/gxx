@@ -1,10 +1,21 @@
-id: web-广联达协同办公管理平台
+id: glodon-linkworks
 info:
   name: 广联达协同办公管理平台
   author: archer
   verified: false
   description: 检测到广联达协同办公管理平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: glodon.linkworks
+    name: 广联达 Linkworks 协同办公管理平台
+    vendor: 广联达
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - 广联达协同办公管理平台
 rules:
   r0:
     request:

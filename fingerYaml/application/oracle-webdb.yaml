@@ -1,10 +1,17 @@
-id: web-oracle-webdb
+id: oracle-webdb
 info:
   name: oracle-webdb
   author: archer
   verified: false
   description: 检测到oracle-webdb系统或组件的特征
   created: 2025/04/24
+  product:
+    id: oracle.webdb
+    name: Oracle WebDB
+    vendor: Oracle
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: web-drupal
+id: drupal
 info:
   tags: cms
   reference:
@@ -8,6 +8,19 @@ info:
   verified: false
   description: 用于内容管理和站点发布的开源平台。
   created: 2025/04/24
+  product:
+    id: drupal.drupal
+    name: Drupal
+    category: cms
+    identity: product
+    assurance: verified
+    tags:
+      - cms
+    aliases:
+      - drupal
+    references:
+      - https://www.drupal.org/
+    description: 用于内容管理和站点发布的开源平台。
 rules:
   r0:
     request:

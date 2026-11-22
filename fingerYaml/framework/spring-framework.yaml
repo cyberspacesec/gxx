@@ -1,4 +1,4 @@
-id: web-spring-framework
+id: spring-framework
 info:
   tags: framework
   reference:
@@ -8,6 +8,20 @@ info:
   verified: true
   description: 提供依赖注入、应用集成与 Web 开发能力的 Java 框架。
   created: 2025/04/24
+  product:
+    id: spring.framework
+    name: Spring Framework
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - framework
+      - dev-framework
+    aliases:
+      - spring-framework
+    references:
+      - https://spring.io/projects/spring-framework
+    description: 提供依赖注入、应用集成与 Web 开发能力的 Java 框架。
 rules:
   r0:
     request:

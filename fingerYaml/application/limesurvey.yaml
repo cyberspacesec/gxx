@@ -1,10 +1,21 @@
-id: web-lime-survey
+id: limesurvey
 info:
   name: lime-survey
   author: archer
   verified: false
   description: 检测到lime-survey系统或组件的特征
   created: 2025/04/24
+  product:
+    id: limesurvey.limesurvey
+    name: LimeSurvey
+    vendor: LimeSurvey GmbH
+    category: application
+    identity: product
+    assurance: verified
+    aliases:
+      - lime-survey
+    references:
+      - https://www.limesurvey.org/
 rules:
   r0:
     request:

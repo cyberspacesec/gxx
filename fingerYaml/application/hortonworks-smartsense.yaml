@@ -1,10 +1,22 @@
-id: web-hortonworks-smartsense-tool
+id: hortonworks-smartsense
 info:
   name: hortonworks-smartsense-tool
   author: archer
   verified: false
   description: 检测到hortonworks-smartsense-tool系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hortonworks.smartsense
+    name: Hortonworks SmartSense
+    vendor: Hortonworks
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - big-data
+      - monitoring
+    aliases:
+      - hortonworks-smartsense-tool
 rules:
   r0:
     request:

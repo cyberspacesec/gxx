@@ -1,10 +1,19 @@
-id: web-kj65n煤矿远程监控安全预警系统
+id: kj65n-coal-mine-monitoring
 info:
   name: kj65n煤矿远程监控安全预警系统
   author: archer
   verified: false
   description: 检测到kj65n煤矿远程监控安全预警系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kj65n.coal-mine-monitoring
+    name: KJ65N 煤矿远程监控安全预警系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - industrial
+      - monitoring
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-sangfor-ba
+id: sangfor-ba
 info:
   name: sangfor-ba
   author: archer
   verified: false
   description: 检测到sangfor-ba系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.ba
+    name: 深信服 BA
+    vendor: 深信服
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - sangfor-ba
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-cisco-meeting-app
+id: cisco-meeting-app
 info:
   name: cisco-meeting-app
   author: archer
   verified: false
   description: 检测到cisco-meeting-app系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cisco.meeting-app
+    name: Cisco Meeting App
+    vendor: Cisco
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
 rules:
   r0:
     request:

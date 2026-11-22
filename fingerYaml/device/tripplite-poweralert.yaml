@@ -1,10 +1,19 @@
-id: web-poweralert
+id: tripplite-poweralert
 info:
   name: poweralert
   author: archer
   verified: false
   description: 检测到poweralert系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tripplite.poweralert
+    name: PowerAlert
+    vendor: Tripp Lite
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

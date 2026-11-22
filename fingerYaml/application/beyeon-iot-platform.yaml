@@ -1,10 +1,19 @@
-id: web-beyeon-iot
+id: beyeon-iot-platform
 info:
   name: beyeon-iot
   author: archer
   verified: false
   description: 检测到beyeon-iot系统或组件的特征
   created: 2025/04/24
+  product:
+    id: beyeon.iot-platform
+    name: Beyeon IoT Platform
+    vendor: 郑州蓝视科技有限公司
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - iot-platform
 rules:
   r0:
     request:

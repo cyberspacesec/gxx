@@ -1,10 +1,18 @@
-id: web-integrating-century-epbp-management-platform
+id: integrating-century-epbp
 info:
   name: integrating-century-epbp-management-platform
   author: archer
   verified: false
   description: 检测到integrating-century-epbp-management-platform系统或组件的特征
   created: 2025/04/16
+  product:
+    id: integrating-century.epbp
+    name: EPBP 管理平台
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - integrating-century-epbp-management-platform
 rules:
   r0:
     request:

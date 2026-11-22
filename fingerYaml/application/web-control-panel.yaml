@@ -1,10 +1,16 @@
-id: web-web-control-panel
+id: web-control-panel
 info:
   name: web-control-panel
   author: archer
   verified: false
   description: 检测到web-control-panel系统或组件的特征
   created: 2025/04/24
+  product:
+    id: web-control-panel.web-control-panel
+    name: Web Control Panel
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

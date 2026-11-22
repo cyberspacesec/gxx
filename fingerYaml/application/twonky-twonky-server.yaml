@@ -1,10 +1,18 @@
-id: web-twonkyserver
+id: twonky-twonky-server
 info:
   name: twonkyserver
   author: archer
   verified: false
   description: 检测到twonkyserver系统或组件的特征
   created: 2025/04/24
+  product:
+    id: twonky.twonky-server
+    name: Twonky Server
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - TwonkyMedia
 rules:
   r0:
     request:

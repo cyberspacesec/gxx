@@ -1,10 +1,17 @@
-id: web-salien-performance-management-platform
+id: salien-performance-management
 info:
   name: salien-performance-management-platform
   author: archer
   verified: false
   description: 检测到salien-performance-management-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: salien.performance-management
+    name: 时林 Performance Management Platform
+    vendor: 北京市时林电脑公司
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

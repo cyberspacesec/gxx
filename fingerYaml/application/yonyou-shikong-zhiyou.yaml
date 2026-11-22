@@ -1,10 +1,18 @@
-id: web-用友时空智友
+id: yonyou-shikong-zhiyou
 info:
   name: 用友时空智友
   author: archer
   verified: true
   description: 检测到用友时空智友系统或组件的特征
   created: 2025/04/16
+  product:
+    id: yonyou.shikong-zhiyou
+    name: 用友时空智友
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
 rules:
   r0:
     request:

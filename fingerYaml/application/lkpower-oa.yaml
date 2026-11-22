@@ -1,10 +1,20 @@
-id: web-lkpoweroa
+id: lkpower-oa
 info:
   name: lkpoweroa
   author: archer
   verified: false
   description: 检测到lkpoweroa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lkpower.oa
+    name: LKPower OA
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - lkpoweroa
 rules:
   r0:
     request:

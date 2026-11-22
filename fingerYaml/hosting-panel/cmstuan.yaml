@@ -1,10 +1,18 @@
-id: web-cmstuan
+id: cmstuan
 info:
   name: cmstuan
   author: archer
   verified: false
   description: 检测到cmstuan系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cmstuan.cmstuan
+    name: 开源团主机管理系统
+    category: hosting-panel
+    identity: product
+    assurance: inferred
+    aliases:
+      - cmstuan
 rules:
   r0:
     request:

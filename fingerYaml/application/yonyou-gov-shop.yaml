@@ -1,10 +1,19 @@
-id: web-yonyou-shop
+id: yonyou-gov-shop
 info:
   name: yonyou-shop
   author: archer
   verified: false
   description: 检测到yonyou-shop系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yonyou.gov-shop
+    name: 用友政务网上商城
+    vendor: 用友网络
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

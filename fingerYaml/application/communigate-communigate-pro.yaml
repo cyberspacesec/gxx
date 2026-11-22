@@ -1,10 +1,19 @@
-id: web-communigate-pro
+id: communigate-communigate-pro
 info:
   name: communigate-pro
   author: archer
   verified: false
   description: 检测到communigate-pro系统或组件的特征
   created: 2025/04/24
+  product:
+    id: communigate.communigate-pro
+    name: CommuniGate Pro
+    vendor: CommuniGate Systems
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

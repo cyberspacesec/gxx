@@ -1,10 +1,19 @@
-id: web-supermap-gis
+id: supermap-vendor-mark
 info:
   name: supermap-gis
   author: archer
   verified: false
   description: 检测到supermap-gis系统或组件的特征
   created: 2025/04/24
+  product:
+    id: supermap.vendor-mark
+    name: 超图软件厂商标识
+    vendor: 超图软件
+    category: application
+    identity: signal
+    assurance: inferred
+    aliases:
+      - SuperMap GIS 产品
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-customer-service-operations-management-system
+id: csoms-customer-service-operations-management
 info:
   name: customer-service-operations-management-system
   author: archer
   verified: false
   description: 检测到customer-service-operations-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: csoms.customer-service-operations-management
+    name: 客服运营管理系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - customer-service-operations-management-system
 rules:
   r0:
     request:

@@ -1,10 +1,17 @@
-id: web-sco-openserver
+id: sco-openserver
 info:
   name: sco-openserver
   author: archer
   verified: false
   description: 检测到sco-openserver系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sco.openserver
+    name: SCO OpenServer
+    vendor: Xinuos
+    category: operating-system
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

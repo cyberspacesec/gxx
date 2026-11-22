@@ -1,4 +1,4 @@
-id: web-apache-ofbiz
+id: apache-ofbiz
 info:
   tags: application
   reference:
@@ -8,6 +8,22 @@ info:
   verified: false
   description: 包含 ERP、CRM 和电子商务功能的业务应用框架。
   created: 2025/04/24
+  product:
+    id: apache.ofbiz
+    name: Apache OFBiz
+    vendor: Apache Software Foundation
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - erp
+      - ecommerce
+    aliases:
+      - apache-ofbiz
+    references:
+      - https://ofbiz.apache.org/
+    description: 包含 ERP、CRM 和电子商务功能的业务应用框架。
 rules:
   r0:
     request:

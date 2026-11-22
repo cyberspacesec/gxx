@@ -1,10 +1,18 @@
-id: web-bigdump
+id: bigdump
 info:
   name: bigdump
   author: archer
   verified: false
   description: 检测到bigdump系统或组件的特征
   created: 2025/04/24
+  product:
+    id: bigdump.bigdump
+    name: BigDump
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - db-admin
 rules:
   r0:
     request:

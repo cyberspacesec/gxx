@@ -1,10 +1,18 @@
-id: web-account-manager-exhibition-system
+id: account-manager-exhibition
 info:
   name: account-manager-exhibition-system
   author: archer
   verified: false
   description: 检测到account-manager-exhibition-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: account-manager-exhibition.account-manager-exhibition
+    name: Account Manager Exhibition System
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - login
 rules:
   r0:
     request:

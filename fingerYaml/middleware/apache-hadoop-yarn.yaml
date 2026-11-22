@@ -1,4 +1,4 @@
-id: web-apache-hadoop-yarn
+id: apache-hadoop-yarn
 info:
   tags: middleware
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: Hadoop 集群的资源管理与作业调度组件。
   created: 2025/04/24
+  product:
+    id: apache.hadoop-yarn
+    name: Apache Hadoop YARN
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+      - big-data
+    aliases:
+      - apache-hadoop-yarn
+    references:
+      - https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html
+    description: Hadoop 集群的资源管理与作业调度组件。
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-移动云防火墙
+id: yidongyun-cloud-firewall
 info:
   name: 移动云防火墙
   author: archer
   verified: false
   description: 检测到移动云防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yidongyun.cloud-firewall
+    name: 移动云下一代防火墙
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+      - cloud
 rules:
   r0:
     request:

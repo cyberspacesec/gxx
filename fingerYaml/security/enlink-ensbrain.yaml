@@ -1,10 +1,21 @@
-id: web-江苏易安联安全设备
+id: enlink-ensbrain
 info:
   name: 江苏易安联安全设备
   author: archer
   verified: true
   description: 检测到江苏易安联安全设备系统或组件的特征
   created: 2025/04/16
+  product:
+    id: enlink.ensbrain
+    name: 易安联 EnSBrain
+    vendor: 易安联
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+    aliases:
+      - 江苏易安联安全设备
 rules:
   r0:
     request:

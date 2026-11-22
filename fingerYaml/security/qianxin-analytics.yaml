@@ -1,10 +1,17 @@
-id: web-qianxin-analytics
+id: qianxin-analytics
 info:
   name: qianxin-analytics
   author: archer
   verified: false
   description: 检测到qianxin-analytics系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qianxin.analytics
+    name: qianxin-analytics
+    vendor: 奇安信
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

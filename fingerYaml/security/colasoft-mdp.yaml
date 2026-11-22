@@ -1,10 +1,19 @@
-id: web-colasoft-mdp
+id: colasoft-mdp
 info:
   name: colasoft-mdp
   author: archer
   verified: false
   description: 检测到colasoft-mdp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: colasoft.mdp
+    name: 科来 MDP
+    vendor: 科来
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - colasoft-mdp
 rules:
   r0:
     request:

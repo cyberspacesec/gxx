@@ -1,10 +1,21 @@
-id: web-jakarta-project
+id: apache-jakarta-project
 info:
   name: jakarta-project
   author: archer
   verified: false
   description: 检测到jakarta-project系统或组件的特征
   created: 2025/04/24
+  product:
+    id: apache.jakarta-project
+    name: Apache Jakarta Project 页面
+    vendor: Apache Software Foundation
+    category: other
+    identity: signal
+    assurance: inferred
+    tags:
+      - default-page
+    aliases:
+      - jakarta-project
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-maop-oa
+id: maopu-oa
 info:
   name: maop-oa
   author: archer
   verified: false
   description: 检测到maop-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: maopu.oa
+    name: 猫扑 OA
+    vendor: 重庆猫扑网络科技有限公司
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

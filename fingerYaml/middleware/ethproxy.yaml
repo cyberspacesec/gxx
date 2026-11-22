@@ -1,10 +1,20 @@
-id: web-ethproxy
+id: ethproxy
 info:
   name: ethproxy
   author: archer
   verified: false
   description: 检测到ethproxy系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ethproxy.ethproxy
+    name: eth-proxy
+    category: middleware
+    identity: product
+    assurance: inferred
+    tags:
+      - proxy
+    aliases:
+      - ethproxy
 rules:
   r0:
     request:

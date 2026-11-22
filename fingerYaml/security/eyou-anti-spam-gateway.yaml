@@ -1,10 +1,20 @@
-id: web-eyou-anti-spam-mailbox-firewall
+id: eyou-anti-spam-gateway
 info:
   name: eyou-anti-spam-mailbox-firewall
   author: archer
   verified: false
   description: 检测到eyou-anti-spam-mailbox-firewall系统或组件的特征
   created: 2025/04/24
+  product:
+    id: eyou.anti-spam-gateway
+    name: 亿邮反垃圾邮件网关
+    vendor: 亿邮
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+      - gateway
 rules:
   r0:
     request:

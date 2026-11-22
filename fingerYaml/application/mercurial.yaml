@@ -1,10 +1,22 @@
-id: web-mercurial
+id: mercurial
 info:
   name: mercurial
   author: archer
   verified: false
   description: 检测到mercurial系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mercurial.mercurial
+    name: Mercurial
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    aliases:
+      - hgweb
+    references:
+      - https://www.mercurial-scm.org/
 rules:
   r0:
     request:

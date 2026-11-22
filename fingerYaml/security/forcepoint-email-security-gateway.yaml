@@ -1,10 +1,22 @@
-id: web-forcepoint-websense-email-security-gateway
+id: forcepoint-email-security-gateway
 info:
   name: forcepoint-websense-email-security-gateway
   author: archer
   verified: false
   description: 检测到forcepoint-websense-email-security-gateway系统或组件的特征
   created: 2025/04/24
+  product:
+    id: forcepoint.email-security-gateway
+    name: Forcepoint Email Security Gateway
+    vendor: Forcepoint
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+      - gateway
+    aliases:
+      - Websense Email Security Gateway
 rules:
   r0:
     request:

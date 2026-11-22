@@ -71,7 +71,8 @@ func looksLikeBundledLibrary(dir string) bool {
 	return false
 }
 
-// GetFingerYaml 从 fingerYaml/ 目录加载全部指纹规则。
+// GetFingerYaml 从 fingerYaml/ 目录加载全部指纹规则，并检查同一产品标识的声明完全一致；
+// 找不到磁盘目录时使用嵌入的规则库。
 func GetFingerYaml() ([]*finger2.Finger, error) {
 	root, err := findFingerYamlDir()
 	if err != nil {
@@ -103,6 +104,9 @@ func GetFingerYaml() ([]*finger2.Finger, error) {
 	})
 	if err != nil {
 		return nil, fmt.Errorf("遍历指纹目录 %s 出错: %w", root, err)
+	}
+	if err := finger2.CheckProductDeclarations(allFinger); err != nil {
+		return nil, fmt.Errorf("指纹目录 %s: %w", root, err)
 	}
 	return allFinger, nil
 }

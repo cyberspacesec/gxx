@@ -1,10 +1,20 @@
-id: web-php-cloud
+id: phpyun
 info:
   name: php-cloud
   author: archer
   verified: false
   description: 检测到php-cloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: phpyun.phpyun
+    name: PHP云人才系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - hr
+    aliases:
+      - PHPYun
 rules:
   r0:
     request:

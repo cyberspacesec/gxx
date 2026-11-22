@@ -1,10 +1,19 @@
-id: web-automatedlogiccorporation-webctrl
+id: automatedlogic-webctrl
 info:
   name: automatedlogiccorporation-webctrl
   author: archer
   verified: false
   description: 检测到automatedlogiccorporation-webctrl系统或组件的特征
   created: 2025/04/24
+  product:
+    id: automatedlogic.webctrl
+    name: WebCTRL
+    vendor: Automated Logic
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - industrial
 rules:
   r0:
     request:

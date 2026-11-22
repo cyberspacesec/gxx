@@ -1,10 +1,18 @@
-id: web-jienohan-journal
+id: jienohan-journal
 info:
   name: jienohan-journal
   author: archer
   verified: false
   description: 检测到jienohan-journal系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jienohan.journal
+    name: 期刊投稿系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - jienohan-journal
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-天清汉马VPN
+id: venustech-tianqing-hanma-vpn
 info:
   name: 天清汉马VPN
   author: archer
   verified: true
   description: 检测到天清汉马VPN系统或组件的特征
   created: 2025/04/16
+  product:
+    id: venustech.tianqing-hanma-vpn
+    name: 天清汉马 VPN
+    vendor: 启明星辰
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

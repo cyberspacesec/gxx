@@ -1,10 +1,18 @@
-id: web-ctop-oa
+id: ctop-ctop-oa
 info:
   name: ctop-oa
   author: archer
   verified: false
   description: 检测到ctop-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ctop.ctop-oa
+    name: CTOP OA
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

@@ -1,10 +1,23 @@
-id: web-open-source-ticket-request-system
+id: otrs
 info:
   name: open-source-ticket-request-system
   author: archer
   verified: false
   description: 检测到open-source-ticket-request-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: otrs.otrs
+    name: OTRS
+    vendor: OTRS AG
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - helpdesk
+    aliases:
+      - Open Source Ticket Request System
+    references:
+      - https://otrs.com/
 rules:
   r0:
     request:

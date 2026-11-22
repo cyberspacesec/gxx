@@ -1,10 +1,22 @@
-id: web-和信下一代云桌面vesystem
+id: hexin-vesystem
 info:
   name: 和信下一代云桌面vesystem
   author: archer
   verified: false
   description: 检测到和信下一代云桌面vesystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hexin.vesystem
+    name: 和信下一代云桌面 VESystem
+    vendor: 和信创天
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+      - remote-access
+    aliases:
+      - 和信云桌面
 rules:
   r0:
     request:

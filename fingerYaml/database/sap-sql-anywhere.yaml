@@ -1,10 +1,20 @@
-id: web-sap-sybase
+id: sap-sql-anywhere
 info:
   name: sap-sybase
   author: archer
   verified: false
   description: 检测到sap-sybase系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sap.sql-anywhere
+    name: SAP SQL Anywhere
+    vendor: SAP
+    category: database
+    identity: product
+    assurance: inferred
+    aliases:
+      - Adaptive Server Anywhere
+      - Sybase SQL Anywhere
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-asp168-oho
+id: asp168-oho
 info:
   name: asp168-oho
   author: archer
   verified: false
   description: 检测到asp168-oho系统或组件的特征
   created: 2025/04/24
+  product:
+    id: asp168.oho
+    name: ASP168 OHO
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-cwp-controlpanel
+id: centos-webpanel-centos-web-panel
 info:
   name: cwp-controlpanel
   author: archer
   verified: false
   description: 检测到cwp-controlpanel系统或组件的特征
   created: 2025/04/24
+  product:
+    id: centos-webpanel.centos-web-panel
+    name: CentOS Web Panel
+    category: hosting-panel
+    identity: product
+    assurance: inferred
+    aliases:
+      - Control Web Panel
+      - CWP
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-suremail
+id: suremail
 info:
   name: suremail
   author: archer
   verified: false
   description: 检测到suremail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: suremail.suremail
+    name: SureMail
+    vendor: 北京国信安邮科技有限公司
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

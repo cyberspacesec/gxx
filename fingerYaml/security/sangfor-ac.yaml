@@ -1,10 +1,23 @@
-id: web-sangfor-employee-internet-management
+id: sangfor-ac
 info:
   name: sangfor-employee-internet-management
   author: archer
   verified: false
   description: 检测到sangfor-employee-internet-management系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.ac
+    name: 深信服上网行为管理 AC
+    vendor: 深信服
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+    aliases:
+      - 深信服上网行为管理系统
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

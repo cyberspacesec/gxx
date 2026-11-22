@@ -1,10 +1,18 @@
-id: web-basic-php-events-lister
+id: mevin-basic-php-events-lister
 info:
   name: basic-php-events-lister
   author: archer
   verified: false
   description: 检测到basic-php-events-lister系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mevin.basic-php-events-lister
+    name: Basic PHP Events Lister
+    category: application
+    identity: product
+    assurance: inferred
+    references:
+      - http://www.mevin.com/
 rules:
   r0:
     request:

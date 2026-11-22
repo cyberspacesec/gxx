@@ -1,10 +1,22 @@
-id: web-nexpose
+id: rapid7-nexpose-login-icon
 info:
   name: nexpose
   author: archer
   verified: true
   description: 检测到nexpose系统或组件的特征
   created: 2025/04/24
+  product:
+    id: rapid7.nexpose
+    name: Rapid7 Nexpose
+    vendor: Rapid7
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vulnerability-scanner
+    aliases:
+      - Nexpose Security Console
+      - InsightVM
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-baidu-subaidu
+id: baidu-yunjiasu
 info:
   name: baidu-subaidu
   author: archer
   verified: false
   description: 检测到baidu-subaidu系统或组件的特征
   created: 2025/04/24
+  product:
+    id: baidu.yunjiasu
+    name: 百度云加速
+    vendor: 百度
+    category: other
+    identity: signal
+    assurance: inferred
+    tags:
+      - cloud
+      - waf
 rules:
   r0:
     request:

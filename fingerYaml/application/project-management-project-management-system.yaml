@@ -1,10 +1,16 @@
-id: web-project-management-system
+id: project-management-project-management-system
 info:
   name: project-management-system
   author: archer
   verified: false
   description: 检测到project-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: project-management.project-management-system
+    name: 项目管理系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

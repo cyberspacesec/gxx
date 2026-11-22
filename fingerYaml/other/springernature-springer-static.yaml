@@ -1,10 +1,17 @@
-id: web-springer
+id: springernature-springer-static
 info:
   name: springer
   author: archer
   verified: false
   description: 检测到springer系统或组件的特征
   created: 2025/04/24
+  product:
+    id: springernature.springer-static
+    name: Springer 站点静态资源
+    vendor: Springer Nature
+    category: other
+    identity: signal
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,25 @@
-id: web-海康威视网络设备
+id: hikvision-vendor-mark
 info:
   name: 海康威视网络设备
   author: archer
   verified: false
   description: 检测到海康威视网络设备系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hikvision.vendor-mark
+    name: 海康威视厂商标识
+    vendor: 海康威视
+    category: device
+    identity: signal
+    assurance: inferred
+    tags:
+      - camera
+      - nvr
+      - default-page
+    aliases:
+      - 海康威视网络设备
+      - 海康威视 Web 控件演示页
+      - hikvision-v23-control
 rules:
   r0:
     request:

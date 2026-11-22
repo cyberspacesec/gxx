@@ -1,10 +1,16 @@
-id: web-thehostingtool
+id: thehostingtool
 info:
   name: thehostingtool
   author: archer
   verified: false
   description: 检测到thehostingtool系统或组件的特征
   created: 2025/04/24
+  product:
+    id: thehostingtool.thehostingtool
+    name: TheHostingTool
+    category: hosting-panel
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

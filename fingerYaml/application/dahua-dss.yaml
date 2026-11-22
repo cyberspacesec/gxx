@@ -1,10 +1,21 @@
-id: web-大华数字监控系统DSS
+id: dahua-dss
 info:
   name: 大华数字监控系统DSS
   author: archer
   verified: true
   description: 检测到大华数字监控系统DSS系统或组件的特征
   created: 2025/04/16
+  product:
+    id: dahua.dss
+    name: 大华 DSS 数字监控系统
+    vendor: 大华
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video
+    aliases:
+      - 大华数字监控系统DSS
 rules:
   r0:
     request:

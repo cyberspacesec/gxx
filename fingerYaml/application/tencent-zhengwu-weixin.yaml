@@ -1,10 +1,19 @@
-id: web-政务微信
+id: tencent-zhengwu-weixin
 info:
   name: 政务微信
   author: archer
   verified: true
   description: 检测到政务微信系统或组件的特征
   created: 2025/04/16
+  product:
+    id: tencent.zhengwu-weixin
+    name: 政务微信
+    vendor: 腾讯
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - im
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: web-debian
+id: debian-nginx-default-page
 info:
   tags: operating-system
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 开源操作系统发行版；响应标记不等同于主机系统已核实。
   created: 2025/04/24
+  product:
+    id: debian.debian
+    name: Debian
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - operating-system
+      - default-page
+    aliases:
+      - Debian
+      - debian
+    references:
+      - https://www.debian.org/
+    description: 开源操作系统发行版；响应标记不等同于主机系统已核实。
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-gm-electronic-security-document-management-system
+id: guomai-document-security-management-copyright
 info:
   name: gm-electronic-security-document-management-system
   author: archer
   verified: false
   description: 检测到gm-electronic-security-document-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: guomai.document-security-management
+    name: 国迈电子安全文档管理系统
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
+    aliases:
+      - gm-electronic-security-document-management-system
 rules:
   r0:
     request:

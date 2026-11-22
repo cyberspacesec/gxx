@@ -1,10 +1,20 @@
-id: web-3kits-cms
+id: 3kits-3kits-cms
 info:
   name: 3kits-cms
   author: zhizhuo
   verified: true
   description: 识别特定Web应用
   created: 2025/04/15
+  product:
+    id: 3kits.3kits-cms
+    name: 3kits CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    references:
+      - http://www.3kits.com/
 rules:
   r0:
     request:

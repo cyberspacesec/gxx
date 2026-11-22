@@ -1,10 +1,19 @@
-id: web-网易企业邮箱
+id: netease-qiye-mail
 info:
   name: 网易企业邮箱
   author: archer
   verified: true
   description: 检测到网易企业邮箱系统或组件的特征
   created: 2025/04/24
+  product:
+    id: netease.qiye-mail
+    name: 网易企业邮箱
+    vendor: 网易
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

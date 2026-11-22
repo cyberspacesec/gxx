@@ -1,10 +1,21 @@
-id: web-安恒信息-明御运维审计与风险控制系统
+id: dbappsecurity-mingyu-bastion
 info:
   name: 安恒信息-明御运维审计与风险控制系统
   author: archer
   verified: true
   description: 检测到安恒信息-明御运维审计与风险控制系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dbappsecurity.mingyu-bastion
+    name: 明御运维审计与风险控制系统
+    vendor: 安恒信息
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - bastion
+    aliases:
+      - 明御堡垒机
 rules:
   r0:
     request:

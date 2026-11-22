@@ -1,10 +1,21 @@
-id: web-fisheye
+id: atlassian-fisheye
 info:
   name: fisheye
   author: archer
   verified: false
   description: 检测到fisheye系统或组件的特征
   created: 2025/04/24
+  product:
+    id: atlassian.fisheye
+    name: Fisheye
+    vendor: Atlassian
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    references:
+      - https://www.atlassian.com/software/fisheye
 rules:
   r0:
     request:

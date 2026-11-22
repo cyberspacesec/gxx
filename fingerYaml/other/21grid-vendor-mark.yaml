@@ -1,10 +1,19 @@
-id: web-21grid
+id: 21grid-vendor-mark
 info:
   name: 21grid
   author: archer
   verified: false
   description: 检测到21grid系统或组件的特征
   created: 2025/04/24
+  product:
+    id: 21grid.vendor-mark
+    name: 网格（福建）智能科技厂商标识
+    vendor: 网格（福建）智能科技有限公司
+    category: other
+    identity: signal
+    assurance: inferred
+    aliases:
+      - 21grid
 rules:
   r0:
     request:

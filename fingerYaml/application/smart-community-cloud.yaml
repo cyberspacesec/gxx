@@ -1,10 +1,16 @@
-id: web-smartcommunityintegratedmanagementcloudplatform
+id: smart-community-cloud
 info:
   name: smartcommunityintegratedmanagementcloudplatform
   author: archer
   verified: false
   description: 检测到smartcommunityintegratedmanagementcloudplatform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: smart-community-cloud.smart-community-cloud
+    name: 智慧社区综合管理云平台
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

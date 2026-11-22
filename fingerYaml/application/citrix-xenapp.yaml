@@ -1,10 +1,22 @@
-id: web-xenapp
+id: citrix-xenapp
 info:
   name: xenapp
   author: archer
   verified: false
   description: 检测到xenapp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: citrix.xenapp
+    name: Citrix XenApp
+    vendor: Citrix
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+      - remote-access
+    aliases:
+      - Citrix Virtual Apps
 rules:
   r0:
     request:

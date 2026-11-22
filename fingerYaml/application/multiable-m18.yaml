@@ -1,10 +1,20 @@
-id: web-multiabnle-m18
+id: multiable-m18
 info:
   name: multiabnle-m18
   author: archer
   verified: false
   description: 检测到multiabnle-m18系统或组件的特征
   created: 2025/04/24
+  product:
+    id: multiable.m18
+    name: M18 ERP
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
+    aliases:
+      - Multiable M18
 rules:
   r0:
     request:

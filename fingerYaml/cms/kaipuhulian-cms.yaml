@@ -1,10 +1,21 @@
-id: web-cmspro
+id: kaipuhulian-cms
 info:
   name: cmspro
   author: archer
   verified: false
   description: 检测到cmspro系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kaipuhulian.cms
+    name: 开普 CMS 内容管理系统
+    vendor: 开普互联
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - cmspro
 rules:
   r0:
     request:

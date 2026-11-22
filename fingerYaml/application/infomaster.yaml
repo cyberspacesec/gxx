@@ -1,10 +1,16 @@
-id: web-infomaster
+id: infomaster
 info:
   name: infomaster
   author: archer
   verified: false
   description: 检测到infomaster系统或组件的特征
   created: 2025/04/24
+  product:
+    id: infomaster.infomaster
+    name: InfoMaster
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-scientific-research-instrument-network-service-platform
+id: research-instrument-platform
 info:
   name: scientific-research-instrument-network-service-platform
   author: archer
   verified: false
   description: 检测到scientific-research-instrument-network-service-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: research-instrument-platform.research-instrument-platform
+    name: 科研仪器网络服务平台
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

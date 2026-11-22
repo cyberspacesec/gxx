@@ -1,10 +1,18 @@
-id: web-quiz-system
+id: online-quiz-system
 info:
   name: quiz-system
   author: archer
   verified: false
   description: 检测到quiz-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: online-quiz-system.online-quiz-system
+    name: Online Quiz System
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
 rules:
   r0:
     request:

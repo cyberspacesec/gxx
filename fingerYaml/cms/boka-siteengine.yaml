@@ -1,10 +1,18 @@
-id: web-siteengine
+id: boka-siteengine
 info:
   name: siteengine
   author: archer
   verified: false
   description: 检测到siteengine系统或组件的特征
   created: 2025/04/24
+  product:
+    id: boka.siteengine
+    name: BOKA SiteEngine
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

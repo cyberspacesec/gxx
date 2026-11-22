@@ -1,10 +1,20 @@
-id: web-dandian-crm
+id: dandian-crm
 info:
   name: dandian-crm
   author: archer
   verified: false
   description: 检测到dandian-crm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dandian.crm
+    name: 单点CRM
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - crm
+    aliases:
+      - dandian-crm
 rules:
   r0:
     request:

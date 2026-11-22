@@ -1,10 +1,20 @@
-id: web-infowarelab-system-management-center
+id: infowarelab-system-management-center
 info:
   name: infowarelab-system-management-center
   author: archer
   verified: false
   description: 检测到infowarelab-system-management-center系统或组件的特征
   created: 2025/04/24
+  product:
+    id: infowarelab.system-management-center
+    name: Infowarelab 系统管理中心
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
+    aliases:
+      - infowarelab-system-management-center
 rules:
   r0:
     request:

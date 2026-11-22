@@ -1,10 +1,16 @@
-id: web-gridsite
+id: gridsite
 info:
   name: gridsite
   author: archer
   verified: false
   description: 检测到gridsite系统或组件的特征
   created: 2025/04/24
+  product:
+    id: gridsite.gridsite
+    name: GridSite
+    category: web-server
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

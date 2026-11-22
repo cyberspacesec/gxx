@@ -1,10 +1,17 @@
-id: web-网心云设备
+id: wangxin-wangxinyun-device
 info:
   name: 网心云设备
   author: archer
   verified: false
   description: 检测到网心云设备系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wangxin.wangxinyun-device
+    name: 网心云设备
+    vendor: 网心科技
+    category: device
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-pillar-axiom-software
+id: pillar-axiom
 info:
   name: pillar-axiom-software
   author: archer
   verified: false
   description: 检测到pillar-axiom-software系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pillar.axiom
+    name: Pillar Axiom
+    vendor: Pillar Data Systems
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
 rules:
   r0:
     request:

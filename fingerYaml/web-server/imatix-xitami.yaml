@@ -1,10 +1,17 @@
-id: web-xitami
+id: imatix-xitami
 info:
   name: xitami
   author: archer
   verified: false
   description: 检测到xitami系统或组件的特征
   created: 2025/04/24
+  product:
+    id: imatix.xitami
+    name: Xitami
+    vendor: iMatix
+    category: web-server
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-蓝盾-防火墙
+id: bluedon-firewall
 info:
   name: 蓝盾-防火墙
   author: archer
   verified: false
   description: 检测到蓝盾-防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: bluedon.firewall
+    name: 蓝盾防火墙
+    vendor: 蓝盾信息安全
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+    aliases:
+      - 蓝盾-防火墙
 rules:
   r0:
     request:

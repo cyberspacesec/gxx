@@ -1,10 +1,19 @@
-id: web-安恒信息-明御综合日志审计
+id: dbappsecurity-mingyu-log-audit
 info:
   name: 安恒信息-明御综合日志审计
   author: archer
   verified: false
   description: 检测到安恒信息-明御综合日志审计系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dbappsecurity.mingyu-log-audit
+    name: 明御综合日志审计分析平台
+    vendor: 安恒信息
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - siem
 rules:
   r0:
     request:

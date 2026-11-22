@@ -1,10 +1,18 @@
-id: web-reremouse-exam-system
+id: reremouse-exam-system
 info:
   name: reremouse-exam-system
   author: archer
   verified: false
   description: 检测到reremouse-exam-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: reremouse.exam-system
+    name: 蝙蝠在线考试系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
 rules:
   r0:
     request:

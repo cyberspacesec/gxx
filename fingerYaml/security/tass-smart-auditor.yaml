@@ -1,10 +1,19 @@
-id: web-tass-smart-auditor
+id: tass-smart-auditor
 info:
   name: tass-smart-auditor
   author: archer
   verified: false
   description: 检测到tass-smart-auditor系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tass.smart-auditor
+    name: 灵志日志审计系统
+    vendor: 江南天安
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - audit
 rules:
   r0:
     request:

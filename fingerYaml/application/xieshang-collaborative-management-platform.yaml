@@ -1,10 +1,21 @@
-id: web-collaborative-management-platform
+id: xieshang-collaborative-management-platform
 info:
   name: collaborative-management-platform
   author: archer
   verified: false
   description: 检测到collaborative-management-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xieshang.collaborative-management-platform
+    name: 协商科技协同管理平台
+    vendor: 广州协商科技有限公司
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - collaborative-management-platform
 rules:
   r0:
     request:

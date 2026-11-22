@@ -1,10 +1,17 @@
-id: web-vrv-nac
+id: vrv-nac
 info:
   name: vrv-nac
   author: archer
   verified: false
   description: 检测到vrv-nac系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vrv.nac
+    name: 北信源网络接入控制系统
+    vendor: 北信源
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

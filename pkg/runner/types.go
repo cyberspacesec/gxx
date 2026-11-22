@@ -185,6 +185,9 @@ type ScanConfig struct {
 	Resources ResourceOptions
 	// RulePolicy 在加载与重新加载规则时检查，违反即加载失败。
 	RulePolicy finger.RulePolicy
+	// RuleCheck 在规则策略之后检查整个规则集（如同一产品的声明一致），返回错误即加载失败，
+	// 原规则集保持不变。
+	RuleCheck func([]*finger.Finger) error
 }
 
 // ScanOptions 是单次扫描的附加配置，零值与普通扫描相同。

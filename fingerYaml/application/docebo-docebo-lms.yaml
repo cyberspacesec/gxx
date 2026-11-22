@@ -1,10 +1,21 @@
-id: web-docebolms
+id: docebo-docebo-lms
 info:
   name: docebolms
   author: archer
   verified: false
   description: 检测到docebolms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: docebo.docebo-lms
+    name: Docebo
+    vendor: Docebo
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
+    aliases:
+      - Docebo LMS
 rules:
   r0:
     request:

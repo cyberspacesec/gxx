@@ -1,10 +1,21 @@
-id: web-ektron-cms
+id: ektron-ektron-cms
 info:
   name: ektron-cms
   author: archer
   verified: false
   description: 检测到ektron-cms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ektron.ektron-cms
+    name: Ektron CMS
+    vendor: Ektron
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - CMS400.NET
 rules:
   r0:
     request:

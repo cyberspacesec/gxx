@@ -1,10 +1,21 @@
-id: web-华为网络设备
+id: huawei-vendor-mark
 info:
   name: 华为网络设备
   author: archer
   verified: true
   description: 检测到华为网络设备系统或组件的特征
   created: 2025/04/16
+  product:
+    id: huawei.vendor-mark
+    name: 华为厂商标识
+    vendor: 华为
+    category: network-device
+    identity: signal
+    assurance: inferred
+    aliases:
+      - 华为网络设备
+      - 华为设备内置 Web 管理界面
+      - huawei-inner-web
 rules:
   r0:
     request:

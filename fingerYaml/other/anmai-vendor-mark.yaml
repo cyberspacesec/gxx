@@ -1,10 +1,17 @@
-id: web-anmai-system
+id: anmai-vendor-mark
 info:
   name: anmai-system
   author: archer
   verified: false
   description: 检测到anmai-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: anmai.vendor-mark
+    name: 上海安脉厂商标识
+    vendor: 上海安脉计算机科技有限公司
+    category: other
+    identity: signal
+    assurance: inferred
 rules:
   r0:
     request:

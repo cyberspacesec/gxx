@@ -1,10 +1,17 @@
-id: web-yunsuo
+id: jiaotu-yunsuo
 info:
   name: yunsuo
   author: archer
   verified: false
   description: 检测到yunsuo系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jiaotu.yunsuo
+    name: 云锁
+    vendor: 椒图科技
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

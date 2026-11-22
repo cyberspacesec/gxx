@@ -1,10 +1,21 @@
-id: web-canal-admin
+id: alibaba-canal-admin
 info:
   name: canal-admin
   author: archer
   verified: false
   description: 检测到canal-admin系统或组件的特征
   created: 2025/04/24
+  product:
+    id: alibaba.canal-admin
+    name: Canal Admin
+    vendor: Alibaba
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - db-admin
+    references:
+      - https://github.com/alibaba/canal
 rules:
   r0:
     request:

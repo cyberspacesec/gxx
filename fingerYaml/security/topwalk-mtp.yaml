@@ -1,10 +1,17 @@
-id: web-topwalk-mtp
+id: topwalk-mtp
 info:
   name: topwalk-mtp
   author: archer
   verified: false
   description: 检测到topwalk-mtp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: topwalk.mtp
+    name: 天行网安 MTP
+    vendor: 天行网安
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

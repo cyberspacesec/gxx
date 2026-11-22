@@ -1,10 +1,21 @@
-id: web-netcom-ngfw
+id: qianxin-netentsec-ngfw-login-page
 info:
   name: netcom-ngfw
   author: archer
   verified: true
   description: 检测到netcom-ngfw系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qianxin.netentsec-ngfw
+    name: 网康下一代防火墙
+    vendor: 奇安信
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+    aliases:
+      - 网康 NGFW
 rules:
   r0:
     request:

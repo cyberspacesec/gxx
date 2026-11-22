@@ -1,10 +1,21 @@
-id: web-金和协同管理平台
+id: jinher-c6
 info:
   name: 金和协同管理平台
   author: archer
   verified: false
   description: 检测到金和协同管理平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jinher.c6
+    name: 金和 C6 协同管理平台
+    vendor: 金和网络
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - 金和协同管理平台
 rules:
   r0:
     request:

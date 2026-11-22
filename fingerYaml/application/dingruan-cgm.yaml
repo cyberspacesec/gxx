@@ -1,10 +1,18 @@
-id: web-dingruan-cgm
+id: dingruan-cgm
 info:
   name: dingruan-cgm
   author: archer
   verified: false
   description: 检测到dingruan-cgm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dingruan.cgm
+    name: CGM
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - dingruan-cgm
 rules:
   r0:
     request:

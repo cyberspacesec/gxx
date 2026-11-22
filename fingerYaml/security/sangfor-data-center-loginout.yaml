@@ -1,10 +1,22 @@
-id: web-深信服防火墙数据中心
+id: sangfor-data-center-loginout
 info:
   name: 深信服防火墙数据中心
   author: archer
   verified: false
   description: 检测到深信服防火墙数据中心系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.data-center
+    name: 深信服数据中心
+    vendor: 深信服
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - 深信服数据中心管理系统
+      - 深信服防火墙数据中心
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-OpenVPN
+id: openvpn-access-server
 info:
   name: OpenVPN
   author: archer
   verified: true
   description: 检测到OpenVPN系统或组件的特征
   created: 2025/04/16
+  product:
+    id: openvpn.access-server
+    name: OpenVPN Access Server
+    vendor: OpenVPN Inc.
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

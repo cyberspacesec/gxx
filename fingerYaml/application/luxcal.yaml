@@ -1,10 +1,16 @@
-id: web-luxcal
+id: luxcal
 info:
   name: luxcal
   author: archer
   verified: false
   description: 检测到luxcal系统或组件的特征
   created: 2025/04/24
+  product:
+    id: luxcal.luxcal
+    name: LuxCal
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-hitachi-maintenance-utility
+id: hitachi-maintenance-utility
 info:
   name: hitachi-maintenance-utility
   author: archer
   verified: false
   description: 检测到hitachi-maintenance-utility系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hitachi.maintenance-utility
+    name: Hitachi Maintenance Utility
+    vendor: Hitachi
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
+    aliases:
+      - hitachi-maintenance-utility
 rules:
   r0:
     request:

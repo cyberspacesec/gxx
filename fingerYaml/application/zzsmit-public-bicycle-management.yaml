@@ -1,10 +1,16 @@
-id: web-zzsmit-public-bicycle-management-system
+id: zzsmit-public-bicycle-management
 info:
   name: zzsmit-public-bicycle-management-system
   author: archer
   verified: false
   description: 检测到zzsmit-public-bicycle-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zzsmit.public-bicycle-management
+    name: 公共自行车管理系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

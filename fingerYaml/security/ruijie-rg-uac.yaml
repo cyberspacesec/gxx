@@ -1,10 +1,21 @@
-id: web-ruijie-rg-uac
+id: ruijie-rg-uac
 info:
   name: ruijie-rg-uac
   author: archer
   verified: false
   description: 检测到ruijie-rg-uac系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruijie.rg-uac
+    name: 锐捷 RG-UAC 统一上网行为管理与审计系统
+    vendor: 锐捷网络
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - audit
+    references:
+      - https://www.ruijie.com.cn/
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-iguard-security-system
+id: lucky-tech-iguard
 info:
   name: iguard-security-system
   author: archer
   verified: false
   description: 检测到iguard-security-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lucky-tech.iguard
+    name: iGuard Security System
+    vendor: Lucky Technology
+    category: device
+    identity: product
+    assurance: inferred
+    aliases:
+      - iguard-security-system
 rules:
   r0:
     request:

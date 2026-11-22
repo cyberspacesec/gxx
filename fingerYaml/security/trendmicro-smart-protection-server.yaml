@@ -1,10 +1,19 @@
-id: web-trend-smart-protection-server
+id: trendmicro-smart-protection-server
 info:
   name: trend-smart-protection-server
   author: archer
   verified: false
   description: 检测到trend-smart-protection-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: trendmicro.smart-protection-server
+    name: Trend Micro Smart Protection Server
+    vendor: Trend Micro
+    category: security
+    identity: product
+    assurance: inferred
+    references:
+      - https://www.trendmicro.com/
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-yonyou-grp-u8
+id: yonyou-grp-u8
 info:
   name: yonyou-grp-u8
   author: archer
   verified: true
   description: 检测到yonyou-grp-u8系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yonyou.grp-u8
+    name: 用友 GRP-U8
+    vendor: 用友网络
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
 rules:
   r0:
     request:

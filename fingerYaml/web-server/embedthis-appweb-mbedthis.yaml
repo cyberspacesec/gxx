@@ -1,10 +1,22 @@
-id: web-mbedthis-appweb
+id: embedthis-appweb-mbedthis
 info:
   name: mbedthis-appweb
   author: archer
   verified: false
   description: 检测到mbedthis-appweb系统或组件的特征
   created: 2025/04/24
+  product:
+    id: embedthis.appweb
+    name: Appweb
+    vendor: Embedthis Software
+    category: web-server
+    identity: product
+    assurance: verified
+    aliases:
+      - Embedthis Appweb
+      - Mbedthis AppWeb
+    references:
+      - https://www.embedthis.com/
 rules:
   r0:
     request:

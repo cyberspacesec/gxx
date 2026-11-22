@@ -1,10 +1,21 @@
-id: web-appwrite
+id: appwrite
 info:
   name: appwrite
   author: archer
   verified: false
   description: 检测到appwrite系统或组件的特征
   created: 2025/04/24
+  product:
+    id: appwrite.appwrite
+    name: Appwrite
+    vendor: Appwrite
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - cloud
+    references:
+      - https://appwrite.io/
 rules:
   r0:
     request:

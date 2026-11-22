@@ -1,10 +1,19 @@
-id: web-vbulletin
+id: vbulletin
 info:
   name: vbulletin
   author: archer
   verified: false
   description: 检测到vbulletin系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vbulletin.vbulletin
+    name: vBulletin
+    vendor: vBulletin Solutions
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - forum
 rules:
   r0:
     request:

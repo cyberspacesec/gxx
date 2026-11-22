@@ -1,10 +1,20 @@
-id: web-chinaorgantransplantresponsesystem
+id: cotrs
 info:
   name: chinaorgantransplantresponsesystem
   author: archer
   verified: false
   description: 检测到chinaorgantransplantresponsesystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cotrs.cotrs
+    name: 中国人体器官分配与共享计算机系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - healthcare
+    aliases:
+      - COTRS
 rules:
   r0:
     request:

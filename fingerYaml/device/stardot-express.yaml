@@ -1,10 +1,19 @@
-id: web-stardot-express
+id: stardot-express
 info:
   name: stardot-express
   author: archer
   verified: false
   description: 检测到stardot-express系统或组件的特征
   created: 2025/04/24
+  product:
+    id: stardot.express
+    name: StarDot Express
+    vendor: StarDot Technologies
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
 rules:
   r0:
     request:

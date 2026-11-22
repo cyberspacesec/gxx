@@ -1,10 +1,21 @@
-id: web-citrix-xcp
+id: citrix-xcp
 info:
   name: citrix-xcp
   author: archer
   verified: false
   description: 检测到citrix-xcp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: citrix.xcp
+    name: Citrix XCP
+    vendor: Citrix
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+    aliases:
+      - Xen Cloud Platform
 rules:
   r0:
     request:

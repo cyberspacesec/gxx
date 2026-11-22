@@ -1,10 +1,18 @@
-id: web-thinkmail
+id: thinkmail
 info:
   name: thinkmail
   author: archer
   verified: false
   description: 检测到thinkmail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: thinkmail.thinkmail
+    name: ThinkMail
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

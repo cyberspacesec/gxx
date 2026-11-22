@@ -1,10 +1,23 @@
-id: web-若依CMS
+id: ruoyi
 info:
   name: 若依CMS
   author: archer
   verified: true
   description: 检测到若依CMS系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruoyi.ruoyi
+    name: 若依管理系统 RuoYi
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    aliases:
+      - 若依
+      - RuoYi-Vue
+    references:
+      - https://gitee.com/y_project/RuoYi
 rules:
   r0:
     request:

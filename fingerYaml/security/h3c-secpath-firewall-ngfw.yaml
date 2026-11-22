@@ -1,10 +1,19 @@
-id: web-h3c-下一代防火墙
+id: h3c-secpath-firewall-ngfw
 info:
   name: h3c-下一代防火墙
   author: archer
   verified: false
   description: 检测到h3c-下一代防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: h3c.secpath-firewall
+    name: H3C SecPath 防火墙
+    vendor: 新华三
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
 rules:
   r0:
     request:

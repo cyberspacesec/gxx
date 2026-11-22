@@ -1,10 +1,16 @@
-id: web-aolansoft-studentsystem
+id: aolansoft-student-system
 info:
   name: aolansoft-studentsystem
   author: archer
   verified: false
   description: 检测到aolansoft-studentsystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: aolansoft.student-system
+    name: Aolansoft Student System
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

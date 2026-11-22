@@ -1,10 +1,19 @@
-id: web-杰思安全-猎鹰主机安全响应系统
+id: majorsec-falcon-hids
 info:
   name: 杰思安全-猎鹰主机安全响应系统
   author: archer
   verified: false
   description: 检测到杰思安全-猎鹰主机安全响应系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: majorsec.falcon-hids
+    name: 猎鹰主机安全响应系统
+    vendor: 杰思安全
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - 杰思安全-猎鹰主机安全响应系统
 rules:
   r0:
     request:

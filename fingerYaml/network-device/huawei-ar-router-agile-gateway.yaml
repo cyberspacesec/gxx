@@ -1,10 +1,23 @@
-id: web-huawei-ar敏捷网关
+id: huawei-ar-router-agile-gateway
 info:
   name: huawei-ar敏捷网关
   author: archer
   verified: false
   description: 检测到huawei-ar敏捷网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huawei.ar-router
+    name: AR 系列路由器
+    vendor: 华为
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - router
+      - gateway
+    aliases:
+      - 华为AR路由器
+      - huawei-ar敏捷网关
 rules:
   r0:
     request:

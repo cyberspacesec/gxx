@@ -1,10 +1,21 @@
-id: web-cloudera-manager
+id: cloudera-cloudera-manager
 info:
   name: cloudera-manager
   author: archer
   verified: false
   description: 检测到cloudera-manager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cloudera.cloudera-manager
+    name: Cloudera Manager
+    vendor: Cloudera
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - big-data
+    references:
+      - https://www.cloudera.com/
 rules:
   r0:
     request:

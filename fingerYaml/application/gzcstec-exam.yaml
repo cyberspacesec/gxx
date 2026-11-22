@@ -1,10 +1,20 @@
-id: web-gzcstec-exam
+id: gzcstec-exam
 info:
   name: gzcstec-exam
   author: archer
   verified: false
   description: 检测到gzcstec-exam系统或组件的特征
   created: 2025/04/24
+  product:
+    id: gzcstec.exam
+    name: 考试系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
+    aliases:
+      - gzcstec-exam
 rules:
   r0:
     request:

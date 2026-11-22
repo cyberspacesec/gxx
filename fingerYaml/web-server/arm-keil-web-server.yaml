@@ -1,10 +1,19 @@
-id: web-keil-embedded-web-server
+id: arm-keil-web-server
 info:
   name: keil-embedded-web-server
   author: archer
   verified: false
   description: 检测到keil-embedded-web-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: arm.keil-web-server
+    name: Keil Embedded Web Server (EWEB)
+    vendor: Arm
+    category: web-server
+    identity: product
+    assurance: inferred
+    aliases:
+      - keil-embedded-web-server
 rules:
   r0:
     request:

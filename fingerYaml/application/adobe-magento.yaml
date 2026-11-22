@@ -1,10 +1,22 @@
-id: web-adobe-magento
+id: adobe-magento
 info:
   name: adobe-magento
   author: archer
   verified: false
   description: 检测到adobe-magento系统或组件的特征
   created: 2025/04/24
+  product:
+    id: adobe.magento
+    name: Magento
+    vendor: Adobe
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
+    aliases:
+      - Adobe Commerce
+      - Magento Open Source
 rules:
   r0:
     request:

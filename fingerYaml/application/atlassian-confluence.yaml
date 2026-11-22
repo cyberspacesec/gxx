@@ -1,10 +1,21 @@
-id: web-confluence
+id: atlassian-confluence
 info:
   name: confluence
   author: archer
   verified: false
   description: 检测到confluence系统或组件的特征
   created: 2025/04/24
+  product:
+    id: atlassian.confluence
+    name: Confluence
+    vendor: Atlassian
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - wiki
+    references:
+      - https://www.atlassian.com/software/confluence
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-libwww-perl-daemon
+id: libwww-perl-http-daemon
 info:
   name: libwww-perl-daemon
   author: archer
   verified: false
   description: 检测到libwww-perl-daemon系统或组件的特征
   created: 2025/04/24
+  product:
+    id: libwww-perl.http-daemon
+    name: HTTP::Daemon (libwww-perl)
+    category: library
+    identity: signal
+    assurance: inferred
+    tags:
+      - language
+    aliases:
+      - libwww-perl-daemon
 rules:
   r0:
     request:

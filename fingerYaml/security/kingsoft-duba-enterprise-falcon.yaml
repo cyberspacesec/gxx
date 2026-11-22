@@ -1,10 +1,20 @@
-id: web-猎鹰安全-金山毒霸企业版
+id: kingsoft-duba-enterprise-falcon
 info:
   name: 猎鹰安全-金山毒霸企业版
   author: archer
   verified: false
   description: 检测到猎鹰安全-金山毒霸企业版系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kingsoft.duba-enterprise
+    name: 金山毒霸企业版
+    vendor: 金山
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - kingsoft-duba-enterprise
+      - 猎鹰安全-金山毒霸企业版
 rules:
   r0:
     request:

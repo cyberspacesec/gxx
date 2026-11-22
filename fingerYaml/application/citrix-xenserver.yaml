@@ -1,10 +1,21 @@
-id: web-citrix-xenserver
+id: citrix-xenserver
 info:
   name: citrix-xenserver
   author: archer
   verified: false
   description: 检测到citrix-xenserver系统或组件的特征
   created: 2025/04/24
+  product:
+    id: citrix.xenserver
+    name: Citrix XenServer
+    vendor: Citrix
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+    aliases:
+      - Citrix Hypervisor
 rules:
   r0:
     request:

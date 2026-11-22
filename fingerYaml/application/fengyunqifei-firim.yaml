@@ -1,10 +1,18 @@
-id: web-fengyunqifei-firim
+id: fengyunqifei-firim
 info:
   name: fengyunqifei-firim
   author: archer
   verified: false
   description: 检测到fengyunqifei-firim系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fengyunqifei.firim
+    name: Fengyunqifei FIRIM
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - fengyunqifei-firim
 rules:
   r0:
     request:

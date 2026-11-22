@@ -1,10 +1,16 @@
-id: web-special-device-testing-risk-assessment-system
+id: special-device-risk-assessment
 info:
   name: special-device-testing-risk-assessment-system
   author: archer
   verified: false
   description: 检测到special-device-testing-risk-assessment-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: special-device-risk-assessment.special-device-risk-assessment
+    name: 特种设备检验风险评估系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

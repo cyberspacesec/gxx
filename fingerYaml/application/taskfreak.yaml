@@ -1,10 +1,16 @@
-id: web-taskfreak
+id: taskfreak
 info:
   name: taskfreak
   author: archer
   verified: false
   description: 检测到taskfreak系统或组件的特征
   created: 2025/04/24
+  product:
+    id: taskfreak.taskfreak
+    name: TaskFreak
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

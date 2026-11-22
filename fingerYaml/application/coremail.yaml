@@ -1,10 +1,23 @@
-id: web-coremail
+id: coremail
 info:
   name: coremail
   author: archer
   verified: false
   description: 检测到coremail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: coremail.coremail
+    name: Coremail 邮件系统
+    vendor: 论客科技
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - mail
+    aliases:
+      - Coremail
+    references:
+      - https://www.coremail.cn/
 rules:
   r0:
     request:

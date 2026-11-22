@@ -1,10 +1,24 @@
-id: web-fortinet-sslvpn
+id: fortinet-fortigate-sslvpn-lang
 info:
   name: fortinet-sslvpn
   author: archer
   verified: false
   description: 检测到fortinet-sslvpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fortinet.fortigate
+    name: FortiGate
+    vendor: Fortinet
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+      - vpn
+    aliases:
+      - FortiOS
+    references:
+      - https://www.fortinet.com/
 rules:
   r0:
     request:

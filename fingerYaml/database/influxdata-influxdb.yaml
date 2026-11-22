@@ -1,10 +1,21 @@
-id: web-influxdata-influxdb
+id: influxdata-influxdb
 info:
   name: influxdata-influxdb
   author: archer
   verified: false
   description: 检测到influxdata-influxdb系统或组件的特征
   created: 2025/04/24
+  product:
+    id: influxdata.influxdb
+    name: InfluxDB
+    vendor: InfluxData
+    category: database
+    identity: product
+    assurance: verified
+    aliases:
+      - influxdata-influxdb
+    references:
+      - https://www.influxdata.com/
 rules:
   r0:
     request:

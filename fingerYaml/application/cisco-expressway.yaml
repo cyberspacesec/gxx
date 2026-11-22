@@ -1,10 +1,19 @@
-id: web-cisco-expressway
+id: cisco-expressway
 info:
   name: cisco-expressway
   author: archer
   verified: false
   description: 检测到cisco-expressway系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cisco.expressway
+    name: Cisco Expressway
+    vendor: Cisco
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-绿盟安全管理平台
+id: nsfocus-security-management-platform
 info:
   name: 绿盟安全管理平台
   author: archer
   verified: false
   description: 检测到绿盟安全管理平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nsfocus.security-management-platform
+    name: 绿盟安全管理平台
+    vendor: 绿盟科技
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - siem
 rules:
   r0:
     request:

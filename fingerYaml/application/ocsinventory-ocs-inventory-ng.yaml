@@ -1,10 +1,18 @@
-id: web-ocs-inventory-ng
+id: ocsinventory-ocs-inventory-ng
 info:
   name: ocs-inventory-ng
   author: archer
   verified: false
   description: 检测到ocs-inventory-ng系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ocsinventory.ocs-inventory-ng
+    name: OCS Inventory NG
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - asset-management
 rules:
   r0:
     request:

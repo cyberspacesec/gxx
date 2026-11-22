@@ -1,10 +1,23 @@
-id: web-ikuai8-cloud
+id: ikuai-cloud-platform
 info:
   name: ikuai8-cloud
   author: archer
   verified: true
   description: 检测到ikuai8-cloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ikuai.cloud-platform
+    name: iKuai 云平台
+    vendor: 爱快
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - cloud
+      - router
+    aliases:
+      - ikuai8-cloud
+      - 爱快云
 rules:
   r0:
     request:

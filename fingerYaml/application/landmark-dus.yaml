@@ -1,10 +1,18 @@
-id: web-landmark-dus
+id: landmark-dus
 info:
   name: landmark-dus
   author: archer
   verified: false
   description: 检测到landmark-dus系统或组件的特征
   created: 2025/04/24
+  product:
+    id: landmark.dus
+    name: Landmark DUS
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - landmark-dus
 rules:
   r0:
     request:

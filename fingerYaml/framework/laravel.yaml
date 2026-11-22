@@ -1,10 +1,22 @@
-id: web-laravel-framework
+id: laravel
 info:
   name: laravel-framework
   author: archer
   verified: false
   description: 检测到laravel-framework系统或组件的特征
   created: 2025/04/24
+  product:
+    id: laravel.laravel
+    name: Laravel
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    aliases:
+      - laravel-framework
+    references:
+      - https://laravel.com/
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-pageup-people
+id: pageup
 info:
   name: pageup-people
   author: archer
   verified: false
   description: 检测到pageup-people系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pageup.pageup
+    name: PageUp
+    vendor: PageUp
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - hr
+    aliases:
+      - PageUp People
 rules:
   r0:
     request:

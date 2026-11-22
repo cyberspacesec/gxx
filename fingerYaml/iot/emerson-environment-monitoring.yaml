@@ -1,10 +1,21 @@
-id: web-emerson-environmentalenergymonitoringsystem
+id: emerson-environment-monitoring
 info:
   name: emerson-environmentalenergymonitoringsystem
   author: archer
   verified: false
   description: 检测到emerson-environmentalenergymonitoringsystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: emerson.environment-monitoring
+    name: 艾默生动力环境监控系统
+    vendor: Emerson
+    category: iot
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
+    aliases:
+      - IDU-S
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-ralph
+id: allegro-ralph
 info:
   name: ralph
   author: archer
   verified: false
   description: 检测到ralph系统或组件的特征
   created: 2025/04/24
+  product:
+    id: allegro.ralph
+    name: Ralph
+    vendor: Allegro
+    category: application
+    identity: product
+    assurance: verified
+    references:
+      - https://github.com/allegro/ralph
 rules:
   r0:
     request:

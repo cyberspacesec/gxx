@@ -1,10 +1,19 @@
-id: web-蓝海卓越计费管理系统
+id: lanhaizhuoyue-billing
 info:
   name: 蓝海卓越计费管理系统
   author: archer
   verified: false
   description: 检测到蓝海卓越计费管理系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lanhaizhuoyue.billing
+    name: 蓝海卓越计费管理系统
+    vendor: 蓝海卓越
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - payment
 rules:
   r0:
     request:

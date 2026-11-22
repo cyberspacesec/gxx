@@ -1,10 +1,19 @@
-id: web-思科-Wireless-LAN-Controller
+id: cisco-wireless-lan-controller
 info:
   name: 思科-Wireless-LAN-Controller
   author: archer
   verified: false
   description: 检测到思科-Wireless-LAN-Controller系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cisco.wireless-lan-controller
+    name: Cisco Wireless LAN Controller
+    vendor: Cisco
+    category: network-device
+    identity: product
+    assurance: inferred
+    aliases:
+      - WLC
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: web-apache-druid
+id: apache-druid
 info:
   tags: database
   reference:
@@ -8,6 +8,22 @@ info:
   verified: false
   description: 面向实时数据分析的分布式数据库。
   created: 2025/04/24
+  product:
+    id: apache.druid
+    name: Apache Druid
+    vendor: Apache Software Foundation
+    category: database
+    identity: product
+    assurance: verified
+    tags:
+      - database
+      - big-data
+    aliases:
+      - apache-druid
+      - indexer-coordinator
+    references:
+      - https://druid.apache.org/
+    description: 面向实时数据分析的分布式数据库。
 rules:
   r0:
     request:

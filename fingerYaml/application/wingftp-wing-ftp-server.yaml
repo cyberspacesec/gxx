@@ -1,10 +1,21 @@
-id: web-wing-ftp-server
+id: wingftp-wing-ftp-server
 info:
   name: wing-ftp-server
   author: archer
   verified: false
   description: 检测到wing-ftp-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wingftp.wing-ftp-server
+    name: Wing FTP Server
+    vendor: Wing FTP Software
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - file-transfer
+    references:
+      - https://www.wftpserver.com/
 rules:
   r0:
     request:

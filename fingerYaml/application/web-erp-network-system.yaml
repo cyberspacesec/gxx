@@ -1,10 +1,18 @@
-id: web-web-erp-network-system
+id: web-erp-network-system
 info:
   name: web-erp-network-system
   author: archer
   verified: false
   description: 检测到web-erp-network-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: web-erp-network-system.web-erp-network-system
+    name: Web ERP 网络系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
 rules:
   r0:
     request:

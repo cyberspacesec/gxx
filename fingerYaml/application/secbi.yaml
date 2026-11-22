@@ -1,10 +1,16 @@
-id: web-secbi-product
+id: secbi
 info:
   name: secbi-product
   author: archer
   verified: false
   description: 检测到secbi-product系统或组件的特征
   created: 2025/04/24
+  product:
+    id: secbi.secbi
+    name: secbi-product
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

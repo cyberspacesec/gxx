@@ -1,10 +1,19 @@
-id: web-huawei-netopen
+id: huawei-netopen
 info:
   name: huawei-netopen
   author: archer
   verified: false
   description: 检测到huawei-netopen系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huawei.netopen
+    name: NetOpen
+    vendor: 华为
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - huawei-netopen
 rules:
   r0:
     request:

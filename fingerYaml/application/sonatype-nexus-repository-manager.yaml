@@ -1,10 +1,21 @@
-id: web-nexus-repository-manager
+id: sonatype-nexus-repository-manager
 info:
   name: nexus-repository-manager
   author: archer
   verified: false
   description: 检测到nexus-repository-manager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sonatype.nexus-repository-manager
+    name: Nexus Repository Manager
+    vendor: Sonatype
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - devops
+    aliases:
+      - Nexus Repository
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-shenguyun-sgc8000
+id: shenguyun-sgc8000
 info:
   name: shenguyun-sgc8000
   author: archer
   verified: false
   description: 检测到shenguyun-sgc8000系统或组件的特征
   created: 2025/04/24
+  product:
+    id: shenguyun.sgc8000
+    name: SGC8000
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - shenguyun-sgc8000
 rules:
   r0:
     request:

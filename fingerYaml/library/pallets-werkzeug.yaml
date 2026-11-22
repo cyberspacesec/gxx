@@ -1,10 +1,20 @@
-id: web-werkzeug
+id: pallets-werkzeug
 info:
   name: werkzeug
   author: archer
   verified: false
   description: 检测到werkzeug系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pallets.werkzeug
+    name: Werkzeug
+    category: library
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    references:
+      - https://werkzeug.palletsprojects.com/
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-oracle-primerva
+id: oracle-primavera
 info:
   name: oracle-primerva
   author: archer
   verified: false
   description: 检测到oracle-primerva系统或组件的特征
   created: 2025/04/24
+  product:
+    id: oracle.primavera
+    name: Oracle Primavera
+    vendor: Oracle
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - Primavera P6
 rules:
   r0:
     request:

@@ -1,10 +1,25 @@
-id: web-cups
+id: openprinting-cups-server-header
 info:
   name: cups
   author: archer
   verified: false
   description: 检测到cups系统或组件的特征
   created: 2025/04/24
+  product:
+    id: openprinting.cups
+    name: CUPS
+    vendor: OpenPrinting
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - printer
+    aliases:
+      - CUPS
+    references:
+      - https://openprinting.github.io/cups/
+    description: OpenPrinting 维护的打印服务系统。
 rules:
   r0:
     request:

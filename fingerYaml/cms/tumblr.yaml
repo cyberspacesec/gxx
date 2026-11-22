@@ -1,10 +1,19 @@
-id: web-tumblr
+id: tumblr
 info:
   name: tumblr
   author: archer
   verified: false
   description: 检测到tumblr系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tumblr.tumblr
+    name: Tumblr
+    vendor: Tumblr
+    category: cms
+    identity: signal
+    assurance: inferred
+    tags:
+      - blog
 rules:
   r0:
     request:

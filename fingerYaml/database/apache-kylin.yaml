@@ -1,4 +1,4 @@
-id: web-apache-kylin
+id: apache-kylin
 info:
   tags: database
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 面向多维分析与大规模数据查询的 OLAP 引擎。
   created: 2025/04/24
+  product:
+    id: apache.kylin
+    name: Apache Kylin
+    vendor: Apache Software Foundation
+    category: database
+    identity: product
+    assurance: verified
+    tags:
+      - database
+      - big-data
+    aliases:
+      - apache-kylin
+    references:
+      - https://kylin.apache.org/
+    description: 面向多维分析与大规模数据查询的 OLAP 引擎。
 rules:
   r0:
     request:

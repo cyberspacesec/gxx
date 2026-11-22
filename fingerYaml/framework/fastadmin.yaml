@@ -1,10 +1,20 @@
-id: web-fastadmin-framework
+id: fastadmin
 info:
   name: fastadmin-framework
   author: archer
   verified: true
   description: 检测到fastadmin-framework系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fastadmin.fastadmin
+    name: FastAdmin
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    references:
+      - https://www.fastadmin.net/
 rules:
   r0:
     request:

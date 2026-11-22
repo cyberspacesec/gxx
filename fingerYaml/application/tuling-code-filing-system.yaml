@@ -1,10 +1,16 @@
-id: web-tuling-code-filing-system
+id: tuling-code-filing-system
 info:
   name: tuling-code-filing-system
   author: archer
   verified: false
   description: 检测到tuling-code-filing-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tuling.code-filing-system
+    name: 编码申报系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

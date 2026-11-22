@@ -1,10 +1,18 @@
-id: web-websvn
+id: websvn
 info:
   name: websvn
   author: archer
   verified: false
   description: 检测到websvn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: websvn.websvn
+    name: WebSVN
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - devops
 rules:
   r0:
     request:

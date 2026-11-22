@@ -1,10 +1,19 @@
-id: web-dell-unisphere
+id: dell-unisphere-sc
 info:
   name: dell-unisphere
   author: archer
   verified: false
   description: 检测到dell-unisphere系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dell.unisphere-sc
+    name: Unisphere for SC Series
+    vendor: Dell
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-octopussy
+id: octopussy
 info:
   name: octopussy
   author: archer
   verified: false
   description: 检测到octopussy系统或组件的特征
   created: 2025/04/24
+  product:
+    id: octopussy.octopussy
+    name: Octopussy
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - siem
 rules:
   r0:
     request:

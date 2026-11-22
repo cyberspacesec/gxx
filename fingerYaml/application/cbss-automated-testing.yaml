@@ -1,10 +1,16 @@
-id: web-cbss-automated-testing
+id: cbss-automated-testing
 info:
   name: cbss-automated-testing
   author: archer
   verified: false
   description: 检测到cbss-automated-testing系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cbss.automated-testing
+    name: cBSS 自动化测试系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

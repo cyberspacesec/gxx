@@ -1,10 +1,20 @@
-id: web-easycloud
+id: easycloud-cloud-resource-platform
 info:
   name: easycloud
   author: archer
   verified: false
   description: 检测到easycloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: easycloud.cloud-resource-platform
+    name: 云资源管控平台
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - cloud
+    aliases:
+      - easycloud
 rules:
   r0:
     request:

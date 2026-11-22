@@ -1,4 +1,4 @@
-id: web-apache-hadoop
+id: apache-hadoop
 info:
   tags: middleware
   reference:
@@ -8,6 +8,22 @@ info:
   verified: false
   description: 面向大规模数据的分布式存储与处理框架。
   created: 2025/04/24
+  product:
+    id: apache.hadoop
+    name: Apache Hadoop
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+      - big-data
+    aliases:
+      - apache-hadoop
+      - httpfs
+    references:
+      - https://hadoop.apache.org/
+    description: 面向大规模数据的分布式存储与处理框架。
 rules:
   r0:
     request:

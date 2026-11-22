@@ -1,10 +1,19 @@
-id: web-zoneminder
+id: zoneminder
 info:
   name: zoneminder
   author: archer
   verified: false
   description: 检测到zoneminder系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zoneminder.zoneminder
+    name: ZoneMinder
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
+      - nvr
 rules:
   r0:
     request:

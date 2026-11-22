@@ -1,10 +1,21 @@
-id: web-mailgard-webmail
+id: youyou-mailgard-hechen-link
 info:
   name: mailgard-webmail
   author: archer
   verified: false
   description: 检测到mailgard-webmail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: youyou.mailgard
+    name: MailGard WebMail
+    vendor: 佑友
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - mailgard-webmail
 rules:
   r0:
     request:

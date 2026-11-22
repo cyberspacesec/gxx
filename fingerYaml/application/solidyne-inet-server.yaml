@@ -1,10 +1,16 @@
-id: web-solidyne-inet-server
+id: solidyne-inet-server
 info:
   name: solidyne-inet-server
   author: archer
   verified: false
   description: 检测到solidyne-inet-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: solidyne.inet-server
+    name: Solidyne iNet Server
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

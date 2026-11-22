@@ -1,10 +1,19 @@
-id: web-wireless-access-point-controller
+id: howay-wireless-controller
 info:
   name: wireless-access-point-controller
   author: archer
   verified: false
   description: 检测到wireless-access-point-controller系统或组件的特征
   created: 2025/04/24
+  product:
+    id: howay.wireless-controller
+    name: 汉明无线 AP 控制器
+    vendor: 汉明科技
+    category: network-device
+    identity: product
+    assurance: inferred
+    aliases:
+      - MVC Howay
 rules:
   r0:
     request:

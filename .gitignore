@@ -18,12 +18,14 @@ dist/
 result_*
 *.json
 !sdk/catalog.json
+!sdk/validations.json
 !cmd/gxx-ide/wails.json
 !cmd/gxx-ide/frontend/.prettierrc.json
 !cmd/gxx-ide/frontend/package.json
 !cmd/gxx-ide/frontend/package-lock.json
 !cmd/gxx-ide/frontend/tsconfig*.json
 *.csv
+!docs/*.csv
 *.txt
 
 # ---- GXX IDE（cmd/gxx-ide/）GUI 子项目产物 ----

@@ -1,10 +1,19 @@
-id: web-安恒信息-明鉴网站安全监测平台
+id: dbappsecurity-mingjian-website-monitoring
 info:
   name: 安恒信息-明鉴网站安全监测平台
   author: archer
   verified: false
   description: 检测到安恒信息-明鉴网站安全监测平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dbappsecurity.mingjian-website-monitoring
+    name: 明鉴网站安全监测平台
+    vendor: 安恒信息
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

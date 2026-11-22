@@ -1,10 +1,19 @@
-id: web-文网亿联-文网卫士安全路由器
+id: wenwangyilian-security-router
 info:
   name: 文网亿联-文网卫士安全路由器
   author: archer
   verified: false
   description: 检测到文网亿联-文网卫士安全路由器系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wenwangyilian.security-router
+    name: 文网卫士安全路由器
+    vendor: 文网亿联
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - router
 rules:
   r0:
     request:

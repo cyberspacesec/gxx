@@ -1,4 +1,4 @@
-id: web-apache-axis2
+id: apache-axis2
 info:
   tags: framework
   reference:
@@ -8,6 +8,20 @@ info:
   verified: false
   description: SOAP 和 Web 服务的实现框架。
   created: 2025/04/24
+  product:
+    id: apache.axis2
+    name: Apache Axis2
+    vendor: Apache Software Foundation
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - framework
+    aliases:
+      - apache-axis2
+    references:
+      - https://axis.apache.org/axis2/java/core/
+    description: SOAP 和 Web 服务的实现框架。
 rules:
   r0:
     request:

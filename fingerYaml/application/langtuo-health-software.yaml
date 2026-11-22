@@ -1,10 +1,19 @@
-id: web-江苏朗拓健康开发软件
+id: langtuo-health-software
 info:
   name: 江苏朗拓健康开发软件
   author: archer
   verified: true
   description: 检测到江苏朗拓健康开发软件系统或组件的特征
   created: 2025/04/16
+  product:
+    id: langtuo.health-software
+    name: 朗拓健康软件
+    vendor: 江苏朗拓
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - 江苏朗拓健康开发软件
 rules:
   r0:
     request:

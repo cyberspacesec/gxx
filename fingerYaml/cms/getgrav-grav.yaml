@@ -1,10 +1,22 @@
-id: web-gravcms
+id: getgrav-grav
 info:
   name: gravcms
   author: archer
   verified: true
   description: 检测到gravcms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: getgrav.grav
+    name: Grav
+    category: cms
+    identity: product
+    assurance: verified
+    tags:
+      - cms
+    aliases:
+      - GravCMS
+    references:
+      - https://getgrav.org/
 rules:
   r0:
     request:

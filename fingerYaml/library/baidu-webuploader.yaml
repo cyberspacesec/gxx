@@ -1,10 +1,21 @@
-id: web-webuploader
+id: baidu-webuploader
 info:
   name: webuploader
   author: archer
   verified: false
   description: 检测到webuploader系统或组件的特征
   created: 2025/04/24
+  product:
+    id: baidu.webuploader
+    name: WebUploader
+    vendor: 百度
+    category: library
+    identity: product
+    assurance: verified
+    tags:
+      - js-library
+    references:
+      - https://github.com/fex-team/webuploader
 rules:
   r0:
     request:

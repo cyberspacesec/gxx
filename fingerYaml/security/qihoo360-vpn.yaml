@@ -1,10 +1,18 @@
-id: web-360-vpn
+id: qihoo360-vpn
 info:
   name: 360-vpn
   author: archer
   verified: true
   description: 检测到360-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qihoo360.vpn
+    name: 360 VPN
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

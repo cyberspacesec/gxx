@@ -1,10 +1,16 @@
-id: web-suyaxing-campus-management-system
+id: suyaxing-campus-management-system
 info:
   name: suyaxing-campus-management-system
   author: archer
   verified: false
   description: 检测到suyaxing-campus-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: suyaxing.campus-management-system
+    name: 苏亚星校园管理系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-爱办公-oa
+id: rongneng-aibangong-oa
 info:
   name: 爱办公-oa
   author: archer
   verified: false
   description: 检测到爱办公-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: rongneng.aibangong-oa
+    name: 爱办公OA
+    vendor: 厦门容能科技有限公司
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - oa
+    references:
+      - https://www.ioa.cn/
 rules:
   r0:
     request:

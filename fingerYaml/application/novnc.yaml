@@ -1,10 +1,20 @@
-id: web-novnc
+id: novnc
 info:
   name: novnc
   author: archer
   verified: false
   description: 检测到novnc系统或组件的特征
   created: 2025/04/24
+  product:
+    id: novnc.novnc
+    name: noVNC
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - remote-access
+    references:
+      - https://github.com/novnc/noVNC
 rules:
   r0:
     request:

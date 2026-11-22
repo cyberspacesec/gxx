@@ -1,10 +1,18 @@
-id: web-6kbbs
+id: 6kbbs
 info:
   name: 6kbbs
   author: zhizhuo
   verified: true
   description: 识别特定Web应用
   created: 2025/04/15
+  product:
+    id: 6kbbs.6kbbs
+    name: 6KBBS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - forum
 rules:
   r0:
     request:

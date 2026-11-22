@@ -1,10 +1,18 @@
-id: web-jymusic
+id: jymusic
 info:
   name: jymusic
   author: archer
   verified: false
   description: 检测到jymusic系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jymusic.jymusic
+    name: JYmusic 音乐管理系统
+    category: cms
+    identity: product
+    assurance: inferred
+    aliases:
+      - jymusic
 rules:
   r0:
     request:

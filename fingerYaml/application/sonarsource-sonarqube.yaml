@@ -1,10 +1,21 @@
-id: web-sonarqube
+id: sonarsource-sonarqube
 info:
   name: sonarqube
   author: archer
   verified: false
   description: 检测到sonarqube系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sonarsource.sonarqube
+    name: SonarQube
+    vendor: SonarSource
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    references:
+      - https://github.com/SonarSource/sonarqube
 rules:
   r0:
     request:

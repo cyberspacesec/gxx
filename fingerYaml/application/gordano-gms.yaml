@@ -1,10 +1,21 @@
-id: web-gordano-messaging-suite
+id: gordano-gms
 info:
   name: gordano-messaging-suite
   author: archer
   verified: false
   description: 检测到gordano-messaging-suite系统或组件的特征
   created: 2025/04/24
+  product:
+    id: gordano.gms
+    name: Gordano Messaging Suite
+    vendor: Gordano
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - GMS
 rules:
   r0:
     request:

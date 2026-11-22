@@ -1,10 +1,21 @@
-id: web-ruijie-router-nbr
+id: ruijie-nbr-router
 info:
   name: ruijie-router-nbr
   author: archer
   verified: false
   description: 检测到ruijie-router-nbr系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruijie.nbr-router
+    name: 锐捷 NBR 路由器
+    vendor: 锐捷网络
+    category: network-device
+    identity: product
+    assurance: verified
+    tags:
+      - router
+    references:
+      - https://www.ruijie.com.cn/
 rules:
   r0:
     request:

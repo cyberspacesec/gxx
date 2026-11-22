@@ -1,10 +1,21 @@
-id: web-猎鹰安全-金山终端安全系统
+id: kingsoft-endpoint-security-db-error
 info:
   name: 猎鹰安全-金山终端安全系统
   author: archer
   verified: false
   description: 检测到猎鹰安全-金山终端安全系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kingsoft.endpoint-security
+    name: 金山终端安全系统
+    vendor: 金山
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - ejinshan
+      - 猎鹰安全-金山终端安全系统
+      - 金山V8+终端安全系统
 rules:
   r0:
     request:

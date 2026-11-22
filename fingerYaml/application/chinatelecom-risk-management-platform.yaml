@@ -1,10 +1,16 @@
-id: web-chinatelecomriskmanagementplatform
+id: chinatelecom-risk-management-platform
 info:
   name: chinatelecomriskmanagementplatform
   author: archer
   verified: false
   description: 检测到chinatelecomriskmanagementplatform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: chinatelecom.risk-management-platform
+    name: 风险治理平台
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

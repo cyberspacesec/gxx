@@ -1,10 +1,18 @@
-id: web-telinxinxi-527meeting
+id: telinxinxi-527meeting
 info:
   name: telinxinxi-527meeting
   author: archer
   verified: false
   description: 检测到telinxinxi-527meeting系统或组件的特征
   created: 2025/04/24
+  product:
+    id: telinxinxi.527meeting
+    name: 527 轻会议
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
 rules:
   r0:
     request:

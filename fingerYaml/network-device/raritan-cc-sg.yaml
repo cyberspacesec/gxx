@@ -1,10 +1,21 @@
-id: web-raritan-安全网关
+id: raritan-cc-sg
 info:
   name: raritan-安全网关
   author: archer
   verified: false
   description: 检测到raritan-安全网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: raritan.cc-sg
+    name: Raritan CommandCenter Secure Gateway
+    vendor: Raritan
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - remote-access
+    aliases:
+      - CC-SG
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: nginx-detect
+id: nginx
 info:
   name: nginx
   author: zhizhuo
@@ -8,6 +8,21 @@ info:
     - https://nginx.org/en/
   tags: web-server,reverse-proxy
   created: 2026/10/01
+  product:
+    id: nginx.nginx
+    name: nginx
+    category: web-server
+    identity: product
+    assurance: verified
+    tags:
+      - web-server
+      - proxy
+      - default-page
+    aliases:
+      - NGINX
+    references:
+      - https://nginx.org/en/
+    description: 提供 HTTP 服务和反向代理的开源 Web 服务器。
 rules:
   r0:
     request:

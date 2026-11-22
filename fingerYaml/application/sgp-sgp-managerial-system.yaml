@@ -1,10 +1,16 @@
-id: web-sgp-managerial-system
+id: sgp-sgp-managerial-system
 info:
   name: sgp-managerial-system
   author: archer
   verified: false
   description: 检测到sgp-managerial-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sgp.sgp-managerial-system
+    name: sgp-managerial-system
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

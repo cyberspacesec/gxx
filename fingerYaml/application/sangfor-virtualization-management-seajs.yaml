@@ -1,10 +1,21 @@
-id: web-深信服虚拟化管理平台
+id: sangfor-virtualization-management-seajs
 info:
   name: 深信服虚拟化管理平台
   author: archer
   verified: false
   description: 检测到深信服虚拟化管理平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.virtualization-management
+    name: 深信服虚拟化管理平台
+    vendor: 深信服
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

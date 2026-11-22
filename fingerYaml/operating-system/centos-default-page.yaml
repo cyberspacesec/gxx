@@ -1,10 +1,22 @@
-id: web-centos默认页面
+id: centos-default-page
 info:
   name: centos默认页面
   author: archer
   verified: false
   description: 检测到centos默认页面系统或组件的特征
   created: 2025/04/24
+  product:
+    id: centos.centos
+    name: CentOS Linux
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - default-page
+    aliases:
+      - CentOS
+    references:
+      - https://www.centos.org/
 rules:
   r0:
     request:

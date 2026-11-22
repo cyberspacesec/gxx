@@ -1,10 +1,19 @@
-id: web-zte-iad语音网关
+id: zte-iad
 info:
   name: zte-iad语音网关
   author: archer
   verified: false
   description: 检测到zte-iad语音网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zte.iad
+    name: 中兴 IAD 语音网关
+    vendor: 中兴
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
 rules:
   r0:
     request:

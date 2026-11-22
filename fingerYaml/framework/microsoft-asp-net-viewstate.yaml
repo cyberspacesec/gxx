@@ -1,10 +1,21 @@
-id: web-NET-ViewState反序列化特征
+id: microsoft-asp-net-viewstate
 info:
   name: NET-ViewState反序列化特征
   author: archer
   verified: false
   description: 检测到NET-ViewState反序列化特征系统或组件的特征
   created: 2025/04/24
+  product:
+    id: microsoft.asp-net
+    name: ASP.NET
+    vendor: Microsoft
+    category: framework
+    identity: signal
+    assurance: inferred
+    tags:
+      - dev-framework
+    aliases:
+      - ASP.NET Web Forms
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-ms-mfc-httpsvr
+id: mfc-httpsvr
 info:
   name: ms-mfc-httpsvr
   author: archer
   verified: false
   description: 检测到ms-mfc-httpsvr系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mfc-httpsvr.mfc-httpsvr
+    name: MFC HttpSvr
+    category: web-server
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

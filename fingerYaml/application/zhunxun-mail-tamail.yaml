@@ -1,10 +1,18 @@
-id: web-xinnet-mail
+id: zhunxun-mail-tamail
 info:
   name: xinnet-mail
   author: archer
   verified: false
   description: 检测到xinnet-mail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhunxun.mail
+    name: 准讯邮件系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

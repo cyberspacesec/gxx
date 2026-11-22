@@ -1,10 +1,25 @@
-id: web-minio-browser
+id: minio
 info:
   name: minio-browser
   author: archer
   verified: false
   description: 检测到minio-browser系统或组件的特征
   created: 2025/04/24
+  product:
+    id: minio.minio
+    name: MinIO
+    vendor: MinIO
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - storage
+      - cloud
+    aliases:
+      - MinIO Console
+      - MinIO Browser
+    references:
+      - https://min.io/
 rules:
   r0:
     request:

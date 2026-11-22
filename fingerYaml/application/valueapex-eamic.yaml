@@ -1,10 +1,16 @@
-id: web-valueapex-eamic
+id: valueapex-eamic
 info:
   name: valueapex-eamic
   author: archer
   verified: false
   description: 检测到valueapex-eamic系统或组件的特征
   created: 2025/04/24
+  product:
+    id: valueapex.eamic
+    name: eAMIC
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

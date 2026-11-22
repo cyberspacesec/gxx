@@ -1,5 +1,5 @@
 ---
-id: fofayaml-59
+id: linuxmint
 info:
   reference:
     - https://linuxmint.com/
@@ -9,6 +9,19 @@ info:
   description: Linux 桌面发行版；响应标记不等同于主机系统已核实。
   tags: web,fofa,converted,operating-system
   created: 2025/04/07
+  product:
+    id: linuxmint.linuxmint
+    name: Linux Mint
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - operating-system
+    aliases:
+      - linuxmint
+    references:
+      - https://linuxmint.com/
+    description: Linux 桌面发行版；响应标记不等同于主机系统已核实。
 rules:
   r0:
     request:

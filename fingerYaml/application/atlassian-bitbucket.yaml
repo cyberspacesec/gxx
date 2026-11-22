@@ -1,10 +1,24 @@
-id: web-bitbucket
+id: atlassian-bitbucket
 info:
   name: bitbucket
   author: archer
   verified: false
   description: 检测到bitbucket系统或组件的特征
   created: 2025/04/24
+  product:
+    id: atlassian.bitbucket
+    name: Bitbucket
+    vendor: Atlassian
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    aliases:
+      - Bitbucket Server
+      - Bitbucket Data Center
+    references:
+      - https://www.atlassian.com/software/bitbucket
 rules:
   r0:
     request:

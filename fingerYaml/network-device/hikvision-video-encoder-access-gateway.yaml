@@ -1,10 +1,22 @@
-id: web-hikvision-视频编码设备接入网关
+id: hikvision-video-encoder-access-gateway
 info:
   name: hikvision-视频编码设备接入网关
   author: archer
   verified: false
   description: 检测到hikvision-视频编码设备接入网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hikvision.video-encoder-access-gateway
+    name: 视频编码设备接入网关
+    vendor: 海康威视
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+      - camera
+    aliases:
+      - hikvision-视频编码设备接入网关
 rules:
   r0:
     request:

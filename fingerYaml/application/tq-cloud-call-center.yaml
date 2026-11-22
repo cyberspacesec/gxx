@@ -1,10 +1,18 @@
-id: web-tq-cloud-call-center
+id: tq-cloud-call-center
 info:
   name: tq-cloud-call-center
   author: archer
   verified: false
   description: 检测到tq-cloud-call-center系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tq.cloud-call-center
+    name: TQ 云呼叫中心
+    category: application
+    identity: signal
+    assurance: inferred
+    tags:
+      - im
 rules:
   r0:
     request:

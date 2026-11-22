@@ -1,10 +1,19 @@
-id: web-zfsoft-oa
+id: zfsoft-oa
 info:
   name: zfsoft-oa
   author: archer
   verified: false
   description: 检测到zfsoft-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zfsoft.oa
+    name: 正方 OA
+    vendor: 正方软件
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

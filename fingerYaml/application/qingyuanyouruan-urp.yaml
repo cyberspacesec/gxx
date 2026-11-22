@@ -1,10 +1,19 @@
-id: web-urp-integrated-educational-system
+id: qingyuanyouruan-urp
 info:
   name: urp-integrated-educational-system
   author: archer
   verified: false
   description: 检测到urp-integrated-educational-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qingyuanyouruan.urp
+    name: URP 综合教务系统
+    vendor: 清元优软
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - URP教务系统
 rules:
   r0:
     request:

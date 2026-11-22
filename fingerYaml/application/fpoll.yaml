@@ -1,10 +1,16 @@
-id: web-fpoll
+id: fpoll
 info:
   name: fpoll
   author: archer
   verified: false
   description: 检测到fpoll系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fpoll.fpoll
+    name: fpoll
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

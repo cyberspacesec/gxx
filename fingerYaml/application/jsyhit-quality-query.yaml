@@ -1,10 +1,18 @@
-id: web-jsyhit-system
+id: jsyhit-quality-query
 info:
   name: jsyhit-system
   author: archer
   verified: false
   description: 检测到jsyhit-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jsyhit.quality-query
+    name: 仪化产品质量查询系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - jsyhit-system
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-wap
+id: generic-wap-redirect
 info:
   name: wap
   author: archer
   verified: false
   description: 检测到wap系统或组件的特征
   created: 2025/04/24
+  product:
+    id: generic.wap-redirect
+    name: WAP 页面跳转
+    category: other
+    identity: signal
+    assurance: inferred
 rules:
   r0:
     request:

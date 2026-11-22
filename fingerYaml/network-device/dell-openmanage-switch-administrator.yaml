@@ -1,10 +1,19 @@
-id: web-dell-openmanage-switch-administrator
+id: dell-openmanage-switch-administrator
 info:
   name: dell-openmanage-switch-administrator
   author: archer
   verified: false
   description: 检测到dell-openmanage-switch-administrator系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dell.openmanage-switch-administrator
+    name: OpenManage Switch Administrator
+    vendor: Dell
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - switch
 rules:
   r0:
     request:

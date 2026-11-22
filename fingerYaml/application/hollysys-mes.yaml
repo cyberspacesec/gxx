@@ -1,10 +1,21 @@
-id: web-hollysys-mes
+id: hollysys-mes
 info:
   name: hollysys-mes
   author: archer
   verified: false
   description: 检测到hollysys-mes系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hollysys.mes
+    name: 和利时 MES
+    vendor: 和利时
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - industrial
+    aliases:
+      - hollysys-mes
 rules:
   r0:
     request:

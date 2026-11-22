@@ -1,10 +1,24 @@
-id: web-禅道CMS
+id: easycorp-zentao
 info:
   name: 禅道CMS
   author: archer
   verified: true
   description: 检测到禅道CMS系统或组件的特征
   created: 2025/04/24
+  product:
+    id: easycorp.zentao
+    name: 禅道
+    vendor: 易软天创
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    aliases:
+      - ZenTao
+      - 禅道项目管理
+    references:
+      - https://www.zentao.net/
 rules:
   r0:
     request:

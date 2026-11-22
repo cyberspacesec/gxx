@@ -1,10 +1,23 @@
-id: web-nessus
+id: tenable-nessus
 info:
   name: nessus
   author: archer
   verified: false
   description: 检测到nessus系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tenable.nessus
+    name: Tenable Nessus
+    vendor: Tenable
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - vulnerability-scanner
+    aliases:
+      - Nessus
+    references:
+      - https://www.tenable.com/products/nessus
 rules:
   r0:
     request:

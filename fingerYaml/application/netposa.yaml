@@ -1,10 +1,21 @@
-id: web-netposa-system
+id: netposa
 info:
   name: netposa-system
   author: archer
   verified: false
   description: 检测到netposa-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: netposa.netposa
+    name: 东方网力视频监控平台
+    vendor: 东方网力
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
+    aliases:
+      - NetPosa
 rules:
   r0:
     request:

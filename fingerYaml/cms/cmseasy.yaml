@@ -1,10 +1,18 @@
-id: web-cmseasy
+id: cmseasy
 info:
   name: cmseasy
   author: archer
   verified: false
   description: 检测到cmseasy系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cmseasy.cmseasy
+    name: CmsEasy
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

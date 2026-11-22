@@ -1,10 +1,18 @@
-id: web-screwturn-wiki-web-service
+id: screwturn-screwturn-wiki
 info:
   name: screwturn-wiki-web-service
   author: archer
   verified: false
   description: 检测到screwturn-wiki-web-service系统或组件的特征
   created: 2025/04/24
+  product:
+    id: screwturn.screwturn-wiki
+    name: ScrewTurn Wiki
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - wiki
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-gzmwiccard-system
+id: gzmwiccard-ic-card-system
 info:
   name: gzmwiccard-system
   author: archer
   verified: false
   description: 检测到gzmwiccard-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: gzmwiccard.ic-card-system
+    name: IC 卡管理系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - gzmwiccard-system
 rules:
   r0:
     request:

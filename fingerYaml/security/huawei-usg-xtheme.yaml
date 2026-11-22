@@ -1,10 +1,22 @@
-id: web-huawei-usg-firewall
+id: huawei-usg-xtheme
 info:
   name: huawei-usg-firewall
   author: archer
   verified: false
   description: 检测到huawei-usg-firewall系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huawei.usg
+    name: USG 防火墙
+    vendor: 华为
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+    aliases:
+      - huawei-usg-firewall
+      - Huawei USG防火墙
 rules:
   r0:
     request:

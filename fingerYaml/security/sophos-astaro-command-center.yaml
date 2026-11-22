@@ -1,10 +1,20 @@
-id: web-astaro-command-center
+id: sophos-astaro-command-center
 info:
   name: astaro-command-center
   author: archer
   verified: false
   description: 检测到astaro-command-center系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sophos.astaro-command-center
+    name: Astaro Command Center
+    vendor: Sophos
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+      - monitoring
 rules:
   r0:
     request:

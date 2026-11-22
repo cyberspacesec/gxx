@@ -1,10 +1,22 @@
-id: web-hp-system-management
+id: hpe-system-management-homepage
 info:
   name: hp-system-management
   author: archer
   verified: false
   description: 检测到hp-system-management系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hpe.system-management-homepage
+    name: HP System Management Homepage
+    vendor: Hewlett Packard Enterprise
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
+    aliases:
+      - hp-system-management
+      - HP SMH
 rules:
   r0:
     request:

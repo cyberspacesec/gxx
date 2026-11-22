@@ -1,10 +1,25 @@
-id: web-elastic
+id: elastic-kibana-login
 info:
   name: elastic
   author: archer
   verified: true
   description: 检测到elastic系统或组件的特征
   created: 2025/04/24
+  product:
+    id: elastic.kibana
+    name: Kibana
+    vendor: Elastic
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - monitoring
+    aliases:
+      - kibana
+    references:
+      - https://www.elastic.co/kibana
+    description: 用于查询、分析和可视化 Elasticsearch 数据的应用。
 rules:
   r0:
     request:

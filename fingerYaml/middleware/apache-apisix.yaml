@@ -1,4 +1,4 @@
-id: web-apache-apisix
+id: apache-apisix
 info:
   tags: middleware
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 用于 API 和微服务流量管理的网关。
   created: 2025/04/24
+  product:
+    id: apache.apisix
+    name: Apache APISIX
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+      - api-gateway
+    aliases:
+      - apache-apisix
+    references:
+      - https://apisix.apache.org/
+    description: 用于 API 和微服务流量管理的网关。
 rules:
   r0:
     request:

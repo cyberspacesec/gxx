@@ -1,10 +1,21 @@
-id: web-haproxy-report
+id: haproxy
 info:
   name: haproxy-report
   author: archer
   verified: false
   description: 检测到haproxy-report系统或组件的特征
   created: 2025/04/24
+  product:
+    id: haproxy.haproxy
+    name: HAProxy
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - load-balancer
+      - proxy
+    references:
+      - https://www.haproxy.org/
 rules:
   r0:
     request:

@@ -1,10 +1,22 @@
-id: web-网康科技-ns-asg安全网关
+id: qianxin-netentsec-ns-asg
 info:
   name: 网康科技-ns-asg安全网关
   author: archer
   verified: false
   description: 检测到网康科技-ns-asg安全网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qianxin.netentsec-ns-asg
+    name: 网康 NS-ASG 应用安全网关
+    vendor: 奇安信
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+      - vpn
+    aliases:
+      - NS-ASG
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-yuneasy-ipcalling
+id: yuneasy-ip-call-center
 info:
   name: yuneasy-ipcalling
   author: archer
   verified: false
   description: 检测到yuneasy-ipcalling系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yuneasy.ip-call-center
+    name: 云翌 IP 呼叫中心
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

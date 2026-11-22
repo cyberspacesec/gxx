@@ -1,10 +1,16 @@
-id: web-chinags-sc
+id: chinags-sc
 info:
   name: chinags-sc
   author: archer
   verified: false
   description: 检测到chinags-sc系统或组件的特征
   created: 2025/04/24
+  product:
+    id: chinags.sc
+    name: chinags-sc
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

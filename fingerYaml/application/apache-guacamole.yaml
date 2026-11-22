@@ -1,4 +1,4 @@
-id: web-apache-guacamole
+id: apache-guacamole
 info:
   tags: application
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 通过浏览器访问远程桌面的网关。
   created: 2025/04/24
+  product:
+    id: apache.guacamole
+    name: Apache Guacamole
+    vendor: Apache Software Foundation
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - remote-access
+    aliases:
+      - apache-guacamole
+    references:
+      - https://guacamole.apache.org/
+    description: 通过浏览器访问远程桌面的网关。
 rules:
   r0:
     request:

@@ -1,10 +1,23 @@
-id: web-horde
+id: horde-groupware
 info:
   name: horde
   author: archer
   verified: false
   description: 检测到horde系统或组件的特征
   created: 2025/04/24
+  product:
+    id: horde.groupware
+    name: Horde Groupware
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - mail
+    aliases:
+      - horde
+      - Horde IMP
+    references:
+      - https://www.horde.org/
 rules:
   r0:
     request:

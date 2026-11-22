@@ -1,10 +1,17 @@
-id: web-dnatools-dnalims
+id: dnatools-dnalims
 info:
   name: dnatools-dnalims
   author: archer
   verified: false
   description: 检测到dnatools-dnalims系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dnatools.dnalims
+    name: dnaLIMS
+    vendor: dnaTools
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

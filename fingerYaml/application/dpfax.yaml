@@ -1,10 +1,18 @@
-id: web-dpfax
+id: dpfax
 info:
   name: dpfax
   author: archer
   verified: false
   description: 检测到dpfax系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dpfax.dpfax
+    name: DPFax
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - MiniFaxServer
 rules:
   r0:
     request:

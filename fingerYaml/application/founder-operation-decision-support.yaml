@@ -1,10 +1,19 @@
-id: web-founder-operation-management-and-decision-support-system
+id: founder-operation-decision-support
 info:
   name: founder-operation-management-and-decision-support-system
   author: archer
   verified: false
   description: 检测到founder-operation-management-and-decision-support-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: founder.operation-decision-support
+    name: 方正经营管理与决策支持系统
+    vendor: 方正
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - bi
 rules:
   r0:
     request:

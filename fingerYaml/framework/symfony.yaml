@@ -1,10 +1,20 @@
-id: web-symfony
+id: symfony
 info:
   name: symfony
   author: archer
   verified: false
   description: 检测到symfony系统或组件的特征
   created: 2025/04/24
+  product:
+    id: symfony.symfony
+    name: Symfony
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    references:
+      - https://symfony.com/
 rules:
   r0:
     request:

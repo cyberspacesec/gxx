@@ -1,10 +1,24 @@
-id: web-IIS默认界面
+id: microsoft-iis-default-page
 info:
   name: IIS默认界面
   author: archer
   verified: false
   description: 检测到IIS默认界面系统或组件的特征
   created: 2025/04/24
+  product:
+    id: microsoft.iis
+    name: Internet Information Services (IIS)
+    vendor: Microsoft
+    category: web-server
+    identity: product
+    assurance: verified
+    tags:
+      - default-page
+    aliases:
+      - IIS
+      - IIS默认界面
+    references:
+      - https://www.iis.net/
 rules:
   r0:
     request:

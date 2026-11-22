@@ -1,10 +1,19 @@
-id: web-easy-file-sharing-web-server
+id: efssoft-easy-file-sharing-web-server
 info:
   name: easy-file-sharing-web-server
   author: archer
   verified: false
   description: 检测到easy-file-sharing-web-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: efssoft.easy-file-sharing-web-server
+    name: Easy File Sharing Web Server
+    vendor: EFS Software
+    category: web-server
+    identity: product
+    assurance: inferred
+    tags:
+      - file-transfer
 rules:
   r0:
     request:

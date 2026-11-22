@@ -1,10 +1,21 @@
-id: web-loopup-meeting
+id: loopup
 info:
   name: loopup-meeting
   author: archer
   verified: false
   description: 检测到loopup-meeting系统或组件的特征
   created: 2025/04/24
+  product:
+    id: loopup.loopup
+    name: LoopUp
+    vendor: LoopUp
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
+    aliases:
+      - loopup-meeting
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: web-apache-airflow
+id: apache-airflow
 info:
   tags: application
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 以代码定义、调度和监控工作流的平台。
   created: 2025/04/24
+  product:
+    id: apache.airflow
+    name: Apache Airflow
+    vendor: Apache Software Foundation
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - devops
+    aliases:
+      - apache-airflow
+    references:
+      - https://airflow.apache.org/
+    description: 以代码定义、调度和监控工作流的平台。
 rules:
   r0:
     request:

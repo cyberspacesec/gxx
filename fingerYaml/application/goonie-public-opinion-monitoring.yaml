@@ -1,10 +1,18 @@
-id: web-goonie-internet-public-ppinion-monitoring-system
+id: goonie-public-opinion-monitoring
 info:
   name: goonie-internet-public-ppinion-monitoring-system
   author: archer
   verified: false
   description: 检测到goonie-internet-public-ppinion-monitoring-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: goonie.public-opinion-monitoring
+    name: 谷尼网络舆情监控系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - goonie-internet-public-ppinion-monitoring-system
 rules:
   r0:
     request:

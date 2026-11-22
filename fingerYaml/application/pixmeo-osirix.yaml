@@ -1,10 +1,21 @@
-id: web-osirix-viewer
+id: pixmeo-osirix
 info:
   name: osirix-viewer
   author: archer
   verified: false
   description: 检测到osirix-viewer系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pixmeo.osirix
+    name: OsiriX
+    vendor: Pixmeo
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - medical
+    aliases:
+      - OsiriX MD
 rules:
   r0:
     request:

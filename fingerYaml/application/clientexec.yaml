@@ -1,10 +1,18 @@
-id: web-clientexec
+id: clientexec
 info:
   name: clientexec
   author: archer
   verified: false
   description: 检测到clientexec系统或组件的特征
   created: 2025/04/24
+  product:
+    id: clientexec.clientexec
+    name: Clientexec
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - payment
 rules:
   r0:
     request:

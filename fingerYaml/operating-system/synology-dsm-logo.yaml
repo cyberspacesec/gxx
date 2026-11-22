@@ -1,10 +1,25 @@
-id: web-synology-dms
+id: synology-dsm-logo
 info:
   name: synology-dms
   author: archer
   verified: false
   description: 检测到synology-dms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: synology.dsm
+    name: Synology DiskStation Manager
+    vendor: Synology
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - nas
+      - storage
+    aliases:
+      - DSM
+      - Synology DiskStation
+    references:
+      - https://www.synology.com/
 rules:
   r0:
     request:

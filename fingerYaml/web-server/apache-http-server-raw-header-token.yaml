@@ -1,4 +1,4 @@
-id: apache-detect
+id: apache-http-server-raw-header-token
 info:
   reference:
     - https://httpd.apache.org/
@@ -8,6 +8,25 @@ info:
   description: 提供 HTTP 服务的开源 Web 服务器。
   tags: web,fofa,converted,web-server
   created: 2025/04/07
+  product:
+    id: apache.http-server
+    name: Apache HTTP Server
+    vendor: Apache Software Foundation
+    category: web-server
+    identity: product
+    assurance: verified
+    tags:
+      - web-server
+      - default-page
+    aliases:
+      - Apache
+      - apache-http
+      - Apache2 Ubuntu默认页面
+    cpe:
+      - cpe:2.3:a:apache:http_server:*:*:*:*:*:*:*:*
+    references:
+      - https://httpd.apache.org/
+    description: 提供 HTTP 服务的开源 Web 服务器。
 rules:
   r0:
     request:

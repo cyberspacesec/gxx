@@ -1,10 +1,18 @@
-id: web-bees_cms
+id: beescms
 info:
   name: bees_cms
   author: archer
   verified: false
   description: 检测到bees_cms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: beescms.beescms
+    name: BEESCMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

@@ -1,4 +1,4 @@
-id: apache-dubbo
+id: apache-dubbo-basic-realm
 info:
   reference:
     - https://dubbo.apache.org/
@@ -8,6 +8,23 @@ info:
   description: 微服务 RPC 通信、服务发现与治理框架。
   tags: web,fofa,converted,framework
   created: 2025/04/07
+  product:
+    id: apache.dubbo
+    name: Apache Dubbo
+    vendor: Apache Software Foundation
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - framework
+      - dev-framework
+    aliases:
+      - apache-dubbo
+      - Apache dubbo
+      - Dubbo
+    references:
+      - https://dubbo.apache.org/
+    description: 微服务 RPC 通信、服务发现与治理框架。
 rules:
   r0:
     request:

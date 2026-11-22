@@ -1,10 +1,19 @@
-id: web-jxt-consulting
+id: jxt
 info:
   name: jxt-consulting
   author: archer
   verified: false
   description: 检测到jxt-consulting系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jxt.jxt
+    name: JXT
+    vendor: JXT Consulting
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - jxt-consulting
 rules:
   r0:
     request:

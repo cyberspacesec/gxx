@@ -1,10 +1,19 @@
-id: web-alcatel_lucent-omnivista-cirrus
+id: alcatel-lucent-enterprise-omnivista-cirrus
 info:
   name: alcatel_lucent-omnivista-cirrus
   author: archer
   verified: false
   description: 检测到alcatel_lucent-omnivista-cirrus系统或组件的特征
   created: 2025/04/24
+  product:
+    id: alcatel-lucent-enterprise.omnivista-cirrus
+    name: OmniVista Cirrus
+    vendor: Alcatel-Lucent Enterprise
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

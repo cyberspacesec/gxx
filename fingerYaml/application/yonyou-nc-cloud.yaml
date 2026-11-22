@@ -1,10 +1,21 @@
-id: web-用友NCCloud
+id: yonyou-nc-cloud
 info:
   name: 用友NCCloud
   author: archer
   verified: false
   description: 检测到用友NCCloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yonyou.nc-cloud
+    name: 用友 NC Cloud
+    vendor: 用友网络
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
+    aliases:
+      - NCCloud
 rules:
   r0:
     request:

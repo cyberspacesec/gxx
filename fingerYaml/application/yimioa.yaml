@@ -1,10 +1,18 @@
-id: web-一米OA
+id: yimioa
 info:
   name: 一米OA
   author: archer
   verified: false
   description: 检测到一米OA系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yimioa.yimioa
+    name: 一米OA
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

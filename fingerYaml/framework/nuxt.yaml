@@ -1,10 +1,22 @@
-id: web-nuxtjs
+id: nuxt
 info:
   name: nuxtjs
   author: archer
   verified: false
   description: 检测到nuxtjs系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nuxt.nuxt
+    name: Nuxt
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    aliases:
+      - Nuxt.js
+    references:
+      - https://nuxt.com/
 rules:
   r0:
     request:

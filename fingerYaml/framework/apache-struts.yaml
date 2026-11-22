@@ -1,4 +1,4 @@
-id: web-apache-struts
+id: apache-struts
 info:
   tags: framework
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 基于 MVC 模式的 Java Web 应用框架。
   created: 2025/04/24
+  product:
+    id: apache.struts
+    name: Apache Struts
+    vendor: Apache Software Foundation
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - framework
+      - dev-framework
+    aliases:
+      - apache-struts
+    references:
+      - https://struts.apache.org/
+    description: 基于 MVC 模式的 Java Web 应用框架。
 rules:
   r0:
     request:

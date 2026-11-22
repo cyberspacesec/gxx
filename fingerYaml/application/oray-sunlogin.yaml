@@ -1,10 +1,23 @@
-id: web-sunlogin
+id: oray-sunlogin
 info:
   name: sunlogin
   author: archer
   verified: false
   description: 检测到sunlogin系统或组件的特征
   created: 2025/04/24
+  product:
+    id: oray.sunlogin
+    name: 向日葵远程控制
+    vendor: 贝锐
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - remote-access
+    aliases:
+      - Sunlogin
+    references:
+      - https://sunlogin.oray.com/
 rules:
   r0:
     request:

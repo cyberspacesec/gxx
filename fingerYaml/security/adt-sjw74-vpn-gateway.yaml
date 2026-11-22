@@ -1,10 +1,21 @@
-id: web-adt-sjw74-vpn网关
+id: adt-sjw74-vpn-gateway
 info:
   name: adt-sjw74-vpn网关
   author: archer
   verified: false
   description: 检测到adt-sjw74-vpn网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: adt.sjw74-vpn-gateway
+    name: 安达通 SJW74 VPN 网关
+    vendor: 安达通
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
+      - gateway
+      - login
 rules:
   r0:
     request:

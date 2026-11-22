@@ -1,10 +1,18 @@
-id: web-gzsa-intranet-security
+id: gzsa-intranet-security
 info:
   name: gzsa-intranet-security
   author: archer
   verified: false
   description: 检测到gzsa-intranet-security系统或组件的特征
   created: 2025/04/24
+  product:
+    id: gzsa.intranet-security
+    name: GZSA 内网安全系统
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - gzsa-intranet-security
 rules:
   r0:
     request:

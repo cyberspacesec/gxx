@@ -1,10 +1,21 @@
-id: web-惠尔顿-e地通vpn
+id: wholeton-edt-vpn
 info:
   name: 惠尔顿-e地通vpn
   author: archer
   verified: false
   description: 检测到惠尔顿-e地通vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wholeton.edt-vpn
+    name: e地通 VPN
+    vendor: 惠尔顿
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
+    aliases:
+      - 惠尔顿-e地通vpn
 rules:
   r0:
     request:

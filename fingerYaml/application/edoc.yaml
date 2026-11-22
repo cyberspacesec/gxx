@@ -1,10 +1,16 @@
-id: web-edoc
+id: edoc
 info:
   name: edoc
   author: archer
   verified: true
   description: 检测到edoc系统或组件的特征
   created: 2025/04/24
+  product:
+    id: edoc.edoc
+    name: eDoc
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

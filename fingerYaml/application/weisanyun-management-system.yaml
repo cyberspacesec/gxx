@@ -1,10 +1,16 @@
-id: web-微三云管理系统
+id: weisanyun-management-system
 info:
   name: 微三云管理系统
   author: archer
   verified: false
   description: 检测到微三云管理系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: weisanyun.management-system
+    name: 微三云管理系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

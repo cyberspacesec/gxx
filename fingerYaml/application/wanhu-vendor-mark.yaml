@@ -1,10 +1,20 @@
-id: web-whir
+id: wanhu-vendor-mark
 info:
   name: whir
   author: archer
   verified: false
   description: 检测到whir系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wanhu.vendor-mark
+    name: 万户网络厂商标识
+    vendor: 万户网络
+    category: application
+    identity: signal
+    assurance: inferred
+    aliases:
+      - 万户网络产品
+      - 万户网络产品（未细分）
 rules:
   r0:
     request:

@@ -1,10 +1,22 @@
-id: web-hitachi-virtual-storage-platform
+id: hitachi-virtual-storage-platform
 info:
   name: hitachi-virtual-storage-platform
   author: archer
   verified: false
   description: 检测到hitachi-virtual-storage-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hitachi.virtual-storage-platform
+    name: Hitachi Virtual Storage Platform
+    vendor: Hitachi
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
+    aliases:
+      - hitachi-virtual-storage-platform
+      - VSP
 rules:
   r0:
     request:

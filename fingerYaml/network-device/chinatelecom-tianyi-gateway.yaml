@@ -1,10 +1,20 @@
-id: web-中国电信-天翼宽带政企网关
+id: chinatelecom-tianyi-gateway
 info:
   name: 中国电信-天翼宽带政企网关
   author: archer
   verified: false
   description: 检测到中国电信-天翼宽带政企网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: chinatelecom.tianyi-gateway
+    name: 天翼宽带政企网关
+    vendor: 中国电信
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+      - router
 rules:
   r0:
     request:

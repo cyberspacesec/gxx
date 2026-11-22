@@ -1,10 +1,18 @@
-id: web-jurassic-application-management-system
+id: jurassic-application-management
 info:
   name: jurassic-application-management-system
   author: archer
   verified: false
   description: 检测到jurassic-application-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jurassic.application-management
+    name: Jurassic 应用管理系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - jurassic-application-management-system
 rules:
   r0:
     request:

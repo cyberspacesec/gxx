@@ -1,10 +1,16 @@
-id: web-dspace
+id: dspace
 info:
   name: dspace
   author: archer
   verified: false
   description: 检测到dspace系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dspace.dspace
+    name: DSpace
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

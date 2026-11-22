@@ -1,10 +1,18 @@
-id: web-zhongshengsoft-crm
+id: zhongshengsoft-crm
 info:
   name: zhongshengsoft-crm
   author: archer
   verified: false
   description: 检测到zhongshengsoft-crm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhongshengsoft.crm
+    name: Zhongshengsoft 餐饮 CRM
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - crm
 rules:
   r0:
     request:

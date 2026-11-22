@@ -1,10 +1,16 @@
-id: web-freakauth
+id: freakauth
 info:
   name: freakauth
   author: archer
   verified: false
   description: 检测到freakauth系统或组件的特征
   created: 2025/04/24
+  product:
+    id: freakauth.freakauth
+    name: FreakAuth
+    category: library
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

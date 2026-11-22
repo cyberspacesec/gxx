@@ -1,4 +1,4 @@
-id: web-prometheus
+id: prometheus
 info:
   tags: application
   reference:
@@ -8,6 +8,20 @@ info:
   verified: false
   description: 用于指标采集、时序数据查询与告警的监控系统。
   created: 2025/04/24
+  product:
+    id: prometheus.prometheus
+    name: Prometheus
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - monitoring
+    aliases:
+      - prometheus
+    references:
+      - https://prometheus.io/
+    description: 用于指标采集、时序数据查询与告警的监控系统。
 rules:
   r0:
     request:

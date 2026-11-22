@@ -1,10 +1,16 @@
-id: web-mathopd
+id: mathopd
 info:
   name: mathopd
   author: archer
   verified: false
   description: 检测到mathopd系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mathopd.mathopd
+    name: Mathopd
+    category: web-server
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

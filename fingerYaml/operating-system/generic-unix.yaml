@@ -1,5 +1,5 @@
 ---
-id: fofayaml-47
+id: generic-unix
 info:
   name: Unix
   author: zhizhuo
@@ -7,6 +7,12 @@ info:
   description: 'Converted from FOFA rule: fofayaml-47'
   tags: web,fofa,converted
   created: 2025/04/07
+  product:
+    id: generic.unix
+    name: Unix
+    category: operating-system
+    identity: signal
+    assurance: inferred
 rules:
   r0:
     request:

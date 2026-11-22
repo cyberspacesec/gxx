@@ -1,10 +1,20 @@
-id: web-中科网威-安全接入网关
+id: zhongkewangwei-secure-access-gateway
 info:
   name: 中科网威-安全接入网关
   author: archer
   verified: false
   description: 检测到中科网威-安全接入网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zhongkewangwei.secure-access-gateway
+    name: 中科网威安全接入网关
+    vendor: 中科网威
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+      - vpn
 rules:
   r0:
     request:

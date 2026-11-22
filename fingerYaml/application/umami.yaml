@@ -1,10 +1,18 @@
-id: web-umami
+id: umami
 info:
   name: umami
   author: archer
   verified: true
   description: 检测到umami系统或组件的特征
   created: 2025/04/24
+  product:
+    id: umami.umami
+    name: Umami
+    category: application
+    identity: product
+    assurance: verified
+    references:
+      - https://umami.is/
 rules:
   r0:
     request:

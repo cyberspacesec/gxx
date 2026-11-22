@@ -1,10 +1,20 @@
-id: web-xunruicms
+id: xunruicms
 info:
   name: xunruicms
   author: archer
   verified: false
   description: 检测到xunruicms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xunruicms.xunruicms
+    name: 迅睿CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - XunRuiCMS
 rules:
   r0:
     request:

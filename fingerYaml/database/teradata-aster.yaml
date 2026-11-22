@@ -1,10 +1,21 @@
-id: web-teradata-aster
+id: teradata-aster
 info:
   name: teradata-aster
   author: archer
   verified: false
   description: 检测到teradata-aster系统或组件的特征
   created: 2025/04/24
+  product:
+    id: teradata.aster
+    name: Teradata Aster
+    vendor: Teradata
+    category: database
+    identity: product
+    assurance: inferred
+    tags:
+      - big-data
+    aliases:
+      - Aster nCluster
 rules:
   r0:
     request:

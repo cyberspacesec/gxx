@@ -1,10 +1,20 @@
-id: web-zkteco-system
+id: zkteco-vendor-mark
 info:
   name: zkteco-system
   author: archer
   verified: false
   description: 检测到zkteco-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zkteco.vendor-mark
+    name: 熵基科技厂商标识
+    vendor: 熵基科技
+    category: application
+    identity: signal
+    assurance: inferred
+    aliases:
+      - ZKTeco 产品
+      - ZKTeco 产品（未细分）
 rules:
   r0:
     request:

@@ -1,10 +1,23 @@
-id: web-安博通应用网关
+id: abt-security-gateway-app-gateway
 info:
   name: 安博通应用网关
   author: archer
   verified: false
   description: 检测到安博通应用网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: abt.security-gateway
+    name: 安博通安全网关
+    vendor: 安博通
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+      - firewall
+    aliases:
+      - 安博通应用网关
+      - 安博通深度安全网关
 rules:
   r0:
     request:

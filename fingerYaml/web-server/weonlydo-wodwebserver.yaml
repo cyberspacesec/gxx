@@ -1,10 +1,17 @@
-id: web-weonlydo-product
+id: weonlydo-wodwebserver
 info:
   name: weonlydo-product
   author: archer
   verified: false
   description: 检测到weonlydo-product系统或组件的特征
   created: 2025/04/24
+  product:
+    id: weonlydo.wodwebserver
+    name: wodWebServer
+    vendor: WeOnlyDo Software
+    category: web-server
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

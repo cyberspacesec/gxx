@@ -40,11 +40,11 @@ var (
 
 // Equal 报告两份产品声明是否完全相同；未填写的列表与空列表视为相同。
 func (p Product) Equal(other Product) bool {
-	return p.differingField(other) == ""
+	return p.DifferentField(other) == ""
 }
 
-// differingField 返回第一个不同的字段名，相同时返回空串。
-func (p Product) differingField(other Product) string {
+// DifferentField 返回两份声明中第一个不同的字段名（按声明的字段顺序），相同时返回空串。
+func (p Product) DifferentField(other Product) string {
 	switch {
 	case p.ID != other.ID:
 		return "id"
@@ -168,7 +168,7 @@ func CheckProductDeclarations(fingers []*Finger) error {
 			first[product.ID] = fg
 			continue
 		}
-		if field := seen.Info.Product.differingField(*product); field != "" {
+		if field := seen.Info.Product.DifferentField(*product); field != "" {
 			return &ProductConflictError{ProductID: product.ID, RuleIDs: [2]string{seen.Id, fg.Id}, Field: field}
 		}
 	}

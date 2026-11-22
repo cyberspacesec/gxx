@@ -1,10 +1,16 @@
-id: web-chinatiejun-system
+id: chinatiejun-chinatiejun-system
 info:
   name: chinatiejun-system
   author: archer
   verified: false
   description: 检测到chinatiejun-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: chinatiejun.chinatiejun-system
+    name: chinatiejun-system
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

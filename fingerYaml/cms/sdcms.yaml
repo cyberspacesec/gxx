@@ -1,10 +1,18 @@
-id: web-sdcms神盾内容管理系统
+id: sdcms
 info:
   name: sdcms神盾内容管理系统
   author: archer
   verified: false
   description: 检测到sdcms神盾内容管理系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sdcms.sdcms
+    name: SDCMS 神盾内容管理系统
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-vmware-site-recovery-manager
+id: vmware-site-recovery-manager
 info:
   name: vmware-site-recovery-manager
   author: archer
   verified: false
   description: 检测到vmware-site-recovery-manager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vmware.site-recovery-manager
+    name: VMware Site Recovery Manager
+    vendor: VMware
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
 rules:
   r0:
     request:

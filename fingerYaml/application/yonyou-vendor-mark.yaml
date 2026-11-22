@@ -1,10 +1,22 @@
-id: web-yonyou-erp
+id: yonyou-vendor-mark
 info:
   name: yonyou-erp
   author: archer
   verified: false
   description: 检测到yonyou-erp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yonyou.vendor-mark
+    name: 用友厂商标识
+    vendor: 用友网络
+    category: application
+    identity: signal
+    assurance: inferred
+    tags:
+      - erp
+    aliases:
+      - 用友产品
+      - 用友产品（未细分）
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-host-security-and-management-system
+id: host-security-management-system
 info:
   name: host-security-and-management-system
   author: archer
   verified: false
   description: 检测到host-security-and-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: host-security.management-system
+    name: 主机安全及管理系统
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - host-security-and-management-system
 rules:
   r0:
     request:

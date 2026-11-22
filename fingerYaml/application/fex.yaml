@@ -1,10 +1,20 @@
-id: web-fex
+id: fex
 info:
   name: fex
   author: archer
   verified: false
   description: 检测到fex系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fex.fex
+    name: F*EX
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - file-transfer
+    aliases:
+      - Frams' Fast File EXchange
 rules:
   r0:
     request:

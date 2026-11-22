@@ -1,10 +1,20 @@
-id: web-forsun-科盾安全网关控制台
+id: kedun-security-gateway
 info:
   name: forsun-科盾安全网关控制台
   author: archer
   verified: false
   description: 检测到forsun-科盾安全网关控制台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kedun.security-gateway
+    name: 科盾安全网关
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+    aliases:
+      - forsun-科盾安全网关控制台
 rules:
   r0:
     request:

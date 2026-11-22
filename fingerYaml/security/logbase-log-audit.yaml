@@ -1,10 +1,20 @@
-id: web-LogBase日志综合审计系统
+id: logbase-log-audit
 info:
   name: LogBase 日志综合审计系统
   author: archer
   verified: false
   description: 检测到LogBase 日志综合审计系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: logbase.log-audit
+    name: LogBase 日志综合审计系统
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - siem
+    aliases:
+      - LogBase日志综合审计系统
 rules:
   r0:
     request:

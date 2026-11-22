@@ -1,10 +1,22 @@
-id: web-hikvision-cloudvideo
+id: hikvision-hikan-cloud-video
 info:
   name: hikvision-cloudvideo
   author: archer
   verified: false
   description: 检测到hikvision-cloudvideo系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hikvision.hikan-cloud-video
+    name: 嗨看云视频
+    vendor: 海康威视
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
+      - cloud
+    aliases:
+      - hikvision-cloudvideo
 rules:
   r0:
     request:

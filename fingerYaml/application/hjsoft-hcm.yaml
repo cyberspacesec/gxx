@@ -1,10 +1,22 @@
-id: web-宏景CMS
+id: hjsoft-hcm
 info:
   name: 宏景CMS
   author: archer
   verified: false
   description: 检测到宏景CMS系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hjsoft.hcm
+    name: 宏景 HCM
+    vendor: 宏景世纪软件
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - hr
+    aliases:
+      - 宏景CMS
+      - 宏景eHR
 rules:
   r0:
     request:

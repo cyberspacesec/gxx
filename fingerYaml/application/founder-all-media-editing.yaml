@@ -1,10 +1,17 @@
-id: web-founder-all-media-editing-system
+id: founder-all-media-editing
 info:
   name: founder-all-media-editing-system
   author: archer
   verified: false
   description: 检测到founder-all-media-editing-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: founder.all-media-editing
+    name: 方正全媒体采编系统
+    vendor: 方正
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

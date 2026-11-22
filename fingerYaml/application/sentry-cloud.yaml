@@ -1,10 +1,16 @@
-id: web-sentry-cloud
+id: sentry-cloud
 info:
   name: sentry-cloud
   author: archer
   verified: false
   description: 检测到sentry-cloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sentry-cloud.sentry-cloud
+    name: sentry-cloud
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

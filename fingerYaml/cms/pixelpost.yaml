@@ -1,10 +1,19 @@
-id: web-pixelpost
+id: pixelpost
 info:
   name: pixelpost
   author: archer
   verified: false
   description: 检测到pixelpost系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pixelpost.pixelpost
+    name: Pixelpost
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - blog
+      - photo-gallery
 rules:
   r0:
     request:

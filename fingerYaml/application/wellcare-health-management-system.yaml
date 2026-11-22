@@ -1,10 +1,16 @@
-id: web-wellcare-health-management-system
+id: wellcare-health-management-system
 info:
   name: wellcare-health-management-system
   author: archer
   verified: false
   description: 检测到wellcare-health-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wellcare.health-management-system
+    name: WellCare 健康管理系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

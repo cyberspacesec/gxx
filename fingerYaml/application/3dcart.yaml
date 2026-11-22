@@ -1,10 +1,21 @@
-id: web-3dcart
+id: 3dcart
 info:
   name: 3dcart
   author: zhizhuo
   verified: true
   description: 识别特定Web应用
   created: 2025/04/15
+  product:
+    id: 3dcart.3dcart
+    name: 3dcart
+    vendor: 3dcart
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
+    aliases:
+      - Shift4Shop
 rules:
   r0:
     request:

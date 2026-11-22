@@ -1,10 +1,21 @@
-id: web-Hillstone-SG-6000防火墙
+id: hillstone-sg-6000
 info:
   name: Hillstone-SG-6000 防火墙
   author: archer
   verified: false
   description: 检测到Hillstone-SG-6000 防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hillstone.sg-6000
+    name: SG-6000 防火墙
+    vendor: 山石网科
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+    aliases:
+      - Hillstone-SG-6000 防火墙
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-zipkin
+id: openzipkin-zipkin
 info:
   name: zipkin
   author: archer
   verified: false
   description: 检测到zipkin系统或组件的特征
   created: 2025/04/24
+  product:
+    id: openzipkin.zipkin
+    name: Zipkin
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://zipkin.io/
 rules:
   r0:
     request:

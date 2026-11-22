@@ -1,10 +1,16 @@
-id: web-cameralife
+id: cameralife
 info:
   name: cameralife
   author: archer
   verified: false
   description: 检测到cameralife系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cameralife.cameralife
+    name: Camera Life
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

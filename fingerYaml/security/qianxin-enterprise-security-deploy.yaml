@@ -1,10 +1,19 @@
-id: web-奇安信-企业安全部署
+id: qianxin-enterprise-security-deploy
 info:
   name: 奇安信-企业安全部署
   author: archer
   verified: false
   description: 检测到奇安信-企业安全部署系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qianxin.enterprise-security-deploy
+    name: 360 企业安全部署
+    vendor: 奇安信
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - endpoint
 rules:
   r0:
     request:

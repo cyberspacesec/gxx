@@ -1,10 +1,18 @@
-id: web-nabble
+id: nabble
 info:
   name: nabble
   author: archer
   verified: false
   description: 检测到nabble系统或组件的特征
   created: 2025/04/24
+  product:
+    id: nabble.nabble
+    name: Nabble
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - forum
 rules:
   r0:
     request:

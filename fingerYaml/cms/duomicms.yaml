@@ -1,10 +1,20 @@
-id: web-duomicms
+id: duomicms
 info:
   name: duomicms
   author: archer
   verified: false
   description: 检测到duomicms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: duomicms.duomicms
+    name: DuomiCMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - video
+    aliases:
+      - 多米CMS
 rules:
   r0:
     request:

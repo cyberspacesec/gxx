@@ -1,10 +1,20 @@
-id: web-feifeicms
+id: feifeicms
 info:
   name: feifeicms
   author: archer
   verified: false
   description: 检测到feifeicms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: feifeicms.feifeicms
+    name: FeiFeiCMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - video
+    aliases:
+      - 飞飞CMS
 rules:
   r0:
     request:

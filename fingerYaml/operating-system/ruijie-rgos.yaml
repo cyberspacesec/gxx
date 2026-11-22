@@ -1,10 +1,19 @@
-id: web-ruijie-rgos
+id: ruijie-rgos
 info:
   name: ruijie-rgos
   author: archer
   verified: false
   description: 检测到ruijie-rgos系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruijie.rgos
+    name: 锐捷 RGOS
+    vendor: 锐捷网络
+    category: operating-system
+    identity: product
+    assurance: verified
+    references:
+      - https://www.ruijie.com.cn/
 rules:
   r0:
     request:

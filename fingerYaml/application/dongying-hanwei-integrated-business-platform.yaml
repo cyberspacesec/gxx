@@ -1,10 +1,21 @@
-id: web-hanwei-integrated-business-platform
+id: dongying-hanwei-integrated-business-platform
 info:
   name: hanwei-integrated-business-platform
   author: archer
   verified: false
   description: 检测到hanwei-integrated-business-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dongying-hanwei.integrated-business-platform
+    name: 汉威综合业务平台
+    vendor: 东营汉威石油技术开发有限公司
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - industrial
+    aliases:
+      - hanwei-integrated-business-platform
 rules:
   r0:
     request:

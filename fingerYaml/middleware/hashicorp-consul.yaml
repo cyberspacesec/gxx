@@ -1,10 +1,21 @@
-id: web-consul-hashicorp
+id: hashicorp-consul
 info:
   name: consul-hashicorp
   author: archer
   verified: false
   description: 检测到consul-hashicorp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hashicorp.consul
+    name: Consul
+    vendor: HashiCorp
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    references:
+      - https://www.consul.io/
 rules:
   r0:
     request:

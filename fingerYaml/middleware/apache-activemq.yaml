@@ -1,4 +1,4 @@
-id: web-apache-activemq
+id: apache-activemq
 info:
   tags: middleware
   reference:
@@ -8,6 +8,20 @@ info:
   verified: false
   description: 支持多协议消息传递的 Java 消息代理。
   created: 2025/04/24
+  product:
+    id: apache.activemq
+    name: Apache ActiveMQ
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+    aliases:
+      - apache-activemq
+    references:
+      - https://activemq.apache.org/
+    description: 支持多协议消息传递的 Java 消息代理。
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-autoset
+id: autoset
 info:
   name: autoset
   author: archer
   verified: false
   description: 检测到autoset系统或组件的特征
   created: 2025/04/24
+  product:
+    id: autoset.autoset
+    name: AutoSet
+    category: web-server
+    identity: product
+    assurance: inferred
+    tags:
+      - web-server
 rules:
   r0:
     request:

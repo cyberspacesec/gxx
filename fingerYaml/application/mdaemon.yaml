@@ -1,10 +1,22 @@
-id: web-mdaemon-email-server
+id: mdaemon
 info:
   name: mdaemon-email-server
   author: archer
   verified: false
   description: 检测到mdaemon-email-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mdaemon.mdaemon
+    name: MDaemon Email Server
+    vendor: MDaemon Technologies
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - MDaemon
+      - WorldClient
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-uniview-vm50
+id: uniview-vm
 info:
   name: uniview-vm50
   author: archer
   verified: false
   description: 检测到uniview-vm50系统或组件的特征
   created: 2025/04/24
+  product:
+    id: uniview.vm
+    name: 宇视 VM 视频管理服务器
+    vendor: 宇视科技
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
+    aliases:
+      - VM5.0
 rules:
   r0:
     request:

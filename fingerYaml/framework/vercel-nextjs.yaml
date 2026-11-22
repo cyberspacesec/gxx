@@ -1,10 +1,21 @@
-id: web-nextjs
+id: vercel-nextjs
 info:
   name: nextjs
   author: archer
   verified: false
   description: 检测到nextjs系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vercel.nextjs
+    name: Next.js
+    vendor: Vercel
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - dev-framework
+    references:
+      - https://nextjs.org/
 rules:
   r0:
     request:

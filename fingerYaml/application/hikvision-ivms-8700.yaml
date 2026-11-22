@@ -1,10 +1,22 @@
-id: web-hikvision-ivms-8700
+id: hikvision-ivms-8700
 info:
   name: hikvision-ivms-8700
   author: archer
   verified: false
   description: 检测到hikvision-ivms-8700系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hikvision.ivms-8700
+    name: iVMS-8700 综合安防管理平台
+    vendor: 海康威视
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
+      - monitoring
+    aliases:
+      - hikvision-ivms-8700
 rules:
   r0:
     request:

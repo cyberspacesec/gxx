@@ -1,10 +1,19 @@
-id: web-联软准入
+id: leagsoft-nac
 info:
   name: 联软准入
   author: archer
   verified: false
   description: 检测到联软准入系统或组件的特征
   created: 2025/04/24
+  product:
+    id: leagsoft.nac
+    name: 联软网络准入控制系统
+    vendor: 联软科技
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - 联软准入
 rules:
   r0:
     request:

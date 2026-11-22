@@ -1,10 +1,19 @@
-id: web-pansoft-financial-system
+id: pansoft-financial-system
 info:
   name: pansoft-financial-system
   author: archer
   verified: false
   description: 检测到pansoft-financial-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pansoft.financial-system
+    name: 普联财务系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
+      - finance
 rules:
   r0:
     request:

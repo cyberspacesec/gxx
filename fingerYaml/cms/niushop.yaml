@@ -1,10 +1,20 @@
-id: web-niushop
+id: niushop
 info:
   name: niushop
   author: archer
   verified: true
   description: 检测到niushop系统或组件的特征
   created: 2025/04/24
+  product:
+    id: niushop.niushop
+    name: NiuShop
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
+    aliases:
+      - Niushop 开源商城
 rules:
   r0:
     request:

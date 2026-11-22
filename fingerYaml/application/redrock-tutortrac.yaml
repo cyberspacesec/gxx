@@ -1,10 +1,17 @@
-id: web-tutortrac
+id: redrock-tutortrac
 info:
   name: tutortrac
   author: archer
   verified: false
   description: 检测到tutortrac系统或组件的特征
   created: 2025/04/24
+  product:
+    id: redrock.tutortrac
+    name: TutorTrac
+    vendor: Redrock Software
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

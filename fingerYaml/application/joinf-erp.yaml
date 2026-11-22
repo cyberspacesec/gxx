@@ -1,10 +1,22 @@
-id: web-joinf-erp
+id: joinf-erp
 info:
   name: joinf-erp
   author: archer
   verified: false
   description: 检测到joinf-erp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: joinf.erp
+    name: 富通天下 ERP
+    vendor: 富通天下
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
+      - crm
+    aliases:
+      - joinf-erp
 rules:
   r0:
     request:

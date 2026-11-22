@@ -1,10 +1,19 @@
-id: web-elasticsearch
+id: elastic-elasticsearch
 info:
   name: elasticsearch
   author: archer
   verified: true
   description: 检测到elasticsearch系统或组件的特征
   created: 2025/04/24
+  product:
+    id: elastic.elasticsearch
+    name: Elasticsearch
+    vendor: Elastic
+    category: database
+    identity: product
+    assurance: verified
+    references:
+      - https://www.elastic.co/elasticsearch
 rules:
   r0:
     request:

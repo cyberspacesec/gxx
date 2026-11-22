@@ -1,10 +1,19 @@
-id: web-afterlogic-webmail
+id: afterlogic-webmail-pro
 info:
   name: afterlogic-webmail
   author: archer
   verified: false
   description: 检测到afterlogic-webmail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: afterlogic.webmail-pro
+    name: AfterLogic WebMail Pro
+    vendor: AfterLogic
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

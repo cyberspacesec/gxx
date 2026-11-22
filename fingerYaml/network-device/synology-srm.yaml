@@ -1,10 +1,23 @@
-id: web-synology-router-manager
+id: synology-srm
 info:
   name: synology-router-manager
   author: archer
   verified: false
   description: 检测到synology-router-manager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: synology.srm
+    name: Synology Router Manager
+    vendor: Synology
+    category: network-device
+    identity: product
+    assurance: verified
+    tags:
+      - router
+    aliases:
+      - SRM
+    references:
+      - https://www.synology.com/
 rules:
   r0:
     request:

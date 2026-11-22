@@ -1,10 +1,18 @@
-id: web-pansoft-management-system
+id: pansoft-management-system
 info:
   name: pansoft-management-system
   author: archer
   verified: false
   description: 检测到pansoft-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pansoft.management-system
+    name: 普联管理系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
 rules:
   r0:
     request:

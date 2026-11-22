@@ -1,10 +1,19 @@
-id: web-entrance-guard-system
+id: zkteco-zkeco-favicon
 info:
   name: entrance-guard-system
   author: archer
   verified: false
   description: 检测到entrance-guard-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zkteco.zkeco
+    name: ZKEco 时间&安全管理平台
+    vendor: 熵基科技
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - entrance-guard-system
 rules:
   r0:
     request:

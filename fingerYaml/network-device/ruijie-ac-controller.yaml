@@ -1,10 +1,19 @@
-id: web-锐捷AC无线控制器
+id: ruijie-ac-controller
 info:
   name: 锐捷AC无线控制器
   author: archer
   verified: false
   description: 检测到锐捷AC无线控制器系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruijie.ac-controller
+    name: 锐捷 AC 无线控制器
+    vendor: 锐捷网络
+    category: network-device
+    identity: product
+    assurance: inferred
+    references:
+      - https://www.ruijie.com.cn/
 rules:
   r0:
     request:

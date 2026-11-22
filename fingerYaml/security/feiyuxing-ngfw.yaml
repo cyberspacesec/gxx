@@ -1,10 +1,20 @@
-id: web-飞鱼星-下一代防火墙安全网关
+id: feiyuxing-ngfw
 info:
   name: 飞鱼星-下一代防火墙安全网关
   author: archer
   verified: false
   description: 检测到飞鱼星-下一代防火墙安全网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: feiyuxing.ngfw
+    name: 飞鱼星下一代防火墙安全网关
+    vendor: 飞鱼星
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+      - gateway
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-天行网安-视频图像安全监控接入系统
+id: topwalk-video-access
 info:
   name: 天行网安-视频图像安全监控接入系统
   author: archer
   verified: false
   description: 检测到天行网安-视频图像安全监控接入系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: topwalk.video-access
+    name: 天行视频图像安全监控接入系统
+    vendor: 天行网安
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
+      - gateway
 rules:
   r0:
     request:

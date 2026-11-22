@@ -1,10 +1,21 @@
-id: web-jboss-as
+id: redhat-jboss-as
 info:
   name: jboss-as
   author: archer
   verified: false
   description: 检测到jboss-as系统或组件的特征
   created: 2025/04/24
+  product:
+    id: redhat.jboss-as
+    name: JBoss Application Server
+    vendor: Red Hat
+    category: middleware
+    identity: product
+    assurance: inferred
+    aliases:
+      - jboss
+      - jboss-as
+      - JBoss AS
 rules:
   r0:
     request:

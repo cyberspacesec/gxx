@@ -1,10 +1,21 @@
-id: web-oracle-adf-faces
+id: oracle-adf
 info:
   name: oracle-adf-faces
   author: archer
   verified: false
   description: 检测到oracle-adf-faces系统或组件的特征
   created: 2025/04/24
+  product:
+    id: oracle.adf
+    name: Oracle ADF
+    vendor: Oracle
+    category: framework
+    identity: product
+    assurance: inferred
+    tags:
+      - dev-framework
+    aliases:
+      - ADF Faces
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-启明星辰-泰合信息安全运营中心
+id: venustech-tsoc
 info:
   name: 启明星辰-泰合信息安全运营中心
   author: archer
   verified: false
   description: 检测到启明星辰-泰合信息安全运营中心系统或组件的特征
   created: 2025/04/24
+  product:
+    id: venustech.tsoc
+    name: 泰合信息安全运营中心
+    vendor: 启明星辰
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - siem
+    aliases:
+      - 泰合 TSOC
 rules:
   r0:
     request:

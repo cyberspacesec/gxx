@@ -1,10 +1,24 @@
-id: web-天融信SSLVPN
+id: topsec-vpn-ssl
 info:
   name: 天融信 SSL VPN
   author: archer
   verified: false
   description: 检测到天融信 SSL VPN系统或组件的特征
   created: 2025/04/24
+  product:
+    id: topsec.vpn
+    name: 天融信 VPN
+    vendor: 天融信
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - vpn
+    aliases:
+      - 天融信SSLVPN
+      - 天融信下一代VPN
+    references:
+      - https://www.topsec.com.cn/
 rules:
   r0:
     request:

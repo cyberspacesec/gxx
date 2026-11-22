@@ -1,10 +1,16 @@
-id: web-OEM设备-天融信
+id: topsec-oem-reporter
 info:
   name: OEM设备-天融信
   author: archer
   verified: false
   description: 检测到OEM设备-天融信系统或组件的特征
   created: 2025/04/24
+  product:
+    id: topsec.oem-reporter
+    name: 天融信 OEM 设备（Reporter）
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

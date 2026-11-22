@@ -1,10 +1,17 @@
-id: web-glpi
+id: glpi-project-glpi
 info:
   name: glpi
   author: archer
   verified: true
   description: 检测到glpi系统或组件的特征
   created: 2025/04/24
+  product:
+    id: glpi-project.glpi
+    name: GLPI
+    vendor: Teclib'
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

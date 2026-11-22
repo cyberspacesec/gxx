@@ -1,10 +1,22 @@
-id: web-kodcloud-system
+id: kodcloud
 info:
   name: kodcloud-system
   author: archer
   verified: false
   description: 检测到kodcloud-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kodcloud.kodcloud
+    name: 可道云
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - storage
+    aliases:
+      - kodcloud-system
+      - KodExplorer
+      - kodbox
 rules:
   r0:
     request:

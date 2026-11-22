@@ -1,10 +1,18 @@
-id: web-guahao-appointmentregistrationsystem
+id: guahao-appointment-registration
 info:
   name: guahao-appointmentregistrationsystem
   author: archer
   verified: false
   description: 检测到guahao-appointmentregistrationsystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: guahao.appointment-registration
+    name: 预约挂号系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - guahao-appointmentregistrationsystem
 rules:
   r0:
     request:

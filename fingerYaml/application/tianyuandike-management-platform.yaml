@@ -1,10 +1,19 @@
-id: web-management-platform
+id: tianyuandike-management-platform
 info:
   name: management-platform
   author: archer
   verified: false
   description: 检测到management-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tianyuandike.management-platform
+    name: 天源迪科管理平台
+    vendor: 天源迪科
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - management-platform
 rules:
   r0:
     request:

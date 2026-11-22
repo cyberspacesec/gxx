@@ -1,10 +1,23 @@
-id: web-sangfor-sip
+id: sangfor-sip
 info:
   name: sangfor-sip
   author: archer
   verified: false
   description: 检测到sangfor-sip系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.sip
+    name: 深信服安全感知平台 SIP
+    vendor: 深信服
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - siem
+    aliases:
+      - 深信服安全感知平台
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

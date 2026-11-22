@@ -1,10 +1,18 @@
-id: web-a2b-webserver
+id: a2b-a2b-webserver
 info:
   name: a2b-webserver
   author: archer
   verified: false
   description: 检测到a2b-webserver系统或组件的特征
   created: 2025/04/24
+  product:
+    id: a2b.a2b-webserver
+    name: a2b webserver
+    category: web-server
+    identity: product
+    assurance: inferred
+    tags:
+      - web-server
 rules:
   r0:
     request:

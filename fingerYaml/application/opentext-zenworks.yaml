@@ -1,10 +1,22 @@
-id: web-novell-zenworks
+id: opentext-zenworks
 info:
   name: novell-zenworks
   author: archer
   verified: false
   description: 检测到novell-zenworks系统或组件的特征
   created: 2025/04/24
+  product:
+    id: opentext.zenworks
+    name: ZENworks
+    vendor: OpenText
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - endpoint
+    aliases:
+      - Novell ZENworks
+      - Micro Focus ZENworks
 rules:
   r0:
     request:

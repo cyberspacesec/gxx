@@ -1,10 +1,21 @@
-id: web-jstorm
+id: alibaba-jstorm
 info:
   name: jstorm
   author: archer
   verified: false
   description: 检测到jstorm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: alibaba.jstorm
+    name: JStorm
+    vendor: Alibaba
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - big-data
+    references:
+      - https://github.com/alibaba/jstorm
 rules:
   r0:
     request:

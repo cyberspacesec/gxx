@@ -1,10 +1,23 @@
-id: web-红海云OA
+id: honghaiyun-redsea-platform
 info:
   name: 红海云OA
   author: archer
   verified: false
   description: 检测到红海云OA系统或组件的特征
   created: 2025/04/24
+  product:
+    id: honghaiyun.redsea-platform
+    name: 红海云 OA
+    vendor: 红海云
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+      - hr
+    aliases:
+      - 红海云OA
+      - RedseaPlatform
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-qm-system
+id: qm-system
 info:
   name: qm-system
   author: archer
   verified: false
   description: 检测到qm-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qm-system.qm-system
+    name: qm-system
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

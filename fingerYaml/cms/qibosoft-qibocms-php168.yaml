@@ -1,10 +1,22 @@
-id: web-php168cms
+id: qibosoft-qibocms-php168
 info:
   name: php168cms
   author: archer
   verified: false
   description: 检测到php168cms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qibosoft.qibocms
+    name: 齐博 CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - PHP168
+      - 齐博CMS
+      - qibosoft
 rules:
   r0:
     request:

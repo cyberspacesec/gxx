@@ -15,6 +15,9 @@ import (
 
 const policyHead = "id: demo\ninfo:\n  name: demo\n"
 
+// demoProduct 是标准格式要求的产品声明。
+const demoProduct = "  product:\n    id: acme.demo\n    name: Demo\n    category: application\n    identity: product\n    assurance: inferred\n"
+
 func httpSubRule(key, expression string) string {
 	return "  " + key + ":\n    request:\n      method: GET\n      path: /\n    expression: " + expression + "\n"
 }
@@ -36,6 +39,8 @@ var policyCorpus = map[string]string{
 	"typo":     policyHead + "rules:\n  r0:\n    request:\n      method: GET\n      path: /\n      follow_redirect: false\n    expression: 'true'\nexpression: r0()\ntransprot: http\n",
 	"empty":    "",
 	"sequence": "- a\n- b\n",
+	"badid":    "id: Web_Demo\ninfo:\n  name: demo\n" + demoProduct + "rules:\n" + httpSubRule("r0", "true") + "expression: r0()\n",
+	"product":  "id: demo\ninfo:\n  name: demo\n  product:\n    id: Demo\n    name: demo\n    category: portal\n    identity: product\n    assurance: verified\nrules:\n" + httpSubRule("r0", "true") + "expression: r0()\n",
 }
 
 var policyCases = []sdk.RulePolicy{
@@ -151,6 +156,11 @@ func TestValidateRuleStrictness(t *testing.T) {
 		{"noname", "missing-name", "info.name", 0},
 		{"badexpr", "expression-compile", "rules.r0.expression", 9},
 		{"typo", "unknown-key", "rules.r0.request.follow_redirect", 9},
+		{"plain", "missing-product", "info.product", 2},
+		{"badid", "invalid-id", "id", 1},
+		{"product", "invalid-product", "info.product.id", 5},
+		{"product", "invalid-product", "info.product.category", 7},
+		{"product", "invalid-product", "info.product.references", 4},
 	}
 	for _, tc := range cases {
 		for _, strict := range []bool{false, true} {
@@ -175,10 +185,17 @@ func TestValidateRuleStrictness(t *testing.T) {
 	if len(badType) != 1 || badType[0].Code != "yaml" || badType[0].Field != "rules.r0.request.type" || badType[0].Line != 7 {
 		t.Fatalf("%+v", badType)
 	}
-	if got := sdk.ValidateRule([]byte(policyCorpus["typo"]), sdk.ValidateOptions{}); len(got) != 2 || got[1].Field != "transprot" || got[1].Line != 12 {
-		t.Fatalf("每个未知键各报一次: %+v", got)
+	var unknown []sdk.Diagnostic
+	for _, d := range sdk.ValidateRule([]byte(policyCorpus["typo"]), sdk.ValidateOptions{}) {
+		if d.Code == "unknown-key" {
+			unknown = append(unknown, d)
+		}
 	}
-	if got := sdk.ValidateRule([]byte(policyCorpus["plain"]), sdk.ValidateOptions{Strict: true}); len(got) != 0 {
+	if len(unknown) != 2 || unknown[1].Field != "transprot" || unknown[1].Line != 12 {
+		t.Fatalf("每个未知键各报一次: %+v", unknown)
+	}
+	standard := strings.Replace(policyCorpus["plain"], "  name: demo\n", "  name: demo\n"+demoProduct, 1)
+	if got := sdk.ValidateRule([]byte(standard), sdk.ValidateOptions{Strict: true}); len(got) != 0 {
 		t.Fatalf("合规的规则不应有诊断: %+v", got)
 	}
 }

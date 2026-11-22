@@ -1,10 +1,23 @@
-id: web-ruijie-sslvpn
+id: ruijie-ssl-vpn-encookie
 info:
   name: ruijie-sslvpn
   author: archer
   verified: false
   description: 检测到ruijie-sslvpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruijie.ssl-vpn
+    name: 锐捷 SSL VPN
+    vendor: 锐捷网络
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - vpn
+    aliases:
+      - rjsslvpn
+    references:
+      - https://www.ruijie.com.cn/
 rules:
   r0:
     request:

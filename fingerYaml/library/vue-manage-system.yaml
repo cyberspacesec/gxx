@@ -1,10 +1,20 @@
-id: web-manage-system
+id: vue-manage-system
 info:
   name: manage-system
   author: archer
   verified: false
   description: 检测到manage-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vue-manage-system.vue-manage-system
+    name: vue-manage-system 后台模板
+    category: library
+    identity: signal
+    assurance: inferred
+    tags:
+      - ui-framework
+    aliases:
+      - manage-system
 rules:
   r0:
     request:

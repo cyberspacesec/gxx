@@ -1,10 +1,19 @@
-id: web-lotwan-web-accelerator
+id: huaxiachuangxin-lotwan
 info:
   name: lotwan-web-accelerator
   author: archer
   verified: false
   description: 检测到lotwan-web-accelerator系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huaxiachuangxin.lotwan
+    name: LotWAN 广域网加速
+    vendor: 华夏创新
+    category: network-device
+    identity: product
+    assurance: inferred
+    aliases:
+      - lotwan-web-accelerator
 rules:
   r0:
     request:

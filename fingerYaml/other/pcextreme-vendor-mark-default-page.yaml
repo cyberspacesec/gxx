@@ -1,10 +1,20 @@
-id: web-pcextreme
+id: pcextreme-vendor-mark-default-page
 info:
   name: pcextreme
   author: archer
   verified: false
   description: 检测到pcextreme系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pcextreme.vendor-mark
+    name: PCextreme 厂商标识
+    category: other
+    identity: signal
+    assurance: inferred
+    tags:
+      - default-page
+    aliases:
+      - PCextreme 主机默认页
 rules:
   r0:
     request:

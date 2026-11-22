@@ -1,10 +1,20 @@
-id: web-汇文图书管理系统管理系统
+id: libsys
 info:
   name: 汇文图书管理系统管理系统
   author: archer
   verified: false
   description: 检测到汇文图书管理系统管理系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: libsys.libsys
+    name: 汇文图书馆管理系统
+    vendor: 江苏汇文软件
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - 汇文图书管理系统管理系统
+      - Libsys
 rules:
   r0:
     request:

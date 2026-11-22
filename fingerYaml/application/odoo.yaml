@@ -1,10 +1,24 @@
-id: web-odoo
+id: odoo
 info:
   name: odoo
   author: archer
   verified: true
   description: 检测到odoo系统或组件的特征
   created: 2025/04/24
+  product:
+    id: odoo.odoo
+    name: Odoo
+    vendor: Odoo S.A.
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - erp
+      - crm
+    aliases:
+      - OpenERP
+    references:
+      - https://www.odoo.com/
 rules:
   r0:
     request:

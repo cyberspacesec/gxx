@@ -1,10 +1,19 @@
-id: web-zfsoft-educational-management-system
+id: zfsoft-educational-management-system
 info:
   name: zfsoft-educational-management-system
   author: archer
   verified: false
   description: 检测到zfsoft-educational-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zfsoft.educational-management-system
+    name: 正方教务管理系统
+    vendor: 正方软件
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - jwglxt
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-jltech
+id: jltech-jlwcs
 info:
   name: jltech
   author: archer
   verified: false
   description: 检测到jltech系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jltech.jlwcs
+    name: 京伦建站系统
+    category: cms
+    identity: product
+    assurance: inferred
+    aliases:
+      - jltech
 rules:
   r0:
     request:

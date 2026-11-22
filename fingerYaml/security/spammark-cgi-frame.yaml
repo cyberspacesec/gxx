@@ -1,10 +1,21 @@
-id: web-敏讯科技-spammark邮件信息安全网关
+id: spammark-cgi-frame
 info:
   name: 敏讯科技-spammark邮件信息安全网关
   author: archer
   verified: false
   description: 检测到敏讯科技-spammark邮件信息安全网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: spammark.spammark
+    name: SpamMark 邮件信息安全网关
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+      - gateway
+    aliases:
+      - SpamMark
 rules:
   r0:
     request:

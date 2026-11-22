@@ -1,10 +1,18 @@
-id: web-ultracrm
+id: tonethink-ultracrm
 info:
   name: ultracrm
   author: archer
   verified: false
   description: 检测到ultracrm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tonethink.ultracrm
+    name: UltraCRM
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - crm
 rules:
   r0:
     request:

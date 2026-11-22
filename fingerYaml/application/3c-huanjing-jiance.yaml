@@ -1,10 +1,18 @@
-id: web-3C环境自动监测监控系统
+id: 3c-huanjing-jiance
 info:
   name: 3C环境自动监测监控系统
   author: archer
   verified: true
   description: 检测到3C环境自动监测监控系统系统或组件的特征
   created: 2025/04/16
+  product:
+    id: 3c.huanjing-jiance
+    name: 3C环境自动监测监控系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

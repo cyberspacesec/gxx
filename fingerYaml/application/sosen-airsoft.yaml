@@ -1,10 +1,16 @@
-id: web-sosen-airsoft
+id: sosen-airsoft
 info:
   name: sosen-airsoft
   author: archer
   verified: false
   description: 检测到sosen-airsoft系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sosen.airsoft
+    name: sosen-airsoft
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-bicesoft-super-custom-survey-voting-system
+id: bicesoft-survey
 info:
   name: bicesoft-super-custom-survey-voting-system
   author: archer
   verified: false
   description: 检测到bicesoft-super-custom-survey-voting-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: bicesoft.survey
+    name: 佰思超强自定义问卷调查系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

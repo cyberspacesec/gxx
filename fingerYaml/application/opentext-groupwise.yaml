@@ -1,10 +1,22 @@
-id: web-novell-groupwise
+id: opentext-groupwise
 info:
   name: novell-groupwise
   author: archer
   verified: false
   description: 检测到novell-groupwise系统或组件的特征
   created: 2025/04/24
+  product:
+    id: opentext.groupwise
+    name: GroupWise
+    vendor: OpenText
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - Novell GroupWise
+      - Micro Focus GroupWise
 rules:
   r0:
     request:

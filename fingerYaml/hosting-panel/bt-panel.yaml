@@ -1,10 +1,22 @@
-id: web-宝塔控制面板
+id: bt-panel
 info:
   name: 宝塔控制面板
   author: archer
   verified: false
   description: 检测到宝塔控制面板系统或组件的特征
   created: 2025/04/24
+  product:
+    id: bt.panel
+    name: 宝塔面板
+    vendor: 宝塔
+    category: hosting-panel
+    identity: product
+    assurance: verified
+    aliases:
+      - 宝塔控制面板
+      - BT Panel
+    references:
+      - https://www.bt.cn/
 rules:
   r0:
     request:

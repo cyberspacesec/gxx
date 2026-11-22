@@ -1,10 +1,16 @@
-id: web-紫光档案管理系统
+id: ziguang-archive-management
 info:
   name: 紫光档案管理系统
   author: archer
   verified: true
   description: 检测到紫光档案管理系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ziguang.archive-management
+    name: 紫光档案管理系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

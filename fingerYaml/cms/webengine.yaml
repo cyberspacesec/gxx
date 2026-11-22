@@ -1,10 +1,18 @@
-id: web-webengine-site
+id: webengine
 info:
   name: webengine-site
   author: archer
   verified: false
   description: 检测到webengine-site系统或组件的特征
   created: 2025/04/24
+  product:
+    id: webengine.webengine
+    name: WebEngine 网站系统
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

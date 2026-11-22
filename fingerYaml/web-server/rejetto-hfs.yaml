@@ -1,10 +1,23 @@
-id: web-hfs
+id: rejetto-hfs
 info:
   name: hfs
   author: archer
   verified: false
   description: 检测到hfs系统或组件的特征
   created: 2025/04/24
+  product:
+    id: rejetto.hfs
+    name: HFS (HTTP File Server)
+    vendor: rejetto
+    category: web-server
+    identity: product
+    assurance: verified
+    tags:
+      - file-transfer
+    aliases:
+      - HFS
+    references:
+      - https://www.rejetto.com/hfs/
 rules:
   r0:
     request:

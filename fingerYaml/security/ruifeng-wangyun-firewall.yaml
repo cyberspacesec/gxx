@@ -1,10 +1,18 @@
-id: web-睿峰网云-防火墙
+id: ruifeng-wangyun-firewall
 info:
   name: 睿峰网云-防火墙
   author: archer
   verified: false
   description: 检测到睿峰网云-防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ruifeng-wangyun.firewall
+    name: 睿峰网云防火墙
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
 rules:
   r0:
     request:

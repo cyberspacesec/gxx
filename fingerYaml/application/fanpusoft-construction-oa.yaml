@@ -1,10 +1,20 @@
-id: web-fanpusoft-construction-work-oa
+id: fanpusoft-construction-oa
 info:
   name: fanpusoft-construction-work-oa
   author: archer
   verified: false
   description: 检测到fanpusoft-construction-work-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fanpusoft.construction-oa
+    name: 泛普建筑工程施工OA
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - fanpusoft-construction-work-oa
 rules:
   r0:
     request:

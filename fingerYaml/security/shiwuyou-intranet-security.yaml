@@ -1,10 +1,18 @@
-id: web-世无忧-世安内网安全
+id: shiwuyou-intranet-security
 info:
   name: 世无忧-世安内网安全
   author: archer
   verified: false
   description: 检测到世无忧-世安内网安全系统或组件的特征
   created: 2025/04/24
+  product:
+    id: shiwuyou.intranet-security
+    name: 世安内网终端安全管理系统
+    category: security
+    identity: product
+    assurance: inferred
+    aliases:
+      - 世无忧
 rules:
   r0:
     request:

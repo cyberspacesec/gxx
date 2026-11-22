@@ -1,10 +1,16 @@
-id: web-power-cpms
+id: power-cpms
 info:
   name: power-cpms
   author: archer
   verified: false
   description: 检测到power-cpms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: power.cpms
+    name: CPMS
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

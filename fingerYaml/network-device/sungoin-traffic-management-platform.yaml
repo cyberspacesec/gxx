@@ -1,10 +1,16 @@
-id: web-sungoin-traffic-management-platform
+id: sungoin-traffic-management-platform
 info:
   name: sungoin-traffic-management-platform
   author: archer
   verified: false
   description: 检测到sungoin-traffic-management-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sungoin.traffic-management-platform
+    name: 尚景流量管理平台
+    category: network-device
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

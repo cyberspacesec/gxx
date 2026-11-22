@@ -1,10 +1,19 @@
-id: web-netease-enterprise-mailbox
+id: netease-qiye-mail-login-page
 info:
   name: netease-enterprise-mailbox
   author: archer
   verified: false
   description: 检测到netease-enterprise-mailbox系统或组件的特征
   created: 2025/04/24
+  product:
+    id: netease.qiye-mail
+    name: 网易企业邮箱
+    vendor: 网易
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

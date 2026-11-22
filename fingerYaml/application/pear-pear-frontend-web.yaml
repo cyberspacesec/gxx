@@ -1,10 +1,22 @@
-id: web-webbased-pear-package-manager
+id: pear-pear-frontend-web
 info:
   name: webbased-pear-package-manager
   author: archer
   verified: false
   description: 检测到webbased-pear-package-manager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pear.pear-frontend-web
+    name: PEAR_Frontend_Web
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - language
+    aliases:
+      - PEAR
+      - PEAR Frontend Web
+      - PEAR Web Frontend
 rules:
   r0:
     request:

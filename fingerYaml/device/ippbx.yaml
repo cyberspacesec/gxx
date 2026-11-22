@@ -1,10 +1,18 @@
-id: web-polycom-ippbx
+id: ippbx
 info:
   name: polycom-ippbx
   author: archer
   verified: false
   description: 检测到polycom-ippbx系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ippbx.ippbx
+    name: IP PBX
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - voip
 rules:
   r0:
     request:

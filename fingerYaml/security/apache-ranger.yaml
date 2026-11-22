@@ -1,4 +1,4 @@
-id: web-apache-ranger
+id: apache-ranger
 info:
   tags: security
   reference:
@@ -8,6 +8,20 @@ info:
   verified: false
   description: 用于数据平台权限管理、授权与审计的框架。
   created: 2025/04/24
+  product:
+    id: apache.ranger
+    name: Apache Ranger
+    vendor: Apache Software Foundation
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - security
+    aliases:
+      - apache-ranger
+    references:
+      - https://ranger.apache.org/
+    description: 用于数据平台权限管理、授权与审计的框架。
 rules:
   r0:
     request:

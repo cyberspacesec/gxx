@@ -1,10 +1,22 @@
-id: web-netgear
+id: netgear-fvs336g
 info:
   name: netgear
   author: archer
   verified: false
   description: 检测到netgear系统或组件的特征
   created: 2025/04/24
+  product:
+    id: netgear.fvs336g
+    name: NETGEAR ProSAFE FVS336G
+    vendor: NETGEAR
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+      - vpn
+    aliases:
+      - FVS336Gv3
 rules:
   r0:
     request:

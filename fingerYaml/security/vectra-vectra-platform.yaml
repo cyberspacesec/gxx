@@ -1,10 +1,19 @@
-id: web-vectra-product
+id: vectra-vectra-platform
 info:
   name: vectra-product
   author: archer
   verified: false
   description: 检测到vectra-product系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vectra.vectra-platform
+    name: Vectra AI 平台
+    vendor: Vectra AI
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - ids
 rules:
   r0:
     request:

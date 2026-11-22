@@ -1,10 +1,19 @@
-id: web-amaze-ui
+id: amazeui
 info:
   name: amaze-ui
   author: archer
   verified: false
   description: 检测到amaze-ui系统或组件的特征
   created: 2025/04/24
+  product:
+    id: amazeui.amazeui
+    name: Amaze UI
+    vendor: 云适配
+    category: library
+    identity: signal
+    assurance: inferred
+    tags:
+      - ui-framework
 rules:
   r0:
     request:

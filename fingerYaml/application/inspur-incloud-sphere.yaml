@@ -1,10 +1,22 @@
-id: web-inspur-incloud-sphere
+id: inspur-incloud-sphere
 info:
   name: inspur-incloud-sphere
   author: archer
   verified: false
   description: 检测到inspur-incloud-sphere系统或组件的特征
   created: 2025/04/24
+  product:
+    id: inspur.incloud-sphere
+    name: InCloud Sphere
+    vendor: 浪潮
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+    aliases:
+      - inspur-incloud-sphere
+      - 浪潮云海
 rules:
   r0:
     request:

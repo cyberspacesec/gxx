@@ -1,10 +1,19 @@
-id: web-teradici-pcoip-zero-client
+id: teradici-pcoip-zero-client
 info:
   name: teradici-pcoip-zero-client
   author: archer
   verified: false
   description: 检测到teradici-pcoip-zero-client系统或组件的特征
   created: 2025/04/24
+  product:
+    id: teradici.pcoip-zero-client
+    name: Teradici PCoIP Zero Client
+    vendor: Teradici
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - remote-access
 rules:
   r0:
     request:

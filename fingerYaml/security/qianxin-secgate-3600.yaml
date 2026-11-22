@@ -1,10 +1,22 @@
-id: web-网神防火墙
+id: qianxin-secgate-3600
 info:
   name: 网神防火墙
   author: archer
   verified: false
   description: 检测到网神防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qianxin.secgate-3600
+    name: 网神 SecGate 3600 防火墙
+    vendor: 奇安信
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+    aliases:
+      - Legendsec SecGate 3600
+      - 网神防火墙
 rules:
   r0:
     request:

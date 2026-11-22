@@ -1,10 +1,18 @@
-id: web-53kf
+id: 53kf
 info:
   name: 53kf
   author: archer
   verified: false
   description: 检测到53kf系统或组件的特征
   created: 2025/04/24
+  product:
+    id: 53kf.53kf
+    name: 53KF 在线客服
+    category: application
+    identity: signal
+    assurance: inferred
+    tags:
+      - im
 rules:
   r0:
     request:

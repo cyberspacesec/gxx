@@ -1,10 +1,19 @@
-id: web-360-安全路由
+id: qihoo360-router
 info:
   name: 360-安全路由
   author: archer
   verified: false
   description: 检测到360-安全路由系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qihoo360.router
+    name: 360安全路由
+    vendor: "360"
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - router
 rules:
   r0:
     request:

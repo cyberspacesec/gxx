@@ -1,10 +1,20 @@
-id: web-安恒云堡垒机
+id: dbappsecurity-cloud-bastion
 info:
   name: 安恒云堡垒机
   author: archer
   verified: false
   description: 检测到安恒云堡垒机系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dbappsecurity.cloud-bastion
+    name: 安恒云堡垒机
+    vendor: 安恒信息
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - bastion
+      - cloud
 rules:
   r0:
     request:

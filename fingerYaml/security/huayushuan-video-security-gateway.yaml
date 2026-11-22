@@ -1,10 +1,22 @@
-id: web-华域数安-视频综合安全网关
+id: huayushuan-video-security-gateway
 info:
   name: 华域数安-视频综合安全网关
   author: archer
   verified: false
   description: 检测到华域数安-视频综合安全网关系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huayushuan.video-security-gateway
+    name: 视频综合安全网关
+    vendor: 华域数安
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+      - camera
+    aliases:
+      - 华域数安-视频综合安全网关
 rules:
   r0:
     request:

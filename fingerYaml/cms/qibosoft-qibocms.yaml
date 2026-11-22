@@ -1,10 +1,22 @@
-id: web-qibosoft-v7
+id: qibosoft-qibocms
 info:
   name: qibosoft-v7
   author: archer
   verified: false
   description: 检测到qibosoft-v7系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qibosoft.qibocms
+    name: 齐博 CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - PHP168
+      - 齐博CMS
+      - qibosoft
 rules:
   r0:
     request:

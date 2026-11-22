@@ -1,10 +1,16 @@
-id: web-femr
+id: femr
 info:
   name: femr
   author: archer
   verified: false
   description: 检测到femr系统或组件的特征
   created: 2025/04/24
+  product:
+    id: femr.femr
+    name: fEMR
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

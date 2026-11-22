@@ -1,10 +1,22 @@
-id: web-microsoft-skype-for-business
+id: microsoft-skype-for-business-server
 info:
   name: microsoft-skype-for-business
   author: archer
   verified: false
   description: 检测到microsoft-skype-for-business系统或组件的特征
   created: 2025/04/24
+  product:
+    id: microsoft.skype-for-business-server
+    name: Skype for Business Server
+    vendor: Microsoft
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - im
+      - video-conference
+    aliases:
+      - Lync
 rules:
   r0:
     request:

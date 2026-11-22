@@ -1,4 +1,4 @@
-id: web-apache-shiro
+id: apache-shiro
 info:
   tags: framework
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 提供身份认证、授权与会话管理的 Java 安全框架。
   created: 2025/04/24
+  product:
+    id: apache.shiro
+    name: Apache Shiro
+    vendor: Apache Software Foundation
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - framework
+      - dev-framework
+    aliases:
+      - apache-shiro
+    references:
+      - https://shiro.apache.org/
+    description: 提供身份认证、授权与会话管理的 Java 安全框架。
 rules:
   r0:
     request:

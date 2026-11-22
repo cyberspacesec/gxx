@@ -1,10 +1,21 @@
-id: web-SVNServer
+id: visualsvn-visualsvn-server
 info:
   name: SVN Server
   author: archer
   verified: false
   description: 检测到SVN Server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: visualsvn.visualsvn-server
+    name: VisualSVN Server
+    vendor: VisualSVN
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    references:
+      - https://www.visualsvn.com/server/
 rules:
   r0:
     request:

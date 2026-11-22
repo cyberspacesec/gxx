@@ -1,10 +1,17 @@
-id: web-ultrastats
+id: adiscon-ultrastats
 info:
   name: ultrastats
   author: archer
   verified: false
   description: 检测到ultrastats系统或组件的特征
   created: 2025/04/24
+  product:
+    id: adiscon.ultrastats
+    name: UltraStats
+    vendor: Adiscon
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

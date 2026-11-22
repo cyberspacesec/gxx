@@ -1,10 +1,19 @@
-id: web-spamtitan
+id: titanhq-spamtitan
 info:
   name: spamtitan
   author: archer
   verified: false
   description: 检测到spamtitan系统或组件的特征
   created: 2025/04/24
+  product:
+    id: titanhq.spamtitan
+    name: SpamTitan
+    vendor: TitanHQ
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

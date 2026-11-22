@@ -1,10 +1,18 @@
-id: web-jabberd
+id: jabberd
 info:
   name: jabberd
   author: archer
   verified: false
   description: 检测到jabberd系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jabberd.jabberd
+    name: jabberd
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - im
 rules:
   r0:
     request:

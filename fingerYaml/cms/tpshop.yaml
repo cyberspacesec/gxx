@@ -1,10 +1,18 @@
-id: web-tpshop
+id: tpshop
 info:
   name: tpshop
   author: archer
   verified: false
   description: 检测到tpshop系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tpshop.tpshop
+    name: TPshop
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

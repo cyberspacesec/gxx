@@ -1,10 +1,16 @@
-id: web-mission-control-application-shield
+id: mission-control-application-shield
 info:
   name: mission-control-application-shield
   author: archer
   verified: false
   description: 检测到mission-control-application-shield系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mission-control.application-shield
+    name: Mission Control Application Shield
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

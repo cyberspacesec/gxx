@@ -1,4 +1,4 @@
-id: web-apache-axis
+id: apache-axis
 info:
   tags: framework
   reference:
@@ -8,6 +8,20 @@ info:
   verified: false
   description: 基于 Java 的 SOAP Web 服务框架。
   created: 2025/04/24
+  product:
+    id: apache.axis
+    name: Apache Axis
+    vendor: Apache Software Foundation
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - framework
+    aliases:
+      - apache-axis
+    references:
+      - https://axis.apache.org/
+    description: 基于 Java 的 SOAP Web 服务框架。
 rules:
   r0:
     request:

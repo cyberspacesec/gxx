@@ -1,10 +1,17 @@
-id: web-devaldi-flexpaper
+id: devaldi-flexpaper
 info:
   name: devaldi-flexpaper
   author: archer
   verified: false
   description: 检测到devaldi-flexpaper系统或组件的特征
   created: 2025/04/24
+  product:
+    id: devaldi.flexpaper
+    name: FlexPaper
+    vendor: Devaldi
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

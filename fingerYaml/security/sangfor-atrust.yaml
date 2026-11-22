@@ -1,10 +1,24 @@
-id: web-深信服零信任访问控制系统aTrust
+id: sangfor-atrust
 info:
   name: 深信服零信任访问控制系统aTrust
   author: archer
   verified: true
   description: 检测到深信服零信任访问控制系统aTrust系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.atrust
+    name: 深信服零信任访问控制系统 aTrust
+    vendor: 深信服
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - vpn
+      - sso
+    aliases:
+      - aTrust
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

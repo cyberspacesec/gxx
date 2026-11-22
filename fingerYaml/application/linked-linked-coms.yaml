@@ -1,10 +1,18 @@
-id: web-linked-see
+id: linked-linked-coms
 info:
   name: linked-see
   author: archer
   verified: true
   description: 检测到linked-see系统或组件的特征
   created: 2025/04/24
+  product:
+    id: linked.linked-coms
+    name: Linked Coms
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - linked-see
 rules:
   r0:
     request:

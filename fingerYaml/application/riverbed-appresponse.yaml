@@ -1,10 +1,21 @@
-id: web-riverbed-appresponse
+id: riverbed-appresponse
 info:
   name: riverbed-appresponse
   author: archer
   verified: false
   description: 检测到riverbed-appresponse系统或组件的特征
   created: 2025/04/24
+  product:
+    id: riverbed.appresponse
+    name: Riverbed AppResponse
+    vendor: Riverbed
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://www.riverbed.com/
 rules:
   r0:
     request:

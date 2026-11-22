@@ -1,10 +1,17 @@
-id: web-契约锁电子签章系统
+id: qiyuesuo-electronic-signature
 info:
   name: 契约锁电子签章系统
   author: archer
   verified: true
   description: 检测到契约锁电子签章系统的特征
   created: 2025/04/24
+  product:
+    id: qiyuesuo.electronic-signature
+    name: 契约锁电子签章系统
+    vendor: 契约锁
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,22 @@
-id: web-gocd-params
+id: thoughtworks-gocd
 info:
   name: gocd-params
   author: archer
   verified: true
   description: 检测到gocd-params系统或组件的特征
   created: 2025/04/24
+  product:
+    id: thoughtworks.gocd
+    name: GoCD
+    vendor: Thoughtworks
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ci
+      - devops
+    references:
+      - https://www.gocd.org/
 rules:
   r0:
     request:

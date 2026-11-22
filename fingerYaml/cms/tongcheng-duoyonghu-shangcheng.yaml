@@ -1,10 +1,18 @@
-id: web-同城多用户商城
+id: tongcheng-duoyonghu-shangcheng
 info:
   name: 同城多用户商城
   author: archer
   verified: false
   description: 检测到同城多用户商城系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tongcheng-duoyonghu-shangcheng.tongcheng-duoyonghu-shangcheng
+    name: 同城多用户商城
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

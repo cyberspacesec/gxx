@@ -1,6 +1,9 @@
 package sdk
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 // cloneTargetResult 必须深拷贝嵌套的切片与 map：异步 Writer 序列化快照期间，
 // 调用方修改自己持有的返回结果不得影响快照（否则并发访问会触发数据竞争/脏数据）。
@@ -12,7 +15,9 @@ func TestCloneTargetResultDeepCopiesNestedFields(t *testing.T) {
 		Matches: []FingerMatch{{
 			Info: FingerInfo{ID: "a", Tags: []string{"tag"}, References: []string{"ref"},
 				Verified: &verified, Confidence: &confidence,
-				Product: &ProductInfo{ID: "p", Tags: []string{"pt"}, CPE: []string{"cpe:2.3:a:v:p:*:*:*:*:*:*:*:*"}}},
+				Product:  &ProductInfo{ID: "p", Tags: []string{"pt"}, CPE: []string{"cpe:2.3:a:v:p:*:*:*:*:*:*:*:*"}},
+				Services: []Service{{Protocol: "ssh", Transport: "tcp", Ports: []int{22}}},
+				Metadata: map[string]any{"owner": map[string]any{"team": "a"}, "list": []any{"x"}}},
 			ProductVersions: []string{"1.0"},
 			MatchedRules:    []SubRuleMatch{{Key: "r0", Outputs: map[string]string{"k": "v"}, Evidence: []MatchEvidence{{}}}},
 		}},
@@ -28,6 +33,9 @@ func TestCloneTargetResultDeepCopiesNestedFields(t *testing.T) {
 	orig.Matches[0].Info.Tags[0] = "changed"
 	orig.Matches[0].Info.References[0] = "changed"
 	orig.Matches[0].Info.Product.Tags[0] = "changed"
+	orig.Matches[0].Info.Services[0].Ports[0] = 2222
+	orig.Matches[0].Info.Metadata["owner"].(map[string]any)["team"] = "changed"
+	orig.Matches[0].Info.Metadata["list"].([]any)[0] = "changed"
 	*orig.Matches[0].Info.Verified = false
 	*orig.Matches[0].Info.Confidence = 0.1
 	orig.Products[0].Versions[0] = "changed"
@@ -49,6 +57,8 @@ func TestCloneTargetResultDeepCopiesNestedFields(t *testing.T) {
 		{"Info.Tags", clone.Matches[0].Info.Tags[0], "tag"},
 		{"Info.References", clone.Matches[0].Info.References[0], "ref"},
 		{"Info.Product.Tags", clone.Matches[0].Info.Product.Tags[0], "pt"},
+		{"Info.Services.Ports", fmt.Sprint(clone.Matches[0].Info.Services[0].Ports[0]), "22"},
+		{"Info.Metadata", fmt.Sprintf("%v %v", clone.Matches[0].Info.Metadata["owner"].(map[string]any)["team"], clone.Matches[0].Info.Metadata["list"].([]any)[0]), "a x"},
 		{"Products.Versions", clone.Products[0].Versions[0], "1.0"},
 		{"Products.RuleIDs", clone.Products[0].RuleIDs[0], "a"},
 		{"TechStack.CMS", clone.TechStack.CMS[0], "WordPress"},

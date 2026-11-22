@@ -1,10 +1,19 @@
-id: web-h3c-ssl-vpn
+id: h3c-ssl-vpn
 info:
   name: h3c-ssl-vpn
   author: archer
   verified: false
   description: 检测到h3c-ssl-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: h3c.ssl-vpn
+    name: H3C SSL VPN
+    vendor: 新华三
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
 rules:
   r0:
     request:

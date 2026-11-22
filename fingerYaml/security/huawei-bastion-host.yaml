@@ -1,10 +1,21 @@
-id: web-huawei-jump-server
+id: huawei-bastion-host
 info:
   name: huawei-jump-server
   author: archer
   verified: true
   description: 检测到huawei-jump-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huawei.bastion-host
+    name: 华为堡垒机
+    vendor: 华为
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - bastion
+    aliases:
+      - huawei-jump-server
 rules:
   r0:
     request:

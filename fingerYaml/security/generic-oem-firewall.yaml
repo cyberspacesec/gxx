@@ -1,10 +1,18 @@
-id: web-OEM-防火墙
+id: generic-oem-firewall
 info:
   name: OEM-防火墙
   author: archer
   verified: false
   description: 检测到OEM-防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: generic.oem-firewall
+    name: OEM 防火墙通用特征
+    category: security
+    identity: signal
+    assurance: inferred
+    tags:
+      - firewall
 rules:
   r0:
     request:

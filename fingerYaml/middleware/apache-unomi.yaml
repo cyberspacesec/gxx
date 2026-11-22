@@ -1,4 +1,4 @@
-id: web-apache-unomi
+id: apache-unomi
 info:
   tags: middleware
   reference:
@@ -8,6 +8,20 @@ info:
   verified: false
   description: 用于管理用户画像和行为数据的客户数据平台。
   created: 2025/04/24
+  product:
+    id: apache.unomi
+    name: Apache Unomi
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+    aliases:
+      - apache-unomi
+    references:
+      - https://unomi.apache.org/
+    description: 用于管理用户画像和行为数据的客户数据平台。
 rules:
   r0:
     request:

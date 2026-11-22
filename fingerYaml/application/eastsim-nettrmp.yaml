@@ -1,10 +1,20 @@
-id: web-east-simulation-nettrmp
+id: eastsim-nettrmp
 info:
   name: east-simulation-nettrmp
   author: archer
   verified: false
   description: 检测到east-simulation-nettrmp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: eastsim.nettrmp
+    name: 东方仿真 NETTRMP
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
+    aliases:
+      - east-simulation-nettrmp
 rules:
   r0:
     request:

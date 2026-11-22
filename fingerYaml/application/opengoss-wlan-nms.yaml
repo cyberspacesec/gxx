@@ -1,10 +1,18 @@
-id: web-opengoss-wlan
+id: opengoss-wlan-nms
 info:
   name: opengoss-wlan
   author: archer
   verified: false
   description: 检测到opengoss-wlan系统或组件的特征
   created: 2025/04/24
+  product:
+    id: opengoss.wlan-nms
+    name: WLAN 综合网管系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

@@ -1,10 +1,17 @@
-id: web-bangyong-pm2
+id: bangyong-pm2
 info:
   name: bangyong-pm2
   author: archer
   verified: false
   description: 检测到bangyong-pm2系统或组件的特征
   created: 2025/04/24
+  product:
+    id: bangyong.pm2
+    name: 邦永PM2项目管理系统
+    vendor: 邦永科技
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

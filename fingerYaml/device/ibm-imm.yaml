@@ -1,10 +1,21 @@
-id: web-ibm-imm
+id: ibm-imm
 info:
   name: ibm-imm
   author: archer
   verified: false
   description: 检测到ibm-imm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ibm.imm
+    name: Integrated Management Module (IMM)
+    vendor: IBM
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - remote-access
+    aliases:
+      - ibm-imm
 rules:
   r0:
     request:

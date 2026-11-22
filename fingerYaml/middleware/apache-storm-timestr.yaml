@@ -1,10 +1,25 @@
-id: web-storm
+id: apache-storm-timestr
 info:
   name: storm
   author: archer
   verified: false
   description: 检测到storm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: apache.storm
+    name: Apache Storm
+    vendor: Apache Software Foundation
+    category: middleware
+    identity: product
+    assurance: verified
+    tags:
+      - middleware
+      - big-data
+    aliases:
+      - apache-storm
+    references:
+      - https://storm.apache.org/
+    description: 用于实时数据流处理的分布式计算系统。
 rules:
   r0:
     request:

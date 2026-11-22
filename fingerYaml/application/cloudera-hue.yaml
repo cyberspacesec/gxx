@@ -1,10 +1,21 @@
-id: web-hadoop-hue
+id: cloudera-hue
 info:
   name: hadoop-hue
   author: archer
   verified: false
   description: 检测到hadoop-hue系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cloudera.hue
+    name: Hue
+    vendor: Cloudera
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - big-data
+    references:
+      - https://gethue.com/
 rules:
   r0:
     request:

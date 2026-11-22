@@ -1,10 +1,19 @@
-id: web-webasyst-shop-script
+id: webasyst-shop-script
 info:
   name: webasyst-shop-script
   author: archer
   verified: false
   description: 检测到webasyst-shop-script系统或组件的特征
   created: 2025/04/24
+  product:
+    id: webasyst.shop-script
+    name: Shop-Script
+    vendor: Webasyst
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

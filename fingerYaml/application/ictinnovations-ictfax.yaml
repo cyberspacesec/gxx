@@ -1,10 +1,17 @@
-id: web-avantfax-ictfax
+id: ictinnovations-ictfax
 info:
   name: avantfax-ictfax
   author: archer
   verified: false
   description: 检测到avantfax-ictfax系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ictinnovations.ictfax
+    name: ICTFax
+    vendor: ICT Innovations
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

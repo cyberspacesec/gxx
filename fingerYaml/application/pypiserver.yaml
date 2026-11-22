@@ -1,10 +1,20 @@
-id: web-pypiserver
+id: pypiserver
 info:
   name: pypiserver
   author: archer
   verified: false
   description: 检测到pypiserver系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pypiserver.pypiserver
+    name: pypiserver
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    references:
+      - https://github.com/pypiserver/pypiserver
 rules:
   r0:
     request:

@@ -1,10 +1,18 @@
-id: web-useresponse
+id: useresponse
 info:
   name: useresponse
   author: archer
   verified: false
   description: 检测到useresponse系统或组件的特征
   created: 2025/04/24
+  product:
+    id: useresponse.useresponse
+    name: UseResponse
+    category: application
+    identity: product
+    assurance: verified
+    references:
+      - https://www.useresponse.com/
 rules:
   r0:
     request:

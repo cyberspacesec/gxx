@@ -1,10 +1,16 @@
-id: web-php-voting-system
+id: vote123-php-voting-system
 info:
   name: php-voting-system
   author: archer
   verified: false
   description: 检测到php-voting-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vote123.php-voting-system
+    name: PHP 投票系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,23 @@
-id: web-JumpServer堡垒机
+id: fit2cloud-jumpserver
 info:
   name: JumpServer 堡垒机
   author: archer
   verified: true
   description: 检测到JumpServer 堡垒机系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fit2cloud.jumpserver
+    name: JumpServer
+    vendor: 飞致云
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - bastion
+    aliases:
+      - JumpServer堡垒机
+    references:
+      - https://github.com/jumpserver/jumpserver
 rules:
   r0:
     request:

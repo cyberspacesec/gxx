@@ -1,10 +1,18 @@
-id: web-列目录
+id: generic-directory-listing
 info:
   name: 列目录
   author: archer
   verified: false
   description: 检测到列目录系统或组件的特征
   created: 2025/04/24
+  product:
+    id: generic.directory-listing
+    name: 目录列表
+    category: other
+    identity: signal
+    assurance: inferred
+    aliases:
+      - 列目录
 rules:
   r0:
     request:

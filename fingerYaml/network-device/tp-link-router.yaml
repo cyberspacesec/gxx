@@ -1,10 +1,21 @@
-id: web-TPLINK路由器
+id: tp-link-router
 info:
   name: TPLINK路由器
   author: archer
   verified: false
   description: 检测到TPLINK路由器系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tp-link.router
+    name: TP-LINK 路由器
+    vendor: TP-LINK
+    category: network-device
+    identity: product
+    assurance: verified
+    tags:
+      - router
+    references:
+      - https://www.tp-link.com.cn/
 rules:
   r0:
     request:

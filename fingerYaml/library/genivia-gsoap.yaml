@@ -1,10 +1,17 @@
-id: web-gsoap
+id: genivia-gsoap
 info:
   name: gsoap
   author: archer
   verified: false
   description: 检测到gsoap系统或组件的特征
   created: 2025/04/24
+  product:
+    id: genivia.gsoap
+    name: gSOAP
+    vendor: Genivia
+    category: library
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

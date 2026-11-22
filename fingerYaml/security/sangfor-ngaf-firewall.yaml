@@ -1,10 +1,23 @@
-id: web-深信服防火墙
+id: sangfor-ngaf-firewall
 info:
   name: 深信服防火墙
   author: archer
   verified: true
   description: 检测到深信服防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.ngaf
+    name: 深信服下一代防火墙 NGAF
+    vendor: 深信服
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+    aliases:
+      - 深信服防火墙
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

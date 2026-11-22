@@ -1,10 +1,23 @@
-id: web-sangfor-reporting
+id: sangfor-ad-report
 info:
   name: sangfor-reporting
   author: archer
   verified: false
   description: 检测到sangfor-reporting系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.ad
+    name: 深信服应用交付 AD
+    vendor: 深信服
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - load-balancer
+    aliases:
+      - 深信服应用交付管理系统
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

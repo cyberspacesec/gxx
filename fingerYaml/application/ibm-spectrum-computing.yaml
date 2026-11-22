@@ -1,10 +1,19 @@
-id: web-ibm-spectrum-computing
+id: ibm-spectrum-computing
 info:
   name: ibm-spectrum-computing
   author: archer
   verified: false
   description: 检测到ibm-spectrum-computing系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ibm.spectrum-computing
+    name: IBM Spectrum Computing
+    vendor: IBM
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - ibm-spectrum-computing
 rules:
   r0:
     request:

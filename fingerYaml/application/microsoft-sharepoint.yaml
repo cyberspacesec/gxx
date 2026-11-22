@@ -1,10 +1,21 @@
-id: web-microsoft-sharepoint
+id: microsoft-sharepoint
 info:
   name: microsoft-sharepoint
   author: archer
   verified: false
   description: 检测到microsoft-sharepoint系统或组件的特征
   created: 2025/04/24
+  product:
+    id: microsoft.sharepoint
+    name: Microsoft SharePoint
+    vendor: Microsoft
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - SharePoint
 rules:
   r0:
     request:

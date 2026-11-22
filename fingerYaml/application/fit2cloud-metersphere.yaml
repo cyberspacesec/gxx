@@ -1,10 +1,21 @@
-id: web-metersphere
+id: fit2cloud-metersphere
 info:
   name: metersphere
   author: archer
   verified: false
   description: 检测到metersphere系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fit2cloud.metersphere
+    name: MeterSphere
+    vendor: 飞致云
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    references:
+      - https://github.com/metersphere/metersphere
 rules:
   r0:
     request:

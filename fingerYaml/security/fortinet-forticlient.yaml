@@ -1,10 +1,19 @@
-id: web-FortiClient防护软件
+id: fortinet-forticlient
 info:
   name: FortiClient防护软件
   author: archer
   verified: true
   description: 检测到FortiClient防护软件系统或组件的特征
   created: 2025/04/16
+  product:
+    id: fortinet.forticlient
+    name: FortiClient
+    vendor: Fortinet
+    category: security
+    identity: product
+    assurance: inferred
+    references:
+      - https://www.fortinet.com/
 rules:
   r0:
     request:

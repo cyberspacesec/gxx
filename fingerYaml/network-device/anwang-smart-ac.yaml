@@ -1,10 +1,22 @@
-id: web-安网科技-智能AC管理系统
+id: anwang-smart-ac
 info:
   name: 安网科技-智能AC管理系统
   author: archer
   verified: false
   description: 检测到安网科技-智能AC管理系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: anwang.smart-ac
+    name: 安网科技智能AC管理系统
+    vendor: 安网科技
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - router
+      - gateway
+    aliases:
+      - 安网科技智能路由系统
 rules:
   r0:
     request:

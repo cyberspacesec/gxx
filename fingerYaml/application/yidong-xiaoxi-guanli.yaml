@@ -1,10 +1,16 @@
-id: web-移动消息管理平台
+id: yidong-xiaoxi-guanli
 info:
   name: 移动消息管理平台
   author: archer
   verified: false
   description: 检测到移动消息管理平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yidong-xiaoxi-guanli.yidong-xiaoxi-guanli
+    name: 移动消息管理平台
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

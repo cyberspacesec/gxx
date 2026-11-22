@@ -1,10 +1,19 @@
-id: web-安恒信息-明御web应用防火墙
+id: dbappsecurity-mingyu-waf
 info:
   name: 安恒信息-明御web应用防火墙
   author: archer
   verified: false
   description: 检测到安恒信息-明御web应用防火墙系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dbappsecurity.mingyu-waf
+    name: 明御Web应用防火墙
+    vendor: 安恒信息
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - waf
 rules:
   r0:
     request:

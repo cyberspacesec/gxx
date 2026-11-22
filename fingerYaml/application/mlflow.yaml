@@ -1,10 +1,20 @@
-id: web-mlflow
+id: mlflow
 info:
   name: mlflow
   author: archer
   verified: false
   description: 检测到mlflow系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mlflow.mlflow
+    name: MLflow
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - ai
+    references:
+      - https://mlflow.org/
 rules:
   r0:
     request:

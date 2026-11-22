@@ -1,10 +1,19 @@
-id: web-seceon-otm
+id: seceon-otm
 info:
   name: seceon-otm
   author: archer
   verified: false
   description: 检测到seceon-otm系统或组件的特征
   created: 2025/04/24
+  product:
+    id: seceon.otm
+    name: Seceon OTM
+    vendor: Seceon
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - siem
 rules:
   r0:
     request:

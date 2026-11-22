@@ -1,10 +1,16 @@
-id: web-seo-panel
+id: seopanel-seo-panel
 info:
   name: seo-panel
   author: archer
   verified: false
   description: 检测到seo-panel系统或组件的特征
   created: 2025/04/24
+  product:
+    id: seopanel.seo-panel
+    name: Seo Panel
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

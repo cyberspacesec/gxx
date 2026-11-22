@@ -1,4 +1,4 @@
-id: adminset-panel
+id: adminset
 info:
   name: Adminset
   author: zhizhuo
@@ -6,6 +6,15 @@ info:
   description: 'Converted from FOFA rule: adminset-panel'
   tags: web,fofa,converted
   created: 2025/04/07
+  product:
+    id: adminset.adminset
+    name: AdminSet
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - devops
+      - login
 rules:
   r0:
     request:

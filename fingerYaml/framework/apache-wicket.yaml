@@ -1,4 +1,4 @@
-id: web-apache-wicket
+id: apache-wicket
 info:
   tags: framework
   reference:
@@ -8,6 +8,21 @@ info:
   verified: false
   description: 基于组件的 Java Web 应用框架。
   created: 2025/04/24
+  product:
+    id: apache.wicket
+    name: Apache Wicket
+    vendor: Apache Software Foundation
+    category: framework
+    identity: product
+    assurance: verified
+    tags:
+      - framework
+      - dev-framework
+    aliases:
+      - apache-wicket
+    references:
+      - https://wicket.apache.org/
+    description: 基于组件的 Java Web 应用框架。
 rules:
   r0:
     request:

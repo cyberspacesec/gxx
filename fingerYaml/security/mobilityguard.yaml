@@ -1,10 +1,20 @@
-id: web-mobilityguard
+id: mobilityguard
 info:
   name: mobilityguard
   author: archer
   verified: false
   description: 检测到mobilityguard系统或组件的特征
   created: 2025/04/24
+  product:
+    id: mobilityguard.mobilityguard
+    name: MobilityGuard
+    vendor: MobilityGuard
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - sso
+      - remote-access
 rules:
   r0:
     request:

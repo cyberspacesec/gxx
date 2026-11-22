@@ -1,10 +1,19 @@
-id: web-jetty
+id: eclipse-jetty
 info:
   name: jetty
   author: archer
   verified: true
   description: 检测到jetty系统或组件的特征
   created: 2025/04/24
+  product:
+    id: eclipse.jetty
+    name: Eclipse Jetty
+    vendor: Eclipse Foundation
+    category: middleware
+    identity: product
+    assurance: inferred
+    aliases:
+      - jetty
 rules:
   r0:
     request:

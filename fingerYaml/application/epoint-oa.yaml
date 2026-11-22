@@ -1,10 +1,21 @@
-id: web-epoint-oa
+id: epoint-oa
 info:
   name: epoint-oa
   author: archer
   verified: false
   description: 检测到epoint-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: epoint.oa
+    name: 新点 OA
+    vendor: 新点软件
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - epoint-oa
 rules:
   r0:
     request:

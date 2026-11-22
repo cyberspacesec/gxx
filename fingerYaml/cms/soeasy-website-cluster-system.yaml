@@ -1,10 +1,18 @@
-id: web-soeasy-website-cluster-system
+id: soeasy-website-cluster-system
 info:
   name: soeasy-website-cluster-system
   author: archer
   verified: false
   description: 检测到soeasy-website-cluster-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: soeasy.website-cluster-system
+    name: SoEasy 网站群系统
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

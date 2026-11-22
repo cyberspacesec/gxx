@@ -1,10 +1,22 @@
-id: web-fortinet-fortimail
+id: fortinet-fortimail
 info:
   name: fortinet-fortimail
   author: archer
   verified: false
   description: 检测到fortinet-fortimail系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fortinet.fortimail
+    name: FortiMail
+    vendor: Fortinet
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - mail
+      - gateway
+    references:
+      - https://www.fortinet.com/
 rules:
   r0:
     request:

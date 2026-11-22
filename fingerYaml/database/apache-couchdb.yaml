@@ -1,4 +1,4 @@
-id: web-apache-couchdb
+id: apache-couchdb
 info:
   tags: database
   reference:
@@ -8,6 +8,20 @@ info:
   verified: true
   description: 使用 JSON 文档和 HTTP 接口的数据库。
   created: 2025/04/24
+  product:
+    id: apache.couchdb
+    name: Apache CouchDB
+    vendor: Apache Software Foundation
+    category: database
+    identity: product
+    assurance: verified
+    tags:
+      - database
+    aliases:
+      - apache-couchdb
+    references:
+      - https://couchdb.apache.org/
+    description: 使用 JSON 文档和 HTTP 接口的数据库。
 rules:
   r0:
     request:

@@ -1,10 +1,22 @@
-id: web-msvod-mediamanager
+id: meisi-msvod
 info:
   name: msvod-mediamanager
   author: archer
   verified: false
   description: 检测到msvod-mediamanager系统或组件的特征
   created: 2025/04/24
+  product:
+    id: meisi.msvod
+    name: 魅思视频管理系统
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - video
+      - cms
+    aliases:
+      - 魅思CMS
+      - MSVOD
 rules:
   r0:
     request:

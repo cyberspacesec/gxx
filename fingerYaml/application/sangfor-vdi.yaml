@@ -1,10 +1,25 @@
-id: web-深信服桌面云
+id: sangfor-vdi
 info:
   name: 深信服桌面云
   author: archer
   verified: false
   description: 检测到深信服桌面云系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sangfor.vdi
+    name: 深信服桌面云 aDesk
+    vendor: 深信服
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - virtualization
+      - remote-access
+    aliases:
+      - 深信服桌面云
+      - aDesk
+    references:
+      - https://www.sangfor.com.cn/
 rules:
   r0:
     request:

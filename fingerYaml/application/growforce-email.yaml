@@ -1,10 +1,20 @@
-id: web-growforce-email
+id: growforce-email
 info:
   name: growforce-email
   author: archer
   verified: false
   description: 检测到growforce-email系统或组件的特征
   created: 2025/04/24
+  product:
+    id: growforce.email
+    name: Growforce 邮件系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - growforce-email
 rules:
   r0:
     request:

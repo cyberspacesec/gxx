@@ -1,10 +1,18 @@
-id: web-碉堡堡垒机-产品
+id: diaobao-bastion
 info:
   name: 碉堡堡垒机-产品
   author: archer
   verified: false
   description: 检测到碉堡堡垒机-产品系统或组件的特征
   created: 2025/04/24
+  product:
+    id: diaobao.bastion
+    name: 碉堡堡垒机
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - bastion
 rules:
   r0:
     request:

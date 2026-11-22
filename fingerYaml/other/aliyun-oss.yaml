@@ -1,10 +1,22 @@
-id: web-aliyunoss
+id: aliyun-oss
 info:
   name: aliyunoss
   author: archer
   verified: false
   description: 检测到aliyunoss系统或组件的特征
   created: 2025/04/24
+  product:
+    id: aliyun.oss
+    name: 阿里云对象存储 OSS
+    vendor: 阿里云
+    category: other
+    identity: product
+    assurance: inferred
+    tags:
+      - cloud
+      - storage
+    aliases:
+      - AliyunOSS
 rules:
   r0:
     request:

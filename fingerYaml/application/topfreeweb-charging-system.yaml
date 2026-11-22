@@ -1,10 +1,16 @@
-id: web-topfreeweb-charging
+id: topfreeweb-charging-system
 info:
   name: topfreeweb-charging
   author: archer
   verified: false
   description: 检测到topfreeweb-charging系统或组件的特征
   created: 2025/04/24
+  product:
+    id: topfreeweb.charging-system
+    name: TopFreeWeb 收费系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

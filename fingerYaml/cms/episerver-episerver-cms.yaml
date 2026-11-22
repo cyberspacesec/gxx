@@ -1,10 +1,21 @@
-id: web-episerver
+id: episerver-episerver-cms
 info:
   name: episerver
   author: archer
   verified: false
   description: 检测到episerver系统或组件的特征
   created: 2025/04/24
+  product:
+    id: episerver.episerver-cms
+    name: Episerver CMS
+    vendor: Optimizely
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - Optimizely CMS
 rules:
   r0:
     request:

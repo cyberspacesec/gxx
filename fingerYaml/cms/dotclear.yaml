@@ -1,10 +1,20 @@
-id: web-dotclear
+id: dotclear
 info:
   name: dotclear
   author: archer
   verified: false
   description: 检测到dotclear系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dotclear.dotclear
+    name: Dotclear
+    category: cms
+    identity: product
+    assurance: verified
+    tags:
+      - blog
+    references:
+      - https://dotclear.org/
 rules:
   r0:
     request:

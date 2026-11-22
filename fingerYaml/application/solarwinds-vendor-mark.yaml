@@ -1,10 +1,23 @@
-id: web-solarwinds
+id: solarwinds-vendor-mark
 info:
   name: solarwinds
   author: archer
   verified: true
   description: 检测到solarwinds系统或组件的特征
   created: 2025/04/24
+  product:
+    id: solarwinds.vendor-mark
+    name: SolarWinds 厂商标识
+    vendor: SolarWinds
+    category: application
+    identity: signal
+    assurance: inferred
+    tags:
+      - monitoring
+    aliases:
+      - SolarWinds 产品
+    references:
+      - https://www.solarwinds.com/
 rules:
   r0:
     request:

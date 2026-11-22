@@ -1,10 +1,18 @@
-id: web-zhu-ji-bao
+id: admin5-zhujibao
 info:
   name: zhu-ji-bao
   author: archer
   verified: false
   description: 检测到zhu-ji-bao系统或组件的特征
   created: 2025/04/24
+  product:
+    id: admin5.zhujibao
+    name: 主机宝
+    category: hosting-panel
+    identity: product
+    assurance: inferred
+    tags:
+      - default-page
 rules:
   r0:
     request:

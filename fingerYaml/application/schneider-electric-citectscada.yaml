@@ -1,10 +1,21 @@
-id: web-schneider-citectscada
+id: schneider-electric-citectscada
 info:
   name: schneider-citectscada
   author: archer
   verified: false
   description: 检测到schneider-citectscada系统或组件的特征
   created: 2025/04/24
+  product:
+    id: schneider-electric.citectscada
+    name: CitectSCADA
+    vendor: 施耐德
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - industrial
+    aliases:
+      - Citect SCADA
 rules:
   r0:
     request:

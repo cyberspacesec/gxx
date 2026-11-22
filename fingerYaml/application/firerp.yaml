@@ -1,10 +1,20 @@
-id: web-firerp-soft
+id: firerp
 info:
   name: firerp-soft
   author: archer
   verified: false
   description: 检测到firerp-soft系统或组件的特征
   created: 2025/04/24
+  product:
+    id: firerp.firerp
+    name: Firerp
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - erp
+    aliases:
+      - firerp-soft
 rules:
   r0:
     request:

@@ -1,10 +1,19 @@
-id: web-zkteco-时间安全管理平台
+id: zkteco-zkeco
 info:
   name: zkteco-时间安全管理平台
   author: archer
   verified: false
   description: 检测到zkteco-时间安全管理平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zkteco.zkeco
+    name: ZKEco 时间&安全管理平台
+    vendor: 熵基科技
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - entrance-guard-system
 rules:
   r0:
     request:

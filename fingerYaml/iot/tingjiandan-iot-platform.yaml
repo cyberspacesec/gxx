@@ -1,10 +1,18 @@
-id: web-tingjiandan-iot
+id: tingjiandan-iot-platform
 info:
   name: tingjiandan-iot
   author: archer
   verified: false
   description: 检测到tingjiandan-iot系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tingjiandan.iot-platform
+    name: 停简单物联网平台
+    category: iot
+    identity: product
+    assurance: inferred
+    tags:
+      - iot-platform
 rules:
   r0:
     request:

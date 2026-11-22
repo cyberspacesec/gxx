@@ -1,10 +1,16 @@
-id: web-tulingtech-system
+id: tuling-tulingtech-system
 info:
   name: tulingtech-system
   author: archer
   verified: false
   description: 检测到tulingtech-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tuling.tulingtech-system
+    name: 图灵科技管理系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

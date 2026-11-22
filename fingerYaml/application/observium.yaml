@@ -1,10 +1,18 @@
-id: web-observium
+id: observium
 info:
   name: observium
   author: archer
   verified: false
   description: 检测到observium系统或组件的特征
   created: 2025/04/24
+  product:
+    id: observium.observium
+    name: Observium
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

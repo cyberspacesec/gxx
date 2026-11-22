@@ -1,10 +1,20 @@
-id: web-h5s-video-platform
+id: h5s
 info:
   name: h5s-video-platform
   author: archer
   verified: true
   description: 检测到h5s-video-platform系统或组件的特征
   created: 2025/04/24
+  product:
+    id: h5s.h5s
+    name: H5S 视频平台
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video
+    aliases:
+      - h5s-video-platform
 rules:
   r0:
     request:

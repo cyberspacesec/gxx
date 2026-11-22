@@ -1,10 +1,23 @@
-id: web-metasploit
+id: rapid7-metasploit
 info:
   name: metasploit
   author: archer
   verified: false
   description: 检测到metasploit系统或组件的特征
   created: 2025/04/24
+  product:
+    id: rapid7.metasploit
+    name: Metasploit
+    vendor: Rapid7
+    category: security
+    identity: product
+    assurance: verified
+    tags:
+      - vulnerability-scanner
+    aliases:
+      - Metasploit Pro
+    references:
+      - https://www.metasploit.com/
 rules:
   r0:
     request:

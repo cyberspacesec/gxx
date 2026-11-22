@@ -1,10 +1,20 @@
-id: web-haoshitong-cloud-conference
+id: fsmeeting-fastmeeting-cloud
 info:
   name: haoshitong-cloud-conference
   author: archer
   verified: false
   description: 检测到haoshitong-cloud-conference系统或组件的特征
   created: 2025/04/24
+  product:
+    id: fsmeeting.fastmeeting
+    name: 好视通 FastMeeting
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
+    aliases:
+      - 好视通
 rules:
   r0:
     request:

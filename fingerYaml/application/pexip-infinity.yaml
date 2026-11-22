@@ -1,10 +1,19 @@
-id: web-pexip
+id: pexip-infinity
 info:
   name: pexip
   author: archer
   verified: false
   description: 检测到pexip系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pexip.infinity
+    name: Pexip Infinity
+    vendor: Pexip
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
 rules:
   r0:
     request:

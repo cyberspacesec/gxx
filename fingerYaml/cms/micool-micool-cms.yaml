@@ -1,10 +1,21 @@
-id: web-micool-management-system
+id: micool-micool-cms
 info:
   name: micool-management-system
   author: archer
   verified: false
   description: 检测到micool-management-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: micool.micool-cms
+    name: 米酷影视管理系统
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - video
+      - cms
+    aliases:
+      - 米酷CMS
 rules:
   r0:
     request:

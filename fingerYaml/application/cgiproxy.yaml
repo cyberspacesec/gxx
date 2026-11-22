@@ -1,10 +1,20 @@
-id: web-cgiproxy
+id: cgiproxy
 info:
   name: cgiproxy
   author: archer
   verified: false
   description: 检测到cgiproxy系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cgiproxy.cgiproxy
+    name: CGIProxy
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - proxy
+    references:
+      - http://www.jmarshall.com/tools/cgiproxy/
 rules:
   r0:
     request:

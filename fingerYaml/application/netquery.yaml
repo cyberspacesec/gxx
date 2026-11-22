@@ -1,10 +1,16 @@
-id: web-netquery
+id: netquery
 info:
   name: netquery
   author: archer
   verified: false
   description: 检测到netquery系统或组件的特征
   created: 2025/04/24
+  product:
+    id: netquery.netquery
+    name: NetQuery
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

@@ -1,10 +1,21 @@
-id: web-telerik-sitefinity
+id: progress-sitefinity
 info:
   name: telerik-sitefinity
   author: archer
   verified: false
   description: 检测到telerik-sitefinity系统或组件的特征
   created: 2025/04/24
+  product:
+    id: progress.sitefinity
+    name: Sitefinity
+    vendor: Progress Software
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - Telerik Sitefinity
 rules:
   r0:
     request:

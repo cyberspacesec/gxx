@@ -1,10 +1,19 @@
-id: web-oracle-opera
+id: oracle-opera
 info:
   name: oracle-opera
   author: archer
   verified: false
   description: 检测到oracle-opera系统或组件的特征
   created: 2025/04/24
+  product:
+    id: oracle.opera
+    name: Oracle Hospitality OPERA
+    vendor: Oracle
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - OPERA PMS
 rules:
   r0:
     request:

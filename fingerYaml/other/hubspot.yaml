@@ -1,10 +1,19 @@
-id: web-hubspot
+id: hubspot
 info:
   name: hubspot
   author: archer
   verified: false
   description: 检测到hubspot系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hubspot.hubspot
+    name: HubSpot
+    vendor: HubSpot
+    category: other
+    identity: signal
+    assurance: inferred
+    tags:
+      - crm
 rules:
   r0:
     request:

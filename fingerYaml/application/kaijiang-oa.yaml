@@ -1,10 +1,21 @@
-id: web-kaijiang-oa
+id: kaijiang-oa
 info:
   name: kaijiang-oa
   author: archer
   verified: false
   description: 检测到kaijiang-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: kaijiang.oa
+    name: Kaijiang OA
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - kaijiang-oa
+      - kjoa
 rules:
   r0:
     request:

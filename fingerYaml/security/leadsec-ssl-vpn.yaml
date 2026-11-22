@@ -1,10 +1,22 @@
-id: web-leadsec-ssl-vpn
+id: leadsec-ssl-vpn
 info:
   name: leadsec-ssl-vpn
   author: archer
   verified: false
   description: 检测到leadsec-ssl-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: leadsec.ssl-vpn
+    name: 网御星云 SSL VPN
+    vendor: 网御星云
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
+    aliases:
+      - 网御 SSL VPN
+      - leadsec-ssl-vpn
 rules:
   r0:
     request:

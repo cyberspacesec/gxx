@@ -1,10 +1,20 @@
-id: web-jboss-eap
+id: redhat-jboss-eap
 info:
   name: jboss-eap
   author: archer
   verified: false
   description: 检测到jboss-eap系统或组件的特征
   created: 2025/04/24
+  product:
+    id: redhat.jboss-eap
+    name: JBoss Enterprise Application Platform
+    vendor: Red Hat
+    category: middleware
+    identity: product
+    assurance: inferred
+    aliases:
+      - jboss-eap
+      - JBoss EAP
 rules:
   r0:
     request:

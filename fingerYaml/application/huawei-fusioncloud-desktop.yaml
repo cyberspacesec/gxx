@@ -1,10 +1,22 @@
-id: web-huawei-fusioncloud-desktop
+id: huawei-fusioncloud-desktop
 info:
   name: huawei-fusioncloud-desktop
   author: archer
   verified: false
   description: 检测到huawei-fusioncloud-desktop系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huawei.fusioncloud-desktop
+    name: FusionCloud 桌面云
+    vendor: 华为
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
+      - remote-access
+    aliases:
+      - huawei-fusioncloud-desktop
 rules:
   r0:
     request:

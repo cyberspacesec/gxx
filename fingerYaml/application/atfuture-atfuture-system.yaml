@@ -1,10 +1,18 @@
-id: web-atfuture-system
+id: atfuture-atfuture-system
 info:
   name: atfuture-system
   author: archer
   verified: false
   description: 检测到atfuture-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: atfuture.atfuture-system
+    name: atfuture-system
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - login
 rules:
   r0:
     request:

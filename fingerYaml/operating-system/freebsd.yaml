@@ -1,5 +1,5 @@
 ---
-id: fofayaml-56
+id: freebsd
 info:
   reference:
     - https://www.freebsd.org/
@@ -9,6 +9,19 @@ info:
   description: 开源类 Unix 操作系统；响应标记不等同于主机系统已核实。
   tags: web,fofa,converted,operating-system
   created: 2025/04/07
+  product:
+    id: freebsd.freebsd
+    name: FreeBSD
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - operating-system
+    aliases:
+      - FreeBSD
+    references:
+      - https://www.freebsd.org/
+    description: 开源类 Unix 操作系统；响应标记不等同于主机系统已核实。
 rules:
   r0:
     request:

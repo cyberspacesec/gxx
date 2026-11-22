@@ -1,10 +1,22 @@
-id: web-263-enterprise-mailbox
+id: 263-enterprise-mail
 info:
   name: 263-enterprise-mailbox
   author: archer
   verified: false
   description: 检测到263-enterprise-mailbox系统或组件的特征
   created: 2025/04/24
+  product:
+    id: 263.enterprise-mail
+    name: 263企业邮箱
+    vendor: 二六三网络通信
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+    aliases:
+      - 263 Enterprise Mail
+      - net263
 rules:
   r0:
     request:

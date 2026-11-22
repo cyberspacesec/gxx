@@ -1,10 +1,18 @@
-id: web-weisha-learningsystem
+id: weisha-learning-system
 info:
   name: weisha-learningsystem
   author: archer
   verified: false
   description: 检测到weisha-learningsystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: weisha.learning-system
+    name: 微厦在线学习系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
 rules:
   r0:
     request:

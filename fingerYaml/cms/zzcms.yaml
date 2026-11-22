@@ -1,10 +1,18 @@
-id: web-zzcms
+id: zzcms
 info:
   name: zzcms
   author: archer
   verified: false
   description: 检测到zzcms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: zzcms.zzcms
+    name: zzcms
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

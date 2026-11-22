@@ -1,10 +1,19 @@
-id: web-adobe-connect
+id: adobe-connect
 info:
   name: adobe-connect
   author: archer
   verified: false
   description: 检测到adobe-connect系统或组件的特征
   created: 2025/04/24
+  product:
+    id: adobe.connect
+    name: Adobe Connect
+    vendor: Adobe
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
 rules:
   r0:
     request:

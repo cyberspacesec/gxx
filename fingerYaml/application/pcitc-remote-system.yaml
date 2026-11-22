@@ -1,10 +1,18 @@
-id: web-pcitc-remotesystem
+id: pcitc-remote-system
 info:
   name: pcitc-remotesystem
   author: archer
   verified: false
   description: 检测到pcitc-remotesystem系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pcitc.remote-system
+    name: 石化盈科远程系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - remote-access
 rules:
   r0:
     request:

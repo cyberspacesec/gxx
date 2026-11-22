@@ -1,10 +1,18 @@
-id: web-monitoring-center
+id: yingyan-hezi-monitoring-center
 info:
   name: monitoring-center
   author: archer
   verified: false
   description: 检测到monitoring-center系统或组件的特征
   created: 2025/04/24
+  product:
+    id: yingyan-hezi.monitoring-center
+    name: 鹰眼盒子监控中心
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

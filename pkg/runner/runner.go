@@ -86,6 +86,7 @@ func NewRunner(cfg ScanConfig, pocOptions types.YamlFingerType) (*Runner, error)
 	r.store = NewFingerStore(r.log)
 	r.store.captureEvidence = cfg.CaptureEvidence
 	r.store.policy = cfg.RulePolicy
+	r.store.check = cfg.RuleCheck
 	if err := r.store.Load(pocOptions); err != nil {
 		_ = r.Close()
 		return nil, fmt.Errorf("加载指纹规则失败: %w", err)

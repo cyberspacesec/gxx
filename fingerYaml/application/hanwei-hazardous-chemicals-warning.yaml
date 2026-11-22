@@ -1,10 +1,20 @@
-id: web-hanwei-hazardous-chemicals-enterprise-early-warning-and-prevention-system
+id: hanwei-hazardous-chemicals-warning
 info:
   name: hanwei-hazardous-chemicals-enterprise-early-warning-and-prevention-system
   author: archer
   verified: false
   description: 检测到hanwei-hazardous-chemicals-enterprise-early-warning-and-prevention-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hanwei.hazardous-chemicals-warning
+    name: 危化品企业预警防控系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - industrial
+    aliases:
+      - hanwei-hazardous-chemicals-enterprise-early-warning-and-prevention-system
 rules:
   r0:
     request:

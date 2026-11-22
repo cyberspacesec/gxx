@@ -1,10 +1,21 @@
-id: web-imo-云办公室
+id: imo-cloud-office
 info:
   name: imo-云办公室
   author: archer
   verified: false
   description: 检测到imo-云办公室系统或组件的特征
   created: 2025/04/24
+  product:
+    id: imo.cloud-office
+    name: imo 云办公室
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - im
+      - oa
+    aliases:
+      - imo-云办公室
 rules:
   r0:
     request:

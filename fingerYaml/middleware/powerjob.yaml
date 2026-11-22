@@ -1,10 +1,18 @@
-id: web-powerjob
+id: powerjob
 info:
   name: powerjob
   author: archer
   verified: false
   description: 检测到powerjob系统或组件的特征
   created: 2025/04/24
+  product:
+    id: powerjob.powerjob
+    name: PowerJob
+    category: middleware
+    identity: product
+    assurance: verified
+    references:
+      - https://github.com/PowerJob/PowerJob
 rules:
   r0:
     request:

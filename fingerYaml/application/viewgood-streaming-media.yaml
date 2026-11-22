@@ -1,10 +1,16 @@
-id: web-viewgood-streammedia
+id: viewgood-streaming-media
 info:
   name: viewgood-streammedia
   author: archer
   verified: false
   description: 检测到viewgood-streammedia系统或组件的特征
   created: 2025/04/24
+  product:
+    id: viewgood.streaming-media
+    name: ViewGood 流媒体系统
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

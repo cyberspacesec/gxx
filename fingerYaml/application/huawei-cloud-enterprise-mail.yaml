@@ -1,10 +1,20 @@
-id: web-华为云企业邮箱
+id: huawei-cloud-enterprise-mail
 info:
   name: 华为云企业邮箱
   author: archer
   verified: true
   description: 检测到华为云企业邮箱系统的特征
   created: 2025/04/24
+  product:
+    id: huawei.cloud-enterprise-mail
+    name: 华为云企业邮箱
+    vendor: 华为
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
+      - cloud
 rules:
   r0:
     request:

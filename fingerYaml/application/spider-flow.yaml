@@ -1,10 +1,18 @@
-id: web-SpiderFlow爬虫平台
+id: spider-flow
 info:
   name: SpiderFlow爬虫平台
   author: archer
   verified: true
   description: 检测到SpiderFlow爬虫平台系统或组件的特征
   created: 2025/04/16
+  product:
+    id: spider-flow.spider-flow
+    name: Spider-Flow
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - SpiderFlow爬虫平台
 rules:
   r0:
     request:

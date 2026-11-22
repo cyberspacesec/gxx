@@ -1,10 +1,18 @@
-id: web-hiki
+id: hiki
 info:
   name: hiki
   author: archer
   verified: false
   description: 检测到hiki系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hiki.hiki
+    name: Hiki
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - wiki
 rules:
   r0:
     request:

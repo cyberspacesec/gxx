@@ -1,10 +1,23 @@
-id: web-hbase
+id: apache-hbase
 info:
   name: hbase
   author: archer
   verified: false
   description: 检测到hbase系统或组件的特征
   created: 2025/04/24
+  product:
+    id: apache.hbase
+    name: Apache HBase
+    vendor: Apache Software Foundation
+    category: database
+    identity: product
+    assurance: verified
+    tags:
+      - big-data
+    aliases:
+      - HBase
+    references:
+      - https://hbase.apache.org/
 rules:
   r0:
     request:

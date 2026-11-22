@@ -1,10 +1,19 @@
-id: web-qinzhe-excel
+id: qinzhe-excel-server
 info:
   name: qinzhe-excel
   author: archer
   verified: false
   description: 检测到qinzhe-excel系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qinzhe.excel-server
+    name: 勤哲 Excel 服务器
+    vendor: 勤哲软件
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - qinzhe-excel
 rules:
   r0:
     request:

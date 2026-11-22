@@ -1,4 +1,4 @@
-id: web-phpmyadmin
+id: phpmyadmin
 info:
   tags: application
   reference:
@@ -8,6 +8,20 @@ info:
   verified: false
   description: 通过 Web 界面管理 MySQL 与 MariaDB 数据库的工具。
   created: 2025/04/24
+  product:
+    id: phpmyadmin.phpmyadmin
+    name: phpMyAdmin
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - application
+      - db-admin
+    aliases:
+      - phpmyadmin
+    references:
+      - https://www.phpmyadmin.net/
+    description: 通过 Web 界面管理 MySQL 与 MariaDB 数据库的工具。
 rules:
   r0:
     request:

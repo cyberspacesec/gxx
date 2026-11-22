@@ -1,10 +1,20 @@
-id: web-cnvp-jcms
+id: cnvp-jcms
 info:
   name: cnvp-jcms
   author: archer
   verified: false
   description: 检测到cnvp-jcms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cnvp.jcms
+    name: JCMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
+    aliases:
+      - cnvp-jcms
 rules:
   r0:
     request:

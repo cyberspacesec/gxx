@@ -1,10 +1,19 @@
-id: web-moodle
+id: moodle
 info:
   name: moodle
   author: archer
   verified: false
   description: 检测到moodle系统或组件的特征
   created: 2025/04/24
+  product:
+    id: moodle.moodle
+    name: Moodle
+    vendor: Moodle Pty Ltd
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - lms
 rules:
   r0:
     request:

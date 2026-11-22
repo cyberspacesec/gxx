@@ -1,5 +1,5 @@
 ---
-id: fofayaml-38
+id: apple-macos
 info:
   reference:
     - https://www.apple.com/macos/
@@ -9,6 +9,20 @@ info:
   description: Apple 的桌面操作系统；响应标记不等同于主机系统已核实。
   tags: web,fofa,converted,operating-system
   created: 2025/04/07
+  product:
+    id: apple.macos
+    name: macOS
+    vendor: Apple
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - operating-system
+    aliases:
+      - MacOS
+    references:
+      - https://www.apple.com/macos/
+    description: Apple 的桌面操作系统；响应标记不等同于主机系统已核实。
 rules:
   r0:
     request:

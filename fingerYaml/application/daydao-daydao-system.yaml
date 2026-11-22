@@ -1,10 +1,18 @@
-id: web-daydao-system
+id: daydao-daydao-system
 info:
   name: daydao-system
   author: archer
   verified: false
   description: 检测到daydao-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: daydao.daydao-system
+    name: DayDao 系统
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - daydao-system
 rules:
   r0:
     request:

@@ -115,6 +115,10 @@ type FingerInfo struct {
 	Source             RuleSource     `json:"source"`
 	Product            *ProductInfo   `json:"product,omitempty"`
 	Validation         ValidationInfo `json:"validation"`
+	// Services 是规则声明的 TCP/UDP 服务；HTTP 规则通常为空。
+	Services []Service `json:"services,omitempty"`
+	// Metadata 是规则 info.metadata 的副本，引擎只透传，不参与匹配。
+	Metadata map[string]any `json:"metadata,omitempty"`
 }
 
 // FingerMatch 单条指纹匹配结果。

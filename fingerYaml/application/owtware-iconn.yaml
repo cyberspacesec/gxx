@@ -1,10 +1,18 @@
-id: web-owtware-iconn-end-user-calculation
+id: owtware-iconn
 info:
   name: owtware-iconn-end-user-calculation
   author: archer
   verified: false
   description: 检测到owtware-iconn-end-user-calculation系统或组件的特征
   created: 2025/04/24
+  product:
+    id: owtware.iconn
+    name: iConn 终端计算平台
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - virtualization
 rules:
   r0:
     request:

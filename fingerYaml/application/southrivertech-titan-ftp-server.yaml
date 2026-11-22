@@ -1,10 +1,19 @@
-id: web-titan-ftp
+id: southrivertech-titan-ftp-server
 info:
   name: titan-ftp
   author: archer
   verified: false
   description: 检测到titan-ftp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: southrivertech.titan-ftp-server
+    name: Titan FTP Server
+    vendor: South River Technologies
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - file-transfer
 rules:
   r0:
     request:

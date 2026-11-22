@@ -1,10 +1,23 @@
-id: web-eoffice10
+id: weaver-e-office-v10
 info:
   name: eoffice10
   author: archer
   verified: false
   description: 检测到eoffice10系统或组件的特征
   created: 2025/04/24
+  product:
+    id: weaver.e-office
+    name: e-office
+    vendor: 泛微网络
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - oa
+    aliases:
+      - 泛微 e-office
+    references:
+      - https://www.weaver.com.cn/
 rules:
   r0:
     request:

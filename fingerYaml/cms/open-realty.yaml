@@ -1,10 +1,16 @@
-id: web-open-realty
+id: open-realty
 info:
   name: open-realty
   author: archer
   verified: false
   description: 检测到open-realty系统或组件的特征
   created: 2025/04/24
+  product:
+    id: open-realty.open-realty
+    name: Open-Realty
+    category: cms
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

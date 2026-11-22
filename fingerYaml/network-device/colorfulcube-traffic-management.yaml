@@ -1,10 +1,18 @@
-id: web-colorfulcube-traffic-management
+id: colorfulcube-traffic-management
 info:
   name: colorfulcube-traffic-management
   author: archer
   verified: false
   description: 检测到colorfulcube-traffic-management系统或组件的特征
   created: 2025/04/24
+  product:
+    id: colorfulcube.traffic-management
+    name: ColorfulCube 流量管理系统
+    category: network-device
+    identity: product
+    assurance: inferred
+    aliases:
+      - colorfulcube-traffic-management
 rules:
   r0:
     request:

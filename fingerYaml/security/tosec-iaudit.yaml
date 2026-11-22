@@ -1,10 +1,19 @@
-id: web-中远麒麟iaudit堡垒机
+id: tosec-iaudit
 info:
   name: 中远麒麟iaudit堡垒机
   author: archer
   verified: false
   description: 检测到中远麒麟iaudit堡垒机系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tosec.iaudit
+    name: 中远麒麟 iAudit 堡垒机
+    vendor: 中远麒麟
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - bastion
 rules:
   r0:
     request:

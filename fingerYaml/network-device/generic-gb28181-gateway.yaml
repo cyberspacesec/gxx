@@ -1,10 +1,18 @@
-id: web-国标网关管理系统
+id: generic-gb28181-gateway
 info:
   name: 国标网关管理系统
   author: archer
   verified: false
   description: 检测到国标网关管理系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: generic.gb28181-gateway
+    name: 国标网关管理系统
+    category: network-device
+    identity: signal
+    assurance: inferred
+    tags:
+      - video
 rules:
   r0:
     request:

@@ -1,10 +1,16 @@
-id: web-speed-test
+id: speed-test
 info:
   name: speed-test
   author: archer
   verified: false
   description: 检测到speed-test系统或组件的特征
   created: 2025/04/24
+  product:
+    id: speed-test.speed-test
+    name: speed-test
+    category: application
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

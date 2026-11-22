@@ -1,10 +1,21 @@
-id: web-sentinel-dashboard
+id: alibaba-sentinel-dashboard
 info:
   name: sentinel-dashboard
   author: archer
   verified: false
   description: 检测到sentinel-dashboard系统或组件的特征
   created: 2025/04/24
+  product:
+    id: alibaba.sentinel-dashboard
+    name: Sentinel Dashboard
+    vendor: Alibaba
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://github.com/alibaba/Sentinel
 rules:
   r0:
     request:

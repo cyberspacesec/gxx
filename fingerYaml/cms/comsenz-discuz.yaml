@@ -1,10 +1,21 @@
-id: web-discuz
+id: comsenz-discuz
 info:
   name: discuz
   author: archer
   verified: false
   description: 检测到discuz系统或组件的特征
   created: 2025/04/24
+  product:
+    id: comsenz.discuz
+    name: Discuz!
+    vendor: 康盛
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - forum
+    aliases:
+      - Discuz
 rules:
   r0:
     request:

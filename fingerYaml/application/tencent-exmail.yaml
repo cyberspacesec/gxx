@@ -1,10 +1,21 @@
-id: web-腾讯企业邮箱
+id: tencent-exmail
 info:
   name: 腾讯企业邮箱
   author: archer
   verified: true
   description: 检测到腾讯企业邮箱系统或组件的特征
   created: 2025/04/24
+  product:
+    id: tencent.exmail
+    name: 腾讯企业邮箱
+    vendor: 腾讯
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - mail
+    references:
+      - https://exmail.qq.com/
 rules:
   r0:
     request:

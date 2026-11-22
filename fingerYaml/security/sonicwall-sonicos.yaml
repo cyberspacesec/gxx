@@ -1,10 +1,23 @@
-id: web-SonicWall防火墙
+id: sonicwall-sonicos
 info:
   name: SonicWall 防火墙
   author: archer
   verified: true
   description: 检测到SonicWall 防火墙系统或组件的特征
   created: 2025/04/16
+  product:
+    id: sonicwall.sonicos
+    name: SonicWall SonicOS
+    vendor: SonicWall
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
+    aliases:
+      - SonicWall 防火墙
+    references:
+      - https://www.sonicwall.com/
 rules:
   r0:
     request:

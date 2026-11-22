@@ -1,10 +1,19 @@
-id: web-aliyuncdn
+id: aliyun-cdn
 info:
   name: aliyuncdn
   author: archer
   verified: false
   description: 检测到aliyuncdn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: aliyun.cdn
+    name: 阿里云 CDN
+    vendor: 阿里云
+    category: other
+    identity: signal
+    assurance: inferred
+    tags:
+      - cloud
 rules:
   r0:
     request:

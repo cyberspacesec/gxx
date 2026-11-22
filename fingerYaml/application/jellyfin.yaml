@@ -1,10 +1,20 @@
-id: web-jellyfin
+id: jellyfin
 info:
   name: jellyfin
   author: archer
   verified: false
   description: 检测到jellyfin系统或组件的特征
   created: 2025/04/24
+  product:
+    id: jellyfin.jellyfin
+    name: Jellyfin
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - video
+    references:
+      - https://jellyfin.org/
 rules:
   r0:
     request:

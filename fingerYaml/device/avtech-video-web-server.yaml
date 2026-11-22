@@ -1,10 +1,20 @@
-id: web-avtech-video-web-server
+id: avtech-video-web-server
 info:
   name: avtech-video-web-server
   author: archer
   verified: true
   description: 检测到avtech-video-web-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: avtech.video-web-server
+    name: AVTECH Video Web Server
+    vendor: AVTECH
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - camera
+      - nvr
 rules:
   r0:
     request:

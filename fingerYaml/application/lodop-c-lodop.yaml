@@ -1,10 +1,18 @@
-id: web-c-lodop
+id: lodop-c-lodop
 info:
   name: c-lodop
   author: archer
   verified: false
   description: 检测到c-lodop系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lodop.c-lodop
+    name: C-Lodop
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - Lodop
 rules:
   r0:
     request:

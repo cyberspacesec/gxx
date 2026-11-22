@@ -1,10 +1,18 @@
-id: web-pg-real-estate-solution
+id: pilotgroup-pg-real-estate
 info:
   name: pg-real-estate-solution
   author: archer
   verified: false
   description: 检测到pg-real-estate-solution系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pilotgroup.pg-real-estate
+    name: PG Real Estate
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - PG Real Estate Solution
 rules:
   r0:
     request:

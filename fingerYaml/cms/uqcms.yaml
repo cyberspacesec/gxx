@@ -1,10 +1,18 @@
-id: web-uqcms
+id: uqcms
 info:
   name: uqcms
   author: archer
   verified: false
   description: 检测到uqcms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: uqcms.uqcms
+    name: UQCMS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

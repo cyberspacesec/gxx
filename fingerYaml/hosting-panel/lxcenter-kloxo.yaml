@@ -1,10 +1,19 @@
-id: web-kloxo-single-server
+id: lxcenter-kloxo
 info:
   name: kloxo-single-server
   author: archer
   verified: false
   description: 检测到kloxo-single-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lxcenter.kloxo
+    name: Kloxo
+    vendor: LxCenter
+    category: hosting-panel
+    identity: product
+    assurance: inferred
+    aliases:
+      - kloxo-single-server
 rules:
   r0:
     request:

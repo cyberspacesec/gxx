@@ -1,10 +1,23 @@
-id: web-icinga
+id: icinga-icinga-web
 info:
   name: icinga
   author: archer
   verified: true
   description: 检测到icinga系统或组件的特征
   created: 2025/04/24
+  product:
+    id: icinga.icinga-web
+    name: Icinga Web 2
+    vendor: Icinga
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    aliases:
+      - icinga
+    references:
+      - https://icinga.com/
 rules:
   r0:
     request:

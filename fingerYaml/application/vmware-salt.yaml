@@ -1,10 +1,23 @@
-id: web-saltstack
+id: vmware-salt
 info:
   name: saltstack
   author: archer
   verified: false
   description: 检测到saltstack系统或组件的特征
   created: 2025/04/24
+  product:
+    id: vmware.salt
+    name: Salt
+    vendor: VMware
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - devops
+    aliases:
+      - SaltStack
+    references:
+      - https://github.com/saltstack/salt
 rules:
   r0:
     request:

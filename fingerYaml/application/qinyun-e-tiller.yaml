@@ -1,10 +1,19 @@
-id: web-e-tiller
+id: qinyun-e-tiller
 info:
   name: e-tiller
   author: archer
   verified: false
   description: 检测到e-tiller系统或组件的特征
   created: 2025/04/24
+  product:
+    id: qinyun.e-tiller
+    name: 勤云期刊采编系统
+    vendor: 北京勤云
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - e-Tiller
 rules:
   r0:
     request:

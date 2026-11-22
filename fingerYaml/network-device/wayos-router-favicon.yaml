@@ -1,10 +1,24 @@
-id: web-anwang-wayosac
+id: wayos-router-favicon
 info:
   name: anwang-wayosac
   author: archer
   verified: true
   description: 检测到anwang-wayosac系统或组件的特征
   created: 2025/04/24
+  product:
+    id: wayos.router
+    name: 维盟智能路由管理系统
+    vendor: 维盟科技
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+      - router
+    aliases:
+      - WayOS AC
+      - 维盟AC集中管理系统
+      - WayOS
 rules:
   r0:
     request:

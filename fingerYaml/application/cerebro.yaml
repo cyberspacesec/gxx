@@ -1,10 +1,20 @@
-id: web-cerebro
+id: cerebro
 info:
   name: cerebro
   author: archer
   verified: false
   description: 检测到cerebro系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cerebro.cerebro
+    name: Cerebro
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - db-admin
+    references:
+      - https://github.com/lmenezes/cerebro
 rules:
   r0:
     request:

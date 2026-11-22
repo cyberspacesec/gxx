@@ -1,10 +1,21 @@
-id: web-biscom-delivery-server
+id: biscom-delivery-server-page-assets
 info:
   name: biscom-delivery-server
   author: archer
   verified: false
   description: 检测到biscom-delivery-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: biscom.delivery-server
+    name: Biscom Delivery Server
+    vendor: Biscom
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - file-transfer
+    aliases:
+      - BDS
 rules:
   r0:
     request:

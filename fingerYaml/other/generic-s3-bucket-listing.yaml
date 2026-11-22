@@ -1,10 +1,21 @@
-id: web-OSS存储桶
+id: generic-s3-bucket-listing
 info:
   name: OSS 存储桶
   author: archer
   verified: false
   description: 检测到OSS 存储桶系统或组件的特征
   created: 2025/04/24
+  product:
+    id: generic.s3-bucket-listing
+    name: S3 兼容对象存储桶列表
+    category: other
+    identity: signal
+    assurance: inferred
+    tags:
+      - storage
+      - cloud
+    aliases:
+      - OSS 存储桶
 rules:
   r0:
     request:

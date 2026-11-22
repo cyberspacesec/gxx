@@ -43,11 +43,11 @@ func main() {
 	}
 	wordpress := false
 	for _, match := range result.Matches {
-		if match.Info.ID != "web-wordpress" {
+		if match.Info.ID != "wordpress" {
 			continue
 		}
 		wordpress = true
-		if match.ProductVersion != "6.7" || match.Info.Source.Version != sdk.Version || len(match.Info.Source.SHA256) != 64 || match.Info.Product == nil || match.Info.Product.ID != "wordpress.wordpress" || match.Info.Vendor != "WordPress" || len(match.Info.Tags) == 0 || match.Info.Verified == nil || match.Info.Confidence != nil || match.Info.Validation.Status != "sample-tested" || len(match.MatchedRules) == 0 {
+		if match.ProductVersion != "6.7" || match.Info.Source.Version != sdk.Version || len(match.Info.Source.SHA256) != 64 || match.Info.Product == nil || match.Info.Product.ID != "wordpress.wordpress" || match.Info.Product.Identity != "product" || match.Info.Product.Assurance != "verified" || match.Info.Vendor != "WordPress" || len(match.Info.Tags) == 0 || match.Info.Verified == nil || match.Info.Confidence != nil || match.Info.Validation.Status != "sample-tested" || len(match.MatchedRules) == 0 {
 			panic(fmt.Sprintf("SDK 产品信息或版本不符合预期：%+v", match))
 		}
 		evidence := false

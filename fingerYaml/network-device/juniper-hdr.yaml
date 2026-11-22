@@ -1,10 +1,19 @@
-id: web-juniper-hdr
+id: juniper-hdr
 info:
   name: juniper-hdr
   author: archer
   verified: false
   description: 检测到juniper-hdr系统或组件的特征
   created: 2025/04/24
+  product:
+    id: juniper.hdr
+    name: Juniper HDR
+    vendor: Juniper
+    category: network-device
+    identity: product
+    assurance: inferred
+    aliases:
+      - juniper-hdr
 rules:
   r0:
     request:

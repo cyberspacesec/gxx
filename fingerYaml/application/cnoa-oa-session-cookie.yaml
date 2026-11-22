@@ -1,10 +1,20 @@
-id: web-协众oa
+id: cnoa-oa-session-cookie
 info:
   name: 协众oa
   author: archer
   verified: false
   description: 检测到协众oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cnoa.oa
+    name: 协众OA
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - CNOA
 rules:
   r0:
     request:

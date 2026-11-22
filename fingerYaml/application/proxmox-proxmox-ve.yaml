@@ -1,10 +1,24 @@
-id: web-proxmox-ve
+id: proxmox-proxmox-ve
 info:
   name: proxmox-ve
   author: archer
   verified: false
   description: 检测到proxmox-ve系统或组件的特征
   created: 2025/04/24
+  product:
+    id: proxmox.proxmox-ve
+    name: Proxmox Virtual Environment
+    vendor: Proxmox Server Solutions
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - virtualization
+    aliases:
+      - Proxmox VE
+      - PVE
+    references:
+      - https://www.proxmox.com/
 rules:
   r0:
     request:

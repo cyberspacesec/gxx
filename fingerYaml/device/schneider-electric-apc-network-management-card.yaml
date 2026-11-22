@@ -1,10 +1,19 @@
-id: web-apc-management
+id: schneider-electric-apc-network-management-card
 info:
   name: apc-management
   author: archer
   verified: false
   description: 检测到apc-management系统或组件的特征
   created: 2025/04/24
+  product:
+    id: schneider-electric.apc-network-management-card
+    name: APC Network Management Card
+    vendor: 施耐德
+    category: device
+    identity: product
+    assurance: inferred
+    aliases:
+      - APC Management Web Server
 rules:
   r0:
     request:

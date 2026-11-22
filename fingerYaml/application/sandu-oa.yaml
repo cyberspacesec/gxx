@@ -1,10 +1,21 @@
-id: web-sandu-oa
+id: sandu-oa
 info:
   name: sandu-oa
   author: archer
   verified: false
   description: 检测到sandu-oa系统或组件的特征
   created: 2025/04/24
+  product:
+    id: sandu.oa
+    name: 叁度 OA
+    vendor: 青岛叁度信息技术有限公司
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
+    aliases:
+      - sandu-oa
 rules:
   r0:
     request:

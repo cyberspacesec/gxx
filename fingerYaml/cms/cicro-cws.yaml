@@ -1,10 +1,18 @@
-id: web-cicro
+id: cicro-cws
 info:
   name: cicro
   author: archer
   verified: false
   description: 检测到cicro系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cicro.cws
+    name: Cicro CWS
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

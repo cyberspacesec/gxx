@@ -1,10 +1,21 @@
-id: web-netbotz-network-monitoring-device
+id: schneider-electric-netbotz
 info:
   name: netbotz-network-monitoring-device
   author: archer
   verified: false
   description: 检测到netbotz-network-monitoring-device系统或组件的特征
   created: 2025/04/24
+  product:
+    id: schneider-electric.netbotz
+    name: APC NetBotz
+    vendor: 施耐德
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
+    aliases:
+      - NetBotz
 rules:
   r0:
     request:

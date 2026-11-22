@@ -1,10 +1,21 @@
-id: web-ntopng
+id: ntop-ntopng
 info:
   name: ntopng
   author: archer
   verified: false
   description: 检测到ntopng系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ntop.ntopng
+    name: ntopng
+    vendor: ntop
+    category: application
+    identity: product
+    assurance: verified
+    tags:
+      - monitoring
+    references:
+      - https://www.ntop.org/
 rules:
   r0:
     request:

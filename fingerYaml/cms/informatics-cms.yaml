@@ -1,10 +1,18 @@
-id: web-informatics-cms
+id: informatics-cms
 info:
   name: informatics-cms
   author: archer
   verified: false
   description: 检测到informatics-cms系统或组件的特征
   created: 2025/04/24
+  product:
+    id: informatics.cms
+    name: Informatics CMS
+    category: cms
+    identity: product
+    assurance: inferred
+    aliases:
+      - informatics-cms
 rules:
   r0:
     request:

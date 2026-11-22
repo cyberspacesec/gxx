@@ -1,10 +1,18 @@
-id: web-aakuan-attendance-system
+id: aakuan-attendance
 info:
   name: aakuan-attendance-system
   author: archer
   verified: false
   description: 检测到aakuan-attendance-system系统或组件的特征
   created: 2025/04/24
+  product:
+    id: aakuan.attendance
+    name: Aakuan Attendance System
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - hr
 rules:
   r0:
     request:

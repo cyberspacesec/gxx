@@ -1,10 +1,19 @@
-id: web-pineapp
+id: pineapp-mail-secure
 info:
   name: pineapp
   author: archer
   verified: false
   description: 检测到pineapp系统或组件的特征
   created: 2025/04/24
+  product:
+    id: pineapp.mail-secure
+    name: PineApp Mail-SeCure
+    vendor: PineApp
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - mail
 rules:
   r0:
     request:

@@ -1,10 +1,20 @@
-id: web-xecure-vpn
+id: xecure-xecure-vpn
 info:
   name: xecure-vpn
   author: archer
   verified: false
   description: 检测到xecure-vpn系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xecure.xecure-vpn
+    name: XecureVPN
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - vpn
+    aliases:
+      - Xecure VPN Manager
 rules:
   r0:
     request:

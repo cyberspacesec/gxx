@@ -1,10 +1,19 @@
-id: web-netscout-ngeniusone
+id: netscout-ngeniusone
 info:
   name: netscout-ngeniusone
   author: archer
   verified: false
   description: 检测到netscout-ngeniusone系统或组件的特征
   created: 2025/04/24
+  product:
+    id: netscout.ngeniusone
+    name: nGeniusONE
+    vendor: NETSCOUT
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - monitoring
 rules:
   r0:
     request:

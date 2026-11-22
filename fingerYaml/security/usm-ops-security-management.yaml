@@ -1,10 +1,18 @@
-id: web-运维安全管理平台
+id: usm-ops-security-management
 info:
   name: 运维安全管理平台
   author: archer
   verified: false
   description: 检测到运维安全管理平台系统或组件的特征
   created: 2025/04/24
+  product:
+    id: usm.ops-security-management
+    name: 运维安全管理平台 USM
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - bastion
 rules:
   r0:
     request:

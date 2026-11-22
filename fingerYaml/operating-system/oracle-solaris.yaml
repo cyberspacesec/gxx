@@ -1,5 +1,5 @@
 ---
-id: fofayaml-53
+id: oracle-solaris
 info:
   reference:
     - https://www.oracle.com/solaris/
@@ -9,6 +9,20 @@ info:
   description: Oracle 的 Unix 操作系统；响应标记不等同于主机系统已核实。
   tags: web,fofa,converted,operating-system
   created: 2025/04/07
+  product:
+    id: oracle.solaris
+    name: Oracle Solaris
+    vendor: Oracle
+    category: operating-system
+    identity: product
+    assurance: verified
+    tags:
+      - operating-system
+    aliases:
+      - Oracle Solaris
+    references:
+      - https://www.oracle.com/solaris/
+    description: Oracle 的 Unix 操作系统；响应标记不等同于主机系统已核实。
 rules:
   r0:
     request:

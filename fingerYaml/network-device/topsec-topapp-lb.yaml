@@ -1,10 +1,23 @@
-id: web-天融信负载均衡系统
+id: topsec-topapp-lb
 info:
   name: 天融信负载均衡系统
   author: archer
   verified: false
   description: 检测到天融信负载均衡系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: topsec.topapp-lb
+    name: 天融信 TopAPP-LB 负载均衡系统
+    vendor: 天融信
+    category: network-device
+    identity: product
+    assurance: verified
+    tags:
+      - load-balancer
+    aliases:
+      - 天融信负载均衡系统
+    references:
+      - https://www.topsec.com.cn/
 rules:
   r0:
     request:

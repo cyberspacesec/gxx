@@ -1,10 +1,18 @@
-id: web-cms4j
+id: cms4j
 info:
   name: cms4j
   author: archer
   verified: false
   description: 检测到cms4j系统或组件的特征
   created: 2025/04/24
+  product:
+    id: cms4j.cms4j
+    name: CMS4J
+    category: cms
+    identity: product
+    assurance: inferred
+    tags:
+      - cms
 rules:
   r0:
     request:

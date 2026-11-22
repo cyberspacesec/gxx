@@ -1,10 +1,20 @@
-id: web-安达通-tpn网关控制台登陆系统
+id: adt-tpn-2g-gateway-admin-login
 info:
   name: 安达通-tpn网关控制台登陆系统
   author: archer
   verified: false
   description: 检测到安达通-tpn网关控制台登陆系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: adt.tpn-2g-gateway
+    name: 安达通 TPN-2G 网关
+    vendor: 安达通
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
+      - login
 rules:
   r0:
     request:

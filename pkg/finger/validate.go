@@ -34,10 +34,12 @@ const (
 	CodeYAML              = "yaml"               // YAML 语法或结构错误，规则无法加载
 	CodeUnknownKey        = "unknown-key"        // 未知的键
 	CodeMissingID         = "missing-id"         // 缺少 id
+	CodeInvalidID         = "invalid-id"         // id 不是小写字母、数字与连字符组成的 3–96 个字符
 	CodeMissingName       = "missing-name"       // 缺少 info.name
 	CodeMissingRules      = "missing-rules"      // 没有子规则
 	CodeMissingExpression = "missing-expression" // 缺少总表达式
 	CodeExpression        = "expression-compile" // 表达式无法编译
+	CodeMissingProduct    = "missing-product"    // 没有声明 info.product
 	CodeInvalidProduct    = "invalid-product"    // info.product 缺少必填项或取值不合规
 	CodeMissingServices   = "missing-services"   // TCP/UDP 规则没有声明 info.services
 	CodeInvalidService    = "invalid-service"    // info.services 的一项不合规
@@ -100,6 +102,8 @@ func Validate(content []byte, opts ValidateOptions) []Diagnostic {
 	}
 	if strings.TrimSpace(fg.Id) == "" {
 		add(CodeMissingID, "id", "缺少规则标识 id")
+	} else if len(fg.Id) < minRuleIDLength || len(fg.Id) > maxRuleIDLength || !ruleIDPattern.MatchString(fg.Id) {
+		add(CodeInvalidID, "id", fmt.Sprintf("规则标识 %q 须由小写字母、数字与单个连字符组成，长度 %d–%d", fg.Id, minRuleIDLength, maxRuleIDLength))
 	}
 	validateInfo(fg, add)
 	if len(fg.Rules) == 0 {
@@ -123,19 +127,23 @@ func validateInfo(fg *Finger, add func(code, field, message string)) {
 	if strings.TrimSpace(fg.Info.Name) == "" {
 		add(CodeMissingName, "info.name", "缺少规则名称 info.name")
 	}
-	if fg.Info.Product != nil {
+	if fg.Info.Product == nil {
+		add(CodeMissingProduct, "info.product", "缺少产品声明 info.product")
+	} else {
 		validateProduct(*fg.Info.Product, add)
 	}
 	validateServices(fg, add)
 }
 
-// 产品声明的格式与上限。
+// 规则标识与产品声明的格式与上限。规则标识与产品标签都是由连字符连接的小写字母数字词。
 var (
-	productIDPattern  = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9-]*$`)
-	productTagPattern = regexp.MustCompile(`^[a-z0-9]+(-[a-z0-9]+)*$`)
+	ruleIDPattern    = regexp.MustCompile(`^[a-z0-9]+(-[a-z0-9]+)*$`)
+	productIDPattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9-]*$`)
 )
 
 const (
+	minRuleIDLength             = 3
+	maxRuleIDLength             = 96
 	maxProductIDLength          = 96
 	maxProductNameLength        = 200
 	maxProductTags              = 8
@@ -183,7 +191,7 @@ func validateProduct(product Product, add func(code, field, message string)) {
 			}
 		}
 	}
-	list("tags", "标签", product.Tags, maxProductTags, productTagPattern.MatchString, "须由小写字母、数字与连字符组成")
+	list("tags", "标签", product.Tags, maxProductTags, ruleIDPattern.MatchString, "须由小写字母、数字与连字符组成")
 	list("aliases", "别名", product.Aliases, maxProductAliases, func(value string) bool { return strings.TrimSpace(value) != "" }, "不能为空")
 	list("cpe", "CPE", product.CPE, len(product.CPE), ValidCPE, "不是有效的 CPE 2.3 格式化字符串")
 	list("references", "参考链接", product.References, maxProductReferences, ValidReferenceURL, "须为不含账号信息的 http(s) 链接，且不是占位域名")

@@ -1,10 +1,19 @@
-id: web-techbridge-cloud-conference
+id: techbridge-cloud-conference
 info:
   name: techbridge-cloud-conference
   author: archer
   verified: false
   description: 检测到techbridge-cloud-conference系统或组件的特征
   created: 2025/04/24
+  product:
+    id: techbridge.cloud-conference
+    name: Techbridge 云会议
+    vendor: Techbridge
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - video-conference
 rules:
   r0:
     request:

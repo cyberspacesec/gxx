@@ -1,10 +1,19 @@
-id: web-oracle-commerce-cloud
+id: oracle-commerce-cloud
 info:
   name: oracle-commerce-cloud
   author: archer
   verified: false
   description: 检测到oracle-commerce-cloud系统或组件的特征
   created: 2025/04/24
+  product:
+    id: oracle.commerce-cloud
+    name: Oracle Commerce Cloud
+    vendor: Oracle
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - ecommerce
 rules:
   r0:
     request:

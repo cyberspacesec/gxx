@@ -1,10 +1,19 @@
-id: web-hintsoft-pubwin2015
+id: hintsoft-pubwin
 info:
   name: hintsoft-pubwin2015
   author: archer
   verified: false
   description: 检测到hintsoft-pubwin2015系统或组件的特征
   created: 2025/04/24
+  product:
+    id: hintsoft.pubwin
+    name: PubWin
+    category: application
+    identity: product
+    assurance: inferred
+    aliases:
+      - hintsoft-pubwin2015
+      - PubWin 2015
 rules:
   r0:
     request:

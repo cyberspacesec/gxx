@@ -1,10 +1,21 @@
-id: web-myscada-hmi
+id: myscada-mypro
 info:
   name: myscada-hmi
   author: archer
   verified: false
   description: 检测到myscada-hmi系统或组件的特征
   created: 2025/04/24
+  product:
+    id: myscada.mypro
+    name: mySCADA myPRO
+    vendor: mySCADA Technologies
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - industrial
+    aliases:
+      - mySCADA HMI
 rules:
   r0:
     request:

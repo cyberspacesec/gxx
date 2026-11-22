@@ -1,10 +1,21 @@
-id: web-华为交换机Lanswitch
+id: huawei-lanswitch
 info:
   name: 华为交换机Lanswitch
   author: archer
   verified: false
   description: 检测到华为交换机Lanswitch系统或组件的特征
   created: 2025/04/24
+  product:
+    id: huawei.lanswitch
+    name: LANSwitch 交换机
+    vendor: 华为
+    category: network-device
+    identity: product
+    assurance: inferred
+    tags:
+      - switch
+    aliases:
+      - 华为交换机Lanswitch
 rules:
   r0:
     request:

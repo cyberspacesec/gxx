@@ -1,10 +1,21 @@
-id: web-mechat-online-service
+id: meiqia
 info:
   name: mechat-online-service
   author: archer
   verified: false
   description: 检测到mechat-online-service系统或组件的特征
   created: 2025/04/24
+  product:
+    id: meiqia.meiqia
+    name: 美洽在线客服
+    vendor: 美洽
+    category: application
+    identity: signal
+    assurance: inferred
+    tags:
+      - im
+    aliases:
+      - mechat
 rules:
   r0:
     request:

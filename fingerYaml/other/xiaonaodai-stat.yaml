@@ -1,10 +1,16 @@
-id: web-xiaonaodai
+id: xiaonaodai-stat
 info:
   name: xiaonaodai
   author: archer
   verified: false
   description: 检测到xiaonaodai系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xiaonaodai.stat
+    name: 小脑袋统计
+    category: other
+    identity: signal
+    assurance: inferred
 rules:
   r0:
     request:

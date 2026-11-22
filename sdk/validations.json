@@ -1,0 +1,93 @@
+[
+  {
+    "rule_id": "alibaba-fastjson",
+    "rule_sha256": "07d015864df7ae037d9f2ce3ae02a34718da3c21c8291d84ef83316c7809e279",
+    "validation": {
+      "status": "sample-tested",
+      "method": "synthetic-http-fixtures",
+      "positive_samples": 4,
+      "negative_samples": 8,
+      "reviewed_at": "2026-11-22",
+      "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+    },
+    "confidence": null
+  },
+  {
+    "rule_id": "apache-http-server",
+    "rule_sha256": "a846b7eb1af611f0da9d53d9d26bfaf0f68340859ff046851ac7f9f06d1e3acc",
+    "validation": {
+      "status": "sample-tested",
+      "method": "synthetic-http-fixtures",
+      "positive_samples": 2,
+      "negative_samples": 1,
+      "reviewed_at": "2026-11-22",
+      "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+    },
+    "confidence": null
+  },
+  {
+    "rule_id": "apache-tomcat",
+    "rule_sha256": "01688af87b9430857c3a12641f86076208cd34b4af092f6c51ec46c773ead7ba",
+    "validation": {
+      "status": "sample-tested",
+      "method": "synthetic-http-fixtures",
+      "positive_samples": 3,
+      "negative_samples": 1,
+      "reviewed_at": "2026-11-22",
+      "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+    },
+    "confidence": null
+  },
+  {
+    "rule_id": "arl",
+    "rule_sha256": "b3c065c8c2c192987850a6c8f8cee370bd9e1c47c1f3c49ce91bad7836aebd37",
+    "validation": {
+      "status": "sample-tested",
+      "method": "synthetic-http-fixtures",
+      "positive_samples": 1,
+      "negative_samples": 1,
+      "reviewed_at": "2026-11-22",
+      "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+    },
+    "confidence": null
+  },
+  {
+    "rule_id": "jenkins",
+    "rule_sha256": "ad0d178093019aeae9efa53b3832061a58361c3316ae70c512185a45546d24d3",
+    "validation": {
+      "status": "sample-tested",
+      "method": "synthetic-http-fixtures",
+      "positive_samples": 2,
+      "negative_samples": 2,
+      "reviewed_at": "2026-11-22",
+      "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+    },
+    "confidence": null
+  },
+  {
+    "rule_id": "nginx",
+    "rule_sha256": "acfdcc3d4c798d59b0b529206cd3861eec3f339758548c589638751dd3f84004",
+    "validation": {
+      "status": "sample-tested",
+      "method": "synthetic-http-fixtures",
+      "positive_samples": 3,
+      "negative_samples": 2,
+      "reviewed_at": "2026-11-22",
+      "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+    },
+    "confidence": null
+  },
+  {
+    "rule_id": "wordpress",
+    "rule_sha256": "88c5f139a9b80cd5884de674478d210452cd69aa5ba8241280b0680145ce9f59",
+    "validation": {
+      "status": "sample-tested",
+      "method": "synthetic-http-fixtures",
+      "positive_samples": 4,
+      "negative_samples": 1,
+      "reviewed_at": "2026-11-22",
+      "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
+    },
+    "confidence": null
+  }
+]

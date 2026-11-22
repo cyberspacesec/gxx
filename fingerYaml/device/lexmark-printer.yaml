@@ -1,10 +1,21 @@
-id: web-lexmark
+id: lexmark-printer
 info:
   name: lexmark
   author: archer
   verified: false
   description: 检测到lexmark系统或组件的特征
   created: 2025/04/24
+  product:
+    id: lexmark.printer
+    name: Lexmark 打印机
+    vendor: Lexmark
+    category: device
+    identity: product
+    assurance: inferred
+    tags:
+      - printer
+    aliases:
+      - lexmark
 rules:
   r0:
     request:

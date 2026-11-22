@@ -1,10 +1,19 @@
-id: web-任子行-net110网络安全审计系统
+id: surfilter-net110
 info:
   name: 任子行-net110网络安全审计系统
   author: archer
   verified: false
   description: 检测到任子行-net110网络安全审计系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: surfilter.net110
+    name: 任子行 NET110 网络安全审计系统
+    vendor: 任子行
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - audit
 rules:
   r0:
     request:

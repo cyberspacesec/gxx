@@ -1,10 +1,26 @@
-id: web-科来-网络全流量安全分析系统
+id: colasoft-tsa
 info:
   name: 科来-网络全流量安全分析系统
   author: archer
   verified: false
   description: 检测到科来-网络全流量安全分析系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: colasoft.tsa
+    name: 科来网络全流量安全分析系统
+    vendor: 科来
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - ids
+      - monitoring
+    aliases:
+      - 网络全流量安全分析系统（TSA）
+      - 科来 TSA
+      - TSA
+      - colasoft-tsa
+      - 科来-网络全流量安全分析系统
 rules:
   r0:
     request:

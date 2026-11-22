@@ -1,10 +1,18 @@
-id: web-web-crossing-server
+id: webcrossing-web-crossing
 info:
   name: web-crossing-server
   author: archer
   verified: false
   description: 检测到web-crossing-server系统或组件的特征
   created: 2025/04/24
+  product:
+    id: webcrossing.web-crossing
+    name: Web Crossing
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - forum
 rules:
   r0:
     request:

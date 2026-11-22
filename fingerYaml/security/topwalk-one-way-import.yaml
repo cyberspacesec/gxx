@@ -1,10 +1,19 @@
-id: web-天行网安-安全单向导入系统
+id: topwalk-one-way-import
 info:
   name: 天行网安-安全单向导入系统
   author: archer
   verified: false
   description: 检测到天行网安-安全单向导入系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: topwalk.one-way-import
+    name: 天行安全单向导入系统
+    vendor: 天行网安
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - gateway
 rules:
   r0:
     request:

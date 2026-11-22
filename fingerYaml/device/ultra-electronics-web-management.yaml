@@ -1,10 +1,16 @@
-id: web-ultra_electronics
+id: ultra-electronics-web-management
 info:
   name: ultra_electronics
   author: archer
   verified: false
   description: 检测到ultra_electronics系统或组件的特征
   created: 2025/04/24
+  product:
+    id: ultra-electronics.web-management
+    name: Ultra Electronics 设备管理界面
+    category: device
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:

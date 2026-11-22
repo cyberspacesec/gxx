@@ -1,10 +1,18 @@
-id: web-storage-management
+id: generic-storage-management-stor2
 info:
   name: storage-management
   author: archer
   verified: false
   description: 检测到storage-management系统或组件的特征
   created: 2025/04/24
+  product:
+    id: generic.storage-management-stor2
+    name: 存储管理界面（固件 stor_2.0）
+    category: device
+    identity: signal
+    assurance: inferred
+    tags:
+      - storage
 rules:
   r0:
     request:

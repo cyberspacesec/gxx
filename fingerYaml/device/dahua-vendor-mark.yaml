@@ -1,10 +1,22 @@
-id: web-大华网络设备
+id: dahua-vendor-mark
 info:
   name: 大华网络设备
   author: archer
   verified: true
   description: 检测到大华网络设备系统或组件的特征
   created: 2025/04/24
+  product:
+    id: dahua.vendor-mark
+    name: 大华厂商标识
+    vendor: 大华
+    category: device
+    identity: signal
+    assurance: inferred
+    tags:
+      - camera
+      - nvr
+    aliases:
+      - 大华网络设备
 rules:
   r0:
     request:

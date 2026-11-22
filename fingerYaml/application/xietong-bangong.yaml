@@ -1,10 +1,18 @@
-id: web-协同办公系统
+id: xietong-bangong
 info:
   name: 协同办公系统
   author: archer
   verified: false
   description: 检测到协同办公系统系统或组件的特征
   created: 2025/04/24
+  product:
+    id: xietong-bangong.xietong-bangong
+    name: 协同办公系统
+    category: application
+    identity: product
+    assurance: inferred
+    tags:
+      - oa
 rules:
   r0:
     request:

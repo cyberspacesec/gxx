@@ -1,10 +1,18 @@
-id: web-netpilot
+id: netpilot
 info:
   name: netpilot
   author: archer
   verified: false
   description: 检测到netpilot系统或组件的特征
   created: 2025/04/24
+  product:
+    id: netpilot.netpilot
+    name: NetPilot
+    category: security
+    identity: product
+    assurance: inferred
+    tags:
+      - firewall
 rules:
   r0:
     request:

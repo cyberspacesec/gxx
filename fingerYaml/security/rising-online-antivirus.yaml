@@ -1,10 +1,17 @@
-id: web-rising-antivirus-online
+id: rising-online-antivirus
 info:
   name: rising-antivirus-online
   author: archer
   verified: false
   description: 检测到rising-antivirus-online系统或组件的特征
   created: 2025/04/24
+  product:
+    id: rising.online-antivirus
+    name: 瑞星在线杀毒
+    vendor: 瑞星
+    category: security
+    identity: product
+    assurance: inferred
 rules:
   r0:
     request:
