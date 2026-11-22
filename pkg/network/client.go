@@ -42,6 +42,7 @@ type HTTPClient struct {
 	resourceMu        sync.Mutex
 	resourceHashes    map[[32]byte]*list.Element
 	resourceOrder     *list.List
+	resourceBytes     int
 }
 
 // NewHTTPClient 创建 HTTP 客户端实例。
@@ -108,7 +109,7 @@ func (c *HTTPClient) Close() error {
 		return nil
 	}
 	c.resourceMu.Lock()
-	c.resourceHashes, c.resourceOrder = nil, nil
+	c.resourceHashes, c.resourceOrder, c.resourceBytes = nil, nil, 0
 	c.resourceMu.Unlock()
 	c.transportCache.Range(func(key, value any) bool {
 		if transport, ok := value.(*http.Transport); ok {

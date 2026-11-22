@@ -15,6 +15,7 @@ import (
 	"github.com/cyberspacesec/gxx/utils/logger"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -26,6 +27,9 @@ type GetIconHash struct {
 	proxy   string
 	client  *network.HTTPClient
 	timeout time.Duration
+	// evidenceLimit 不小于 0 时在计算哈希的同一次读取中记录证据，原始字节最多保留该值。
+	evidenceLimit int
+	evidence      *IconEvidence
 }
 
 // NewGetIconHash 初始化 GetIconHash
@@ -37,9 +41,16 @@ func NewGetIconHash(iconURL string, proxy string) *GetIconHash {
 			"Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 			"Accept-Language": "en-US,en;q=0.5",
 		},
-		proxy:   proxy,
-		timeout: defaultTimeout,
+		proxy:         proxy,
+		timeout:       defaultTimeout,
+		evidenceLimit: -1,
 	}
+}
+
+// WithEvidence 在计算哈希的同一次读取中记录证据，原始字节最多保留 limit 字节。
+func (g *GetIconHash) WithEvidence(limit int) *GetIconHash {
+	g.evidenceLimit = max(limit, 0)
+	return g
 }
 
 // WithHTTPClient 绑定 Runner/Engine 持有的 HTTP 客户端（nil 时回退 DefaultHTTPClient）。
@@ -96,9 +107,18 @@ func (g *GetIconHash) hashDataURL(iconURL string) int32 {
 	if reader.encoded {
 		source = base64.NewDecoder(base64.StdEncoding, reader)
 	}
+	var capture *iconCapture
+	if g.evidenceLimit >= 0 {
+		capture = newIconCapture(source, g.evidenceLimit)
+		source = capture
+	}
 	hash, err := hashIconReader(source, nil)
 	if err != nil {
 		return 0
+	}
+	if capture != nil && hash != 0 {
+		mediaType, _, _ := strings.Cut(strings.TrimSpace(header[5:]), ";")
+		g.evidence = capture.evidence(dataURLEvidenceURL(iconURL), mediaType, strconv.FormatInt(int64(hash), 10))
 	}
 	return hash
 }
@@ -137,7 +157,13 @@ func (g *GetIconHash) hashHTTPURL(parentCtx context.Context, iconURL string) int
 	}
 	imageMIME := strings.HasPrefix(strings.ToLower(strings.TrimSpace(resp.Header.Get("Content-Type"))), "image/")
 	probe := iconContentProbe{validate: true, imageMIME: imageMIME}
-	hash, err := hashIconReader(resp.Body, &probe)
+	var body io.Reader = resp.Body
+	var capture *iconCapture
+	if g.evidenceLimit >= 0 {
+		capture = newIconCapture(body, g.evidenceLimit)
+		body = capture
+	}
+	hash, err := hashIconReader(body, &probe)
 	if err != nil {
 		logger.FromContext(reqCtx).Debug("读取图标失败: %s", err)
 		return 0
@@ -147,6 +173,9 @@ func (g *GetIconHash) hashHTTPURL(parentCtx context.Context, iconURL string) int
 	}
 	probe.finish()
 	if probe.binary || probe.elementIs("svg") || imageMIME && !probe.html() {
+		if capture != nil && hash != 0 {
+			g.evidence = capture.evidence(iconURL, resp.Header.Get("Content-Type"), strconv.FormatInt(int64(hash), 10))
+		}
 		return hash
 	}
 	return 0

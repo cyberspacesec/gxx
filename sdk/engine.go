@@ -103,6 +103,8 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		CacheMaxBytes:        uint64(cfg.cacheMaxBytes),
 		BodyLimit:            cfg.bodyLimit,
 		ResponseCacheBudget:  cfg.responseCacheBudget,
+		IconEvidence:         cfg.iconEvidence,
+		IconEvidenceData:     cfg.iconEvidenceData,
 	}
 	if !cfg.enableRateLimit {
 		scanCfg.RateLimitQPS = 0
@@ -430,6 +432,7 @@ func (e *Engine) GetBaseInfo(ctx context.Context, target string) (*BaseInfo, err
 		Redirects:   convertRedirects(base.Redirects),
 		HeaderOrder: base.HeaderOrder,
 		TLS:         convertTLS(base.TLS),
+		Icon:        convertIcon(base.Icon),
 	}
 	if base.Server != nil {
 		info.Server = convertServerInfo(base.Server)
@@ -493,6 +496,7 @@ func (e *Engine) convertTargetResult(r *runner.TargetResult) *TargetResult {
 		Matches:     make([]FingerMatch, 0),
 		HeaderOrder: r.HeaderOrder,
 		TLS:         convertTLS(r.TLS),
+		Icon:        convertIcon(r.Icon),
 	}
 	if r.LastResponse != nil {
 		tr.Headers = string(r.LastResponse.RawHeader)
@@ -560,6 +564,13 @@ func convertTLS(info *network.TLSInfo) *TLSInfo {
 		return nil
 	}
 	return &TLSInfo{Version: info.Version, CipherSuite: info.CipherSuite, ALPN: info.ALPN, JA3S: info.JA3S, JARM: info.JARM}
+}
+
+func convertIcon(icon *finger.IconEvidence) *IconEvidence {
+	if icon == nil {
+		return nil
+	}
+	return &IconEvidence{URL: icon.URL, ContentType: icon.ContentType, Bytes: icon.Bytes, SHA256: icon.SHA256, MMH3: icon.MMH3, Data: icon.Data, TooLarge: icon.TooLarge, CrossOrigin: icon.CrossOrigin}
 }
 
 func convertRedirects(redirects []runner.Redirect) []Redirect {

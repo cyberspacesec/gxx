@@ -47,6 +47,10 @@ type OptionsRequest struct {
 	Probe bool
 	// BodyLimit 是响应正文的读取上限（字节），0 表示 MaxDefaultBody。
 	BodyLimit int64
+	// IconEvidence 为 true 时页面图标在计算哈希的同一次读取中记录证据，
+	// 原始字节不超过 IconEvidenceData 时一并保存。
+	IconEvidence     bool
+	IconEvidenceData int
 }
 
 // ReadLimit 返回响应正文的读取上限。

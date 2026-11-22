@@ -43,6 +43,8 @@ type engineConfig struct {
 	cacheMaxBytes       int64
 	responseCacheBudget int64
 	bodyLimit           int64
+	iconEvidence        bool
+	iconEvidenceData    int
 
 	// 监控
 	enableMonitor    bool
@@ -303,6 +305,20 @@ func WithBodyLimit(n int64) Option {
 			return fmt.Errorf("%w: body limit must be > 0, got %d", ErrInvalidOption, n)
 		}
 		c.bodyLimit = n
+		return nil
+	}
+}
+
+// WithIconEvidence 在 TargetResult.Icon 中记录最终页面图标的证据：地址、类型、字节数、
+// SHA256、MMH3，以及不超过 maxData 字节的原始数据（maxData 为 0 时不保存原始数据）。
+// 证据来自计算 icon_hash 的同一次真实请求，不再二次请求；同一引擎内命中图标缓存时
+// 证据随缓存复用。默认关闭。
+func WithIconEvidence(maxData int) Option {
+	return func(c *engineConfig) error {
+		if maxData < 0 {
+			return fmt.Errorf("%w: icon evidence data limit must be >= 0, got %d", ErrInvalidOption, maxData)
+		}
+		c.iconEvidence, c.iconEvidenceData = true, maxData
 		return nil
 	}
 }

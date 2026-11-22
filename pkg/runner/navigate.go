@@ -140,7 +140,15 @@ func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logg
 	last := base.pages[len(base.pages)-1]
 	for _, page := range base.pages {
 		pageURL, _ := url.Parse(page.url)
-		page.response = finger.BuildPageResponseOwned(ctx, pageResponse(page), page.body, client, optionsFor(origin, pageURL, options), page.url, page == last)
+		pageCtx := ctx
+		var iconEvidence func() *finger.IconEvidence
+		if page == last && options.IconEvidence {
+			pageCtx, iconEvidence = finger.WithIconEvidenceSlot(ctx)
+		}
+		page.response = finger.BuildPageResponseOwned(pageCtx, pageResponse(page), page.body, client, optionsFor(origin, pageURL, options), page.url, page == last)
+		if iconEvidence != nil {
+			base.Icon = iconEvidence()
+		}
 		network.RecorderFrom(ctx).Bind(page.source, page.response)
 		if page.truncated {
 			network.MarkTruncated(ctx, page.response)

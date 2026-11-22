@@ -162,6 +162,8 @@ type TargetResult struct {
 	HeaderOrder []string `json:"header_order,omitempty"`
 	// TLS 是最终页面所在连接的握手摘要；明文目标为 nil。
 	TLS *TLSInfo `json:"tls,omitempty"`
+	// Icon 是最终页面图标的证据，WithIconEvidence 开启且页面有图标时非空。
+	Icon *IconEvidence `json:"icon,omitempty"`
 	// Error 由调用方在目标扫描失败时填写，用于把失败原因随结果一起输出；
 	// Scan 成功返回的结果中始终为空。
 	Error string `json:"error,omitempty"`
@@ -179,9 +181,25 @@ type BaseInfo struct {
 	TechStack  *TechStack  `json:"tech_stack,omitempty"`
 	ICP        string      `json:"icp,omitempty"`
 	Certs      []CertInfo  `json:"certs,omitempty"`
-	// HeaderOrder 与 TLS 的含义与 TargetResult 相同。
-	HeaderOrder []string `json:"header_order,omitempty"`
-	TLS         *TLSInfo `json:"tls,omitempty"`
+	// HeaderOrder、TLS 与 Icon 的含义与 TargetResult 相同。
+	HeaderOrder []string      `json:"header_order,omitempty"`
+	TLS         *TLSInfo      `json:"tls,omitempty"`
+	Icon        *IconEvidence `json:"icon,omitempty"`
+}
+
+// IconEvidence 是最终页面图标的证据，来自计算 icon_hash 的同一次真实请求，不另发请求。
+// MMH3 与 response.icon_hash 相同；Data 是图标原始字节，超过 WithIconEvidence 的上限时
+// 为空并置 TooLarge；CrossOrigin 表示图标与页面不属于同一资产。图标地址是 data URL 时
+// URL 只保留媒体类型部分。
+type IconEvidence struct {
+	URL         string `json:"url"`
+	ContentType string `json:"content_type,omitempty"`
+	Bytes       int64  `json:"bytes"`
+	SHA256      string `json:"sha256"`
+	MMH3        string `json:"mmh3"`
+	Data        []byte `json:"data,omitempty"`
+	TooLarge    bool   `json:"too_large,omitempty"`
+	CrossOrigin bool   `json:"cross_origin,omitempty"`
 }
 
 // TLSInfo 是一次 TLS 握手的摘要。版本、套件、ALPN 与 JA3S 取自扫描本来就有的那次

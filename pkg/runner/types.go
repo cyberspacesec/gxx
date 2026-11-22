@@ -44,8 +44,10 @@ type BaseInfoResponse struct {
 	// HeaderOrder 是最后一页的响应头名称，按服务器发送的顺序；TLS 是最后一页所在连接的握手摘要。
 	HeaderOrder []string
 	TLS         *network.TLSInfo
-	pages       []*scanPage
-	origin      *url.URL // 入口所在的资产
+	// Icon 是最后一页图标的证据，开启 IconEvidence 时记录。
+	Icon   *finger.IconEvidence
+	pages  []*scanPage
+	origin *url.URL // 入口所在的资产
 }
 
 // Redirect 入口跳转链上的一跳。Followed 为 false 表示页面里识别出的跳转指向其他资产，没有访问。
@@ -87,6 +89,7 @@ type TargetResult struct {
 	Redirects    []Redirect
 	HeaderOrder  []string
 	TLS          *network.TLSInfo
+	Icon         *finger.IconEvidence
 }
 
 // FingerMatch 单条指纹匹配结果。
@@ -170,6 +173,9 @@ type ScanConfig struct {
 	BodyLimit int64
 	// ResponseCacheBudget 是每次扫描的响应归一化缓存预算（字节），0 表示默认 8 MiB。
 	ResponseCacheBudget int64
+	// IconEvidence 为 true 时记录最终页面图标的证据，原始字节最多保留 IconEvidenceData。
+	IconEvidence     bool
+	IconEvidenceData int
 }
 
 // ScanOptions 是单次扫描的附加配置，零值与普通扫描相同。

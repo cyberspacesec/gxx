@@ -199,6 +199,7 @@ func (r *Runner) applyBaseInfo(result *TargetResult, base *BaseInfoResponse) {
 	result.Redirects = base.Redirects
 	result.HeaderOrder = base.HeaderOrder
 	result.TLS = base.TLS
+	result.Icon = base.Icon
 }
 
 // executeFingerprintMatching 并发评估当前指纹库的所有规则。
@@ -347,6 +348,7 @@ func (r *Runner) buildHTTPOptions(timeout time.Duration, followRedirects bool) n
 	// cfg 在构造期复制，随后只读；规则覆盖头在 SendRequest 中单独复制。
 	opts.CustomHeaders = r.cfg.CustomHeaders
 	opts.BodyLimit = r.cfg.BodyLimit
+	opts.IconEvidence, opts.IconEvidenceData = r.cfg.IconEvidence, r.cfg.IconEvidenceData
 	return opts
 }
 

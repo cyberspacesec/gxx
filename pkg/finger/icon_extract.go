@@ -224,6 +224,18 @@ func isImagePath(raw string) bool {
 // GetPageIconHash 依次验证页面候选，最后回退根路径。所有请求共享一个
 // 时间预算；失败不写长期缓存，签名参数不同的地址保持独立。
 func GetPageIconHash(ctx context.Context, client *network.HTTPClient, pageURL string, body []byte, options network.OptionsRequest) string {
+	hash, evidence := pageIcon(ctx, client, pageURL, body, options)
+	keepIconEvidence(ctx, pageURL, evidence)
+	return hash
+}
+
+// pageIcon 返回页面图标的哈希；请求选项开启 IconEvidence 时同时返回选中图标的证据，
+// 证据来自计算哈希的同一次读取。
+func pageIcon(ctx context.Context, client *network.HTTPClient, pageURL string, body []byte, options network.OptionsRequest) (string, *IconEvidence) {
+	evidence := -1
+	if options.IconEvidence {
+		evidence = max(options.IconEvidenceData, 0)
+	}
 	proxy, timeout := options.Proxy, options.Timeout
 	if ctx == nil {
 		ctx = context.Background()
@@ -233,31 +245,33 @@ func GetPageIconHash(ctx context.Context, client *network.HTTPClient, pageURL st
 	}
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
+	fetch := func(raw string, headers map[string]string) (string, *IconEvidence, bool) {
+		hash, captured := getIconHashExactCached(ctx, client, raw, proxy, timeout, headers, evidence)
+		return hash, captured, hash != "" && hash != "0"
+	}
 	urls, declared := collectIconURLs(pageURL, body)
 	attempted := min(declared, maxIconAttempts)
 	for _, raw := range urls[:attempted] {
 		if iconContextExpired(ctx) {
-			return "0"
+			return "0", nil
 		}
-		if hash := getIconHashExactCached(ctx, client, raw, proxy, timeout, pageIconHeaders(pageURL, raw, options.CustomHeaders)); hash != "" && hash != "0" {
-			return hash
+		if hash, captured, ok := fetch(raw, pageIconHeaders(pageURL, raw, options.CustomHeaders)); ok {
+			return hash, captured
 		}
 	}
 	if iconContextExpired(ctx) {
-		return "0"
+		return "0", nil
 	}
 	if raw := defaultFaviconURL(pageURL); raw != "" {
 		headers := pageIconHeaders(pageURL, raw, options.CustomHeaders)
-		hash := getIconHashExactCached(ctx, client, raw, proxy, timeout, headers)
-		if hash != "" && hash != "0" {
-			return hash
+		if hash, captured, ok := fetch(raw, headers); ok {
+			return hash, captured
 		}
 		// 无声明图标时给默认地址第二次机会，容忍 /favicon.ico 的瞬时 404/5xx。
 		// 失败不写长期缓存，因此这是有意的少量重试；社交图片后备依赖此次确认默认图标确实缺失。
 		if declared == 0 && !iconContextExpired(ctx) {
-			hash = getIconHashExactCached(ctx, client, raw, proxy, timeout, headers)
-			if hash != "" && hash != "0" {
-				return hash
+			if hash, captured, ok := fetch(raw, headers); ok {
+				return hash, captured
 			}
 		}
 	}
@@ -272,11 +286,11 @@ func GetPageIconHash(ctx context.Context, client *network.HTTPClient, pageURL st
 			continue
 		}
 		attempted++
-		if hash := getIconHashExactCached(ctx, client, raw, proxy, timeout, pageIconHeaders(pageURL, raw, options.CustomHeaders)); hash != "" && hash != "0" {
-			return hash
+		if hash, captured, ok := fetch(raw, pageIconHeaders(pageURL, raw, options.CustomHeaders)); ok {
+			return hash, captured
 		}
 	}
-	return "0"
+	return "0", nil
 }
 
 func pageIconHeaders(pageURL, iconURL string, custom map[string]string) map[string]string {
