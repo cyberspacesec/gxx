@@ -20,7 +20,7 @@ import "github.com/cyberspacesec/gxx/sdk"
 在调用方的 Go 模块中执行：
 
 ```bash
-go get github.com/cyberspacesec/gxx/sdk@v1.7.0
+go get github.com/cyberspacesec/gxx/sdk@v1.8.0
 ```
 
 模块路径为 `github.com/cyberspacesec/gxx`，调用方无需配置本地 `replace`。使用 `@latest` 获取当前版本线的最新稳定版本，按当前字段适配调用代码；`FingerInfo.Tags` 为 `[]string`。

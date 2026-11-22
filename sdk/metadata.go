@@ -20,7 +20,7 @@ import (
 )
 
 // Version 是 SDK 源版本，不能作为被识别产品的版本。
-const Version = "1.7.0"
+const Version = "1.8.0"
 
 type RuleSource struct {
 	Path    string `json:"path"`
