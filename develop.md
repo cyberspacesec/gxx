@@ -16,7 +16,7 @@ GXX 是一款用 Go 编写的网络资产指纹识别引擎，核心目标是「
 - **多维度信息提取**：标题、Server 头、证书、ICP 备案号、Favicon Hash、Wappalyzer 技术栈
 - **多格式输出**：TXT / CSV / JSON 三种文件格式 + Unix Domain Socket 实时流式输出
 - **双形态交付**：CLI 二进制（`cmd/main.go`）+ Go SDK 库（`sdk/`），SDK 所有对外类型自包含、支持 `context.Context`
-- **指纹库可嵌入**：通过 `go:embed` 将 `fingerYaml/` 下 2000+ 条规则编入二进制，单文件部署
+- **指纹库可嵌入**：通过 `go:embed` 将 `fingerYaml/` 下 2,348 条规则编入二进制，单文件部署
 
 ---
 
@@ -58,6 +58,9 @@ gxx/
 ├── sdk/                              # ② SDK 对外层（全实例化 API）
 │   ├── sdk.go                        # 对外类型 + NewFingerOptions
 │   ├── engine.go / options.go / errors.go
+│   ├── metadata.go                   # 产品信息、规则目录、专项样本记录
+│   ├── catalog.json                  # 内置产品目录（go generate ./sdk 由 fingerYaml/ 生成）
+│   ├── validations.json              # 专项样本记录（样本测试 -update-validations 据实写入）
 │   ├── writer.go / writer_test.go    # 实例化 Writer 抽象（File/Sock/Multi/Nop）
 │   └── sdk.md                        # SDK 使用文档
 │
@@ -107,7 +110,8 @@ gxx/
 ├── internal/                         # 内部工具包
 │   ├── casefold/                     # 与 bytes.ToLower 逐字节一致的快速小写转换
 │   ├── literal/                      # Aho-Corasick 多字面量索引
-│   └── lifecycle/                    # 实例生命周期辅助
+│   ├── lifecycle/                    # 实例生命周期辅助
+│   └── catalog/                      # 由规则的产品声明生成 sdk/catalog.json（gen/ 为命令）
 │
 ├── types/                            # 公共类型
 │   ├── options.go                    # YamlFingerType
@@ -122,10 +126,8 @@ gxx/
 ├── fingerYaml/                       # 内置指纹库（go:embed 嵌入）
 │   ├── embed.go                      # -tags embed：go:embed 编入二进制
 │   ├── loader.go                     # 默认构建（无 tag）：从磁盘 fingerYaml/ 加载
-│   ├── fingerprints/                 # 指纹规则集 1
-│   ├── fingers/                      # 指纹规则集 2
-│   ├── fofa/                         # FOFA 风格规则
-│   └── jiajiu/                       # 主指纹库（2300+ YAML 文件）
+│   ├── builtin.go                    # 嵌入库加载，检查同一产品的声明一致
+│   └── <分类>/<规则标识>.yaml         # 2,348 条规则，按 info.product.category 分为 14 个目录
 │
 └── example/                          # 6 个 SDK 调用示例
     ├── basic_scan/                   # 基础单目标
@@ -618,7 +620,7 @@ goreleaser release --snapshot --clean
 7. YAML 规则解析使用调用内状态；并发加载、直接解码 `Rule` 和重复规则名称均有回归用例
 8. **Cookie 会话按扫描隔离**：每次扫描使用独立的会话，同一 Engine 对同一目标的多次扫描互不影响；图标哈希缓存按 Cookie 摘要隔离
 9. **技术栈只用跳转链最后一页**：中间跳的响应头不参与 Wappalyzer 识别，但参与指纹规则匹配（见 [资产与跳转](docs/资产与跳转.md)）
-10. **磁盘指纹库查找**：默认（非 embed）构建从工作目录逐级向上、以及二进制同级目录查找 `fingerYaml/`，但只接受"看起来像内置库"的目录（含 `fingerprints`/`fingers`/`fofa`/`jiajiu` 中至少两个子目录），避免无关同名目录被静默采用。自定义规则请用 `PocFile`/`PocYaml` 显式指定
+10. **磁盘指纹库查找**：默认（非 embed）构建从工作目录逐级向上、以及二进制同级目录查找 `fingerYaml/`，但只接受"看起来像内置库"的目录（含产品分类子目录中的至少两个，如 `application`、`web-server`），避免无关同名目录被静默采用。自定义规则请用 `PocFile`/`PocYaml` 显式指定
 11. **字符集解码**：`decodeHTMLBody` 按显式声明解码，无声明时 UTF-8 保留、否则 GB18030 兜底。页面谎报字符集（如标 utf-8 实为 GBK）时以标注为准，由 GB18030 兜底覆盖常见中文误标
 
 ---
@@ -650,7 +652,7 @@ goreleaser release --snapshot --clean
 - [ ] 读 `pkg/cel/cel.go` + `celprogram.go` 理解表达式引擎
 - [ ] 读 `pkg/runner/cache.go` 理解缓存策略
 - [ ] 读 `pkg/runner/pool.go` 理解规则池抽象
-- [ ] 看 `fingerYaml/jiajiu/` 下任意 YAML 文件理解规则编写
+- [ ] 看 `fingerYaml/<分类>/` 下任意 YAML 文件理解规则编写，产品声明见 `docs/指纹规则格式说明.md`
 
 **作为指纹规则编写者**：
 

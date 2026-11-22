@@ -89,8 +89,8 @@ func main() {
 | `(*Engine).NormalizeURL(ctx, target) (string, error)` | 确定目标所属的资产地址：已带协议时原样返回，否则请求一次入口确定 http/https |
 | `(*Engine).LoadFingerOptions(opts) error` | 运行期重新加载指纹规则 |
 | `(*Engine).FingerCount() int` | 当前加载的指纹数量 |
-| `(*Engine).RuleCatalog(ctx) ([]RuleMetadata, error)` | 全部规则来源、产品目录、检测条件与质量缺项 |
-| `ProductCatalog() ([]ProductDefinition, error)` | 内置产品目录的独立副本 |
+| `(*Engine).RuleCatalog(ctx) ([]RuleMetadata, error)` | 全部规则来源、产品与服务声明、检测条件与质量缺项 |
+| `ProductCatalog() ([]ProductDefinition, error)` | 内置产品目录的独立副本，由内置规则的产品声明生成 |
 | `ValidateRule(content []byte, opts ValidateOptions) []Diagnostic` | 不发请求校验一条规则，结论与 `NewEngine` 加载一致 |
 | `(*Engine).PoolStats() PoolStats` | 规则池统计快照 |
 | `(*Engine).IsClosed() bool` | 引擎是否已 Close |
@@ -102,7 +102,7 @@ func main() {
 |--------|--------|------|
 | `WithFingerOptions(opts FingerOptions)` | 空（嵌入式指纹库） | 指纹规则文件 / 目录 |
 | `WithMatchDetails(enabled bool)` | `true` | 回传成功子规则与证据，关闭时仍保留产品版本和元数据 |
-| `WithProductCatalog(products []ProductDefinition)` | 内置目录 | 实例产品目录，按明确的规则 ID 映射；同一产品 ID 的元数据一致覆盖 |
+| `WithProductCatalog(products []ProductDefinition)` | 规则自带声明 | 按规则 ID 追加或覆盖产品声明；同一规则被两个目录项声明时报错 |
 | `WithRuleAssessments(assessments []RuleAssessment)` | 内置记录 | 按规则 ID 与 SHA256 绑定的测试记录、外部校准置信度 |
 | `WithRuleSourceVersion(version string)` | 空 | 外部规则包的来源版本 |
 | `WithProxy(addr string)` | `""` | 单个代理地址：http/https/socks5/socks5h（socks4/socks4a 仅 TCP）。UDP 规则仅 socks5/socks5h。证书默认不校验（含 TLS 代理）；TLS 代理可用 `?tls-insecure-skip-verify=false` 开启校验，`tls-ca-file`/`tls-domain` 指定信任根与校验名 |
@@ -235,15 +235,57 @@ type FingerMatch struct {
 
 ### 规则与产品信息
 
-`FingerInfo.Author` 保存规则作者，`Vendor` 来自独立产品目录。`Tags` 为 `[]string`，未知标签不归入 Web。`References` 保存可追溯的 HTTP/HTTPS 产品依据，过滤空值和 `example.com` 占位链接。`Created` 保留规则创建时间。
+```go
+type FingerInfo struct {
+    ID                 string         `json:"id"`
+    Name               string         `json:"name"`
+    Author             string         `json:"author,omitempty"`
+    Severity           string         `json:"severity,omitempty"`
+    Description        string         `json:"description,omitempty"`
+    Tags               []string       `json:"tags,omitempty"`
+    Vendor             string         `json:"vendor,omitempty"`
+    Verified           *bool          `json:"verified"`
+    VerificationStatus string         `json:"verification_status"`
+    Confidence         *float64       `json:"confidence"`
+    References         []string       `json:"references,omitempty"`
+    Created            string         `json:"created,omitempty"`
+    Source             RuleSource     `json:"source"`
+    Product            *ProductInfo   `json:"product,omitempty"`
+    Validation         ValidationInfo `json:"validation"`
+    Services           []Service      `json:"services,omitempty"` // 规则声明的 TCP/UDP 服务
+    Metadata           map[string]any `json:"metadata,omitempty"` // info.metadata 的副本，只透传
+}
+
+type ProductInfo struct {
+    ID          string   `json:"id"`                 // 厂商段.产品段
+    Name        string   `json:"name"`
+    Vendor      string   `json:"vendor,omitempty"`
+    Category    string   `json:"category,omitempty"`
+    Identity    string   `json:"identity,omitempty"`  // product / signal
+    Assurance   string   `json:"assurance,omitempty"` // verified / inferred
+    Tags        []string `json:"tags,omitempty"`
+    Aliases     []string `json:"aliases,omitempty"`
+    CPE         []string `json:"cpe,omitempty"`
+    References  []string `json:"references,omitempty"`
+    Description string   `json:"description,omitempty"`
+}
+
+type Service struct {
+    Protocol  string `json:"protocol"`
+    Transport string `json:"transport"` // tcp / udp
+    Ports     []int  `json:"ports,omitempty"`
+}
+```
+
+`FingerInfo.Author` 保存规则作者，`Vendor` 等于产品声明的厂商。`Tags` 为 `[]string`，合并规则标签与产品标签，未知标签不归入 Web。`References` 合并规则引用与产品参考链接，保存可追溯的 HTTP/HTTPS 依据，过滤空值、含账号信息的链接和 `example.com` 占位链接。`Created` 保留规则创建时间。`Services` 与 `Metadata` 来自规则的 `info.services`、`info.metadata`，每次返回独立副本。
 
 `Verified` 为 `*bool`：`nil` 表示源 YAML 未声明；`false` 和 `true` 分别表示来源标注未验证、已验证。`VerificationStatus` 使用 `unknown`、`unverified`、`declared-verified`。来源声明与 `Validation` 的样本测试状态独立，不相互替代。`Confidence` 为 `*float64`，默认 JSON `null`；有限合成样本没有经过实际部署数据校准，因此不会赋值为 `1`。
 
 `Source.Path`、`Source.SHA256`、`Source.Version` 保存实际规则来源。内置文件仅在摘要与内置内容一致时使用 SDK 源版本；外部版本由 `WithRuleSourceVersion` 声明。`ProductVersion` 仅来自成功匹配子规则的成功 `output.product_version` 提取，缺失、提取失败或冲突时为空。多个不同版本保留在 `ProductVersions` 并标记 `VersionConflict`。`Server.Version` 是服务响应头信息，不自动用作全部命中产品的版本。
 
-`ProductInfo` 包含目录 ID、规范名称、厂商、分类、标签、别名、参考链接及 CPE。目录 ID 是稳定的 GXX 产品标识，不声称其本身属于其他标准；CPE 仅在有字典依据时填写，产品通配 CPE 不代表检测到漏洞。未知产品不从作者、拼音或规则名猜测厂商与 CPE。
+`ProductInfo` 来自规则自带的 `info.product` 声明（字段规则见[指纹规则格式说明](../docs/指纹规则格式说明.md#产品声明)），`WithProductCatalog` 可以按规则 ID 覆盖。产品 ID 是稳定的 GXX 产品标识，不声称其本身属于其他标准。`Identity` 为 `product` 表示命中即确认是这个产品，`signal` 表示技术线索（语言、前端库、默认页面、只能识别出厂商的页面、通用特征）；`Assurance` 为 `verified` 表示厂商与产品已确认且有可访问的官方链接，`inferred` 表示由规则名称与特征推断，调用方可据此决定是否直接展示。CPE 仅在有字典依据时填写，产品通配 CPE 不代表检测到漏洞；声明中无效的参考链接与 CPE 不进入结果。未声明产品的规则 `Product` 为 `nil`，不从作者、拼音或规则名猜测厂商与 CPE。
 
-`TargetResult.Matches` 保留每条规则结果；`Products` 按产品目录 ID 归并，并通过 `RuleIDs` 保留来源。没有目录的规则保持独立产品条目，产品 ID 为空，不强行合并。ARL 的两条等价规则保留原始命中，产品展示归并为一个条目。
+`TargetResult.Matches` 保留每条规则结果；`Products` 按产品 ID 归并，并通过 `RuleIDs` 保留来源。未声明产品的规则保持独立产品条目，产品 ID 为空，不强行合并。同一产品 ID 在规则集中的有效声明必须完全一致，加载（含 `LoadFingerOptions`）时检查，不一致返回可用 `errors.As` 取得的 `*ProductConflictError`。
 
 ### 命中证据
 
@@ -270,9 +312,9 @@ for _, rule := range catalog {
 }
 ```
 
-`MissingMetadata` 使用 `product-catalog`、`vendor`、`tags`、`references`、`sample-validation`、`version-extractor`，表示待补充数据，不表示规则无效。`Transport` 来自实际子规则请求类型，混合规则使用 `mixed`；HTTP 协议不能替代产品分类。
+`MissingMetadata` 按顺序使用以下取值（常量 `sdk.Missing*`），表示待补充或待核实的数据，不表示规则无效：`product`（没有产品声明，也没有目录覆盖）、`vendor`（产品没有厂商）、`product-assurance`（产品信息为推断）、`tags`（规则与产品都没有标签）、`references`（没有有效参考链接）、`services`（TCP/UDP 规则没有声明服务）、`sample-validation`（没有绑定当前规则内容的专项样本记录）、`version-extractor`（没有 `product_version` 输出）。`Transport` 来自实际子规则请求类型，混合规则使用 `mixed`；HTTP 协议不能替代产品分类。
 
-系统产品目录通过 `WithProductCatalog` 提供 `ProductDefinition`，以 `RuleIDs` 显式关联。目录按产品 ID 统一元数据，多实例独立复制。`WithRuleAssessments` 的记录必须包含方法、样本数、适用范围和规则 SHA256；文件内容变化后旧记录不生效。输入参数与返回的数组、指针可由调用方保存和修改，不影响其他实例。
+内置产品目录 `ProductCatalog()` 由内置规则的产品声明生成（`sdk/catalog.json`，`go generate ./sdk` 重新生成），每个产品列出声明它的全部规则 ID。系统产品目录通过 `WithProductCatalog` 提供 `ProductDefinition`，按 `RuleIDs` 逐条追加（规则没有声明时）或覆盖（规则已有声明时）产品信息，未列出的规则保留自带声明；同一规则出现在两个目录项中返回 `ErrInvalidOption`。覆盖一个已有产品 ID 时应列出该产品的全部规则，否则同一产品的声明不一致，加载失败。多实例独立复制。`WithRuleAssessments` 的记录必须包含方法、样本数、适用范围和规则 SHA256；文件内容变化后旧记录不生效。输入参数与返回的数组、指针可由调用方保存和修改，不影响其他实例。
 
 ```go
 engine, err := sdk.NewEngine(ctx,
@@ -453,7 +495,7 @@ type Diagnostic struct {
 
 `RulePolicy` 的零值表示不限制；任一字段非零时策略生效，未允许的能力一律拒绝。只允许 HTTP 写成 `RulePolicy{AllowTypes: []string{"http"}}`；允许全部类型但禁止 Raw、反连与 sleep 写成 `RulePolicy{AllowTypes: []string{"http", "tcp", "udp"}}`。加载与 `LoadFingerOptions` 重新加载时检查，内置规则库同样受检查。
 
-`ValidateRule` 不发请求。非严格模式下存在 `error` 当且仅当使用同样 `Policy` 的 `NewEngine` 拒绝加载这条规则（YAML 无法解析、不支持的请求类型、违反规则策略）；其余问题为 `warning`。严格模式把未知键、缺少 `id` / `info.name` / 子规则 / 总表达式、表达式无法编译也报告为 `error`。`Code` 取值：`yaml`、`unknown-key`、`missing-id`、`missing-name`、`missing-rules`、`missing-expression`、`expression-compile`、`policy-type`、`policy-raw`、`policy-reverse`、`policy-sleep`、`policy-sub-rules`。
+`ValidateRule` 不发请求。非严格模式下存在 `error` 当且仅当使用同样 `Policy` 的 `NewEngine` 拒绝加载这条规则（YAML 无法解析、不支持的请求类型、违反规则策略）；其余问题为 `warning`。严格模式把未知键（`info.metadata` 内部除外）、缺少 `id` / `info.name` / 子规则 / 总表达式、规则标识不合规、缺少或不合规的产品声明、TCP/UDP 规则缺少服务声明、表达式无法编译也报告为 `error`。`Code` 取值：`yaml`、`unknown-key`、`missing-id`、`invalid-id`、`missing-name`、`missing-product`、`invalid-product`、`missing-services`、`invalid-service`、`missing-rules`、`missing-expression`、`expression-compile`、`policy-type`、`policy-raw`、`policy-reverse`、`policy-sleep`、`policy-sub-rules`。`Field` 是字段路径，列表项用序号表示，如 `info.product.tags.1`、`info.services.0.ports`。规则集级的检查（规则数上限、同一产品声明一致）不适用于单条规则。
 
 ### TechStack
 
@@ -704,7 +746,7 @@ if !report.Complete {
     // 有规则没有完整求值：未命中不一定可信
 }
 
-debug, err := engine.DebugRule(ctx, target, "web-wordpress")
+debug, err := engine.DebugRule(ctx, target, "wordpress")
 for _, sub := range debug.SubRules {
     fmt.Println(sub.Key, sub.Result, len(sub.Exchanges), sub.Failure)
 }

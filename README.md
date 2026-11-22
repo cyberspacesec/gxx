@@ -98,7 +98,7 @@ func main() {
 
 详细 SDK 文档参见 [sdk/sdk.md](sdk/sdk.md)。
 
-规则导入使用 `RuleCatalog`，识别结果分别返回作者、厂商、来源验证声明、样本记录、产品版本及可定位的命中证据；`Products` 按规范产品目录归并并保留命中规则。字段约定、数据覆盖范围和测试方法见[指纹数据与验证](docs/指纹数据与验证.md)。
+内置的 2,348 条规则都声明了产品（`info.product`：产品标识、名称、厂商、分类、身份 `product`/`signal`、可信度 `verified`/`inferred` 等），产品信息以规则自带的声明为准。规则导入使用 `RuleCatalog`，识别结果分别返回作者、厂商、产品、来源验证声明、样本记录、产品版本及可定位的命中证据；`Products` 按产品标识归并并保留命中规则。v1.7.0 旧规则标识与新标识的对应关系见[指纹标识对照表](docs/指纹标识对照表.csv)。字段约定、数据覆盖范围和测试方法见[指纹数据与验证](docs/指纹数据与验证.md)。
 
 favicon 候选、内联图标哈希与 ICP 备案识别的范围和限制参见 [网站元数据识别](docs/网站元数据识别.md)。
 
@@ -195,7 +195,7 @@ gxx/
 │   ├── common/               # 通用工具
 │   ├── config/               # 配置管理
 │   └── proto/                # Protobuf 协议定义
-├── fingerYaml/                # 内置指纹规则库（embed.go / loader.go）
+├── fingerYaml/                # 内置指纹规则库：<分类>/<规则标识>.yaml（embed.go / loader.go）
 └── example/                   # 示例代码
     ├── basic_scan/           # 基本扫描
     ├── api_scan_baidu/       # API 调用示例
@@ -274,12 +274,18 @@ SDK 的缓存、并发、日志与生命周期约定见 [SDK 使用文档](sdk/s
 ## 指纹规则格式
 
 ```yaml
-id: web-application
+id: acme-portal
 
 info:
   name: Web应用识别
   author: 作者名
   description: 识别特定Web应用
+  product:
+    id: acme.portal
+    name: Acme Portal
+    category: application
+    identity: product
+    assurance: inferred
 
 rules:
   r0:
