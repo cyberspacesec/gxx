@@ -1,9 +1,63 @@
 package network
 
 import (
+	"context"
 	"io"
 	"net/http"
+	"sync"
 )
+
+// ReadResponseBodyLimit 与 ReadResponseBody 相同，并报告正文是否超过上限而被截断。
+// 声明了长度时按声明判断；长度未知且恰好读满上限时视为可能被截断。不为判断多读字节。
+func ReadResponseBodyLimit(resp *http.Response, limit int64) ([]byte, bool, error) {
+	data, err := ReadResponseBody(resp, limit)
+	if limit <= 0 || int64(len(data)) < limit {
+		return data, false, err
+	}
+	if resp.ContentLength >= 0 {
+		return data, resp.ContentLength > limit, err
+	}
+	return data, true, err
+}
+
+type truncationKey struct{}
+
+// truncationTracker 记录一次扫描中正文被截断的响应对象。
+type truncationTracker struct {
+	mu    sync.Mutex
+	items map[any]struct{}
+}
+
+// WithTruncationTracker 让 ctx 下构造的响应对象记录正文是否被截断。
+func WithTruncationTracker(ctx context.Context) context.Context {
+	return context.WithValue(ctx, truncationKey{}, &truncationTracker{})
+}
+
+// MarkTruncated 记录响应对象 value 的正文超过读取上限；ctx 没有记录器时不做任何事。
+func MarkTruncated(ctx context.Context, value any) {
+	tracker, _ := ctx.Value(truncationKey{}).(*truncationTracker)
+	if tracker == nil || value == nil {
+		return
+	}
+	tracker.mu.Lock()
+	if tracker.items == nil {
+		tracker.items = make(map[any]struct{})
+	}
+	tracker.items[value] = struct{}{}
+	tracker.mu.Unlock()
+}
+
+// Truncated 报告响应对象 value 的正文是否被截断。
+func Truncated(ctx context.Context, value any) bool {
+	tracker, _ := ctx.Value(truncationKey{}).(*truncationTracker)
+	if tracker == nil || value == nil {
+		return false
+	}
+	tracker.mu.Lock()
+	defer tracker.mu.Unlock()
+	_, ok := tracker.items[value]
+	return ok
+}
 
 // ReadResponseBody 在字节上限内读取响应。长度声明只用于容量提示；未知
 // 长度使用分段暂存，EOF 后一次合并，不把可复用的暂存区交给调用方。

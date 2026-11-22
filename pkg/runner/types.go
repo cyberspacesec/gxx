@@ -66,6 +66,8 @@ type scanPage struct {
 	request  *proto.Request
 	response *proto.Response
 	source   *http.Response // 实际读取的响应，正文已关闭，只用于连接信息
+	// truncated 表示正文超过读取上限被截断。
+	truncated bool
 }
 
 // TargetResult 单个目标的扫描结果。
@@ -128,6 +130,7 @@ type BaseInfo struct {
 	earlier  []*scanPage
 	requests singleflight.Group
 	cache    *CacheManager
+	scan     *scanState
 }
 
 // ScanConfig 扫描配置参数。
@@ -163,12 +166,21 @@ type ScanConfig struct {
 
 	// Policy 是引擎级网络策略，约束全部出站连接。
 	Policy network.Policy
+	// BodyLimit 是响应正文的读取上限（字节），0 表示 network.MaxDefaultBody。
+	BodyLimit int64
+	// ResponseCacheBudget 是每次扫描的响应归一化缓存预算（字节），0 表示默认 8 MiB。
+	ResponseCacheBudget int64
 }
 
 // ScanOptions 是单次扫描的附加配置，零值与普通扫描相同。
 type ScanOptions struct {
 	// Policy 逐字段覆盖引擎级网络策略，只作用于本次扫描。
 	Policy network.Policy
+	// Report 非 nil 时，扫描结束（含失败与取消）后写入求值报告。
+	Report *EvaluationReport
+	// Observer 非 nil 时，每次交换完成后串行回调。
+	Observer       func(network.Exchange)
+	ExchangeLimits network.ExchangeLimits
 }
 
 // RulePoolStats 规则池任务统计。

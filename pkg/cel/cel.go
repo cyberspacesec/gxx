@@ -2,6 +2,7 @@ package cel
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -224,6 +225,7 @@ func (c *CustomLib) EvaluateContext(ctx context.Context, expression string, vari
 		return nil, err
 	}
 	c.requests.ctx = ctx
+	c.requests.regexTimeout = false
 	c.lastTrace = nil
 	c.trace = evaluationTrace{}
 	c.requests.trace = nil
@@ -258,6 +260,21 @@ func (c *CustomLib) EvaluateContext(ctx context.Context, expression string, vari
 		return nil, ctx.Err()
 	}
 	return out, err
+}
+
+// RegexTimedOut 报告最近一次求值中是否有正则匹配超时（超时的匹配按未命中处理）。
+func (c *CustomLib) RegexTimedOut() bool { return c.requests.regexTimeout }
+
+// IsBudgetError 报告求值是否因超出计算成本上限而中止。
+func IsBudgetError(err error) bool {
+	var cancelled interpreter.EvalCancelledError
+	return errors.As(err, &cancelled) && cancelled.Cause == interpreter.CostLimitExceeded
+}
+
+// IsPanicError 报告求值是否因自定义函数 panic 而中止：cel-go 捕获 panic 后以
+// "internal error:" 开头的错误返回。
+func IsPanicError(err error) bool {
+	return err != nil && strings.HasPrefix(err.Error(), "internal error:")
 }
 
 func (c *CustomLib) WriteRuleFunctionsROptions(name string, value bool) {

@@ -59,7 +59,7 @@ func TestRegexRuneCacheSharesBudgetAndConcurrentBuffer(t *testing.T) {
 		lowerResponse(ctx, value)
 	}
 	cache := ctx.Value(responseCacheKey{}).(*responseCache)
-	if cache.bytes > responseCacheBudget {
+	if cache.bytes > DefaultResponseCacheBudget {
 		t.Fatalf("响应归一化缓存超出共享预算: %d", cache.bytes)
 	}
 }

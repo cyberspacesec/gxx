@@ -100,6 +100,9 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		CustomHeaders:        cfg.customHeaders,
 		Debug:                cfg.debug,
 		Policy:               cfg.policy,
+		CacheMaxBytes:        uint64(cfg.cacheMaxBytes),
+		BodyLimit:            cfg.bodyLimit,
+		ResponseCacheBudget:  cfg.responseCacheBudget,
 	}
 	if !cfg.enableRateLimit {
 		scanCfg.RateLimitQPS = 0

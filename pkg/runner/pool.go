@@ -137,11 +137,22 @@ func (rp *RulePool) execute(task *RuleTask, handler func(*RuleTask), log logger.
 		if failure := recover(); failure != nil {
 			atomic.AddInt64(&rp.stats.FailedTasks, 1)
 			log.Error("规则池goroutine异常: %v", failure)
+			recordPanic(task, failure)
 		} else {
 			atomic.AddInt64(&rp.stats.CompletedTasks, 1)
 		}
 	}()
 	handler(task)
+}
+
+// recordPanic 把规则执行中的 panic 写入求值报告；该规则的其余记录随 panic 丢失。
+func recordPanic(task *RuleTask, failure any) {
+	if task.BaseInfo == nil || task.Finger == nil || task.BaseInfo.scan == nil || task.BaseInfo.scan.report == nil {
+		return
+	}
+	trace := &ruleTrace{ruleID: task.Finger.Id}
+	trace.fail("", StagePanic, fmt.Sprint(failure))
+	task.BaseInfo.scan.report.add(trace, task.Finger, false)
 }
 
 func finishRuleTask(task *RuleTask) {

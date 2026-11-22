@@ -37,9 +37,12 @@ type engineConfig struct {
 	urlConcurrency  int
 	ruleConcurrency int
 
-	// 缓存
-	cacheMaxSize int
-	cacheTTL     time.Duration
+	// 缓存与资源预算
+	cacheMaxSize        int
+	cacheTTL            time.Duration
+	cacheMaxBytes       int64
+	responseCacheBudget int64
+	bodyLimit           int64
 
 	// 监控
 	enableMonitor    bool
@@ -263,6 +266,43 @@ func WithCacheTTL(ttl time.Duration) Option {
 			return fmt.Errorf("%w: cache TTL must be > 0, got %v", ErrInvalidOption, ttl)
 		}
 		c.cacheTTL = ttl
+		return nil
+	}
+}
+
+// WithCacheMaxBytes 设置请求/响应缓存的字节预算（默认 64 MiB）。超出单条预算的响应
+// 不进入缓存，需要它的规则各自重新请求；预算只影响请求次数，不影响识别结论。
+func WithCacheMaxBytes(n int64) Option {
+	return func(c *engineConfig) error {
+		if n <= 0 {
+			return fmt.Errorf("%w: cache max bytes must be > 0, got %d", ErrInvalidOption, n)
+		}
+		c.cacheMaxBytes = n
+		return nil
+	}
+}
+
+// WithResponseCacheBudget 设置每次扫描中响应归一化结果（小写化、字符缓冲与预筛选位图）
+// 的估算预算（默认 8 MiB）。超出后按需重新计算，只影响耗时，不影响识别结论。
+func WithResponseCacheBudget(n int64) Option {
+	return func(c *engineConfig) error {
+		if n <= 0 {
+			return fmt.Errorf("%w: response cache budget must be > 0, got %d", ErrInvalidOption, n)
+		}
+		c.responseCacheBudget = n
+		return nil
+	}
+}
+
+// WithBodyLimit 设置响应正文的读取上限（默认 512 KiB），作用于入口页面、规则请求
+// （含 Raw HTTP）与附属资源。超出部分不读取，规则按截断后的内容求值；求值报告中
+// 使用了截断响应的子规则记为 budget。
+func WithBodyLimit(n int64) Option {
+	return func(c *engineConfig) error {
+		if n <= 0 {
+			return fmt.Errorf("%w: body limit must be > 0, got %d", ErrInvalidOption, n)
+		}
+		c.bodyLimit = n
 		return nil
 	}
 }

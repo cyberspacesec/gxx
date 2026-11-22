@@ -14,6 +14,11 @@ import (
 // EvaluateOutput 仅保存成功求值的输出。失败的提取表达式不作为产品版本或证据回传。
 // 执行变量保留完整值，公开结果中的单项输出限制为 512 字节。
 func EvaluateOutput(args yaml.MapSlice, variables map[string]any, lib *gcel.CustomLib) map[string]string {
+	return EvaluateOutputReport(args, variables, lib, nil)
+}
+
+// EvaluateOutputReport 与 EvaluateOutput 相同，并在提取表达式求值失败时调用 failed。
+func EvaluateOutputReport(args yaml.MapSlice, variables map[string]any, lib *gcel.CustomLib, failed func(key string, err error)) map[string]string {
 	var outputs map[string]string
 	for _, argument := range args {
 		key, keyOK := argument.Key.(string)
@@ -24,6 +29,9 @@ func EvaluateOutput(args yaml.MapSlice, variables map[string]any, lib *gcel.Cust
 		delete(variables, key)
 		out, err := lib.Evaluate(expression, variables)
 		if err != nil || out == nil {
+			if err != nil && failed != nil {
+				failed(key, err)
+			}
 			continue
 		}
 		var value string

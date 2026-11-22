@@ -45,6 +45,16 @@ type OptionsRequest struct {
 	CustomHeaders      map[string]string
 	// Probe 表示这是确定目标是否为 HTTP 服务的入口请求：失败就是失败，不做兼容性回退。
 	Probe bool
+	// BodyLimit 是响应正文的读取上限（字节），0 表示 MaxDefaultBody。
+	BodyLimit int64
+}
+
+// ReadLimit 返回响应正文的读取上限。
+func (o OptionsRequest) ReadLimit() int64 {
+	if o.BodyLimit > 0 {
+		return o.BodyLimit
+	}
+	return MaxDefaultBody
 }
 
 var (

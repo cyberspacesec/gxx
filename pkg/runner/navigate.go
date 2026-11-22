@@ -86,7 +86,7 @@ func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logg
 	visited := map[string]struct{}{navigationKey(origin): {}}
 	current, resp := entry, first
 	for {
-		data, err := network.ReadResponseBody(resp, network.MaxDefaultBody)
+		data, truncated, err := network.ReadResponseBodyLimit(resp, options.ReadLimit())
 		_ = resp.Body.Close()
 		if err != nil {
 			if len(base.pages) == 0 {
@@ -95,7 +95,7 @@ func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logg
 			break
 		}
 		pageURL := resp.Request.URL
-		base.pages = append(base.pages, &scanPage{url: current, status: int32(resp.StatusCode), header: resp.Header, body: data, request: finger.BuildProtoRequest(resp, http.MethodGet, "", "/"), source: resp})
+		base.pages = append(base.pages, &scanPage{url: current, status: int32(resp.StatusCode), header: resp.Header, body: data, request: finger.BuildProtoRequest(resp, http.MethodGet, "", "/"), source: resp, truncated: truncated})
 		base.Response = resp
 
 		next, kind := nextHop(pageURL, resp, data)
@@ -141,6 +141,10 @@ func walkEntry(ctx, navCtx context.Context, client *network.HTTPClient, log logg
 	for _, page := range base.pages {
 		pageURL, _ := url.Parse(page.url)
 		page.response = finger.BuildPageResponseOwned(ctx, pageResponse(page), page.body, client, optionsFor(origin, pageURL, options), page.url, page == last)
+		network.RecorderFrom(ctx).Bind(page.source, page.response)
+		if page.truncated {
+			network.MarkTruncated(ctx, page.response)
+		}
 	}
 	return base, nil
 }

@@ -43,7 +43,7 @@ func SendRawRequest(ctx context.Context, client *HTTPClient, request, baseurl st
 	}(resp.Body)
 
 	// 限制读取大小，避免异常大响应体
-	respBody, err := ReadResponseBody(resp, MaxDefaultBody)
+	respBody, truncated, err := ReadResponseBodyLimit(resp, options.ReadLimit())
 	if err != nil {
 		return fmt.Errorf("读取 Raw HTTP 响应失败: %w", err)
 	}
@@ -84,6 +84,10 @@ func SendRawRequest(ctx context.Context, client *HTTPClient, request, baseurl st
 		tempResultResponse.TlsVersion, tempResultResponse.CipherSuite, tempResultResponse.Ja3S = info.Version, info.CipherSuite, info.JA3S
 	}
 	variableMap["response"] = tempResultResponse
+	RecorderFrom(ctx).Bind(resp, tempResultResponse)
+	if truncated {
+		MarkTruncated(ctx, tempResultResponse)
+	}
 
 	tempResultRequest := &proto.Request{}
 	tempResultRequest.Method = rhttp.Method

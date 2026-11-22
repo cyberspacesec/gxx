@@ -112,7 +112,7 @@ func GetTitleFromBody(ctx context.Context, urlStr string, resp *http.Response, b
 		} else {
 			var script []byte
 			if respTitle.StatusCode == http.StatusOK {
-				script, err = network.ReadResponseBody(respTitle, network.MaxDefaultBody)
+				script, err = network.ReadResponseBody(respTitle, options.ReadLimit())
 			}
 			_ = respTitle.Body.Close()
 			if err != nil {

@@ -107,12 +107,12 @@ func TestIndexedContainsConcurrentAndBudgetFallback(t *testing.T) {
 	}
 	wg.Wait()
 	cache := ctx.Value(responseCacheKey{}).(*responseCache)
-	cache.bytes = responseCacheBudget
+	cache.bytes = DefaultResponseCacheBudget
 	uncached := append([]byte(nil), body...)
 	if !containsResponse(ctx, uncached, []byte("needle"), true) || containsResponse(ctx, uncached, []byte("missing"), false) {
 		t.Fatal("预算不足时匹配行为发生变化")
 	}
-	if cache.bytes != responseCacheBudget {
+	if cache.bytes != DefaultResponseCacheBudget {
 		t.Fatal("缓存超过预算")
 	}
 }

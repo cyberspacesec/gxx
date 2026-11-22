@@ -77,6 +77,24 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 				host = target
 			}
 			// 主机、端口、是否握手与 ServerName 全部由 network.ParseEndpoint 一处决定。
+			start := time.Now()
+			rec := network.RecorderFrom(reqCtx)
+			exchange := network.Exchange{Kind: network.RequestTCP, URL: reqType + "://" + host}
+			if reqType == common.UdpType {
+				exchange.Kind = network.RequestUDP
+			}
+			if rec != nil {
+				info := network.RequestInfoFrom(reqCtx)
+				exchange.RuleID, exchange.SubRule = info.RuleID, info.SubRule
+				if endpoint, parseErr := network.ParseEndpoint(host, reqType); parseErr == nil {
+					exchange.URL = reqType + "://" + endpoint.Address()
+				}
+			}
+			record := func(response []byte, err error) {
+				if rec != nil {
+					rec.Data(exchange, response, start, err)
+				}
+			}
 			nc, err := network.NewClientContext(reqCtx, host, network.TcpOrUdpConfig{
 				Network:     reqType,
 				ReadTimeout: time.Duration(rule.Request.ReadTimeout) * time.Second,
@@ -88,6 +106,7 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 				VerifyTLS:   !options.InsecureSkipVerify,
 			})
 			if err != nil {
+				record(nil, err)
 				return nil, err
 			}
 			defer nc.Close()
@@ -96,9 +115,11 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 				data = common.FromHex(data)
 			}
 			if err := nc.Send([]byte(data)); err != nil {
+				record(nil, err)
 				return nil, err
 			}
 			res, err := nc.Receive()
+			record(res, err)
 			if err != nil {
 				return nil, err
 			}
@@ -153,7 +174,7 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 	variableMap["request"] = protoReq
 
 	// 读取响应体
-	body, err := network.ReadResponseBody(resp, network.MaxDefaultBody)
+	body, truncated, err := network.ReadResponseBodyLimit(resp, options.ReadLimit())
 	if err != nil {
 		logger.FromContext(reqCtx).Debug("读取响应体出错：%s", err)
 		// 即使读取响应体出错，也继续处理，使用空响应体
@@ -163,5 +184,9 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 	// 处理响应的raw，传入代理参数
 	protoResp := BuildProtoResponseOwned(parentCtx, resp, body, milliseconds, client, options)
 	variableMap["response"] = protoResp
+	network.RecorderFrom(reqCtx).Bind(resp, protoResp)
+	if truncated {
+		network.MarkTruncated(reqCtx, protoResp)
+	}
 	return variableMap, nil
 }

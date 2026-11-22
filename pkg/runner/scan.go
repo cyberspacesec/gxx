@@ -37,6 +37,23 @@ func (r *Runner) ScanTarget(ctx context.Context, target string) (*TargetResult, 
 
 // ScanTargetWith 与 ScanTarget 相同，并应用本次扫描的附加配置。
 func (r *Runner) ScanTargetWith(ctx context.Context, target string, opts ScanOptions) (*TargetResult, error) {
+	return r.scanTarget(ctx, target, opts, nil, nil)
+}
+
+// scanState 是一次扫描的附加观测。字段为 nil 时对应功能关闭，普通扫描不产生额外开销。
+type scanState struct {
+	report   *evaluationCollector
+	debug    *debugCollector
+	recorder *network.Recorder
+	// labeled 表示规则请求需要携带规则标注（网络策略检查目标或记录交换时使用）。
+	labeled bool
+}
+
+// tracing 报告是否需要逐条规则记录求值过程。
+func (s *scanState) tracing() bool { return s != nil && (s.report != nil || s.debug != nil) }
+
+// scanTarget 执行一次扫描。plans 非 nil 时只执行这些规则（单规则调试）。
+func (r *Runner) scanTarget(ctx context.Context, target string, opts ScanOptions, plans []fingerExecutionPlan, debug *debugCollector) (result *TargetResult, err error) {
 	ctx = logger.WithContext(ctx, r.log)
 	ctx, done, err := r.life.Begin(ctx)
 	if err != nil {
@@ -52,15 +69,33 @@ func (r *Runner) ScanTargetWith(ctx context.Context, target string, opts ScanOpt
 	}
 	timeout := r.requestTimeout()
 
-	result := newTargetResult(target)
-	cache := r.cache.newScope()
-	defer cache.clearScope()
-	snap := r.store.executionSnapshot()
-	ctx = cel.WithResponseCache(ctx)
-	// 一次扫描一个 Cookie 会话：入口、规则请求与页面资源共用，扫描结束即释放。
-	ctx = network.WithCookieJar(ctx)
+	snap := plans
+	if snap == nil {
+		snap = r.store.executionSnapshot()
+	}
+	state := &scanState{debug: debug}
+	if opts.Report != nil {
+		state.report = &evaluationCollector{expected: len(snap)}
+		ctx = network.WithTruncationTracker(ctx)
+		defer func() { *opts.Report = state.report.report(err != nil || ctx.Err() != nil) }()
+	}
+	if opts.Observer != nil {
+		state.recorder = network.NewRecorder(opts.Observer, opts.ExchangeLimits)
+		ctx = network.WithRecorder(ctx, state.recorder)
+	}
 	// 引擎级与扫描级策略合并后放入 ctx，TCP、UDP 与 Raw 请求同样读取它。
 	ctx = r.httpClient.WithPolicy(ctx, opts.Policy)
+	state.labeled = state.recorder != nil || state.tracing() || r.httpClient.PolicyFor(ctx).CheckTarget != nil
+	if !state.labeled && !state.tracing() && state.recorder == nil {
+		state = nil
+	}
+
+	result = newTargetResult(target)
+	cache := r.cache.newScope()
+	defer cache.clearScope()
+	ctx = cel.WithResponseCacheBudget(ctx, r.cfg.ResponseCacheBudget)
+	// 一次扫描一个 Cookie 会话：入口、规则请求与页面资源共用，扫描结束即释放。
+	ctx = network.WithCookieJar(ctx)
 	var earlier []*scanPage
 	hasHTTP := false
 	for _, entry := range snap {
@@ -80,6 +115,10 @@ func (r *Runner) ScanTargetWith(ctx context.Context, target string, opts ScanOpt
 			for _, entry := range snap {
 				if !entry.finger.IsHTTPType() {
 					transportRules = append(transportRules, entry)
+				} else if state != nil && state.report != nil {
+					trace := &ruleTrace{ruleID: entry.finger.Id}
+					trace.fail("", StageRequest, "入口请求失败，规则未执行: "+err.Error())
+					state.report.add(trace, entry.finger, false)
 				}
 			}
 			if len(transportRules) == 0 {
@@ -107,6 +146,7 @@ func (r *Runner) ScanTargetWith(ctx context.Context, target string, opts ScanOpt
 		rootTarget: result.URL,
 		rootURL:    common.ParseTarget(result.URL, "/"),
 		earlier:    earlier,
+		scan:       state,
 	}
 	if baseInfo.request == nil {
 		// HTTP 探测失败或整库只有 TCP/UDP 规则：合成只含地址的请求供 set 块求值。
@@ -306,12 +346,21 @@ func (r *Runner) buildHTTPOptions(timeout time.Duration, followRedirects bool) n
 	}
 	// cfg 在构造期复制，随后只读；规则覆盖头在 SendRequest 中单独复制。
 	opts.CustomHeaders = r.cfg.CustomHeaders
+	opts.BodyLimit = r.cfg.BodyLimit
 	return opts
 }
 
 // processRuleTask 单个规则任务的执行体（由 RulePool handler 调用）。
 func (r *Runner) processRuleTask(task *RuleTask) {
-	result, err := r.evaluateFingerprint(task.Ctx, task.Finger, task.Target, task.BaseInfo, task.Proxy, task.Timeout, task.prepared)
+	var trace *ruleTrace
+	state := task.BaseInfo.scan
+	if state.tracing() {
+		trace = &ruleTrace{ruleID: task.Finger.Id}
+	}
+	result, err := r.evaluateFingerprint(task.Ctx, task.Finger, task.Target, task.BaseInfo, task.Proxy, task.Timeout, task.prepared, trace)
+	if trace != nil && task.Ctx.Err() == nil && state.report != nil {
+		state.report.add(trace, task.Finger, err == nil && result != nil && result.Result)
+	}
 	if err != nil {
 		releaseFingerMatch(result)
 		r.log.Debug("规则 %s 执行失败: %v", task.Finger.Id, err)
@@ -329,13 +378,29 @@ func (r *Runner) processRuleTask(task *RuleTask) {
 // 根路径规则默认匹配入口跳转链的最后一页。未命中且链上还有更早的页面（入口的
 // 30x 响应、跳转壳）时，依次把它们当作根路径响应重新评估，任一页满足即命中：
 // 跳转链上的每个响应都是该资产的指纹素材。
-func (r *Runner) evaluateFingerprint(ctx context.Context, fg *finger.Finger, target string, baseInfo *BaseInfo, proxy string, timeout time.Duration, plan *cel.PreparedLibrary) (*FingerMatch, error) {
-	match, err := r.evaluateFingerprintOn(ctx, fg, target, baseInfo, timeout, plan, nil)
+func (r *Runner) evaluateFingerprint(ctx context.Context, fg *finger.Finger, target string, baseInfo *BaseInfo, proxy string, timeout time.Duration, plan *cel.PreparedLibrary, trace *ruleTrace) (*FingerMatch, error) {
+	debug := baseInfo.scan != nil && baseInfo.scan.debug != nil
+	evaluate := func(page *scanPage) (*FingerMatch, error) {
+		if !debug {
+			return r.evaluateFingerprintOn(ctx, fg, target, baseInfo, timeout, plan, page, trace)
+		}
+		// 单规则调试：每一页的子规则记录独立保存，最后留下决定结果的那一页。
+		collector := baseInfo.scan.debug
+		trace.debug = &ruleDebug{from: collector.mark()}
+		match, err := r.evaluateFingerprintOn(ctx, fg, target, baseInfo, timeout, plan, page, trace)
+		trace.debug.to = collector.mark()
+		if collector.chosen == nil || match != nil {
+			collector.chosen = trace.debug
+		}
+		trace.debug = nil
+		return match, err
+	}
+	match, err := evaluate(nil)
 	if match != nil || err != nil || len(baseInfo.earlier) == 0 || !matchesEntryPage(fg) {
 		return match, err
 	}
 	for _, page := range baseInfo.earlier {
-		if match, err = r.evaluateFingerprintOn(ctx, fg, target, baseInfo, timeout, plan, page); match != nil || err != nil {
+		if match, err = evaluate(page); match != nil || err != nil {
 			break
 		}
 	}
@@ -359,16 +424,20 @@ func matchesEntryPage(fg *finger.Finger) bool {
 
 // evaluateFingerprintOn 评估单条指纹：CEL 求值 + 缓存命中 / 写入。
 // page 非 nil 时，匹配入口页的规则改用该页的响应。
-func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, target string, baseInfo *BaseInfo, timeout time.Duration, plan *cel.PreparedLibrary, page *scanPage) (*FingerMatch, error) {
+func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, target string, baseInfo *BaseInfo, timeout time.Duration, plan *cel.PreparedLibrary, page *scanPage, trace *ruleTrace) (*FingerMatch, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
+	state := baseInfo.scan
+	debug := trace != nil && trace.debug != nil
+	// 单规则调试总是采集证据；普通扫描按引擎配置。
+	captureEvidence := r.cfg.CaptureEvidence || debug
 	customLib := acquireLibrary(plan)
 	defer releaseLibrary(customLib)
 	customLib.SetContext(ctx)
 	customLib.SetRequestOptions(r.httpClient, r.buildHTTPOptions(timeout, true))
 	customLib.SetReverseConfig(r.cfg.Reverse)
-	customLib.SetEvidenceEnabled(r.cfg.CaptureEvidence)
+	customLib.SetEvidenceEnabled(captureEvidence)
 	cache := baseInfo.cache
 	varMap := acquireVarMap()
 	defer releaseVarMap(varMap)
@@ -414,6 +483,15 @@ func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, t
 
 		ruleCopy := rule
 		ruleCopy.Value.Request = reqCopy
+		// 规则请求携带规则标注，供网络策略检查目标与交换记录使用；普通扫描不标注。
+		reqCtx := ctx
+		if state != nil && state.labeled {
+			reqCtx = network.WithRequestInfo(ctx, network.RequestInfo{Kind: network.RequestHTTP, RuleID: fg.Id, SubRule: rule.Key})
+		}
+		var sub *SubRuleDebug
+		if debug {
+			sub = trace.debug.subRule(rule.Key, rule.Value.Expression)
+		}
 
 		var hit bool
 		var cachedReq *proto.Request
@@ -430,6 +508,9 @@ func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, t
 		if hit && cachedReq != nil && cachedResp != nil {
 			varMap["request"] = cachedReq
 			varMap["response"] = cachedResp
+			if state != nil && state.recorder != nil {
+				state.recorder.Cached(reqCtx, cachedResp, cachedExchange(cachedReq, cachedResp))
+			}
 		} else {
 			ruleOpts := r.buildHTTPOptions(timeout, reqCopy.ShouldFollowRedirects())
 			var err error
@@ -437,11 +518,13 @@ func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, t
 			if strings.EqualFold(reqCopy.Method, "GET") && len(reqCopy.Headers) == 0 && reqCopy.Body == "" && reqCopy.Raw == "" && (reqCopy.Type == "" || strings.EqualFold(reqCopy.Type, common.HttpType)) {
 				key := common.RemoveTrailingSlash(urlStr) + "\x00" + strconv.FormatBool(ruleOpts.FollowRedirects)
 				var value any
+				sent := false
 				value, err, _ = baseInfo.requests.Do(key, func() (any, error) {
 					if hit, req, resp := cache.ShouldUseCache(ruleCopy, urlStr); hit {
 						return &CacheRequest{Request: req, Response: resp}, nil
 					}
-					variables, err := finger.SendRequest(ctx, r.httpClient, target, reqCopy, ruleCopy.Value, varMap, ruleOpts)
+					sent = true
+					variables, err := finger.SendRequest(reqCtx, r.httpClient, target, reqCopy, ruleCopy.Value, varMap, ruleOpts)
 					if err != nil {
 						return nil, err
 					}
@@ -453,10 +536,14 @@ func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, t
 				if err == nil {
 					shared := value.(*CacheRequest)
 					varMap["request"], varMap["response"] = shared.Request, shared.Response
+					// 合并到其他规则的请求或命中缓存时没有发出新请求，记为缓存复用。
+					if !sent && state != nil && state.recorder != nil {
+						state.recorder.Cached(reqCtx, shared.Response, cachedExchange(shared.Request, shared.Response))
+					}
 				}
 			} else {
 				var newVarMap map[string]any
-				newVarMap, err = finger.SendRequest(ctx, r.httpClient, target, reqCopy, ruleCopy.Value, varMap, ruleOpts)
+				newVarMap, err = finger.SendRequest(reqCtx, r.httpClient, target, reqCopy, ruleCopy.Value, varMap, ruleOpts)
 				if err == nil && len(newVarMap) > 0 {
 					varMap = newVarMap
 					if len(reqCopy.Headers) == 0 && reqCopy.Raw == "" && (reqCopy.Type == "" || reqCopy.Type == common.HttpType) {
@@ -466,31 +553,44 @@ func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, t
 			}
 			if err != nil {
 				r.log.Debug("规则 %s 请求失败: %v", ruleCopy.Key, err)
+				trace.requestFailure(ctx, ruleCopy.Key, err)
 				customLib.WriteRuleFunctionsROptions(ruleCopy.Key, false)
 				continue
 			}
 		}
+		if trace != nil && network.Truncated(ctx, varMap["response"]) {
+			trace.fail(ruleCopy.Key, StageBudget, fmt.Sprintf("响应正文超过读取上限 %d 字节，按截断后的内容求值", network.OptionsRequest{BodyLimit: r.cfg.BodyLimit}.ReadLimit()))
+		}
 
-		customLib.SetEvidenceEnabled(r.cfg.CaptureEvidence)
+		customLib.SetEvidenceEnabled(captureEvidence)
 		result, err := customLib.Evaluate(ruleCopy.Value.Expression, varMap)
 		ruleMatched := false
 		if err != nil {
 			r.log.Debug("规则 %s CEL解析错误：%v", ruleCopy.Key, err)
+			trace.failure(ctx, ruleCopy.Key, customLib, err)
 			customLib.WriteRuleFunctionsROptions(ruleCopy.Key, false)
 		} else {
+			trace.regexTimeout(ruleCopy.Key, customLib)
 			if rb, ok := result.Value().(bool); ok {
 				ruleMatched = rb
 				customLib.WriteRuleFunctionsROptions(ruleCopy.Key, rb)
+				if sub != nil {
+					sub.Result = &rb
+				}
 			} else {
 				r.log.Debug("规则 %s CEL结果非布尔值（%T）", ruleCopy.Key, result.Value())
+				trace.fail(ruleCopy.Key, StageNonBool, fmt.Sprintf("表达式结果类型为 %s，不是布尔值", result.Type().TypeName()))
 				customLib.WriteRuleFunctionsROptions(ruleCopy.Key, false)
 			}
+		}
+		if sub != nil {
+			sub.Evidence, _ = customLib.Evidence(varMap)
 		}
 
 		if ruleMatched {
 			var detail SubRuleMatch
-			captureDetail := r.cfg.CaptureEvidence && len(matchedRules) < 64
-			if r.cfg.CaptureEvidence && !captureDetail {
+			captureDetail := captureEvidence && len(matchedRules) < 64
+			if captureEvidence && !captureDetail {
 				detailsTruncated = true
 			}
 			if captureDetail {
@@ -502,7 +602,13 @@ func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, t
 			}
 			if len(ruleCopy.Value.Output) > 0 {
 				customLib.SetEvidenceEnabled(false)
-				outputs := finger.EvaluateOutput(ruleCopy.Value.Output, varMap, customLib)
+				var failed func(string, error)
+				if trace != nil {
+					failed = func(output string, err error) {
+						trace.fail(ruleCopy.Key, StageExtract, "输出 "+output+" 提取失败: "+err.Error())
+					}
+				}
+				outputs := finger.EvaluateOutputReport(ruleCopy.Value.Output, varMap, customLib, failed)
 				if found := strings.TrimSpace(outputs["product_version"]); found != "" {
 					if !slices.Contains(versions, found) {
 						if len(versions) < 16 {
@@ -515,6 +621,9 @@ func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, t
 				if captureDetail {
 					detail.Outputs = outputs
 				}
+				if sub != nil {
+					sub.Outputs = outputs
+				}
 			}
 			if captureDetail {
 				matchedRules = append(matchedRules, detail)
@@ -524,11 +633,14 @@ func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, t
 
 	result, err := customLib.Evaluate(fg.Expression, varMap)
 	if err != nil {
+		trace.failure(ctx, "", customLib, err)
 		return nil, fmt.Errorf("最终表达式解析错误：%w", err)
 	}
+	trace.regexTimeout("", customLib)
 	rb, ok := result.Value().(bool)
 	if !ok {
 		r.log.Debug("最终表达式 %q 返回非布尔值（%T），视为不匹配", fg.Expression, result.Value())
+		trace.fail("", StageNonBool, fmt.Sprintf("最终表达式结果类型为 %s，不是布尔值", result.Type().TypeName()))
 	}
 	if !rb {
 		return nil, nil
@@ -549,6 +661,21 @@ func (r *Runner) evaluateFingerprintOn(ctx context.Context, fg *finger.Finger, t
 		resultData.Response = resp
 	}
 	return resultData, nil
+}
+
+// cachedExchange 在缓存的响应没有原始交换记录时（如由 TCP 响应构造），按响应对象生成记录。
+func cachedExchange(req *proto.Request, resp *proto.Response) network.Exchange {
+	ex := network.Exchange{Kind: network.RequestHTTP}
+	if req != nil {
+		ex.Method = req.Method
+	}
+	if resp != nil {
+		ex.StatusCode = int(resp.Status)
+		if resp.Url != nil {
+			ex.URL = common.UrlTypeToString(resp.Url)
+		}
+	}
+	return ex
 }
 
 func calculateResultBuffer(ruleCount int) int {

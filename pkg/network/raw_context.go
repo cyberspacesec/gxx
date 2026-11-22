@@ -69,12 +69,24 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 		if u.Host == "" || u.Scheme != "http" && u.Scheme != "https" {
 			return nil, fmt.Errorf("无效的 Raw HTTP 重定向: %s", u)
 		}
+		rec := RecorderFrom(ctx)
+		if rec != nil && rec.Full() {
+			rec = nil
+		}
+		start := time.Now()
+		ex := Exchange{Kind: RequestRaw, RuleID: info.RuleID, SubRule: info.SubRule, Method: parsed.Method, URL: u.String(), Redirect: redirects > 0 || info.Redirect}
+		fail := func(err error) error {
+			if rec != nil {
+				rec.failed(ex, start, err)
+			}
+			return err
+		}
 		// 先检查目标再计入限速：被策略拒绝的请求不占用名额。
 		if err = checkTarget(ctx, policy, urlTarget(RequestRaw, u, info, redirects > 0)); err != nil {
-			return nil, err
+			return nil, fail(err)
 		}
 		if err = c.WaitRequest(ctx, u.String()); err != nil {
-			return nil, err
+			return nil, fail(err)
 		}
 		port := u.Port()
 		if port == "" {
@@ -85,7 +97,7 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 		}
 		conn, err := dialTarget(ctx, policy, nil, "tcp", net.JoinHostPort(u.Hostname(), port), options.Proxy, options.Timeout, u.Scheme == "https", u.Hostname(), options.InsecureSkipVerify)
 		if err != nil {
-			return nil, err
+			return nil, fail(err)
 		}
 		deadline := time.Now().Add(options.Timeout)
 		if d, ok := ctx.Deadline(); ok && d.Before(deadline) {
@@ -101,6 +113,13 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 			}
 		}
 		hs = append(hs, rawclient.Header{Key: "Host", Value: u.Host})
+		if rec != nil {
+			sent := make(http.Header, len(hs))
+			for _, header := range hs {
+				sent[header.Key] = append(sent[header.Key], header.Value)
+			}
+			ex.RequestHeader = rec.copyHeader(sent)
+		}
 		path := parsed.Path
 		if redirects > 0 {
 			path = u.RequestURI()
@@ -112,7 +131,7 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 		if err = wire.WriteRequest(req); err != nil {
 			stop()
 			_ = conn.Close()
-			return nil, err
+			return nil, fail(err)
 		}
 		response, err := wire.ReadResponse(false)
 		// TLS 关闭通知可能使服务端结束请求并返回已缓冲的响应；取消优先。
@@ -122,7 +141,7 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 		if err != nil {
 			stop()
 			_ = conn.Close()
-			return nil, err
+			return nil, fail(err)
 		}
 		h := make(http.Header, len(response.Headers))
 		details := &responseDetails{headerOrder: make([]string, 0, len(response.Headers))}
@@ -137,6 +156,9 @@ func (c *HTTPClient) SendRawRequest(ctx context.Context, rawText, baseURL string
 			body = http.NoBody
 		}
 		resp := &http.Response{StatusCode: response.Status.Code, Status: strconv.Itoa(response.Status.Code) + " " + response.Status.Reason, Proto: response.Version.String(), ProtoMajor: response.Version.Major, ProtoMinor: response.Version.Minor, Header: h, ContentLength: response.ContentLength(), Body: &rawResponseBody{Reader: body, ctx: ctx, conn: conn, stop: stop}, TLS: state, Request: (&http.Request{Method: parsed.Method, URL: u, Header: make(http.Header)}).WithContext(context.WithValue(ctx, responseDetailsKey{}, details))}
+		if rec != nil {
+			rec.observeResponse(ex, resp, details.headerOrder, start)
+		}
 		if options.FollowRedirects && response.Status.IsRedirect() && h.Get("Location") != "" && redirects < maxRedirects {
 			next, err := u.Parse(h.Get("Location"))
 			// Location 无法解析时返回 30x 响应本身。

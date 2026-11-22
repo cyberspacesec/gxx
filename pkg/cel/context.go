@@ -25,7 +25,13 @@ type evaluationContext struct {
 	options network.OptionsRequest
 	reverse scantypes.ReverseConfig
 	trace   *evaluationTrace
+	// regexTimeout 记录本次求值中是否有正则匹配超时：超时的匹配按未命中处理，
+	// 求值报告据此标注结论不完整。
+	regexTimeout bool
 }
+
+// errRegexTimeout 替代 regexp2 的超时错误：后者的文本包含完整的匹配输入（响应正文）。
+var errRegexTimeout = fmt.Errorf("正则匹配超时（%v）", regexMatchTimeout)
 
 func (v *evaluationContext) ConvertToNative(t reflect.Type) (any, error) {
 	if reflect.TypeOf(v).AssignableTo(t) {
@@ -70,7 +76,7 @@ func (v *evaluationContext) get(target string) ([]byte, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	return network.ReadResponseBody(resp, network.MaxDefaultBody)
+	return network.ReadResponseBody(resp, opts.ReadLimit())
 }
 func waitContext(ctx context.Context, seconds int64) error {
 	if err := ctx.Err(); err != nil {
@@ -117,7 +123,9 @@ func responseMatches(context, pattern, value ref.Val) ref.Val {
 	}
 	matched, err := re.MatchRunes(regexResponseRunes(state.ctx, data))
 	if err != nil {
-		return types.NewErr("%v", err)
+		// regexp2 只在匹配超时时返回错误。
+		state.regexTimeout = true
+		return types.NewErr("%v", errRegexTimeout)
 	}
 	return types.Bool(matched)
 }
@@ -159,9 +167,13 @@ func contextEnvOptions() []cel.EnvOption {
 		if err != nil {
 			return types.NewErr("正则表达式无效: %v", err)
 		}
-		// 字符缓冲与匹配函数共用扫描预算，分组字符串独立于完整响应。
+		// 字符缓冲与匹配函数共用扫描预算，分组字符串独立于完整响应。超时按未命中处理。
 		result := make(map[string]string)
-		if match, _ := re.FindRunesMatch(regexResponseRunes(state.ctx, value)); match != nil {
+		match, err := re.FindRunesMatch(regexResponseRunes(state.ctx, value))
+		if err != nil {
+			state.regexTimeout = true
+		}
+		if match != nil {
 			for index, group := range match.Groups() {
 				if index != 0 {
 					result[group.Name] = group.String()
@@ -169,6 +181,20 @@ func contextEnvOptions() []cel.EnvOption {
 			}
 		}
 		return types.NewStringStringMap(types.DefaultTypeAdapter, result)
+	}))))
+	// submatch 同样支持成员写法 "正则".submatch(s) 与全局写法 submatch("正则", s)，
+	// 经执行上下文调用以便记录匹配超时。
+	opts = append(opts, cel.Macros(cel.ReceiverMacro("submatch", 1, func(eh cel.MacroExprFactory, target ast.Expr, args []ast.Expr) (ast.Expr, *cel.Error) {
+		return eh.NewCall("__gxx_submatch", eh.NewIdent(contextVariable), target, args[0]), nil
+	}), cel.GlobalMacro("submatch", 2, func(eh cel.MacroExprFactory, _ ast.Expr, args []ast.Expr) (ast.Expr, *cel.Error) {
+		return eh.NewCall("__gxx_submatch", eh.NewIdent(contextVariable), args[0], args[1]), nil
+	})))
+	opts = append(opts, cel.Function("__gxx_submatch", cel.Overload("gxx_submatch_context_string_string", []*cel.Type{cel.DynType, cel.StringType, cel.StringType}, cel.MapType(cel.StringType, cel.StringType), cel.FunctionBinding(func(args ...ref.Val) ref.Val {
+		state, ok := args[0].Value().(*evaluationContext)
+		if !ok {
+			return types.NewErr("缺少执行上下文")
+		}
+		return stringSubmatch(state, args[1], args[2])
 	}))))
 	// bmatches 支持三种写法："正则".bmatches(b)、bmatches("正则", b)，以及以响应为
 	// 接收者的 response.body.bmatches("正则") / response.body.bmatches(b"正则")。

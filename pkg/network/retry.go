@@ -129,8 +129,31 @@ func (c *HTTPClient) tolerantRoundTrip(req *http.Request, options OptionsRequest
 	if err := c.WaitRequest(ctx, req.URL.String()); err != nil {
 		return nil, err
 	}
+	rec := RecorderFrom(ctx)
+	var ex Exchange
+	start := time.Now()
+	if rec != nil {
+		if rec.Full() {
+			rec = nil
+		} else {
+			ex = rec.requestExchange(ctx, info.Kind, req, false)
+		}
+	}
+	resp, err := c.tolerantExchange(ctx, req, options, target, state != nil && state.scoped)
+	if rec != nil {
+		if err != nil {
+			rec.failed(ex, start, err)
+		} else {
+			rec.observeResponse(ex, resp, nil, start)
+		}
+	}
+	return resp, err
+}
+
+// tolerantExchange 发出原始报文并读取、解析响应。
+func (c *HTTPClient) tolerantExchange(ctx context.Context, req *http.Request, options OptionsRequest, target TargetRequest, scoped bool) (*http.Response, error) {
 	host := target.Host
-	dial, err := c.targetDialer("", state != nil && state.scoped)
+	dial, err := c.targetDialer("", scoped)
 	if err != nil {
 		return nil, err
 	}

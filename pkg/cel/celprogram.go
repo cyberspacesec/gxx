@@ -31,6 +31,9 @@ import (
 	"github.com/dlclark/regexp2"
 )
 
+// regexMatchTimeout 是单次正则匹配的时长上限，防止回溯爆炸拖住规则池。
+const regexMatchTimeout = 250 * time.Millisecond
+
 // regexp2Cache 缓存按 (pattern, options) 编译的 regexp2.Regexp，避免热路径每次 MustCompile。
 // CEL 自定义函数 bmatches/submatch/bsubmatch 单次扫描可能调用数万次同一 pattern。
 var regexp2Cache = lru.NewLRUCache[string, *regexp2.Regexp](4096)
@@ -52,7 +55,7 @@ func getCachedRegexp2(pattern string, opts regexp2.RegexOptions) (*regexp2.Regex
 	if err != nil {
 		return nil, err
 	}
-	re.MatchTimeout = 250 * time.Millisecond
+	re.MatchTimeout = regexMatchTimeout
 	regexp2Cache.Set(key, re)
 	return re, nil
 }
@@ -363,17 +366,6 @@ var functionEnvOptions = []cel.EnvOption{
 			}),
 		),
 	),
-	// regex：成员写法 "正则".submatch(s) 与全局写法 submatch("正则", s) 等价。
-	cel.Function("submatch",
-		cel.MemberOverload("string_submatch_string",
-			[]*cel.Type{cel.StringType, cel.StringType}, cel.MapType(cel.StringType, cel.StringType),
-			cel.BinaryBinding(stringSubmatch),
-		),
-		cel.Overload("submatch_string_string",
-			[]*cel.Type{cel.StringType, cel.StringType}, cel.MapType(cel.StringType, cel.StringType),
-			cel.BinaryBinding(stringSubmatch),
-		),
-	),
 	// year helpers (保持与旧签名一致：接受一个 int 参数)
 	cel.Function("year",
 		cel.Overload("year_string",
@@ -435,7 +427,8 @@ func stringContainsFold(lhs, rhs ref.Val) ref.Val {
 }
 
 // stringSubmatch 返回 pattern 在 value 中首个匹配的分组，键为分组名（未命名分组为序号）。
-func stringSubmatch(pattern, value ref.Val) ref.Val {
+// 匹配超时按未命中处理，并记录在执行上下文中。
+func stringSubmatch(state *evaluationContext, pattern, value ref.Val) ref.Val {
 	v1, ok := pattern.(types.String)
 	if !ok {
 		return types.ValOrErr(pattern, "unexpected type '%v' passed to submatch", pattern.Type())
@@ -449,7 +442,11 @@ func stringSubmatch(pattern, value ref.Val) ref.Val {
 		return types.NewErr("正则表达式无效: %v", err)
 	}
 	resultMap := make(map[string]string)
-	if m, _ := re.FindStringMatch(string(v2)); m != nil {
+	m, err := re.FindStringMatch(string(v2))
+	if err != nil {
+		state.regexTimeout = true
+	}
+	if m != nil {
 		for n, gp := range m.Groups() {
 			if n != 0 {
 				resultMap[gp.Name] = gp.String()

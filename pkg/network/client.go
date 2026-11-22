@@ -447,10 +447,22 @@ func (t *requestTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 		info.Kind = RequestHTTP
 	}
 	// 重定向的每一跳由 net/http 新建请求，Response 字段指向发出跳转的响应。
-	if err := checkTarget(ctx, policy, urlTarget(info.Kind, req.URL, info, req.Response != nil)); err != nil {
+	redirect := req.Response != nil
+	rec := RecorderFrom(ctx)
+	if rec != nil && rec.Full() {
+		rec = nil
+	}
+	start := time.Now()
+	if err := checkTarget(ctx, policy, urlTarget(info.Kind, req.URL, info, redirect)); err != nil {
+		if rec != nil {
+			rec.failed(rec.requestExchange(ctx, info.Kind, req, redirect), start, err)
+		}
 		return nil, err
 	}
 	if err := t.owner.WaitRequest(ctx, req.URL.String()); err != nil {
+		if rec != nil {
+			rec.failed(rec.requestExchange(ctx, info.Kind, req, redirect), start, err)
+		}
 		return nil, err
 	}
 	// Cookie 会话来自请求的 ctx（见 WithCookieJar）。重定向的每一跳都经过这里，
@@ -464,6 +476,11 @@ func (t *requestTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 			}
 		}
 	}
+	var ex Exchange
+	if rec != nil {
+		ex = rec.requestExchange(ctx, info.Kind, req, redirect)
+		start = time.Now()
+	}
 	rt := t.engine
 	if state != nil && state.override != nil {
 		rt = state.wrappedFor(t.base)
@@ -472,11 +489,14 @@ func (t *requestTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 	// 交给调用方（见 ResponseDetails）。GotConn 在调用 RoundTrip 的协程中触发。
 	details := &responseDetails{}
 	var used net.Conn
-	traced := httptrace.WithClientTrace(context.WithValue(req.Context(), responseDetailsKey{}, details), &httptrace.ClientTrace{
+	traced := httptrace.WithClientTrace(context.WithValue(ctx, responseDetailsKey{}, details), &httptrace.ClientTrace{
 		GotConn: func(info httptrace.GotConnInfo) { used = info.Conn },
 	})
 	resp, err := rt.RoundTrip(req.WithContext(traced))
 	if err != nil {
+		if rec != nil {
+			rec.failed(ex, start, err)
+		}
 		return resp, err
 	}
 	if tracked, ok := used.(*trackedConn); ok {
@@ -492,6 +512,9 @@ func (t *requestTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 		if cookies := resp.Cookies(); len(cookies) > 0 {
 			jar.SetCookies(req.URL, cookies)
 		}
+	}
+	if rec != nil {
+		rec.observeResponse(ex, resp, details.headerOrder, start)
 	}
 	return resp, nil
 }
