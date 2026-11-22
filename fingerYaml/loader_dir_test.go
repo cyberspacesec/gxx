@@ -26,9 +26,9 @@ func TestFindFingerYamlDirDoesNotWalkUp(t *testing.T) {
 		t.Fatalf("不应采用无内置库结构的祖先 fingerYaml/，却返回了 %s", dir)
 	}
 
-	// 具备内置库结构（含已知子目录）的 fingerYaml/ 才会被采用。
+	// 具备内置库结构（含产品分类子目录）的 fingerYaml/ 才会被采用。
 	lib := filepath.Join(parent, "fingerYaml")
-	for _, sub := range []string{"fingerprints", "fingers"} {
+	for _, sub := range []string{"application", "web-server"} {
 		if err := os.MkdirAll(filepath.Join(lib, sub), 0o755); err != nil {
 			t.Fatal(err)
 		}

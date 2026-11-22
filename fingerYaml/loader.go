@@ -14,13 +14,13 @@ import (
 
 const defaultFingerDir = "fingerYaml"
 
-// bundledFingerSubdirs 是随仓库分发的指纹库的已知顶层子目录。
+// bundledFingerSubdirs 是随仓库分发的指纹库的顶层子目录，即产品分类。
 // 用于判定某个 fingerYaml/ 是否为真正的内置规则库，而非恰好同名的无关目录。
-var bundledFingerSubdirs = []string{"fingerprints", "fingers", "fofa", "jiajiu"}
+var bundledFingerSubdirs = finger2.ProductCategories
 
 // findFingerYamlDir 从工作目录逐级向上、并在可执行文件所在目录查找内置指纹库。
 //
-// 关键约束：只接受"看起来像内置库"的 fingerYaml/（包含其已知子目录中的至少两个）。
+// 关键约束：只接受"看起来像内置库"的 fingerYaml/（包含产品分类子目录中的至少两个）。
 // 旧实现接受任意祖先目录中的 fingerYaml/，导致某个无关的、甚至只有一两条规则的
 // 同名目录被静默采用，悄悄覆盖完整规则库（审查问题 S1）。结构校验既保留了从子目录
 // 运行时能找到仓库根部规则库的便利，又避免了误用无关目录；自定义规则应通过
@@ -51,7 +51,7 @@ func findFingerYamlDir() (string, error) {
 			return candidate, nil
 		}
 	}
-	return "", fmt.Errorf("未找到内置指纹库目录 %s（需包含 %v 等子目录）", defaultFingerDir, bundledFingerSubdirs)
+	return "", fmt.Errorf("未找到内置指纹库目录 %s（需包含 %v 中至少两个分类子目录）", defaultFingerDir, bundledFingerSubdirs)
 }
 
 // looksLikeBundledLibrary 判断目录是否为内置指纹库：存在且包含至少两个已知子目录。

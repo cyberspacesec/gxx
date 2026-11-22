@@ -31,7 +31,7 @@ func TestFingerGe(t *testing.T) {
 	variableMap := map[string]any{}
 	customLib := cel.NewCustomLib()
 
-	fin := filepath.Join("..", "fingerYaml", "jiajiu", "0example.yaml")
+	fin := filepath.Join("..", "fingerYaml", "other", "generic-example-domain.yaml")
 	fg, err := finger.Read(fin)
 	if err != nil {
 		t.Fatalf("读取 poc yaml 出错: %v", err)

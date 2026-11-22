@@ -64,7 +64,7 @@ func main() {
 		panic("SDK 缺少 WordPress 命中或产品归并结果")
 	}
 	catalog, err := engine.RuleCatalog(ctx)
-	if err != nil || len(catalog) != engine.FingerCount() || len(catalog) < 2349 {
+	if err != nil || len(catalog) != engine.FingerCount() || len(catalog) < 2348 {
 		panic(fmt.Sprintf("SDK 规则目录不完整：count=%d error=%v", len(catalog), err))
 	}
 	fmt.Printf("SDK 外部模块验证通过：version=%s rules=%d status=%d matches=%d products=%d\n", sdk.Version, len(catalog), result.StatusCode, len(result.Matches), len(result.Products))

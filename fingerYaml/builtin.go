@@ -16,7 +16,9 @@ func matchesBuiltin(path, digest string) bool {
 	return err == nil && fmt.Sprintf("%x", sha256.Sum256(content)) == digest
 }
 
-//go:embed all:fingerprints all:fingers all:fofa all:jiajiu
+// 内置规则按产品分类存放：<分类>/<规则标识>.yaml。
+//
+//go:embed */*.yaml
 var embeddedFingerFS embed.FS
 
 // GetEmbeddedFingerYaml 从嵌入 FS 加载全部指纹规则。

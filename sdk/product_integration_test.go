@@ -65,10 +65,8 @@ var productSamples = []productSample{
 	{"nginx-uppercase", "nginx-detect", map[string]string{"Server": "NGINX/1.26.3"}, "", 200, true, "1.26.3"},
 	{"nginx-webui-is-not-server", "nginx-detect", map[string]string{"Server": "nginx-webui/1.26.3"}, "", 200, false, ""},
 	{"nginx-missing-header", "nginx-detect", nil, "application version 1.26.3", 200, false, ""},
-	{"arl-duplicate", "web-arl", nil, "<title>资产灯塔系统</title>", 200, true, ""},
-	{"arl-alias", "web-资产灯塔系统", nil, "<title>资产灯塔系统</title>", 200, true, ""},
+	{"arl-title", "web-arl", nil, "<title>资产灯塔系统</title>", 200, true, ""},
 	{"arl-negative", "web-arl", nil, "<title>普通资产系统</title>", 200, false, ""},
-	{"arl-alias-negative", "web-资产灯塔系统", nil, "<title>普通资产系统</title>", 200, false, ""},
 }
 
 func TestFullCorpusProductSamples(t *testing.T) {
@@ -130,13 +128,14 @@ func TestFullCorpusProductSamples(t *testing.T) {
 			if len(found.MatchedRules) == 0 {
 				t.Fatal("命中子规则没有回传")
 			}
-			if sample.name == "arl-duplicate" {
+			// 正文与表达式完全相同的两条 ARL 规则已合并为一条，产品只有这一个来源。
+			if sample.name == "arl-title" {
 				count := 0
 				for _, product := range result.Products {
 					if product.ID == "arl.arl" {
 						count++
-						if len(product.RuleIDs) != 2 {
-							t.Fatalf("ARL 来源丢失: %+v", product)
+						if len(product.RuleIDs) != 1 || product.RuleIDs[0] != "web-arl" {
+							t.Fatalf("ARL 来源不符: %+v", product)
 						}
 					}
 				}
@@ -317,7 +316,7 @@ func TestRuleCatalogCoversEntireCorpusAndSeparatesUnknownMetadata(t *testing.T) 
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(catalog) != len(embedded) || len(catalog) != 2349 {
+	if len(catalog) != len(embedded) || len(catalog) != 2348 {
 		t.Fatalf("目录不完整: %d/%d", len(catalog), len(embedded))
 	}
 	known := map[string]bool{}

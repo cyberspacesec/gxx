@@ -82,8 +82,7 @@
         "https://github.com/tophant-ai/ARL-doc"
       ],
       "rule_ids": [
-        "web-arl",
-        "web-资产灯塔系统"
+        "web-arl"
       ],
       "aliases": [
         "arl",
@@ -1231,19 +1230,6 @@
         "status": "sample-tested",
         "method": "synthetic-http-fixtures",
         "positive_samples": 2,
-        "negative_samples": 1,
-        "reviewed_at": "2026-10-01",
-        "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
-      },
-      "confidence": null
-    },
-    "web-资产灯塔系统": {
-      "rule_id": "web-资产灯塔系统",
-      "rule_sha256": "c56eeba93b72f3b3e7546ec48fd83b2c8dd0ac6b4682902a21a945e7d8be8c4d",
-      "validation": {
-        "status": "sample-tested",
-        "method": "synthetic-http-fixtures",
-        "positive_samples": 1,
         "negative_samples": 1,
         "reviewed_at": "2026-10-01",
         "scope": "受控 HTTP 响应的特征匹配与阴性排除；不代表真实产品准确率。"
