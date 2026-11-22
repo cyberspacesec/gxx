@@ -67,6 +67,12 @@ func SendRequest(parentCtx context.Context, client *network.HTTPClient, target s
 	// 判断请求方式
 	reqType := strings.ToLower(strings.TrimSpace(rule.Request.Type))
 	if len(reqType) > 0 && reqType != common.HttpType {
+		// 连接的用途按规则类型标注，网络策略与交换记录据此区分 TCP 与 UDP。
+		kind := network.RequestTCP
+		if reqType == common.UdpType {
+			kind = network.RequestUDP
+		}
+		reqCtx = network.WithRequestKind(reqCtx, kind)
 		if err := client.WaitRequest(reqCtx, target); err != nil {
 			return nil, err
 		}
