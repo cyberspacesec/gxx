@@ -153,3 +153,24 @@ func BenchmarkFullFingerprints(b *testing.B) {
 		})
 	}
 }
+
+// 资源预算只影响缓存与耗时，不影响全量规则的识别结论。
+func TestResourceBudgetsKeepFullCorpusResults(t *testing.T) {
+	scan := func(options ...sdk.Option) string {
+		e, target := fullRuleFixture(t, 64<<10, options...)
+		result, err := e.Scan(context.Background(), target)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var ids []string
+		for _, match := range result.Matches {
+			ids = append(ids, match.Info.ID+"@"+match.ProductVersion)
+		}
+		sort.Strings(ids)
+		return fmt.Sprint(ids)
+	}
+	want := scan()
+	if got := scan(sdk.WithCacheMaxBytes(4096), sdk.WithResponseCacheBudget(1)); got != want {
+		t.Fatalf("预算改变了识别结论: %s != %s", got, want)
+	}
+}

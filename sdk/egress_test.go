@@ -654,3 +654,35 @@ func TestEgressUsesPolicyDial(t *testing.T) {
 		t.Fatalf("dialed=%v", got)
 	}
 }
+
+// Redirect 返回 RedirectStop 时入口不访问下一跳：地址记入 RedirectTo，跳转记为未跟随，
+// 扫描照常完成；扫描级策略逐字段覆盖引擎级策略。
+func TestRedirectPolicyStopsEntryChain(t *testing.T) {
+	other, w := wireHTTP(t, false, nil)
+	entry, _ := wireHTTP(t, false, func(rw http.ResponseWriter, r *http.Request) {
+		http.Redirect(rw, r, other+"/landing", http.StatusFound)
+	})
+	var engineChecks atomic.Int32
+	engine := sdk.NetworkPolicy{CheckTarget: func(context.Context, sdk.TargetRequest) error { engineChecks.Add(1); return nil }}
+	e := newRuleEngine(t, map[string]string{"page": exprRule("page", `response.status == 302`)}, sdk.WithNetworkPolicy(engine))
+	stop := sdk.NetworkPolicy{Redirect: func(_ context.Context, from, to *url.URL) sdk.RedirectAction {
+		if to.Port() == portOf(t, other) {
+			return sdk.RedirectStop
+		}
+		return sdk.RedirectFollow
+	}}
+	result, err := e.ScanWith(context.Background(), entry, sdk.ScanNetworkPolicy(stop))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !w.silent() || result.RedirectTo != other+"/landing" || result.FinalURL != entry || len(result.Redirects) != 1 || result.Redirects[0].Followed || len(result.Matches) != 1 {
+		t.Fatalf("result=%+v conns=%d", result, w.conns.Load())
+	}
+	if engineChecks.Load() == 0 {
+		t.Fatal("扫描级策略未覆盖的 CheckTarget 应沿用引擎级")
+	}
+	// 不带扫描级策略时照常跟随。
+	if result, err := e.Scan(context.Background(), entry); err != nil || result.FinalURL != other+"/landing" || w.silent() {
+		t.Fatalf("result=%+v err=%v", result, err)
+	}
+}
