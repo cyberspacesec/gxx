@@ -340,6 +340,10 @@ CEL 编译结果 `cel.Program` 是 stateless / thread-safe / cacheable 的，所
 - **TLS 套件**：取标准库实现的全部套件（`tls.CipherSuites()` + `tls.InsecureCipherSuites()`），最低 TLS 1.0。扫描需要尽可能握手成功，包含老旧设备依赖的 RSA 密钥交换、CBC-SHA256 等；不能手写清单（曾漏掉 ECDSA+AES-GCM），也不能用 Go 默认值（1.22 起已移除 RSA 密钥交换）
 - **宽松回退**（`retry.go`）：不跟随重定向的规则请求与非 GET 请求遇到畸形 HTTP 响应时，以原始报文重发一次并宽松解析，用于兼容返回非标准 HTTP 报文的设备。回退与 Transport 使用同一个拨号函数，同样计入限速；配置了代理时不回退
 - **重试收敛**（`retry.go`）：传输层失败只重试 1 次、退避 200–600ms，不可达/拒绝连接的目标不会一直重试到整体超时；既容忍瞬时抖动又快速失败。重定向超限、协议不支持与证书不受信任不重试
+- **网络策略**（`policy.go`）：`Policy` 的 `Dial`、`CheckTarget`、`Redirect`、`WrapTransport` 约束全部出站连接；客户端级策略由 `SetPolicy` 设置，请求级覆盖经 `WithPolicy` 放入 ctx 并逐字段合并。`requestTransport` 在每次往返前检查目标，`DialContext` 在每次拨号前检查；请求级 `Dial` 使用按代理缓存、不复用连接的 Transport。说明见 [docs/网络策略.md](docs/网络策略.md)
+- **连接记录**（`conn.go`、`tlshello.go`）：Transport 的拨号返回 `trackedConn`，在明文层记录每个响应的响应头顺序；HTTPS 在拨号中完成握手，`helloRecorder` 在 TLS 之下旁路记录 ServerHello 计算 JA3S。`requestTransport` 经 `httptrace.GotConn` 取得实际使用的连接，填回 `resp.TLS`，摘要随 `resp.Request` 的 ctx 交给调用方（`ResponseHeaderOrder`、`ResponseTLS`）
+- **交换观察**（`observe.go`）：`Recorder` 属于一次扫描，`observedBody` 边读边计算摘要，关闭时回调；`Bind` 关联响应对象，规则复用响应时生成 Cached 记录
+- **JARM**（`jarm.go`）：按参考实现构造 10 个探测、解析响应并折算指纹，测试向量由参考实现生成
 - **资产边界**（`origin.go`）：`SameOrigin` 按协议 + 主机 + 端口判断两个地址是否属于同一资产；30x 离开发起请求的源之后只保留通用请求头，自定义请求头不会发给其他主机；页面里识别出的跳转只在资产内跟随
 
 #### 5.5.1b 代理与 TCP/UDP（`proxy.go`）

@@ -79,6 +79,8 @@ func main() {
 | 方法 | 说明 |
 |------|------|
 | `(*Engine).Scan(ctx, target) (*TargetResult, error)` | 单目标完整指纹识别 |
+| `(*Engine).ScanWith(ctx, target, opts ...ScanOption) (*TargetResult, error)` | 同 `Scan`，并应用本次扫描的网络策略、求值报告与交换观察；不带选项时与 `Scan` 完全一致 |
+| `(*Engine).DebugRule(ctx, target, ruleID, opts ...ScanOption) (*RuleDebug, error)` | 按扫描的方式只执行一条规则，返回每条子规则的结果、交换、证据、输出与失败原因 |
 | `(*Engine).ScanBatch(ctx, targets) ([]*TargetResult, error)` | 批量扫描（一次性返回） |
 | `(*Engine).ScanCallback(ctx, targets, cb) error` | 流式批量扫描（回调可取消） |
 | `(*Engine).ScanIterator(ctx, targets iter.Seq[string], cb) error` | 按并发预算拉取目标，逐条回调结果 |
@@ -89,6 +91,7 @@ func main() {
 | `(*Engine).FingerCount() int` | 当前加载的指纹数量 |
 | `(*Engine).RuleCatalog(ctx) ([]RuleMetadata, error)` | 全部规则来源、产品目录、检测条件与质量缺项 |
 | `ProductCatalog() ([]ProductDefinition, error)` | 内置产品目录的独立副本 |
+| `ValidateRule(content []byte, opts ValidateOptions) []Diagnostic` | 不发请求校验一条规则，结论与 `NewEngine` 加载一致 |
 | `(*Engine).PoolStats() PoolStats` | 规则池统计快照 |
 | `(*Engine).IsClosed() bool` | 引擎是否已 Close |
 | `(*Engine).Close() error` | 释放所有资源（线程安全，可重复调用） |
@@ -123,6 +126,23 @@ func main() {
 | `WithLogger(log *slog.Logger)` | 静默 | 注入实例日志；未注入且开启 Debug 时使用 stderr |
 | `WithOutputFile(path string, format OutputFormat)` | 关闭 | 把结果写入本地文件（txt/csv/json，自带异步队列） |
 | `WithWriter(w Writer)` | nil | 注入自定义 Writer（可多次调用累加） |
+| `WithNetworkPolicy(policy NetworkPolicy)` | 无 | 引擎级网络策略：`Dial`、`CheckTarget`、`Redirect`、`WrapTransport`，见 [网络策略](../docs/网络策略.md) |
+| `WithRuleFS(fsys fs.FS, root string)` | 无 | 从文件系统（内存文件系统、`embed.FS`）的 `root` 目录加载规则，不能与 `WithFingerOptions` 的目录或文件同时使用 |
+| `WithRulePolicy(policy RulePolicy)` | 不限制 | 限制可加载的规则类型、Raw、反连、sleep、规则数与子规则数，违反即加载失败 |
+| `WithBodyLimit(n int64)` | `512 KiB` | 响应正文读取上限 |
+| `WithCacheMaxBytes(n int64)` | `64 MiB` | 请求/响应缓存的字节预算 |
+| `WithResponseCacheBudget(n int64)` | `8 MiB` | 每次扫描的响应归一化缓存预算 |
+| `WithIconEvidence(maxData int)` | 关闭 | 在 `TargetResult.Icon` 记录最终页面图标的证据，原始字节最多 `maxData` |
+| `WithJARM(enable bool)` | `false` | 为 HTTPS 目标计算 JARM 指纹，见 [TLS 信息与指纹](../docs/TLS信息与指纹.md) |
+| `WithResources(opts ResourceOptions)` | 全关 | 读取最终页面所在资产的 robots.txt 与 sitemap.xml，见 [附属资源](../docs/附属资源.md) |
+
+`ScanWith` 与 `DebugRule` 接受的扫描级选项：
+
+| ScanOption | 说明 |
+|------------|------|
+| `ScanNetworkPolicy(policy NetworkPolicy)` | 本次扫描的网络策略，逐字段覆盖引擎级策略 |
+| `ScanEvaluationReport(dst *EvaluationReport)` | 扫描结束后（含失败与取消）把求值报告写入 `dst` |
+| `ScanObserver(observe func(Exchange), limits ExchangeLimits)` | 每次交换完成后串行回调 |
 
 ### 3.4 Sentinel Errors
 
@@ -136,6 +156,7 @@ var (
     ErrInvalidOption     error // 选项参数非法
     ErrEmptyResult       error // 空结果
     ErrLoadFinger        error // 指纹加载失败
+    ErrRulePolicy        error // 规则违反 WithRulePolicy；errors.As 取 *RulePolicyError
 )
 ```
 
@@ -174,8 +195,14 @@ type TargetResult struct {
     ICP        string        `json:"icp,omitempty"`
     Certs      []CertInfo    `json:"certs,omitempty"`
     Products   []ProductMatch `json:"products,omitempty"`
+    HeaderOrder []string      `json:"header_order,omitempty"` // 最后一页的响应头名称，按服务器顺序
+    TLS        *TLSInfo       `json:"tls,omitempty"`          // 最后一页所在连接的 TLS 摘要
+    Icon       *IconEvidence  `json:"icon,omitempty"`         // WithIconEvidence 时的图标证据
+    Resources  []Resource     `json:"resources,omitempty"`    // WithResources 时的附属资源
 }
 ```
+
+`Headers` 按服务器发送的顺序逐行写出最后一页的响应头（名称为规范形式，多值头各占一行），无法记录顺序时按名称排序；`HeaderOrder` 保留原始大小写与重复的名称。
 
 ### Redirect
 
@@ -226,7 +253,7 @@ type FingerMatch struct {
 
 证据使用固定预算：每次表达式最多追踪 128 个布尔节点，成功子规则最多 64 条，每条最多 16 个证据，每个片段最多 256 个原始字节。超出节点或证据数量时设置 `EvidenceTruncated`，超出子规则数量设置 `DetailsTruncated`；片段无法覆盖完整匹配范围时设置证据的 `Truncated`。证据表达式文本最多 512 字节，完整子规则表达式仍可读取。公开输出最多 64 个普通文本或整数项，保留产品版本，单项最多 512 字节；执行变量保留完整值，不通过结果持有完整响应正文。
 
-`WithMatchDetails(false)` 适合无需详情的场景。正文读取维持 512 KiB；favicon 按完整内容流式计算哈希，不采用正文上限。大小写处理、图标哈希算法和实例资源隔离保持相同语义。响应归一化与正则字符缓冲共用每目标 8 MiB 的估算缓存预算。
+`WithMatchDetails(false)` 适合无需详情的场景。正文读取默认 512 KiB（`WithBodyLimit` 设置）；favicon 按完整内容流式计算哈希，不采用正文上限。大小写处理、图标哈希算法和实例资源隔离保持相同语义。响应归一化与正则字符缓冲共用每目标的估算缓存预算（默认 8 MiB，`WithResponseCacheBudget` 设置）。
 
 ### 目录导入与扩展
 
@@ -266,15 +293,167 @@ engine, err := sdk.NewEngine(ctx,
 
 ```go
 type BaseInfo struct {
-    Target     string      `json:"target"`
-    Title      string      `json:"title"`
-    StatusCode int32       `json:"status_code"`
-    Server     *ServerInfo `json:"server,omitempty"`
-    TechStack  *TechStack  `json:"tech_stack,omitempty"`
-    ICP        string      `json:"icp,omitempty"`
-    Certs      []CertInfo  `json:"certs,omitempty"`
+    Target      string        `json:"target"`
+    FinalURL    string        `json:"final_url,omitempty"`
+    RedirectTo  string        `json:"redirect_to,omitempty"`
+    Redirects   []Redirect    `json:"redirects,omitempty"`
+    Title       string        `json:"title"`
+    StatusCode  int32         `json:"status_code"`
+    Server      *ServerInfo   `json:"server,omitempty"`
+    TechStack   *TechStack    `json:"tech_stack,omitempty"`
+    ICP         string        `json:"icp,omitempty"`
+    Certs       []CertInfo    `json:"certs,omitempty"`
+    HeaderOrder []string      `json:"header_order,omitempty"`
+    TLS         *TLSInfo      `json:"tls,omitempty"`
+    Icon        *IconEvidence `json:"icon,omitempty"`
+    Resources   []Resource    `json:"resources,omitempty"`
 }
 ```
+
+### TLSInfo / IconEvidence / Resource
+
+```go
+type TLSInfo struct {
+    Version     string `json:"version"`        // 如 "TLS 1.2"
+    CipherSuite string `json:"cipher_suite"`   // 如 "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+    ALPN        string `json:"alpn,omitempty"` // 扫描的 ClientHello 不携带 ALPN，通常为空
+    JA3S        string `json:"ja3s,omitempty"`
+    JARM        string `json:"jarm,omitempty"` // WithJARM(true) 时计算
+}
+
+type IconEvidence struct {
+    URL, ContentType string
+    Bytes            int64
+    SHA256, MMH3     string // MMH3 与 response.icon_hash 相同
+    Data             []byte // 不超过 WithIconEvidence 的上限，超过时为空并置 TooLarge
+    TooLarge         bool
+    CrossOrigin      bool   // 图标与页面不属于同一资产
+}
+
+type Resource struct {
+    Kind       string // robots / sitemap
+    URL        string
+    StatusCode int
+    Body       []byte // 前 MaxBytes 字节
+    BodyBytes  int64  // 实际读取的正文字节数
+    SHA256     string // 实际读取的正文的摘要
+    Truncated  bool
+}
+```
+
+TLS 版本、套件、ALPN 与 JA3S 取自扫描已有的那次握手，不增加连接；图标证据来自计算 `icon_hash` 的同一次请求，不二次请求。详见 [TLS 信息与指纹](../docs/TLS信息与指纹.md) 与 [附属资源](../docs/附属资源.md)。
+
+### EvaluationReport
+
+```go
+type EvaluationReport struct {
+    Complete  bool             // 全部规则都已执行且没有任何失败
+    Rules     []RuleEvaluation // 按规则标识排序
+    Truncated bool             // 记录超出上限而被省略
+}
+
+type RuleEvaluation struct {
+    RuleID, SourceSHA256 string
+    Completed, Matched   bool
+    Failures             []EvaluationFailure
+}
+
+type EvaluationFailure struct {
+    RuleID, SubRule string
+    Stage           FailureStage // request expression non_bool extract regex_timeout panic budget
+    Message         string       // 不超过 256 字节，不含响应正文
+}
+```
+
+求值报告只说明结论是否完整，不改变普通匹配语义：`Matches` 与不带报告的扫描相同。各阶段的含义：
+
+| Stage | 含义 |
+|---|---|
+| `request` | 子规则的请求失败（含被网络策略拒绝）；入口不可达时未执行的 HTTP 规则也记为 `request` |
+| `expression` | 表达式运行错误（如取不存在的键） |
+| `non_bool` | 子规则或总表达式的结果不是布尔值 |
+| `extract` | `output` 提取表达式求值失败 |
+| `regex_timeout` | 正则匹配超过 250ms，按未命中处理 |
+| `panic` | 规则执行中 panic，只影响该规则 |
+| `budget` | 使用了被正文上限截断的响应、表达式超出计算成本上限，或单条规则的失败超过 16 条 |
+
+扫描被取消、入口失败或记录超出上限（每条规则 16 条失败、每次扫描 65,536 条规则）时 `Complete` 为 `false`。
+
+### Exchange
+
+```go
+type Exchange struct {
+    Sequence            int         // 按回调顺序从 1 递增
+    Kind                RequestKind // http raw tcp udp icon resource tls
+    RuleID, SubRule     string      // 规则请求时为所属规则
+    Method, URL         string
+    Redirect            bool
+    StatusCode          int
+    RequestHeader       http.Header
+    ResponseHeader      http.Header
+    ResponseHeaderOrder []string
+    ResponseBody        []byte      // 前 MaxBody 字节
+    BodyTruncated       bool
+    BodyBytes           int64       // 实际读取的完整正文字节数（经分块与压缩解码）
+    BodySHA256          string      // 实际读取的完整正文的摘要
+    Certificates        []*x509.Certificate
+    Latency             time.Duration
+    Cached              bool        // 规则复用了本次扫描已有的响应
+    Err                 error
+}
+
+type ExchangeLimits struct{ MaxBody, MaxHeader, MaxExchanges int } // 零值取 64 KiB / 64 KiB / 10000
+```
+
+回调在发出请求的协程中串行执行，应尽快返回；记录中的切片与映射只读，多条记录可能共用同一份数据，需要保留时自行复制。并发的多次扫描各自回调，互不串扰。
+
+### RuleDebug
+
+```go
+type RuleDebug struct {
+    Match      *FingerMatch   // 未命中时为 nil
+    SubRules   []SubRuleDebug
+    Evaluation RuleEvaluation
+}
+
+type SubRuleDebug struct {
+    Key, Expression string
+    Result          *bool // nil：请求失败、表达式出错或扫描取消
+    Exchanges       []Exchange
+    Evidence        []MatchEvidence
+    Outputs         map[string]string
+    Failure         *EvaluationFailure
+}
+```
+
+入口跳转链上有多页时，`SubRules` 描述决定结果的那次评估：命中的那一页，未命中时为最后一页。调试总是采集证据，结果不交给 Writer。
+
+### RulePolicy / ValidateRule
+
+```go
+type RulePolicy struct {
+    AllowTypes   []string // 为空时允许 http、tcp、udp
+    AllowRaw     bool
+    AllowReverse bool     // newReverse()、newJNDI()、wait、jndi
+    AllowSleep   bool
+    MaxRules     int      // 0 表示不限制
+    MaxSubRules  int      // 0 表示不限制
+}
+
+type ValidateOptions struct {
+    Strict bool
+    Policy RulePolicy
+}
+
+type Diagnostic struct {
+    Code, Field, Message, Severity string // Severity: error / warning
+    Line, Column                   int
+}
+```
+
+`RulePolicy` 的零值表示不限制；任一字段非零时策略生效，未允许的能力一律拒绝。只允许 HTTP 写成 `RulePolicy{AllowTypes: []string{"http"}}`；允许全部类型但禁止 Raw、反连与 sleep 写成 `RulePolicy{AllowTypes: []string{"http", "tcp", "udp"}}`。加载与 `LoadFingerOptions` 重新加载时检查，内置规则库同样受检查。
+
+`ValidateRule` 不发请求。非严格模式下存在 `error` 当且仅当使用同样 `Policy` 的 `NewEngine` 拒绝加载这条规则（YAML 无法解析、不支持的请求类型、违反规则策略）；其余问题为 `warning`。严格模式把未知键、缺少 `id` / `info.name` / 子规则 / 总表达式、表达式无法编译也报告为 `error`。`Code` 取值：`yaml`、`unknown-key`、`missing-id`、`missing-name`、`missing-rules`、`missing-expression`、`expression-compile`、`policy-type`、`policy-raw`、`policy-reverse`、`policy-sleep`、`policy-sub-rules`。
 
 ### TechStack
 
@@ -491,6 +670,44 @@ engine, _ := sdk.NewEngine(ctx, sdk.WithFingerOptions(sdk.FingerOptions{
 
 // 或者运行期切换
 engine.LoadFingerOptions(sdk.FingerOptions{PocYaml: "single.yaml"})
+
+// 规则来自内存文件系统（如从数据库读出的规则）
+rules := fstest.MapFS{"demo.yaml": {Data: content}}
+engine, err := sdk.NewEngine(ctx, sdk.WithRuleFS(rules, "."))
+
+// 入库前校验
+for _, d := range sdk.ValidateRule(content, sdk.ValidateOptions{Strict: true}) {
+    fmt.Printf("%s 第 %d 行 %s：%s\n", d.Severity, d.Line, d.Field, d.Message)
+}
+```
+
+### 5.10 网络策略、求值报告与交换观察
+
+```go
+engine, _ := sdk.NewEngine(ctx, sdk.WithNetworkPolicy(sdk.NetworkPolicy{
+    CheckTarget: func(ctx context.Context, r sdk.TargetRequest) error {
+        if r.Host == "169.254.169.254" {
+            return errors.New("拒绝访问元数据地址")
+        }
+        return nil
+    },
+}))
+
+var report sdk.EvaluationReport
+result, err := engine.ScanWith(ctx, target,
+    sdk.ScanEvaluationReport(&report),
+    sdk.ScanObserver(func(ex sdk.Exchange) {
+        log.Printf("#%d %s %s %d %s", ex.Sequence, ex.Kind, ex.URL, ex.StatusCode, ex.BodySHA256)
+    }, sdk.ExchangeLimits{MaxBody: 4096}),
+)
+if !report.Complete {
+    // 有规则没有完整求值：未命中不一定可信
+}
+
+debug, err := engine.DebugRule(ctx, target, "web-wordpress")
+for _, sub := range debug.SubRules {
+    fmt.Println(sub.Key, sub.Result, len(sub.Exchanges), sub.Failure)
+}
 ```
 
 ---
@@ -502,7 +719,7 @@ engine.LoadFingerOptions(sdk.FingerOptions{PocYaml: "single.yaml"})
 | 操作 | 并发安全 | 说明 |
 |------|---------|------|
 | `NewEngine` | ✅ | 每次调用返回独立实例 |
-| `(*Engine).Scan` / `ScanBatch` / `ScanCallback` / `ScanIterator` | ✅ | 同一 Engine 多 goroutine 调用安全 |
+| `(*Engine).Scan` / `ScanWith` / `ScanBatch` / `ScanCallback` / `ScanIterator` / `DebugRule` | ✅ | 同一 Engine 多 goroutine 调用安全 |
 | `(*Engine).GetBaseInfo` / `WappalyzerScan` | ✅ | 同上 |
 | `(*Engine).Close` | ✅ | 可重复调用，多次 Close 无副作用 |
 | `(*Engine).LoadFingerOptions` | ✅ | 加载成功后整体发布规则快照；失败保留原库，在途扫描继续使用原快照 |
@@ -580,16 +797,16 @@ if err == nil {
 - 标题解析直接消费只读正文的字节视图；标题与 ICP 备案号独立持有返回字符串，长期保留结果不会通过这些字段引用整页 HTML 或脚本。无候选的合法 UTF-8 正文无需为备案号解析复制整页；结果数量增长仍会增加内存
 - favicon 哈希使用 1,824 字节原始块和 2,465 字节编码块读取到 EOF，不构造完整图片或 Base64 副本；入口页支持非根路径、跳转、多个候选与内联图片。成功哈希归当前实例持有，按请求头和 Cookie 会话隔离，候选回退共用时间预算；同一组图片字节的哈希编码约定不变。元数据识别范围与限制见 [网站元数据识别](../docs/网站元数据识别.md)
 - 未知长度响应使用 32 KiB 暂存块，暂存池最多保留 1 MiB，最终正文使用独立数组；已知长度响应采用有界容量提示，两条路径保持相同的正文上限和读取错误语义
-- 页面正文上限为 512 KiB；图标不受该资源大小限制，使用固定块读取到 EOF。内联图标声明仍需包含在已读取的页面正文中
+- 页面正文上限默认 512 KiB（`WithBodyLimit` 设置）；图标不受该资源大小限制，使用固定块读取到 EOF。内联图标声明仍需包含在已读取的页面正文中
 
 - 大响应的重复字节包含查询可使用按需构造的 8 KiB 片段位图。候选仍调用原始包含函数，位图饱和、响应太小或复用次数不足时使用直接匹配；相关响应数据共用单次扫描 8 MiB 的估算预算
 - 技术栈识别按响应字段建立索引，正文通过必要字面量索引筛选候选；全部 HTTP 规则保持可用，候选由上游解析器判定。编译正则按 512 条工作集共享缓存，淘汰后可重新编译，不裁剪规则；覆盖大量不同模式的负载可能增加编译开销
 - 响应正文按声明的字符集解码为 UTF-8：优先 Content-Type 头，其次正文前部的 `<meta charset>`，支持 UTF-8/GBK/GB18030/Big5/Shift_JIS/ISO-8859-1 等；无任何声明时合法 UTF-8 原样保留，否则按 GB18030 兜底（面向省略或错误标注字符集的中文站点）。CEL 规则中的 `response.body` / 标题 / ICP 均基于解码后的 UTF-8 字节
-- 一个目标是一个资产（协议 + 主机 + 端口）。入口请求与规则请求只在资产内跟随跳转，指向其他资产的 30x 不跟随、不访问，地址写入 `RedirectTo`；自定义请求头因此不会发往其他主机。跳转链上的每一页都参与根路径规则匹配。完整规则见 [资产与跳转](../docs/资产与跳转.md)
+- 一个目标是一个资产（协议 + 主机 + 端口）。入口与规则请求的 30x 默认跟随，可以指向其他主机；页面里识别出的刷新与脚本跳转只在资产内跟随，指向其他资产时不访问，地址写入 `RedirectTo`。离开扫描目标后只带通用请求头，自定义请求头不会发往其他主机。跳转链上的每一页都参与根路径规则匹配。网络策略的 `Redirect` 可以阻止跟随任意一跳。完整规则见 [资产与跳转](../docs/资产与跳转.md)
 - 每次扫描使用独立的 Cookie 会话，入口、规则与图标请求共用，扫描结束即释放。同一 Engine 对同一目标的多次扫描互不影响，引擎不随目标数量累积 Cookie
 - 自定义 `Writer.Write` 收到的 `*TargetResult` 与调用方拿到的是同一指针，必须视为只读、不得在返回后异步持有；需异步使用时自行深拷贝。内置 FileWriter 入队前已深拷贝，SockWriter 在调用内同步序列化
 - CLI 输出完成后只保留汇总计数，不保留全量结果；目标去重集合仍随唯一目标数增长
 - 不要用每目标强制 GC 控制内存；RSS 还包括 Go 运行时保留页、线程栈和原生组件，通常高于存活堆
-- 所有对外类型均在 `sdk` 包内定义，**不需要**导入 `gxx/types` 或 `gxx/pkg/*` 等内部包
+- 所有对外类型均在 `sdk` 包内定义或以类型别名导出（如 `NetworkPolicy`、`Exchange`），**不需要**导入 `gxx/types` 或 `gxx/pkg/*` 等内部包
 
 读取策略、实例归属和验证记录见[资源读取与实例隔离](../docs/资源读取与实例隔离.md)。

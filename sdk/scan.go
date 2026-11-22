@@ -23,6 +23,9 @@ type RequestKind = network.RequestKind
 // RedirectAction 是 NetworkPolicy.Redirect 对一次跳转的决定。
 type RedirectAction = network.RedirectAction
 
+// DeniedError 是被 NetworkPolicy.CheckTarget 拒绝的连接，Request 是被拒绝的目标。
+type DeniedError = network.DeniedError
+
 // 出站连接的用途。
 const (
 	RequestHTTP     = network.RequestHTTP
