@@ -107,6 +107,7 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 		IconEvidenceData:     cfg.iconEvidenceData,
 		JARM:                 cfg.jarm,
 		Resources:            cfg.resources,
+		RulePolicy:           cfg.rulePolicy,
 	}
 	if !cfg.enableRateLimit {
 		scanCfg.RateLimitQPS = 0
@@ -136,6 +137,10 @@ func NewEngine(ctx context.Context, opts ...Option) (*Engine, error) {
 	}
 	r, err := runner.NewRunner(scanCfg, source)
 	if err != nil {
+		var violation *RulePolicyError
+		if errors.As(err, &violation) {
+			return nil, fmt.Errorf("%w: %w: %w", ErrEngineNotReady, ErrRulePolicy, err)
+		}
 		return nil, fmt.Errorf("%w: %w", ErrEngineNotReady, err)
 	}
 	if r.FingerCount() == 0 {
@@ -227,6 +232,10 @@ func (e *Engine) LoadFingerOptions(opts FingerOptions) error {
 		return ErrEngineNotReady
 	}
 	if err := e.runner.LoadFingerOptions(opts.toInternal()); err != nil {
+		var violation *RulePolicyError
+		if errors.As(err, &violation) {
+			return fmt.Errorf("%w: %w: %w", ErrLoadFinger, ErrRulePolicy, err)
+		}
 		return fmt.Errorf("%w: %w", ErrLoadFinger, err)
 	}
 	return nil

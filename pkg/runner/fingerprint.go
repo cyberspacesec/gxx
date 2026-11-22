@@ -27,6 +27,8 @@ type FingerStore struct {
 	plans           []fingerExecutionPlan
 	log             logger.Sink
 	captureEvidence bool
+	// policy 在每次加载时检查；违反时保留原规则集。
+	policy finger.RulePolicy
 }
 
 // 执行清单与只读规则快照同时发布，按连续索引取得程序及调度条件。
@@ -91,9 +93,7 @@ func (fs *FingerStore) Load(options types.YamlFingerType) error {
 		if len(next) == 0 {
 			return fmt.Errorf("规则文件系统的 %s 中未找到有效的 yaml 规则", root)
 		}
-		fs.fingers = next
-		fs.prepare()
-		return nil
+		return fs.commit(next)
 	}
 
 	if options.PocFile == "" && options.PocYaml == "" {
@@ -103,9 +103,7 @@ func (fs *FingerStore) Load(options types.YamlFingerType) error {
 			return fmt.Errorf("加载嵌入指纹库失败: %w", err)
 		}
 		next = fin
-		fs.fingers = next
-		fs.prepare()
-		return nil
+		return fs.commit(next)
 	}
 
 	if options.PocFile != "" {
@@ -137,9 +135,7 @@ func (fs *FingerStore) Load(options types.YamlFingerType) error {
 		if len(next) == 0 {
 			return fmt.Errorf("指纹目录 %s 中未找到有效的 yaml 规则", options.PocFile)
 		}
-		fs.fingers = next
-		fs.prepare()
-		return nil
+		return fs.commit(next)
 	}
 
 	if options.PocYaml != "" {
@@ -157,6 +153,14 @@ func (fs *FingerStore) Load(options types.YamlFingerType) error {
 	}
 	if len(next) == 0 {
 		return fmt.Errorf("指纹文件 %s 未解析出有效规则", options.PocYaml)
+	}
+	return fs.commit(next)
+}
+
+// commit 检查规则策略后整体替换规则集；调用方持有写锁。
+func (fs *FingerStore) commit(next []*finger.Finger) error {
+	if err := finger.CheckLibraryPolicy(next, fs.policy); err != nil {
+		return err
 	}
 	fs.fingers = next
 	fs.prepare()

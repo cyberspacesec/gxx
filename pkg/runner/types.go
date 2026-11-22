@@ -183,6 +183,8 @@ type ScanConfig struct {
 	JARM bool
 	// Resources 选择要读取的附属资源，默认全关。
 	Resources ResourceOptions
+	// RulePolicy 在加载与重新加载规则时检查，违反即加载失败。
+	RulePolicy finger.RulePolicy
 }
 
 // ScanOptions 是单次扫描的附加配置，零值与普通扫描相同。

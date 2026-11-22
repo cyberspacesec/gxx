@@ -48,6 +48,7 @@ type engineConfig struct {
 	iconEvidenceData    int
 	jarm                bool
 	resources           ResourceOptions
+	rulePolicy          RulePolicy
 
 	// 监控
 	enableMonitor    bool

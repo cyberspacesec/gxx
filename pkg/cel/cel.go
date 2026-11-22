@@ -372,3 +372,19 @@ func (a *evaluationActivation) ResolveName(name string) (any, bool) {
 	return value, ok
 }
 func (*evaluationActivation) Parent() interpreter.Activation { return nil }
+
+// CalledFunctions 解析表达式（不做类型检查）并返回其中调用的函数名，宏已展开：
+// sleep(n) 记为 __gxx_sleep，r.wait(n) 与 r.jndi(n) 记为 __gxx_wait 与 __gxx_jndi。
+func CalledFunctions(expression string) ([]string, error) {
+	tree, issues := getBaseEnv().Parse(expression)
+	if issues.Err() != nil {
+		return nil, issues.Err()
+	}
+	var names []string
+	ast.PreOrderVisit(tree.NativeRep().Expr(), ast.NewExprVisitor(func(e ast.Expr) {
+		if e.Kind() == ast.CallKind {
+			names = append(names, e.AsCall().FunctionName())
+		}
+	}))
+	return names, nil
+}

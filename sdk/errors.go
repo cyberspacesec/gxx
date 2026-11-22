@@ -37,4 +37,7 @@ var (
 
 	// ErrLoadFinger 指纹规则加载失败（YAML 文件不存在 / 格式错误等）。
 	ErrLoadFinger = errors.New("sdk: load finger rules failed")
+
+	// ErrRulePolicy 规则违反 WithRulePolicy 设置的规则策略；具体内容用 errors.As 取 *RulePolicyError。
+	ErrRulePolicy = errors.New("sdk: rule violates policy")
 )
